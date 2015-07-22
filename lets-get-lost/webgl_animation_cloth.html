@@ -7,7 +7,7 @@
 		<style>
 			body {
 				font-family: Monospace;
-				background-color: #000;
+				background-color: #FFEEAA;
 				color: #000;
 				margin: 0px;
 				overflow: hidden;
@@ -30,6 +30,8 @@
 			#stats #fps { background: transparent !important }
 			#stats #fps #fpsText { color: #aaa !important }
 			#stats #fps #fpsGraph { display: none }
+
+			#gl { width: 500px; height: 500px;}
 		</style>
 	</head>
 
@@ -41,6 +43,8 @@
 			<a onclick="sphere.visible = !sphere.visible;">Ball</a> |
 			<a onclick="togglePins();">Pins</a>
 		</div>
+
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 		<script src="js/three.min.js"></script>
 
@@ -91,6 +95,8 @@
 
 		</script>
 
+		<div id="gl"></div>
+
 		<script>
 
 			/* testing cloth simulation */
@@ -137,8 +143,10 @@
 
 			function init() {
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				container = document.getElementById('gl');
+			//	container = document.createElement( 'div' );
+			//	$('#gl').append( container );
+		//		document.body.appendChild( container );
 
 				// scene
 
@@ -148,7 +156,7 @@
 
 				// camera
 
-				camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera = new THREE.PerspectiveCamera( 30, $('#gl').width() / $('#gl').height(), 1, 10000 );
 				camera.position.y = 50;
 				camera.position.z = 1500;
 				scene.add( camera );
@@ -183,7 +191,6 @@
 
 				// cloth material
 
-				THREE.ImageUtils.crossOrigin = '';
 				var clothTexture = THREE.ImageUtils.loadTexture( 'textures/circuit_pattern.png' );
 				clothTexture.wrapS = clothTexture.wrapT = THREE.RepeatWrapping;
 				clothTexture.anisotropy = 16;
@@ -285,7 +292,7 @@
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( $('#gl').width(), $('#gl').height() );
 				renderer.setClearColor( scene.fog.color );
 
 				container.appendChild( renderer.domElement );
@@ -312,10 +319,10 @@
 
 			function onWindowResize() {
 
-				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.aspect = $('#gl').width() / $('#gl').height();
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( $('#gl').width(), $('#gl').height() );
 
 			}
 
