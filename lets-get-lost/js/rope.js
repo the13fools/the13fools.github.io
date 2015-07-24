@@ -3,9 +3,9 @@ var nodes = 10;
 
 var MASS = .1;
 var restDistance;
-var springConstant = 100000;
+var springConstant = 1000;
 
-var DAMPING = 0;
+var DAMPING = 0.0003;
 
 var TIMESTEP = 10 / 10000;
 var TIMESTEP_SQ = TIMESTEP * TIMESTEP;
@@ -38,8 +38,8 @@ Particle.prototype.getAcceleration = function() {
 function Rope(nodes) {
 	nodes = nodes || 10;
 	this.nodes = nodes;
-	var tension = .001;
-	restDistance = 1 / ((nodes - 1) - tension);
+	var tension = .1;
+	restDistance = 1 / ((nodes - 1) * 10);
 
 
 	var particles = [];
@@ -77,7 +77,10 @@ Rope.prototype.removePreviousSpringForces = function() {
 		var len = diff.length();
 
 		// be careful with the signs here
-		diff.multiplyScalar((this.springs[i][2] - len) * springConstant);
+		diff.multiplyScalar((this.springs[i][2] - len) * 
+			(this.springs[i][2] - len) * 
+			(this.springs[i][2] - len) * 
+			springConstant);
 
 		this.particles[this.springs[i][0].idx].forces.sub(diff);
 		this.particles[this.springs[i][1].idx].forces.add(diff);
@@ -90,8 +93,11 @@ Rope.prototype.addSpringForces = function() {
 						this.springs[i][1].position);
 		var len = diff.length();
 
-		// be careful with the signs
-		diff.multiplyScalar((this.springs[i][2] - len) * springConstant);
+		// be careful with the signs here
+		diff.multiplyScalar((this.springs[i][2] - len) * 
+			(this.springs[i][2] - len) * 
+			(this.springs[i][2] - len) * 
+			springConstant);
 
 		this.particles[this.springs[i][0].idx].forces.add(diff);
 		this.particles[this.springs[i][1].idx].forces.sub(diff);
@@ -120,10 +126,10 @@ Particle.prototype.stepForward = function(timesq) {
 
 // This is down here because function calls need to come after definitions.  
 // Should really exist across a few files.
-var rope = new Rope(110);
+var rope = new Rope(30);
 var driveTime = 0;
 rope.addSpringForces(1);
-rope.particles[55].position.setY(.2);
+rope.particles[17].position.setY(-.2);
 // rope.particles[1].position.setX(1 / (rope.nodes - 1));
 
 var colors = ["#a50026",
@@ -167,7 +173,7 @@ function simulate(time) {
 		var part = rope.particles[i];
 	//	console.log(part.position.x * 100 + ", " + part.position.y * 100);
 		ctx.fillStyle = colors[i % colors.length];
-		ctx.fillRect(part.position.x * 300, part.position.y * 100 + 100, 10, 10);
+		ctx.fillRect(part.position.x * 400 + 200, part.position.y * 100 + 100, 10, 10);
 	}
 
 }
