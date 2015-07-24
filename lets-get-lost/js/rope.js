@@ -5,7 +5,7 @@ var MASS = .1;
 var restDistance;
 var springConstant = 1000;
 
-var DAMPING = 0.0003;
+var DAMPING = 0;
 
 var TIMESTEP = 10 / 10000;
 var TIMESTEP_SQ = TIMESTEP * TIMESTEP;
@@ -129,7 +129,7 @@ Particle.prototype.stepForward = function(timesq) {
 var rope = new Rope(30);
 var driveTime = 0;
 rope.addSpringForces(1);
-rope.particles[17].position.setY(-.2);
+rope.particles[1].position.setX(rope.particles[1].position.x + .001);
 // rope.particles[1].position.setX(1 / (rope.nodes - 1));
 
 var colors = ["#a50026",
