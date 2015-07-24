@@ -1,4 +1,4 @@
-#content {
+/*#content {
 padding:30px 40px;
 padding-bottom: 0px;
 position: relative;
@@ -99,7 +99,7 @@ width:65px;
 float:right
 }*/
 
-img {
+/*img {
 	border:0px; 
 	margin:0px; 
 	padding:10px 0px; 
@@ -112,10 +112,15 @@ img {
 
 small {
 font-size:11px
-}
+}*/
 
 
 body{
-margin: 0px;
+	background-color: #FFEEAA;
+}
+
+#content{
+	background-color: #FFFFFF;
+	padding: 50px;
 }
 
