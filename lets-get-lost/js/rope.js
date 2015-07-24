@@ -1,7 +1,5 @@
 
 var nodes = 10;
-var rope = new Rope(10);
-rope.addSpringForces();
 
 var MASS = .1;
 var restDistance = 25;
@@ -9,6 +7,9 @@ var springConstant = 1;
 
 var TIMESTEP = 18 / 1000;
 var TIMESTEP_SQ = TIMESTEP * TIMESTEP;
+
+var lastTime;
+
 
 function Particle(x, y, z, mass) {
 	// read/write
@@ -61,36 +62,36 @@ function Rope(nodes) {
 }
 
 var diff = new THREE.Vector3();
-Rope.prototype.removePreviousSpringForces = function() {
+Rope.prototype.removePreviousSpringForces = function(blah) {
 	// We are modelling connections using Hooke's law: 
 	// F = kX, where X is declenation from the "natural" length
 	for (i = 0; i < this.springs.length; i++) {
-		diff.subVectors(this.springs[0].previousPosition, 
-						this.springs[1].previousPosition);
+		diff.subVectors(this.springs[i][0].previousPosition, 
+						this.springs[i][1].previousPosition);
 		var len = diff.length();
 
 		// be careful with the signs here
 		diff.multiplyScalar((this.springs[2] - len) * springConstant);
 
-		this.springs[0].forces.sub(diff);
-		this.springs[1].forces.add(diff);
+		this.springs[i][0].forces.sub(diff);
+		this.springs[i][1].forces.add(diff);
 	}
-}
+};
 
-Rope.prototype.addSpringForces = function() {
+Rope.prototype.addSpringForces = function(blah) {
 	for (i = 0; i < this.springs.length; i++) {
-		diff.subVectors(this.springs[0].position, 
-						this.springs[1].position);
+		diff.subVectors(this.springs[i][0].position, 
+						this.springs[i][1].position);
 		var len = diff.length();
 
 		// be careful with the signs
 		diff.multiplyScalar((this.springs[2] - len) * springConstant);
 
-		this.springs[0].forces.add(diff);
-		this.springs[1].forces.sub(diff);
+		this.springs[i][0].forces.add(diff);
+		this.springs[i][1].forces.sub(diff);
 	}
 
-}
+};
 
 
 
@@ -111,6 +112,13 @@ Particle.prototype.stepForward = function(timesq) {
 	this.position = this.tmp;
 }
 
+
+// This is down here because function calls need to come after definitions.  
+// Should really exist across a few files.
+var rope = new Rope(10);
+var driveTime = 0;
+rope.addSpringForces(1);
+
 function simulate(time) {
 	if (!lastTime) {
 		lastTime = time;
@@ -120,8 +128,26 @@ function simulate(time) {
 	rope.removePreviousSpringForces();
 	rope.addSpringForces();
 
+	driveTime += TIMESTEP * 5;
+
+
+	rope.particles[1].position.setY(Math.sin(driveTime));
+
 	for (i = 1; i < rope.length - 1; i++) {
 		rope.particles[i].stepForward(TIMESTEP_SQ);
+	}
+
+	var canvas = document.getElementById("rope-canvas");
+	var ctx = canvas.getContext("2d");
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+	ctx.fillStyle = "green";
+
+	for (i = 0; i < rope.nodes; i++) {
+		var part = rope.particles[i];
+		console.log(part.position.x * 100 + ", " + part.position.y * 100);
+		ctx.fillStyle = "green";
+		ctx.fillRect(part.position.x * 100, part.position.y * 100 + 100, 10, 10);
 	}
 
 }

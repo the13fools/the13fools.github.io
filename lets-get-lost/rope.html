@@ -2,11 +2,13 @@
 <html lang="en">
 	<head>
 		<link rel="stylesheet" href="css/styles.css">
+		<style>
+			/*#rope-canvas { width: 500px; height: 500px;}*/
+		</style>
 	</head>
 	<body>
 		<div id='content'>
-			<div id='rope'>
-			</div>
+			<canvas id="rope-canvas" height='500'></canvas>
 		</div>
 		<script type="text/javascript">
 		// 	window.onload = function () {
@@ -17,10 +19,30 @@
 		<p>
 			<script src="js/three.min.js"></script> <!-- This is to use the vector data-types to make it easier to make 3d visualizations later -->
 
-			<script type="text/javascript" src="js/rope/physics.js"></script>
-			<script type="text/javascript" src="js/rope/ropeCore.js"></script>
-			<script type="text/javascript" src="js/rope/ropeImpl.js"></script>
-			<script type="text/javascript" src="js/rope/verletDemoBootStrapper.js"></script>
+			<script type="text/javascript" src="js/rope.js"></script>
+
+			<script type="text/javascript">
+				animate();
+
+				function animate() {
+
+					requestAnimationFrame( animate );
+
+					var time = Date.now();
+
+					simulate(time);
+				//	render();
+				//	stats.update();
+
+				}
+			</script>
+			
+
+
+<!-- 			// <script type="text/javascript" src="js/rope/physics.js"></script>
+			// <script type="text/javascript" src="js/rope/ropeCore.js"></script>
+			// <script type="text/javascript" src="js/rope/ropeImpl.js"></script>
+			// <script type="text/javascript" src="js/rope/verletDemoBootStrapper.js"></script> -->
 		</p>
 	</body>
 </html>
