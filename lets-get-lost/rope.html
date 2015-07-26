@@ -5,15 +5,16 @@
 		<style>
 			/*#rope-canvas { width: 500px; height: 500px;}*/
 
-			  #frequency {
+			  #frequency, #driving-position {
 			    float: left;
 			    clear: left;
 			    width: 300px;
 			    margin-left: 200px;
+			    margin-bottom: 10px;
 			    z-index: 2;	
 			}
 
-			#frequency-text {
+			#frequency-text, #driving-position-text {
 				float: left;
 				margin-left: 15px;
 			}
@@ -28,6 +29,7 @@
 		<div id='content'>
 			<canvas id="rope-canvas" height='300' width='1000'></canvas>
 			<div id="frequency"></div><div id="frequency-text"></div>
+			<div id="driving-position"></div><div id="driving-position-text"></div>
 		</div>
 		<script type="text/javascript">
 		// 	window.onload = function () {
@@ -66,22 +68,38 @@
 
 
               <script type="text/javascript">
+				  function updatePosition() {
+				    var pos = $( "#driving-position" ).slider( "value" );
+				    drivingPosition = pos;
+				    $("#driving-position-text").text(drivingPosition);
+				  }
+
 				  function updateFrequency() {
 				    var frequency = $( "#frequency" ).slider( "value" );
 				    frequencyMultiplier = frequency;
 				    $("#frequency-text").text(frequencyMultiplier + "");
 				  }
+
 				  $(function() {
-				    $( "#frequency" ).slider({
+				  	$( "#frequency" ).slider({
 				      orientation: "horizontal",
 				      range: "min",
-				      max: 500,
+				      max: 1000,
 				      value: 100,
 				      slide: updateFrequency,
 				      change: updateFrequency
 				    });
 
-				    $( "#frequency" ).slider( "value", 100 );
+				    $( "#driving-position" ).slider({
+				      orientation: "horizontal",
+				      range: "min",
+				      max: 1,
+				      min: -.2,
+				      value: 0,
+				      step: .05,
+				      slide: updatePosition,
+				      change: updatePosition
+				    });
 				  });
 			  </script>
 			

@@ -1,7 +1,7 @@
 
 var nodes = 10;
 
-var MASS = .01;
+var MASS = .001;
 var springRestDistance;
 var springConstant = 10000;
 
@@ -123,13 +123,14 @@ Rope.prototype.addSpringForces = function() {
 
 };
 
+var steps = 0;
 Rope.prototype.enforceConstraints = function() {
-	for (i = 0; i < this.constraints.length; i++) {
-		var con = this.constraints[i];
+	function enforce(i, rope) {
+		var con = rope.constraints[i];
 		diff.subVectors(con.p1.position, 
 						con.p2.position);
 		var len = diff.length();
-		var targetDist = con.restLength * (1 + con.allowedStretch / 10000);
+		var targetDist = con.restLength * (1 + con.allowedStretch / 100);
 
 		if (len > targetDist || len < con.restLength) {
 			var correction = diff.multiplyScalar(1 - targetDist / len);
@@ -137,8 +138,20 @@ Rope.prototype.enforceConstraints = function() {
 			con.p1.position.sub(correctionHalf);
 			con.p2.position.add(correctionHalf);
 		}
-	}
+	};
 
+	// tighten from both ends 
+	if (steps % 2 == 0) {
+		for (i = 0; i < this.constraints.length; i++) {
+			enforce(i, this);
+		}
+	}
+	else {
+		for (i = this.constraints.length - 1; i >= 0; i--) {
+			enforce(i, this);
+		}
+	}
+	steps++;
 };
 
 
@@ -182,6 +195,7 @@ var colors = ["#a50026",
 				"#313695"];
 
 var frequencyMultiplier = 1;
+var drivingPosition = 0; 
 
 function simulate(time) {
 	if (!lastTime) {
@@ -189,10 +203,10 @@ function simulate(time) {
 		return;
 	}
 
-	driveTime += TIMESTEP * frequencyMultiplier;
-
 	// Step through the simulation several times per animation
 	for (step = 0; step < 1; step++) {
+
+		driveTime += TIMESTEP * frequencyMultiplier / 10;
 //		rope.removePreviousSpringForces();
 //		rope.addSpringForces();
 
@@ -203,7 +217,7 @@ function simulate(time) {
 
 		  rope.enforceConstraints();
 	//	  rope.particles[0].position.set(0, 0, 0);
-		  rope.particles[1].position.set(0, Math.sin(driveTime) / 5, -.01);
+		  rope.particles[1].position.set(drivingPosition, Math.sin(driveTime) / 5, 0);
 //		  rope.particles[1].position.set(0, 0, .1);
 		  rope.particles[rope.nodes - 1].position.set(1, 0, 0);
 	}
