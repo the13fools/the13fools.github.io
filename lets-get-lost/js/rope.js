@@ -5,7 +5,7 @@ var MASS = .01;
 var springRestDistance;
 var springConstant = 10000;
 
-var DAMPING = 0.00001;
+var DAMPING = 0;
 
 var TIMESTEP = 10 / 10000;
 var TIMESTEP_SQ = TIMESTEP * TIMESTEP;
@@ -72,7 +72,7 @@ function Rope(nodes) {
 
 
 	// constraints (to model connections as inf strength springs beyond certain point)
-	stretchPercentage = .01;
+	stretchPercentage = 0;
 	restDistance = 1 / (nodes - 1);
 	for (i = 0; i < nodes - 1; i++) {
 		constraints.push(new Constraint(
@@ -129,7 +129,7 @@ Rope.prototype.enforceConstraints = function() {
 		diff.subVectors(con.p1.position, 
 						con.p2.position);
 		var len = diff.length();
-		var targetDist = con.restLength * (1 + con.allowedStretch);
+		var targetDist = con.restLength * (1 + con.allowedStretch / 10000);
 
 		if (len > targetDist || len < con.restLength) {
 			var correction = diff.multiplyScalar(1 - targetDist / len);
@@ -165,8 +165,8 @@ Particle.prototype.stepForward = function(timesq) {
 var rope = new Rope(100);
 var driveTime = 0;
 //rope.addSpringForces();
-rope.particles[ ~~(rope.nodes / 2)].position
-	.setY(rope.particles[~~(rope.nodes / 2)].position.y + .1);
+//rope.particles[ ~~(rope.nodes / 8)].position
+//	.setY(rope.particles[~~(rope.nodes / 8)].position.y + .2);
 // rope.particles[1].position.setX(1 / (rope.nodes - 1));
 
 var colors = ["#a50026",
@@ -181,15 +181,15 @@ var colors = ["#a50026",
 				"#4575b4",
 				"#313695"];
 
+var frequencyMultiplier = 1;
+
 function simulate(time) {
 	if (!lastTime) {
 		lastTime = time;
 		return;
 	}
 
-	driveTime += TIMESTEP * 5;
-//	rope.particles[1].position.setY(Math.sin(driveTime) / 10);
-	// rope.particles[1].position.setX(1 / rope.nodes);
+	driveTime += TIMESTEP * frequencyMultiplier;
 
 	// Step through the simulation several times per animation
 	for (step = 0; step < 1; step++) {
@@ -202,7 +202,9 @@ function simulate(time) {
 		}
 
 		  rope.enforceConstraints();
-		  rope.particles[0].position.set(0, 0, 0);
+	//	  rope.particles[0].position.set(0, 0, 0);
+		  rope.particles[1].position.set(0, Math.sin(driveTime) / 5, -.01);
+//		  rope.particles[1].position.set(0, 0, .1);
 		  rope.particles[rope.nodes - 1].position.set(1, 0, 0);
 	}
 
