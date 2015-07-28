@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="css/styles.css">
+		<style>
+			/*#rope-canvas { width: 500px; height: 500px;}*/
+
+			  #frequency, #driving-position {
+			    float: left;
+			    clear: left;
+			    width: 300px;
+			    margin-left: 200px;
+			    margin-bottom: 10px;
+			    z-index: 2;	
+			}
+
+			#frequency-text, #driving-position-text {
+				float: left;
+				margin-left: 15px;
+			}
+
+
+			#frequency .ui-slider-range { background: #729fcf; }
+  			#frequency .ui-slider-handle { border-color: #729fcf; }
+
+		</style>
+	</head>
+	<body>
+		<div id='content'>
+			<canvas id="rope-canvas" height='300' width='1000'></canvas>
+			<div id="frequency"></div><div id="frequency-text"></div>
+			<div id="driving-position"></div><div id="driving-position-text"></div>
+		</div>
+		<script type="text/javascript">
+		// 	window.onload = function () {
+		//     	ropeDemo.Initialize();
+		// 	};
+		</script>
+
+		<p>
+			<script src="js/three.min.js"></script> <!-- This is to use the vector data-types to make it easier to make 3d visualizations later -->
+
+			<script type="text/javascript" src="js/disk.js"></script>
+
+			<script type="text/javascript">
+				animate();
+
+				function animate() {
+
+					requestAnimationFrame( animate );
+
+					var time = Date.now();
+
+					simulate(time);
+				//	render();
+				//	stats.update();
+
+				}
+			</script>
+
+<!-- 			// <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+   //          <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
+
+
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+
+              <script type="text/javascript">
+				  function updatePosition() {
+				    var pos = $( "#driving-position" ).slider( "value" );
+				    drivingPosition = pos;
+				    $("#driving-position-text").text(drivingPosition);
+				  }
+
+				  function updateFrequency() {
+				    var frequency = $( "#frequency" ).slider( "value" );
+				    frequencyMultiplier = frequency;
+				    $("#frequency-text").text(frequencyMultiplier + "");
+				  }
+
+				  $(function() {
+				  	$( "#frequency" ).slider({
+				      orientation: "horizontal",
+				      range: "min",
+				      max: 1000,
+				      value: 100,
+				      slide: updateFrequency,
+				      change: updateFrequency
+				    });
+
+				    $( "#driving-position" ).slider({
+				      orientation: "horizontal",
+				      range: "min",
+				      max: 1,
+				      min: -.2,
+				      value: 0,
+				      step: .05,
+				      slide: updatePosition,
+				      change: updatePosition
+				    });
+				  });
+			  </script>
+			
+			
+
+
+<!-- 			// <script type="text/javascript" src="js/rope/physics.js"></script>
+			// <script type="text/javascript" src="js/rope/ropeCore.js"></script>
+			// <script type="text/javascript" src="js/rope/ropeImpl.js"></script>
+			// <script type="text/javascript" src="js/rope/verletDemoBootStrapper.js"></script> -->
+		</p>
+	</body>
+</html>
