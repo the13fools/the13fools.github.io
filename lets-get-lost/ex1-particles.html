@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<div id='content'>
+			<canvas id="mesh-canvas" height='300' width='1000'></canvas>
+		</div>
+
+		<p>
+			<script src="js/three.min.js"></script> <!-- This is to use the vector data-types to make it easier to make 3d visualizations later -->
+
+			<script type="text/javascript">
+			var colors = ["#a50026",
+				"#d73027",
+				"#f46d43",
+				"#fdae61",
+				"#fee090",
+				"#ffffbf",
+				"#e0f3f8",
+				"#abd9e9",
+				"#74add1",
+				"#4575b4",
+				"#313695"];
+
+			function Particle(x, y, z, index) {
+				this.position = new THREE.Vector3(x, y, 0); 
+				this.idx = index;
+			}
+
+			function Mesh(height, width) {
+				var particles = [];
+
+				for (i = 0; i < height; i++) {
+					for (j = 0; j < width; j++) {
+						particles.push(
+							new Particle(i / height, j / width, 0, i * height + j)
+						);
+					}
+				}
+
+				this.particles = particles;
+			}
+
+			var mesh = new Mesh(9, 9);
+
+
+			</script>
+
+			<script type="text/javascript">
+				animate();
+
+				function animate() {
+					requestAnimationFrame( animate );
+
+					var time = Date.now();
+
+					var canvas = document.getElementById("mesh-canvas");
+					var ctx = canvas.getContext("2d");
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+					for (i = 0; i < mesh.particles.length; i++) {
+						var part = mesh.particles[i];
+						ctx.fillStyle = colors[i % colors.length];
+						ctx.fillRect(part.position.x * 100, part.position.y * 100, 10, 10);
+					}
+				}
+			</script>
+		</p>
+	</body>
+</html>
