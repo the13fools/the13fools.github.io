@@ -205,9 +205,6 @@ Particle.prototype.stepForward = function(timesq) {
 var rope = new Rope(100);
 var driveTime = 0;
 rope.addSpringForces();
-//rope.particles[ ~~(rope.nodes / 8)].position
-//	.setY(rope.particles[~~(rope.nodes / 8)].position.y + .2);
-// rope.particles[1].position.setX(1 / (rope.nodes - 1));
 
 var colors = ["#a50026",
 				"#d73027",
@@ -250,15 +247,12 @@ function simulate(time) {
 	//	  rope.particles[rope.nodes - 1].position.set(1, 0, 0);
 	}
 
-//	console.log(rope.particles[0].forces);
-
 	var canvas = document.getElementById("rope-canvas");
 	var ctx = canvas.getContext("2d");
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 	for (i = 0; i < rope.nodes; i++) {
 		var part = rope.particles[i];
-	//	console.log(part.position.x * 100 + ", " + part.position.y * 100);
 		ctx.fillStyle = colors[i % colors.length];
 		ctx.fillRect(part.position.x * 100 + 350, part.position.y * 100 + 150, 10, 10);
 	}
