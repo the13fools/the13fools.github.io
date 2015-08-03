@@ -53,6 +53,8 @@
 
 		<script src="js/Cloth.js"></script>
 
+		<script src="js/OrbitControls.js"></script>
+
 		<script type="x-shader/x-fragment" id="fragmentShaderDepth">
 
 			uniform sampler2D texture;
@@ -130,7 +132,7 @@
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var container, stats;
-			var camera, scene, renderer;
+			var camera, scene, renderer, controls;
 
 			var clothGeometry;
 			var sphere;
@@ -160,6 +162,9 @@
 				camera.position.y = 50;
 				camera.position.z = 1500;
 				scene.add( camera );
+
+				// controls 
+				controls = new THREE.OrbitControls( camera );
 
 				// lights
 
