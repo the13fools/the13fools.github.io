@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="css/styles.css">
+	</head>
+	<body>
+		<div id='content'>
+			<canvas id="mesh-canvas" height='300' width='1000'></canvas>
+		</div>
+
+		<p>
+			<script src="js/three.min.js"></script> <!-- This is to use the vector data-types to make it easier to make 3d visualizations later -->
+
+			<script type="text/javascript">
+			var colors = ["#a50026",
+				"#d73027",
+				"#f46d43",
+				"#fdae61",
+				"#fee090",
+				"#ffffbf",
+				"#e0f3f8",
+				"#abd9e9",
+				"#74add1",
+				"#4575b4",
+				"#313695"];
+
+			function Particle(x, y, z, index) {
+				this.position = new THREE.Vector3(x, y, 0); 
+				this.idx = index;
+			}
+
+			function Mesh(height, width) {
+				var particles = [];
+				var connections = [];
+
+				for (i = 0; i < height; i++) {
+					for (j = 0; j < width; j++) {
+						particles.push(
+							new Particle(i / height, j / width, 0, i * height + j)
+						);
+					}
+				}
+
+				for (i = 0; i < height - 1; i++) {
+					for (j = 0; j < width - 1; j++) {
+						connections.push([particles[i * height + j], particles[i * height + j + 1]]);
+						connections.push([particles[i * height + j], particles[(i + 1) * height + j]]);
+					}
+				}
+
+
+				this.connections = connections;
+				this.particles = particles;
+			}
+
+			var mesh = new Mesh(10, 10);
+
+
+			</script>
+
+			<script type="text/javascript">
+				animate();
+
+				function animate() {
+					requestAnimationFrame( animate );
+
+					var time = Date.now();
+
+					var canvas = document.getElementById("mesh-canvas");
+					var ctx = canvas.getContext("2d");
+					ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+					ctx.lineWidth = 1;
+
+      				// set line color
+      				ctx.strokeStyle = '#ff0000';
+      				var pointSize = 10;
+      				var scale = 200; // pixels per width
+
+					for (i = 0; i < mesh.connections.length; i++) {
+						ctx.beginPath();
+						var con = mesh.connections[i];
+						ctx.moveTo(con[0].position.x * scale + pointSize / 2, 
+								   con[0].position.y * scale + pointSize / 2);
+						ctx.lineTo(con[1].position.x * scale + pointSize / 2, 
+							       con[1].position.y * scale + pointSize / 2);
+						ctx.stroke();
+					}
+
+					for (i = 0; i < mesh.particles.length; i++) {
+						var part = mesh.particles[i];
+						ctx.fillStyle = colors[i % colors.length];
+						ctx.fillRect(part.position.x * scale, part.position.y * scale, 
+									 pointSize, pointSize);
+					}
+				}
+			</script>
+		</p>
+	</body>
+</html>
