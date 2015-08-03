@@ -5,7 +5,8 @@
 	</head>
 	<body>
 		<div id='content'>
-			<canvas id="mesh-canvas" height='300' width='1000'></canvas>
+			Hmm something strange seems to be happening here?  What is going on?  Why?  
+			<canvas id="mesh-canvas" height='500' width='1000'></canvas>
 		</div>
 
 		<p>
@@ -57,7 +58,6 @@
 
 
 			</script>
-
 			<script type="text/javascript">
 				animate();
 
@@ -72,25 +72,41 @@
 
 					ctx.lineWidth = 1;
 
+					// Note that the threejs api provides this as a function for convenience
+					// https://github.com/mrdoob/three.js/blob/master/src/math/Matrix4.js#L756
+					var c = Math.cos( .01 ), s = Math.sin( .01 );
+					var rotation = new THREE.Matrix4();
+					rotation.set(	1, 0,  0, 0,
+								 	0, c, - s, 0,
+								 	0, s,  c, 0,
+									0, 0,  0, 1);
+
+					for (i = 0; i < mesh.particles.length; i++) {
+						var part = mesh.particles[i];
+						part.position = part.position.applyMatrix4(rotation);
+					}
+
+
       				// set line color
       				ctx.strokeStyle = '#ff0000';
       				var pointSize = 10;
       				var scale = 200; // total width in pixels 
+      				var shift = 200;
 
 					for (i = 0; i < mesh.connections.length; i++) {
 						ctx.beginPath();
 						var con = mesh.connections[i];
 						ctx.moveTo(con[0].position.x * scale + pointSize / 2, 
-								   con[0].position.y * scale + pointSize / 2);
+								   con[0].position.y * scale + pointSize / 2 + shift);
 						ctx.lineTo(con[1].position.x * scale + pointSize / 2, 
-							       con[1].position.y * scale + pointSize / 2);
+							       con[1].position.y * scale + pointSize / 2 + shift);
 						ctx.stroke();
 					}
 
 					for (i = 0; i < mesh.particles.length; i++) {
 						var part = mesh.particles[i];
 						ctx.fillStyle = colors[i % colors.length];
-						ctx.fillRect(part.position.x * scale, part.position.y * scale, 
+						ctx.fillRect(part.position.x * scale, part.position.y * scale + shift, 
 									 pointSize, pointSize);
 					}
 				}
