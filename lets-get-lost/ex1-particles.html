@@ -43,7 +43,7 @@
 				this.particles = particles;
 			}
 
-			var mesh = new Mesh(9, 9);
+			var mesh = new Mesh(9, 100);
 
 
 			</script>
@@ -63,7 +63,7 @@
 					for (i = 0; i < mesh.particles.length; i++) {
 						var part = mesh.particles[i];
 						ctx.fillStyle = colors[i % colors.length];
-						ctx.fillRect(part.position.x * 100, part.position.y * 100, 10, 10);
+						ctx.fillRect(part.position.x * 200, part.position.y * 200, 5, 5);
 					}
 				}
 			</script>
