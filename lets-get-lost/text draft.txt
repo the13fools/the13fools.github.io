@@ -1,0 +1,93 @@
+Hello traveller, welcome!  I hope you take a moment to explore this article and to meditate on corresponding visuals.  Please feel free to reach out if you have feedback or if you would like to help me make more things like this. 
+
+This article was born out of an experimental a week and half long "mini" course at a summer math program for high school kids called HCSSiM. The title of the course was "Let's Get Lost", with the idea of the being that each day I would prepare the next lesson/course materials in response to the previous days discussion.  As the class was fairly short, I sought to provide direction by choosing a destination - namely I wanted to touch on all of the ideas necessary to make a computer simulate a leaf (or more generally make it simulate something with hyperbolic geometry). 
+
+After returning from the program, enough friends were curious to see the course materials that I decided to make this website to expose them for general consumption.
+
+References and citations will appear at the end of each part.  But before we begin, I would like to mention two "un-references", "The Bet" by Chekhov and by "The Phantom Tollbooth" by Norton Juster, which have little to do with anything outside of being excellent and worthy of (re)reading if they haven't been considered recently.
+
+Part 0 (Context): 
+This class touched on a number of rich subjects in passing (in an effort to avoid getting to far afield of our initial destination).  The aim was to get lost in connections between disperate ideas while still arriving at a conceptual destination that helped pull all the topics together. 
+
+More than anything else, the factor that drove the class was the question of how much a topic was helped to develop "intrinsic" reasoning, i.e. did it help us understand and simulate the way in which global geometry emerges from local rules?
+
+That said, as this class was happening at a summer math program, this pragmatic drive was tempered to a degree by a desire to meditate on ideas the class found independently compelling.
+
+Part 1 (Peach Season): 
+With the context established, we are ready to embark on our meandering journey.  We start at a breakfast, eating peach. 
+
+In particular, when we bite into the peach, we  
+
+
+
+We begin our journey to the leaf realm by thinking about ways to visualize four dimentional objects.  
+
+--------
+
+Ok that was amusing, but why start here? What does it have to do with leaves?  
+
+To answer this question, let's put on our physicist hats, and pretend that our job is to think about questions of the following form: Given a system (like an apple in a tree), what does it look like if you let time pass without touching it?  Figured out what happens (nothing)?  Good, now let's figure out what happens when you start interacting with the system (by shaking the tree).  Figured out what happens (the apple falls and hits a boy named Issac in the head)?  Good, now let's think about a forest, full of trees, each with a dedicated tree shaker.  What does this forest look like from above?  How many apples fall every second?  
+
+Probably the easiest way to answer the last question is to study the the first two, and then understand the whole forest as a collection of shaker trees that all exist without interacting with each other.  
+
+The math concept that corresponds to this idea is linearity (https://en.wikipedia.org/wiki/Linearity).  The idea is that we want to build a question answering machine (aka a function) that satisfies the condition that f(a + b + c) = f(a) + f(b) + f(c).  In other works, a function where the answer for the forest (which is the sum of trees) is just the sum of the answers for each tree.  This is useful because it means that once you understand how one tree behaves, it doesn't take much to understand the whole forest.  
+
+I think this construction does a great job of exercising this idea in very pretty way, and in a way which is often skipped in traditional math curiculum, which is one reason that I lead with it.  
+
+A neat minimal surface: 
+
+https://www.shadertoy.com/view/Md23Rd
+
+
+
+
+
+
+
+
+Part n (Mouldy Peaches): 
+References: 
+We are the products of all of our past experiences, but some weigh more heavily than others. The ideas in the course were most directly inspired by: 
+Nervous system and Descriptiv - both of which are doing really inspiring explorations 
+A seminar on Foliation Theory led by William Thurston that I took in college (as a result of some madcap encouragement by Professor James West) - for inspiring some of the topology demonstrations
+David Henderson's Experiencing Geometry - a book full of great intuition building exercises for non-euclidian geometry
+Bret Victor and Daniel Shiffman - whose presentation style has inspired the one seen here
+
+
+
+
+
+
+
+Once that is understood, then they invariably they start wanting to touch it, and start asking what happens to the system when you throw a big rock at it (turns out the apple falls and hits someone in the head).  Once that it understood, 
+
+As the systems being studied get more and more complicated (like beehives) 
+
+As the systems they try to understand rapidly get complicated 
+
+The game they play is really quite brutal.  
+
+One trick that they get lots of milage out of is the idea of linearization.  In particular, they look for lens 
+An idea which has wide reaching 
+One question that would be interesting to consider 
+
+Before we begin, 
+
+All manner of peaches
+
+
+
+In doing this, we considered ideas drawn from some mix of signal processing, algebraic topology, and differential geometry.  
+
+After returning, a number of people told me that they were curious to see notes from the class, 
+
+The idea was that in order to do this, we would have to venture through some parts of math that I particularly enjoy 
+
+The course description made vauge reference to a Chekhov story (http://www.eastoftheweb.com/short-stories/UBooks/Bet.shtml) 
+
+
+After leaving, a few friends told me that they would be interested in seeing my notes from the class
+
+After finishing up the course I was left with some 
+
+This document is an experiment in using 2015 web technologies to communicate mathematical ideas.  
