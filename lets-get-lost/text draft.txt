@@ -38,6 +38,30 @@ A neat minimal surface:
 
 https://www.shadertoy.com/view/Md23Rd
 
+Part 2 (If it is possible to simulate reality, then we are probably a simulation): 
+We want to simulate a leaf.  In order to start thinking about how to do that, we need to start thinking about how to model physical reality in a computer.  Turns out there is a great book that does exactly this, called nature of code (LINK).  
+
+In this course, we will be combining many ideas which are touched upon in that book, yet where Nature of Code takes the "textbook" approach of organizing knowledge, we will be more simple-minded.  We just want to make a computer "grow" (or at least draw) a leaf.  
+
+To go down this path, we want to leverage "natural" abstractions, i.e. abstractions in which the control of local rules gives rise to global form.  
+
+
+
+
+
+
+
+ but don't get intimidated, ideas are so often easier to understand if you don't spend too much time worrying about context.  
+
+Yet, while this book is great, in this class, we sought to develop a perspective 
+
+Two examples, one where you change damping, 
+
+
+Part 3 (A simulated peach): 
+
+
+
 
 
 
