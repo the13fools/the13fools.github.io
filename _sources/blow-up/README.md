@@ -2,7 +2,7 @@
 
 An interactive essay on resolution of singularities, written from the point of view of a graphics and physics-simulation researcher: what a blowup is, what it does to colliding balls, tensor fits and cross fields, and why singular learning theory needs it.
 
-Published at **https://foolzone.com/hironaka-blow-up/**.
+Published at **https://foolzone.com/playground/blow-up/**.
 
 | Page | File | Contents |
 | --- | --- | --- |
@@ -40,9 +40,9 @@ npm run preview    # serve dist/
 
 ## Publish
 
-This copy is maintained with the personal website in `the13fools/the13fools.github.io`. Its source is in `_sources/blow-up/` and its generated public files are in `hironaka-blow-up/` at the repository root.
+This copy is maintained with the personal website in `the13fools/the13fools.github.io`. Its source is in `_sources/blow-up/` and its generated public files are in `playground/blow-up/` at the repository root.
 
-From the website repository root, install dependencies once with `npm ci --prefix _sources/blow-up`, then run `node tools/build-blow-up.mjs`. This runs the essay’s type check, production build, link audit and figure-number checks before copying the checked output into `hironaka-blow-up/`. Commit both the source edits and generated output, and push to `master` to publish through the existing GitHub Pages deployment.
+From the website repository root, install dependencies once with `npm ci --prefix _sources/blow-up`, then run `node tools/build-blow-up.mjs`. This runs the essay’s type check, production build, link audit and figure-number checks before copying the checked output into `playground/blow-up/`. Commit both the source edits and generated output, and push to `master` to publish through the existing GitHub Pages deployment.
 
 The original standalone workflow templates are retained in `workflows/` for a future separate repository. They are not active in this publication.
 

@@ -17,4 +17,4 @@ The uploaded public_html backup and recovery material are kept outside this publ
 
 ## Blow-up essay
 
-The interactive essay is published at https://foolzone.com/hironaka-blow-up/. Its editable source is tracked in `_sources/blow-up/`; the checked production output is in `hironaka-blow-up/`. Run `npm ci --prefix _sources/blow-up` once, then `node tools/build-blow-up.mjs` from this repository root to build, audit and refresh it. Commit source and output together before publishing.
+The interactive essay is published at https://foolzone.com/playground/blow-up/. Its editable source is tracked in `_sources/blow-up/`; the checked production output is in `playground/blow-up/`. Run `npm ci --prefix _sources/blow-up` once, then `node tools/build-blow-up.mjs` from this repository root to build, audit and refresh it. Commit source and output together before publishing.

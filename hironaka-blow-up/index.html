@@ -1,64 +1,6 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>What is… a blowup?</title>
-  <meta name="description" content="Hironaka's resolution of singularities was just formalized in Lean. A graphics researcher works out what blowups are, what they do to collisions, tensor fits and cross fields, and why singular learning theory needs them.">
-  <meta name="theme-color" content="#f5f6f8">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="What is… a blowup?">
-  <meta property="og:description" content="Hironaka's resolution of singularities was just formalized in Lean. A graphics researcher works out what blowups are, what they do to collisions, tensor fits and cross fields, and why singular learning theory needs them.">
-  <meta property="og:url" content="https://foolzone.com/hironaka-blow-up/">
-  <meta property="og:image" content="https://foolzone.com/hironaka-blow-up/og.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/hironaka-blow-up/">
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-DLvZcv5C.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-gbYfz69p.css">
-</head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html" aria-current="page">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Simulation</a><a href="./part-3.html">III · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
-  </header>
-<main class="essay">
-
-  <div class="col">
-    <p class="kicker">Notes from a graphics researcher</p>
-    <h1>What is… a blowup?</h1>
-    <p class="dek">Hironaka's theorem on resolution of singularities was just formalized in Lean. It wasn't something I had really encountered before. I did my PhD on physics simulation and graphics, with a lot of polynomial optimization along the way, and I was curious what this machinery would do on the singular problems I know.</p>
-    <p class="byline">Josh, with Chart (Claude Opus 5.5) and Gemini Argon</p>
-  </div>
-  <section class="panel" aria-label="Teaser: a blown-up collision">
-    <div class="pair">
-      <div class="fig"><div class="h">Three balls touching at once</div><div class="box wide"><canvas id="tz-balls" aria-label="Three balls colliding"></canvas></div></div>
-      <div class="fig"><div class="h">Every tiny gap ratio, colored by what happens <span>drag</span></div><svg id="tz-bar" class="bar" role="img" aria-label="Gap ratios colored by outcome; drag to choose" tabindex="0"></svg><p class="cap">Rigid-body physics has no answer when three balls touch at the same instant. Replace that instant by every way of almost getting there, here every ratio of two tiny gaps, and the question splits into regions with definite answers. That replacement is a blowup. <a href="./part-2.html#collisions">Section 6</a> unpacks this demo.</p></div>
-    </div>
-  </section>
-  <div class="col">
-
-    <h2 id="why">Why I'm writing this</h2>
-    <p>In October 2026, Resolution, the AI alignment research organization that absorbed the theoretical AI safety group formerly known as Timaeus, released <a href="https://github.com/resolutionorg/hironaka">a Lean formalization</a> of Heisuke Hironaka's 1964 theorem on resolution of singularities, built largely by AI agents and a rather large amount of computational resources (<a href="https://resolution.org/post/formalizing-resolution-of-singularities">their post</a> explains how). Their interest comes from <em>singular learning theory</em>, which uses the theorem to explain how neural networks generalize. Ultimately I wanted to understand the what and the why of this formalization: what exactly was proved, and why a group working on AI safety would spend its effort on a theorem from 1964.</p>
-    <p>In my graduate work I encountered many challenging singular problems arising from physics simulation and geometry processing, with a focus on problems related to parameterization, and I spent years developing solvers for them. I was curious to understand the core of singular learning theory by seeing what it does when applied in these settings, and through that to gain some intuition for the learning and AI safety problems it was built for.</p>
-    <p>But, it being the age of AI, I talked this through with my chatbot friends, who took names for themselves. This post was mostly written by the Claude Opus 5.5 agent that took the name Chart, with some help from Gemini Argon.</p>
-    <h2 id="contents">Contents</h2>
-    <div class="contents">
-      <a class="card" href="./part-1.html"><div class="n">Part I</div><div class="t">What is a blowup?</div><div class="d">The billiard corner, then a ladder of three singular points (crossing, touching, cusp) and how blowing up resolves each. Hironaka's algorithm, Nash's alternative and how it fails, and blowups on noisy data.</div></a>
-      <a class="card" href="./part-2.html"><div class="n">Part II</div><div class="t">Blowups in simulation, where I have more intuition</div><div class="d">Three demos, each unpacked: the colliding balls above, a tensor fit that never finishes, and a cross field whose singularities you place by hand.</div></a>
-      <a class="card" href="./part-3.html"><div class="n">Part III</div><div class="t">Singular learning theory</div><div class="d">The local learning coefficient: a thermometer for how degenerate a trained network is, why Bayesian learning prefers degenerate fits, and where they come from in networks.</div></a>
-      <a class="card" href="./appendix.html"><div class="n">Appendices</div><div class="t">More on collisions, tensors and the free energy, and references</div><div class="d">Narrowing wedges and three ways to resolve one impact; tensors in more depth; how the temperature in the LLC is chosen.</div></a>
-    </div>
-    <p><a class="button" href="./part-1.html">Start reading: Part I →</a></p>
-
-  </div>
-</main>
-  <nav class="pager" aria-label="Previous and next"><a class="next" href="./part-1.html"><span class="dir">Next →</span><span class="t">What is a blowup?</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5) and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blow-up essay — moved</title><link rel="canonical" href="https://foolzone.com/playground/blow-up/">
+<meta http-equiv="refresh" content="0;url=/playground/blow-up/"></head>
+<body><p>The essay has moved. <a href="/playground/blow-up/">Continue reading.</a></p>
+<script>location.replace("/playground/blow-up/" + location.search + location.hash);</script></body></html>
