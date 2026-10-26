@@ -166,3 +166,12 @@ ol.read { padding-left: 36px; } ol.read li { margin-bottom: .35em; }
 .eq.tex { font-family: inherit; white-space: normal; text-align: center; padding: 6px 14px; }
 .eq.tex .katex-display { margin: 0.4em 0; overflow-x: auto; overflow-y: hidden; }
 .eq.tex .katex { font-size: 1.08em; }
+
+/* The 3-fold obstruction uses the same visual language as the cone explorer. */
+#nash3-generator { max-width: 100%; font: 13.5px var(--f-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; }
+.nash3-legend { font-size: 12px; color: var(--muted); gap: 8px 16px; }
+.nash3-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.nash3-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.nash3-dot { background: var(--cold); }
+.nash3-hole { border: 2px solid var(--hot); }
+.nash3-selected { background: var(--blow); }

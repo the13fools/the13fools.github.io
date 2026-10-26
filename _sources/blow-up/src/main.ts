@@ -43,3 +43,5 @@ import "./figures/geometry.js";
 import "./figures/learning.js";
 import "./figures/physics.js";
 import "./figures/manifolds.js";
+
+import "./figures/nash-three.js";

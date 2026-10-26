@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-BL3XLxvg.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-gbYfz69p.css">
+  <script type="module" crossorigin src="./assets/main-Ch4Cu1Po.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-CdbGaq60.css">
 </head>
 <body>
   <header class="site-header">
@@ -36,7 +36,7 @@
 
   <div class="col">
     <p><b>The idea in one paragraph.</b> Nudge a trained model's weights at random, retaining only perturbations that barely alter the loss. How much parameter room is available? Regular asymptotic theory describes a minimum by a quadratic bowl, whose sublevel volume contracts with exponent $d/2$. Neural network loss landscapes can instead contain degenerate minima and flat valleys of equivalent functions. The <b>local learning coefficient $\lambda$</b> measures this room directly: $\lambda = d/2$ for a regular bowl, but $\lambda &lt; d/2$ in the degenerate examples below. Under its analytic and statistical assumptions, Singular Learning Theory relates $\lambda$ to Bayesian evidence and excess generalization loss. We can estimate it with what amounts to a statistical thermometer.</p>
-    <p class="read"><b>Figure 17.</b> A thermometer for $\lambda$. Langevin chains start at the minimum. At equilibrium, the average loss scaled by $n$ approaches $\lambda$ in the large-$n$ regime: 1 for the quadratic bowl, and less for the degenerate examples. Finite chains and finite $n$ produce deviations. For $(ab)^2$, chains spread along the crossing axes toward $\lambda = 1/2$.</p>
+    <p class="read"><b>Figure 18.</b> A thermometer for $\lambda$. Langevin chains start at the minimum. At equilibrium, the average loss scaled by $n$ approaches $\lambda$ in the large-$n$ regime: 1 for the quadratic bowl, and less for the degenerate examples. Finite chains and finite $n$ produce deviations. For $(ab)^2$, chains spread along the crossing axes toward $\lambda = 1/2$.</p>
   </div>
   <section class="panel" aria-label="Local learning coefficient estimator">
     <div class="controls">
@@ -59,7 +59,7 @@
   <div class="col">
     <h2 id="learning">13. Why singular models learn differently: two perfect fits</h2>
     <p>Consider a toy model with two parameters and two settings that fit the training data with zero error: one regular quadratic bowl ($K \propto r^2$) and one degenerate flat basin ($K \propto r^4$). Classical empirical risk cannot distinguish them. Which one does Bayesian inference select?</p>
-    <p class="read"><b>Figure 18.</b> Posterior samples as sample size $n$ increases (blue = regular, orange = degenerate). Both achieve 0 training error. Yet as $n$ grows, the degenerate fit captures nearly all posterior mass: volume, not depth, decides the winner.</p>
+    <p class="read"><b>Figure 19.</b> Posterior samples as sample size $n$ increases (blue = regular, orange = degenerate). Both achieve 0 training error. Yet as $n$ grows, the degenerate fit captures nearly all posterior mass: volume, not depth, decides the winner.</p>
   </div>
   <section class="panel" aria-label="Two perfect fits">
     <div class="controls"><label class="sl long"><span class="lbl">data points n</span><input id="tw-n" type="range" min="0" max="4" step="0.05" value="0.6"><output id="tw-n-out"></output></label></div>
@@ -75,7 +75,7 @@
     <p><b>From physics to Bayesian learning:</b> At temperature $T = 1/n$, a particle in an empirical potential $K(w)$ visits parameter states according to the Gibbs posterior $p(w) \propto e^{-n K(w)} \varphi(w)$. In a regular quadratic well, the harmonic approximation $K(w) \approx \frac{1}{2} w^\top H w$, with positive-definite $H$, gives the sublevel volume $V(\varepsilon)=\operatorname{Vol}\{K&lt;\varepsilon\}$:</p>
     <div class="eq tex">V(\varepsilon) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\,(2\varepsilon)^{d/2}</div>
     <p><b>Where classical statistics fails:</b> Non-identifiability, dead units, and continuous factorization symmetries can produce minima with zero Hessian eigenvalues ($\det H=0$). Discrete permutation symmetries alone do not force a zero eigenvalue. The regular Laplace approximation then fails: dividing by $\sqrt{\det H}$ is not a valid way to estimate the volume. The usual AIC and BIC formulas can still be evaluated, but their regular-model justifications need not apply.</p>
-    <p class="read"><b>Figure 19.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
+    <p class="read"><b>Figure 20.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
   </div>
   <section class="panel" aria-label="Flat-bottomed well">
     <div class="pair">
@@ -95,7 +95,7 @@
       <li><b>Bayesian Occam's Razor:</b> In model selection, the posterior evidence scales as $n^{-\lambda}(\log n)^{m-1}$. For equally good fits and comparable prior weights, smaller $\lambda$ gives a smaller leading complexity penalty. Differences in fit and prior weight also matter.</li>
       <li><b>Generalized Equipartition:</b> While a quadratic bowl stores an average thermal energy of $\frac{d}{2}T$, a singular potential stores an average excess energy of $\mathbf{\lambda \cdot T}$.</li>
     </ul>
-    <p class="read"><b>Figure 20.</b> Two wells: a sharp regular bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
+    <p class="read"><b>Figure 21.</b> Two wells: a sharp regular bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
   </div>
   <section class="panel" aria-label="Energy versus volume">
     <div class="controls">
@@ -110,7 +110,7 @@
   </section>
 
   <div class="col">
-    <p class="read"><b>Figure 21.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates parameter volume asymptotically.</p>
+    <p class="read"><b>Figure 22.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates parameter volume asymptotically.</p>
   </div>
   <section class="panel" aria-label="Winner take all versus frozen shares">
     <div class="controls"><label class="sl"><span class="lbl">n, or 1/ε</span><input id="r-n" type="range" min="1" max="12" step="0.1" value="4"><output id="r-n-out"></output></label></div>
@@ -130,7 +130,7 @@
       <li><b>Unit Merging:</b> When two hidden units share identical incoming weight vectors, they collapse into a single effective unit.</li>
       <li><b>Matrix Factorization Bottlenecks:</b> Any product $W = BA$ exhibits a continuous $\operatorname{GL}(r)$ gauge symmetry $A \to GA, B \to BG^{-1}$.</li>
     </ul>
-    <p class="read"><b>Figure 22.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
+    <p class="read"><b>Figure 23.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
   </div>
   <section class="panel" aria-label="One ReLU unit">
     <div class="controls"><label class="sl"><span class="lbl">Target strength c</span><input id="nn-c" type="range" min="0" max="1" step="0.01" value="0.6"><output id="nn-c-out"></output></label></div>
@@ -145,7 +145,7 @@
   <div class="col">
     <h3 id="models">Model problems</h3>
     <p><b>Linear networks are matrix factorizations:</b> A two-layer network $y = BAx$ with hidden width $H$ factors $W = BA$. Adding hidden units increases parameter count $d = H(M+N)$ linearly. The Aoyagi–Watanabe formula depends on $M,N,H$ and the true matrix rank $r$. In the plotted family, it reaches $MN/2$ at sufficiently large width. This is half the dimension of the full matrix space; the rank-$r$ matrix stratum instead has dimension $r(M+N-r)$.</p>
-    <p class="read"><b>Figure 23.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
+    <p class="read"><b>Figure 24.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
   </div>
   <section class="panel" aria-label="Learning coefficient of factorized models">
     <div class="pair">
@@ -157,7 +157,7 @@
 
   <div class="col">
     <p><b>ReLU crossings:</b> Two ReLU neurons learning a single target have loss $K = a_2^2 \cdot D(b_2)$. Its zero set forms two crossing lines ($a_2 = 0$ and $b_2 = 0$), giving $\lambda = 1/2$ with multiplicity $m = 2$.</p>
-    <p class="read"><b>Figure 24.</b> Left: loss landscape of a two-neuron ReLU crossing. Right: posterior average $n\langle K \rangle$ converging to $\lambda = 1/2$ at the slow rate $1/\log n$.</p>
+    <p class="read"><b>Figure 25.</b> Left: loss landscape of a two-neuron ReLU crossing. Right: posterior average $n\langle K \rangle$ converging to $\lambda = 1/2$ at the slow rate $1/\log n$.</p>
   </div>
   <section class="panel" aria-label="ReLU crossing singularity">
     <div class="pair">
@@ -176,7 +176,7 @@
     <p>Centering matters: an uncentered partition function includes $e^{-n\beta L_n(w^*)}$, and its free-energy derivative is $n\mathbb{E}_\beta[L_n(w)]$. Subtracting the baseline loss leads to the practical estimator</p>
     <div class="eq tex">\hat\lambda(w^*)=n\beta\left(\frac{1}{S}\sum_{s=1}^{S}L_n(w_s)-L_n(w^*)\right).</div>
     <p>At inverse temperature $\beta^*=1/\log n$, this is a generalized equipartition measurement of local complexity. Finite chains introduce discretization and mixing error, and the logarithmic correction above need not be negligible. A quadratic spring provides soft localization in the demo; its strength changes which region is sampled. A finite SGLD estimate is not an exact LLC, and applying analytic SLT results to piecewise-analytic networks such as ReLU networks requires additional care.</p>
-    <p class="read"><b>Figure 25.</b> LLC estimates on trained linear networks against hidden width $H$. At intermediate localization $\gamma = 10$, compare the finite-chain estimates with the theoretical curve. Agreement and deviations depend on localization and sampling; the comparison is a diagnostic, not a proof of convergence.</p>
+    <p class="read"><b>Figure 26.</b> LLC estimates on trained linear networks against hidden width $H$. At intermediate localization $\gamma = 10$, compare the finite-chain estimates with the theoretical curve. Agreement and deviations depend on localization and sampling; the comparison is a diagnostic, not a proof of convergence.</p>
   </div>
   <section class="panel" aria-label="LLC on a trained network">
     <div class="controls">
@@ -203,7 +203,7 @@
     <p>Integrating the evidence $Z_N = \int e^{-N K} dw$ across the intersecting divisors $\theta = 0$ and $u = 0$ yields:</p>
     <div class="eq tex">Z_N \asymp N^{-1} \cdot N^{-1/2}\log N = \mathbf{N^{-3/2}\log N}</div>
     <p>The RLCT is $\lambda = 3/2$, and the multiplicity jumps to $\mathbf{m = 2}$: the double pole of Watanabe's zeta function is the geometric intersection of component collision and component emptying!</p>
-    <p class="read"><b>Figure 26.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
+    <p class="read"><b>Figure 27.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
   </div>
   <section class="panel" aria-label="Normal crossing and evidence scaling in tensor collisions">
     <div class="controls">
