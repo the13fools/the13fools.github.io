@@ -14,3 +14,7 @@ Local preview: python3 -m http.server 8765 --bind 127.0.0.1
 - The original slides are approximately 198 MiB, exceeding GitHub’s 100 MiB file limit. They remain in the original public_html/papers/ backup outside this checkout. Lossless ZIP recompression still exceeds the limit. The IMA Presentation link remains available; restore a slide download link after preparing an appropriately sized deck or an external download location.
 
 The uploaded public_html backup and recovery material are kept outside this publication checkout.
+
+## Blow-up essay
+
+The interactive essay is published at https://foolzone.com/hironaka-blow-up/. Its editable source is tracked in `_sources/blow-up/`; the checked production output is in `hironaka-blow-up/`. Run `npm ci --prefix _sources/blow-up` once, then `node tools/build-blow-up.mjs` from this repository root to build, audit and refresh it. Commit source and output together before publishing.

@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolving Newton's Cradle · What is… a blowup?</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a wide instrument panel. Companion to "Two Ways to Blow Up": violet = the blowup, chamber hues = different approach orders, ink = the simultaneous answer. */
+:root {
+  --paper: #f5f6f8; --surface: #ffffff; --ink: #1c2028; --muted: #5b6372; --rule: #d9dde4; --soft: #edf0f4;
+  --nash: #7a52c7; --bad: #d4321e; --good: #1f8a5b;
+  --ch1: #e3892f; --ch2: #3a7fc4; --ch3: #1f8a5b; --ch4: #c2417a; --ch5: #1f8a8a; --ch6: #8a6d1f;
+  --steel: #c9ced8; --steel-hi: #f4f6fa;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Literata", Georgia, "Times New Roman", serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111419; --surface: #181c23; --ink: #e6e9ef; --muted: #9ba3b1; --rule: #2b313c; --soft: #20252e;
+    --nash: #a989f0; --bad: #ff6a55; --good: #4fc68f;
+    --ch1: #f0a050; --ch2: #5e9fe0; --ch3: #4fc68f; --ch4: #e46a9c; --ch5: #4cc2c2; --ch6: #c9a54a;
+    --steel: #59606d; --steel-hi: #8d95a3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #111419; --surface: #181c23; --ink: #e6e9ef; --muted: #9ba3b1; --rule: #2b313c; --soft: #20252e;
+  --nash: #a989f0; --bad: #ff6a55; --good: #4fc68f;
+  --ch1: #f0a050; --ch2: #5e9fe0; --ch3: #4fc68f; --ch4: #e46a9c; --ch5: #4cc2c2; --ch6: #c9a54a;
+  --steel: #59606d; --steel-hi: #8d95a3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: 18px; line-height: 1.68;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 44px 72px;
+}
+.col { max-width: 680px; margin: 0 auto; }
+p { margin: 0 0 1em; }
+h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(32px, 5.4vw, 50px); line-height: 1.05; letter-spacing: -0.015em; margin: 0 0 16px; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 24px; line-height: 1.2; margin: 52px 0 12px; text-wrap: balance; }
+.kicker { font-family: var(--f-display); font-weight: 600; font-size: 14px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--nash); margin: 0 0 12px; }
+.dek { font-size: 21px; color: var(--muted); line-height: 1.5; }
+.m { font-family: var(--f-mono); font-size: 0.86em; white-space: nowrap; }
+.read { font-family: var(--f-display); font-size: 15.5px; line-height: 1.55; border-left: 3px solid var(--nash); padding: 2px 0 2px 14px; margin: 0 0 1.1em; }
+.read b { color: var(--nash); }
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 1.2em; }
+@media (max-width: 640px) { .trio { grid-template-columns: minmax(0, 1fr); } }
+.trio div { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; font-family: var(--f-display); font-size: 14.5px; line-height: 1.5; }
+.trio b { display: block; font-size: 15.5px; margin-bottom: 4px; }
+
+.panel { max-width: 900px; margin: 22px auto 32px; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-family: var(--f-display); font-size: 15px; }
+.lbl { color: var(--muted); font-size: 14px; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.seg button, .btn { font: 600 14px var(--f-display); border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.seg button:disabled { opacity: 0.4; cursor: default; }
+.btn.go { background: var(--nash); border-color: var(--nash); color: #fff; }
+button:focus-visible, input:focus-visible, svg:focus-visible { outline: 3px solid var(--nash); outline-offset: 2px; }
+input[type="range"] { accent-color: var(--nash); }
+.nball { display: flex; align-items: center; gap: 10px; }
+.nball output { font-family: var(--f-mono); font-size: 14px; min-width: 1.5em; }
+.masses { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px 14px; font-family: var(--f-display); font-size: 13.5px; }
+.masses label { display: flex; flex-direction: column; gap: 2px; color: var(--muted); }
+.masses label span { display: flex; justify-content: space-between; }
+.masses output { font-family: var(--f-mono); color: var(--ink); font-size: 13px; }
+.masses input { width: 100%; }
+.stage { position: relative; width: 100%; aspect-ratio: 16 / 7; min-height: 220px; background: var(--soft); border-radius: 10px; overflow: hidden; }
+.stage canvas { width: 100%; height: 100%; display: block; }
+.stage .tag { position: absolute; left: 12px; top: 10px; right: 12px; font-family: var(--f-display); font-size: 13.5px; color: var(--muted); pointer-events: none; }
+.stage .tag b { color: var(--ink); }
+.rows { overflow-x: auto; }
+.rows table { border-collapse: collapse; width: 100%; min-width: 600px; font-family: var(--f-display); font-size: 14.5px; }
+.rows th, .rows td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.rows thead th { color: var(--muted); font-size: 13px; font-weight: 600; }
+.rows td.v { font-family: var(--f-mono); font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rows tr.pick { cursor: pointer; }
+.rows tr.pick:hover td { background: var(--soft); }
+.rows tr.on td { background: color-mix(in srgb, var(--nash) 12%, var(--surface)); }
+.rows .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 8px; vertical-align: -1px; }
+.rows .note { color: var(--muted); font-size: 13.5px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; font-family: var(--f-display); font-size: 14px; }
+.chip { background: var(--soft); border-radius: 999px; padding: 4px 12px; }
+.chip b { font-family: var(--f-mono); font-weight: 500; }
+.mapwrap { display: flex; flex-direction: column; gap: 6px; }
+.card { font-family: var(--f-display); font-size: 14.5px; line-height: 1.45; min-width: 0; }
+.card .title { font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.ans { border-top: 1px solid var(--rule); padding: 8px 0; display: flex; flex-direction: column; gap: 2px; }
+.ans .ah { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.ans .note { color: var(--muted); font-size: 13.5px; }
+.ans .v { font-family: var(--f-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.tri3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .tri3 { grid-template-columns: minmax(0, 1fr); } }
+.tri3 .stage.st { aspect-ratio: 3 / 4; min-height: 0; background: var(--surface); border: 1px solid var(--rule); }
+.sth { font-family: var(--f-display); font-weight: 700; font-size: 14.5px; margin: 0 0 6px; }
+.kw2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 680px) { .kw2 { grid-template-columns: minmax(0, 1fr); } }
+.mapwrap svg { max-width: 600px; margin: 0 auto; }
+.mapwrap .h { font-family: var(--f-display); font-weight: 600; font-size: 15px; }
+svg { display: block; width: 100%; height: auto; }
+svg text { font-family: var(--f-display); font-size: 13px; fill: var(--muted); }
+figcaption, .cap { font-family: var(--f-display); font-weight: 500; font-size: 14px; color: var(--muted); line-height: 1.5; }
+.foot { font-family: var(--f-display); font-size: 14px; color: var(--muted); border-top: 1px solid var(--rule); margin-top: 56px; padding-top: 16px; }
+a { color: var(--nash); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<style>body { overflow-x: hidden; } .back { max-width: 680px; margin: -20px auto 24px; font-family: var(--f-display, sans-serif); font-size: 14.5px; } .back a { text-decoration: none; }</style>
+</head>
+<body>
+<p class="back"><a href="../index.html">← What is… a blowup?</a> · companion notes</p>
+<main>
+  <div class="col">
+    <p class="kicker">A companion to <a href="../index.html">What is… a blowup?</a> and <a href="./two-ways.html">Two ways to blow up</a></p>
+    <h1>Resolving Newton's cradle</h1>
+    <p class="dek">When a ball hits a row of touching balls, every contact closes at the same instant. Physics with hard contacts doesn't say what happens next. There are three ways to make it say something.</p>
+    <div class="trio">
+      <div><b>Bubble sort</b>Number the contacts. Repeatedly apply a two-ball collision at the first contact that is still closing. One answer, but it can depend on the numbering.</div>
+      <div><b style="color:var(--nash)">Hironaka: blow up</b>Pull the balls slightly apart, by tiny gaps in every possible ratio. Each ratio gives a definite sequence of two-ball collisions. Keep every outcome, and how much of the space of ratios gives it.</div>
+      <div><b>Nash-style: smooth it</b>Choose no order at all. Replace hard contact with very stiff springs, so every contact acts at once, and take the limit. One answer, but it depends on the spring law.</div>
+    </div>
+    <p class="read"><b>How to use Figure 1.</b> Set the number of balls, how they come in, and each ball's mass. The table lists every resolution's outgoing velocities; click a row to watch it. The map underneath is the blowup itself: each point is one ratio of tiny gaps, colored by the outcome it leads to. Click the map to play that exact ratio.</p>
+  </div>
+
+  <section class="panel" aria-label="Cradle demo">
+    <div class="controls">
+      <label class="nball"><span class="lbl">Balls</span><input id="n" type="range" min="2" max="7" step="1" value="4"><output id="n-out">4</output></label>
+      <span class="lbl">Coming in</span>
+      <span class="seg" role="group" aria-label="Initial motion" id="start">
+        <button type="button" data-v="one" aria-pressed="true">One ball from the left</button>
+        <button type="button" data-v="two" aria-pressed="false">Two balls from the left</button>
+        <button type="button" data-v="ends" aria-pressed="false">Both ends inward</button>
+      </span>
+    </div>
+    <div class="controls">
+      <span class="lbl">Masses</span>
+      <span class="seg" role="group" aria-label="Mass pattern" id="mp">
+        <button type="button" data-v="equal" aria-pressed="false">Equal</button>
+        <button type="button" data-v="heavy" aria-pressed="false">Heavy middle</button>
+        <button type="button" data-v="light" aria-pressed="true">Light middle</button>
+        <button type="button" data-v="up" aria-pressed="false">Heavier to the right</button>
+        <button type="button" data-v="down" aria-pressed="false">Lighter to the right</button>
+        <button type="button" data-v="random" aria-pressed="false">Random</button>
+      </span>
+    </div>
+    <div class="masses" id="masses"></div>
+    <div class="stage"><canvas id="cv" aria-label="Animated cradle"></canvas><span class="tag" id="tag"></span></div>
+    <div class="controls"><button type="button" class="btn go" id="replay">Replay</button><span class="lbl" id="now"></span></div>
+    <div class="chips" id="chips"></div>
+    <div class="rows" id="rows"></div>
+    <div class="mapwrap">
+      <div class="h">The blowup: every ratio of tiny gaps</div>
+      <svg id="map" role="img" aria-label="Map of gap ratios colored by outcome; click to play a ratio" tabindex="0"></svg>
+      <p class="cap" id="mapcap"></p>
+    </div>
+  </section>
+
+  <div class="col">
+    <h2>What to try</h2>
+    <p><b>Equal masses.</b> Every point of the map has the same color, the bubble sort agrees in both numberings, and one ball flies out: the textbook cradle. With equal masses a collision just swaps two velocities, and any sequence of swaps ends with the velocities sorted, so every approach order lands in the same place. In the language of the main page, this is the good case where the contacts don't interfere, like a corner of 60° or 90°.</p>
+    <p><b>Change one mass.</b> With a light middle, the map splits into chambers: regions of gap ratios with different outcomes. Each bubble-sort numbering lands in one chamber, and which one depends only on how you numbered the contacts. The blowup keeps them all, with their shares.</p>
+    <p><b>Look at the springs.</b> The spring rows usually match no chamber. With three balls of masses 1, 3, 1 and both ends coming in, the two chambers are mirror images, and the springs give the symmetric answer that neither sequence produces. With equal masses, the springs spread the motion over several balls, and Hertz contact (exponent 3/2, the law for elastic spheres) spreads it less than linear springs. That spreading is real physics: the clean "one ball out" result relies on the balls not quite touching, a point made by Herrmann and Seitz (1982).</p>
+    <p><b>Look at the average.</b> The share-weighted average of the chambers is order-independent, but it loses kinetic energy, so it is not itself an elastic collision. That is why the main page treats averaging as a modeling choice.</p>
+
+    <h2>How this is a blowup</h2>
+    <p>The trouble spot is the instant when all N − 1 contacts close together. Near it, only the <em>ratios</em> of the gaps matter, not their sizes, because nothing acts between collisions: double every gap and the whole motion happens at double the scale. So Hironaka's move is to replace that single instant with the set of all gap ratios [g₁ : … : g_{N−1}]. For three balls that set is a segment, for four a triangle. Every point of it has a definite outcome, and the map shows it. The bubble sort is one point's worth of that information, chosen by a numbering. The spring limit is the Nash-style move: no center, no choice of order, an answer built from the system's own smooth version. Like Nash's blowup, it is canonical. Unlike Hironaka's, nothing guarantees it agrees with any sequential story, and the force law is a choice in disguise.</p>
+    <p>For three balls, the main page's Figure 9 shows the same thing in one picture: after rescaling positions by √mass, the two contacts become two walls of a corner, and the two chambers are the two sides of the throw.</p>
+
+    <h2>The cradle's polynomial</h2>
+    <p>Three balls are the version you can graph. Remove the motion of the center of mass and rescale each position by √mass. What's left is a plane, and in it the two contacts are two walls through the origin meeting at an angle β with <span class="m">cos β = √(m₁m₃ / ((m₁ + m₂)(m₂ + m₃)))</span>. Every two-ball collision is a mirror reflection across one of those walls.</p>
+    <p>Reflect the walls in each other and you get more mirror lines, at angles 0, β, 2β, 3β, and so on. Multiply the equations of those lines together and you get the cradle's polynomial P. With equal masses, β = 60° and the lines close up after three: <span class="m">P = (x₁ − x₂)(x₂ − x₃)(x₃ − x₁)</span>. That is the Vandermonde polynomial, and its graph is a monkey saddle. Its three zero lines are the three ways two balls can trade places.</p>
+    <p class="read"><b>How to read Figure 2.</b> The surface is the graph z = P over a disk, orange where P is positive and blue where it is negative. The floor shows its zero lines, the mirrors. The shaded <span style="color:var(--nash)">violet</span> wedge is where the balls are actually in order; its edges are the two contacts. A mirror that cuts through the wedge is drawn in <span style="color:var(--bad)">red</span>. The order of collisions stops mattering exactly when no red line appears.</p>
+  </div>
+
+  <section class="panel" aria-label="The polynomial of the cradle">
+    <div class="controls">
+      <span class="lbl">Show</span>
+      <span class="seg" role="group" aria-label="Which plot" id="pmode">
+        <button type="button" data-v="three" aria-pressed="true">Three balls: graph of P</button>
+        <button type="button" data-v="four" aria-pressed="false">Four equal balls: zero set of P</button>
+      </span>
+    </div>
+    <div class="controls" id="p3ctl">
+      <label class="nball" style="flex:1 1 320px"><span class="lbl">Middle mass (outer balls 1)</span><input id="pm" type="range" min="0" max="1" step="0.001" value="0.565" style="flex:1"><output id="pm-out" style="min-width:4.5em">1.00</output></label>
+    </div>
+    <div class="controls" id="p3pre">
+      <span class="lbl">Special masses</span>
+      <span class="seg" role="group" aria-label="Special masses" id="ppre">
+        <button type="button" data-m="100000">very heavy: β = 90°</button>
+        <button type="button" data-m="1">equal: β = 60°</button>
+        <button type="button" data-m="0.41421356">√2 − 1: β = 45°</button>
+        <button type="button" data-m="0.23606798">β = 36°</button>
+        <button type="button" data-m="0.15470054">β = 30°</button>
+        <button type="button" data-m="2.23606798">√5: β = 72°</button>
+      </span>
+    </div>
+    <div class="stage" style="aspect-ratio:16/10;max-height:520px"><canvas id="pcv" tabindex="0" aria-label="3D plot of the cradle polynomial, drag to rotate"></canvas><span class="tag" id="ptag"></span></div>
+    <div class="chips" id="pchips"></div>
+    <p class="cap" id="pcap"></p>
+  </section>
+
+  <div class="col">
+    <p>Try the presets. At 90°, 60°, 45°, 36°, and 30°, the angles 180°/k, the mirrors close up into k lines and none cuts the wedge. Then P is the harmonic polynomial r^k·sin(kθ), a saddle with k valleys, and every resolution of the impact agrees: bubble sort in either order, every chamber of the blowup, all the same. At √5, β = 72°: the lines still close up, after five, but one passes through the wedge, and the two collision orders disagree. For a generic mass, the lines never close at all, so no polynomial vanishes on every mirror.</p>
+    <p>These special cradles are exactly the finite reflection groups in the plane, the symmetry groups of regular polygons. Equal masses give the triangle's group; the √2 − 1 middle ball gives the square's. In the first figure you can find them by setting the middle mass and watching the chamber count drop to one.</p>
+    <p>For N equal balls, P is the Vandermonde polynomial <span class="m">∏ (xᵢ − xⱼ)</span> over all pairs, of degree N(N − 1)/2, in N − 1 variables once the center of mass is removed. Its zero set cuts space into N! regions, one for each ordering of the balls. The physical region is the one where the balls are in order, and every resolution simply sorts the velocities. With four balls the variables are three, so the zero set is six planes you can see; the triangle map in the first figure is a slice through the physical region.</p>
+    <p>P also connects back to the zeta function of the main page. For k lines through a point, one blowup separates them, and the same bookkeeping gives <span class="m">Z(s) = (2 + (2 − k)s) / ((1 + s)(2 + ks))</span>. Its largest pole, −2/k, says how sharply P vanishes at the crossing: 2/3 for the monkey saddle of equal masses.</p>
+
+    <h2>A swarm of perturbations</h2>
+    <p>Here is Hironaka's method run as a particle swarm, in the spirit of ant colony optimization or Stein variational inference. Start every ball touching, at the instant of the simultaneous collision: the center. Then send out particles. Each particle is one small perturbation: every ball after the first gets one number, its gap to the ball before it. Run the collisions from there, one pair at a time, and color the particle by the outgoing velocities.</p>
+    <p class="read"><b>How to read Figure 3.</b> Click any dot to see its collision resolved three ways in Figure 6. Axes are the gaps, so the corner at zero is the simultaneous collision. "Forget the size" slides every particle along its ray onto the slice where the gaps add up to ε. That slice is the blowup's exceptional set, and the colors sort themselves into clean regions there. Each dot is one perturbation, colored by where the balls end up. The legend lists every outcome and the share of the swarm that lands on it, which is that region's volume under the chosen way of perturbing. Shrink the scale and watch the swarm collapse toward the corner without changing color.</p>
+  </div>
+
+  <section class="panel" aria-label="Swarm of perturbations">
+    <div class="controls">
+      <span class="lbl">Balls</span>
+      <span class="seg" role="group" aria-label="Number of balls" id="sw-n">
+        <button type="button" data-v="3" aria-pressed="false">3</button>
+        <button type="button" data-v="4" aria-pressed="true">4</button>
+      </span>
+      <span class="lbl">Masses</span>
+      <span class="seg" role="group" aria-label="Masses" id="sw-m">
+        <button type="button" data-v="equal" aria-pressed="false">Equal</button>
+        <button type="button" data-v="heavy" aria-pressed="false">Heavy middle</button>
+        <button type="button" data-v="light" aria-pressed="true">Light middle</button>
+        <button type="button" data-v="up" aria-pressed="false">Heavier to the right</button>
+      </span>
+      <span class="lbl">Coming in</span>
+      <span class="seg" role="group" aria-label="Coming in" id="sw-s">
+        <button type="button" data-v="one" aria-pressed="true">One from the left</button>
+        <button type="button" data-v="ends" aria-pressed="false">Both ends</button>
+      </span>
+    </div>
+    <div class="controls">
+      <span class="lbl">Perturb by</span>
+      <span class="seg" role="group" aria-label="Perturbation distribution" id="sw-d">
+        <button type="button" data-v="box" aria-pressed="true">Each gap uniform in [0, ε]</button>
+        <button type="button" data-v="gauss" aria-pressed="false">Each gap half-Gaussian</button>
+        <button type="button" data-v="dir" aria-pressed="false">Every direction equally likely</button>
+      </span>
+    </div>
+    <div class="controls">
+      <label class="nball" style="flex:1 1 300px"><span class="lbl">Scale ε</span><input id="sw-eps" type="range" min="0" max="1" step="0.01" value="1" style="flex:1"><output id="sw-eps-out" style="min-width:4em">1.00</output></label>
+      <button type="button" class="btn go" id="sw-go">Release the swarm</button>
+      <button type="button" class="btn" id="sw-proj" aria-pressed="false">Forget the size: keep only the direction</button>
+      <button type="button" class="btn" id="sw-big" aria-pressed="false">Keep only the biggest region</button>
+    </div>
+    <div class="stage" style="aspect-ratio:16/10;max-height:540px"><canvas id="sw-cv" tabindex="0" aria-label="Swarm of perturbations in gap space"></canvas><span class="tag" id="sw-tag"></span></div>
+    <div class="chips" id="sw-chips"></div>
+    <div class="rows" id="sw-legend"></div>
+    <p class="cap" id="sw-cap"></p>
+  </section>
+
+  <div class="col">
+    <h2>Does Hironaka pick the biggest region?</h2>
+    <p>No. A blowup doesn't choose; it keeps every region and records how much of the space of directions each one fills. Choosing the biggest would be a mode-seeking rule, like taking the most likely answer instead of the whole distribution, and the "Keep only the biggest region" button shows what that throws away. Bubble sort doesn't pick the biggest region either. It picks whichever region its numbering happens to land in, whatever its size. And "the biggest region" is not even well defined yet: with a light middle on four balls, region C is biggest when each gap is uniform in [0, ε], but region A is biggest under the other two ways of perturbing.</p>
+    <p>Two features of the picture explain why there is no natural winner here.</p>
+    <ul>
+      <li><b>Every region is a cone.</b> Colors depend only on the direction of the perturbation, never its size, which is why shrinking ε changes nothing but the zoom. So every region's volume shrinks at exactly the same rate as ε goes to 0, and each keeps a fixed share. Those shares are what live on the blowup's exceptional set: the swarm's directions.</li>
+      <li><b>The shares depend on how you perturb.</b> Switch between "uniform in [0, ε]", "half-Gaussian" and "every direction equally likely" and the percentages move, though the colors do not. Volume needs a measure, and the collision itself doesn't supply one.</li>
+    </ul>
+    <p>Singular learning theory is the case where volume <em>does</em> pick a winner. There the regions are sets of near-optimal parameters, and different singularities make their volumes shrink at different rates, ε^λ with different λ. As data grows, the posterior concentrates on the region with the smallest λ, the one with the most volume near the optimum, and the free energy grows like λ·log n. In the cradle every region has the same exponent, so nothing takes over; only the constant shares differ.</p>
+    <p>The swarm also differs from ant colonies and Stein variational inference in one way: its particles never move toward better places, because there is no objective to climb. They only sample. A variational method would move particles to match a target distribution; here the target is just the perturbation distribution itself, and the interesting output is the coloring it reveals.</p>
+
+    <h2>Watching the blowup</h2>
+    <p>The swarm already contains the blowup; it just needs to be drawn the right way. Since an outcome depends only on the direction of a perturbation, give every particle a new coordinate, its direction, and lift it by that. The collision point, which had every direction at once, gets torn open into a whole set of directions: the <em>exceptional set</em> E. Particles no longer pile up at a point where colors meet. Each color gets its own part of E.</p>
+    <p class="read"><b>How to read Figure 4.</b> It uses the balls, masses, and motion chosen in Figure 3. Left: the gap space with the blowup applied by the slider. For three balls each particle rises to a height set by its direction, and the violet stalk over the corner is E. For four balls the corner is pushed open into a colored triangle, which is E. Right: E laid flat and colored by outcome. For four balls, step 2 blows up E's corners where three balls touch at once.</p>
+  </div>
+
+  <section class="panel" aria-label="The blowup, step by step">
+    <div class="controls">
+      <span class="lbl">Method</span>
+      <span class="seg" role="group" aria-label="Method" id="bu-meth">
+        <button type="button" data-v="hir" aria-pressed="true">Hironaka</button>
+        <button type="button" data-v="nash" aria-pressed="false">Nash</button>
+      </span>
+      <span class="lbl">Step</span>
+      <span class="seg" role="group" aria-label="Blowup step" id="bu-step">
+        <button type="button" data-v="1" aria-pressed="true">1. Blow up the collision point</button>
+        <button type="button" data-v="2" aria-pressed="false">2. Blow up where three balls touch</button>
+      </span>
+      <label class="nball" style="flex:1 1 260px"><span class="lbl">Amount</span><input id="bu-s" type="range" min="0" max="1" step="0.01" value="1" style="flex:1"></label>
+    </div>
+    <div class="kw2">
+      <div class="stage" style="aspect-ratio:1/1;max-height:440px"><canvas id="bu-3d" tabindex="0" aria-label="Gap space with the blowup applied, drag to rotate"></canvas><span class="tag" id="bu-tag"></span></div>
+      <div class="stage" style="aspect-ratio:1/1;max-height:440px;background:var(--surface);border:1px solid var(--rule)"><canvas id="bu-2d" aria-label="The exceptional set, colored by outcome"></canvas><span class="tag" id="bu-tag2"></span></div>
+    </div>
+    <div class="chips" id="bu-chips"></div>
+    <p class="cap" id="bu-cap"></p>
+  </section>
+
+  <div class="col">
+    <p><b>Three balls.</b> One blowup is enough. The corner of the gap plane becomes a vertical stalk, one point for each direction, running from "all slack between balls 1 and 2" at the bottom to "all slack between balls 2 and 3" at the top. The lifted swarm settles into horizontal bands, one per outcome, and the stalk is colored in the same bands. Where two colors met at the corner, they now meet only at one point of the stalk, at a definite height.</p>
+    <p><b>Four balls, step 1.</b> The corner of gap space opens into a triangle of directions. That is the triangle map of Figure 1 and the slice of Figure 3. Its middle edge point and its interior are fine, but two of its corners are not. At the corner "2·3·4 touch at once", three balls are still colliding simultaneously, a smaller copy of the original problem. With one ball coming in from the left, every region boundary runs into that corner, so all the colors still meet at a point.</p>
+    <p><b>Four balls, step 2.</b> Blow up those two corners. Each becomes a new edge, whose points are the directions of approach <em>inside</em> the three-ball cluster. The boundaries that crowded into the corner now hit the new edge at separate points. Nothing is singular anymore, and the triangle has become a pentagon.</p>
+    <p>That pentagon has a name: it is the associahedron. Its five corners are the five ways to bracket 1·2·3·4. For example ((12)3)4 means balls 1 and 2 close first, at the smallest scale, then 3 joins them, then 4. Its five edges are the single brackets (12), (23), (34), (123), and (234). With N balls the same construction gives the associahedron of dimension N − 2, the standard way to compactify configurations of points on a line. Each face is a nested order in which clusters of balls can form, and each outcome region is a union of pieces of it.</p>
+    <p><b>Nash, for comparison.</b> Switch Figure 4 to Nash. Nash lifts the walls, the places where a contact is closed, by their tangent direction. The walls are flat, so one step pushes them apart, and the geometry is resolved. But the particles in between are not on any wall, so Nash leaves them where they were, and all the colors still meet at the corner. Over the collision point Nash puts one point per contact and nothing else. There is no room for directions of approach, so the impact law has to come from somewhere else; the right panel shows the answer from Hertz springs, which usually matches none of the swarm's regions.</p>
+
+    <h2>Five balls: the blowup in three dimensions</h2>
+    <p>With five balls there are four gaps, so the directions of approach form a solid tetrahedron. The same two rules apply. Wherever three or more neighboring balls can touch at once, blow up, worst first. There are two places where four balls touch (corners of the tetrahedron) and three where three touch (edges). Cutting them off turns the tetrahedron into the three-dimensional associahedron.</p>
+    <p class="read"><b>How to read Figure 5.</b> The solid is the space of directions after every blowup. Each dot is one direction of approach, colored by where the balls end up; the dots fill the inside. Violet faces are the new ones the blowups created, one per cluster of balls; gray faces are where one gap is exactly closed. Each corner is labeled with its bracketing: the order in which clusters form. Drag to rotate; click a dot to see that direction played out in Figure 6.</p>
+  </div>
+
+  <section class="panel" aria-label="Five-ball associahedron">
+    <div class="controls">
+      <span class="lbl">Masses</span>
+      <span class="seg" role="group" aria-label="Masses" id="k5-m">
+        <button type="button" data-v="equal" aria-pressed="false">Equal</button>
+        <button type="button" data-v="light" aria-pressed="true">Light middle</button>
+        <button type="button" data-v="up" aria-pressed="false">Heavier to the right</button>
+        <button type="button" data-v="ends" aria-pressed="false">Heavy ends</button>
+      </span>
+      <span class="lbl">Coming in</span>
+      <span class="seg" role="group" aria-label="Coming in" id="k5-s">
+        <button type="button" data-v="one" aria-pressed="true">One from the left</button>
+        <button type="button" data-v="ends" aria-pressed="false">Both ends</button>
+      </span>
+      <button type="button" class="btn" id="k5-lab" aria-pressed="true">Corner labels</button>
+    </div>
+    <div class="stage" style="aspect-ratio:16/11;max-height:600px"><canvas id="k5-cv" tabindex="0" aria-label="The three-dimensional associahedron filled with directions colored by outcome"></canvas><span class="tag" id="k5-tag"></span></div>
+    <div class="chips" id="k5-chips"></div>
+    <div class="rows" id="k5-legend"></div>
+    <p class="cap">Figure 5. The solid is drawn in one convenient choice of blown-up coordinates: near each new face, distances to the cluster are stretched so that the cluster's own directions spread across that face. Every color is exact for its true direction. Shares are for directions drawn evenly from the original tetrahedron, before any blowup.</p>
+  </section>
+
+  <div class="col">
+    <p>The counts follow the pattern. Five balls give 14 corners, the 14 ways to bracket five items (a Catalan number), and 9 faces, one for each cluster of neighboring balls: 4 pairs, 3 triples, and 2 quadruples. With N balls the solid has dimension N − 2 and Catalan(N − 1) corners. The blowup turns "everything collides at once" into a polytope whose every face is an honest, nested story of who meets whom first, and the outcome regions are pieces of that polytope.</p>
+
+    <h2>How each method actually resolves a collision</h2>
+    <p>All three methods start from the same place: every ball touching, one ball arriving, and physics that says nothing about what happens next. They differ in the question they ask to get an answer.</p>
+    <div class="trio">
+      <div><b>Bubble sort</b>"In what order did I number the contacts?" It fires two-ball impulses at a single instant, always at the first contact still closing, until none is. The answer never depends on how the balls were arranged.</div>
+      <div><b style="color:var(--nash)">Hironaka</b>"From which direction did the balls approach?" Any direction with all gaps open gives an ordinary sequence of two-ball collisions at different times, so physics has a definite answer. The blowup collects all those answers: one per direction.</div>
+      <div><b>Nash</b>"Which contact am I on?" That separates the walls but says nothing about direction, so the impact needs a smooth law. Stiff springs let every contact push at once and give one answer, set by the spring law.</div>
+    </div>
+    <p class="read"><b>How to read Figure 6.</b> Click anywhere on the map of directions, or click a dot in Figures 3, 4, or 5 to bring it here. Below, three space-time diagrams show the same collision resolved three ways: time runs down, each band is a ball, and a kink is a change of velocity. Only the Hironaka diagram changes when you click a different direction.</p>
+  </div>
+
+  <section class="panel" aria-label="Three resolutions side by side" id="cmp-panel">
+    <div class="controls">
+      <span class="lbl">Balls</span>
+      <span class="seg" role="group" aria-label="Balls" id="cmp-n">
+        <button type="button" data-v="3" aria-pressed="false">3</button>
+        <button type="button" data-v="4" aria-pressed="true">4</button>
+      </span>
+      <span class="lbl">Masses</span>
+      <span class="seg" role="group" aria-label="Masses" id="cmp-m">
+        <button type="button" data-v="equal" aria-pressed="false">Equal</button>
+        <button type="button" data-v="heavy" aria-pressed="false">Heavy middle</button>
+        <button type="button" data-v="light" aria-pressed="true">Light middle</button>
+        <button type="button" data-v="up" aria-pressed="false">Heavier to the right</button>
+      </span>
+      <span class="lbl">Coming in</span>
+      <span class="seg" role="group" aria-label="Coming in" id="cmp-s">
+        <button type="button" data-v="one" aria-pressed="true">One from the left</button>
+        <button type="button" data-v="ends" aria-pressed="false">Both ends</button>
+      </span>
+    </div>
+    <div class="controls">
+      <label class="nball" style="flex:1 1 340px"><span class="lbl">Restitution e</span><span class="lbl">sticky 0</span><input id="cmp-e" type="range" min="0" max="1" step="0.01" value="1" style="flex:1"><span class="lbl">1 elastic</span><output id="cmp-e-out" style="min-width:3em">1.00</output></label>
+    </div>
+    <div class="kw2">
+      <div class="stage" style="aspect-ratio:1/1;max-height:420px;background:var(--surface);border:1px solid var(--rule);cursor:crosshair"><canvas id="cmp-map" tabindex="0" aria-label="Map of directions of approach; click to choose one"></canvas><span class="tag" id="cmp-maptag"></span></div>
+      <div class="card" id="cmp-card" aria-live="polite"></div>
+    </div>
+    <div class="tri3">
+      <div><div class="sth" style="color:var(--nash)">Hironaka: the direction you clicked</div><div class="stage st"><canvas id="st-h" aria-label="Space-time diagram, Hironaka"></canvas></div><p class="cap" id="st-h-cap"></p></div>
+      <div><div class="sth">Bubble sort, numbered left to right</div><div class="stage st"><canvas id="st-b" aria-label="Space-time diagram, bubble sort"></canvas></div><p class="cap" id="st-b-cap"></p></div>
+      <div><div class="sth" id="st-n-title">Nash-style: Hertz springs</div><div class="stage st"><canvas id="st-n" aria-label="Space-time diagram, springs"></canvas></div><p class="cap" id="st-n-cap"></p></div>
+    </div>
+    <p class="cap">Figure 6. Each band is one ball; its width is the ball's size, and time runs downward. Red dots mark two-ball collisions in the order they happen. In the Hironaka diagram the gaps are drawn large enough to see; any smaller gaps in the same ratio give the same sequence and the same outcome. In the bubble-sort diagram every impulse happens at the same instant, listed in order beside it. In the spring diagram, red bars show contacts pushing, often several at once.</p>
+  </section>
+
+  <div class="col">
+    <p>So "resolving" means something different for each. Bubble sort produces an answer by fiat: the numbering. Nash-style smoothing produces an answer by changing the physics, adding springs. Hironaka produces no single answer at all. It produces a <em>function</em>: give it the direction of approach and it returns a definite outcome, found by ordinary two-ball physics. After the blowups that function is well defined everywhere except on the boundaries between regions, which are themselves resolved by blowing up again.</p>
+    <p><b>Energy loss.</b> Lower the restitution e in Figure 6 and the three methods part ways again. Hironaka's answer is still one ordinary sequence of collisions per direction. With equal masses, though, once e drops below 7 − 4√3 ≈ 0.072 (the threshold McNamara and Young found for three balls), the middle ball rattles back and forth infinitely many times in a finite time: inelastic collapse. The blowup still gives a limit, the balls ending up together, but no finite list of events reaches it. Bubble sort hits the same wall from the other side. With five equal balls and e near 0, each impulse only halves a relative velocity, so the loop runs forever. That is the Zeno example in Vouga et al., and their remedy is the fourth answer shown: blend the fully sticky answer, which for a row of balls is a mass-weighted isotonic regression of the velocities, with the elastic one, in proportion e.</p>
+    <p>To turn Hironaka's function into one number you need one more ingredient that the collision doesn't supply: either the actual tiny gaps of the real cradle, which pick a single direction, or a probability over directions, which turns the regions' shares into odds. That is the honest content of the blowup. The ambiguity was real, and the blowup shows exactly what extra information settles it.</p>
+
+    <div class="foot">
+      <p>Two-ball collisions are exact elastic formulas, played out event by event. Springs push with force k·(overlap)^p, integrated with velocity Verlet; for touching balls the answer does not depend on k, only on p. Chamber shares weight every gap ratio equally on the segment or triangle (random samples for five or more balls); other weightings would give other shares. Bubble sort follows the Gauss–Seidel loop described by E. Vouga, B. Smith, D. M. Kaufman, R. Tamstorf, and E. Grinspun, "All's Well That Ends Well," ACM TOG 2017. Ball-chain dispersion: F. Herrmann and M. Seitz, "How does the ball-chain work?", American Journal of Physics 50 (1982). Inelastic collapse: S. McNamara and W. R. Young, Physics of Fluids A 4 (1992). The sticky simultaneous impact is computed as the kinetic-energy projection onto non-approaching velocities, which for a row of balls is weighted isotonic regression.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const NS = "http://www.w3.org/2000/svg";
+  const svgEl = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; return e; };
+  const SUB = (n) => String(n).split("").map((c) => "₀₁₂₃₄₅₆₇₈₉"[+c]).join("");
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- physics ---------- */
+  function coll(m, v, i) { const a = m[i], b = m[i + 1], u = v[i], w = v[i + 1]; v[i] = ((a - b) * u + 2 * b * w) / (a + b); v[i + 1] = ((b - a) * w + 2 * a * u) / (a + b); }
+  // event-driven from given displacements s and gap offsets g (gap_i = g_i + s_{i+1} - s_i)
+  function seqTraj(m, v0, s0, g) {
+    const N = m.length, v = v0.slice(), s = s0.slice(); let t = 0;
+    const pts = [{ t, s: s.slice(), v: v.slice() }];
+    for (let ev = 0; ev < 5000; ev++) {
+      let tb = Infinity, ib = -1;
+      for (let i = 0; i < N - 1; i++) { const rel = v[i] - v[i + 1]; if (rel > 1e-12) { const gap = g[i] + s[i + 1] - s[i]; const tt = Math.max(0, gap) / rel; if (tt < tb - 1e-13) { tb = tt; ib = i; } } }
+      if (ib < 0) break;
+      for (let i = 0; i < N; i++) s[i] += v[i] * tb;
+      t += tb; coll(m, v, ib); pts.push({ t, s: s.slice(), v: v.slice() });
+    }
+    return { pts, v };
+  }
+  function bubble(m, v0, order) {
+    const v = v0.slice();
+    for (let k = 0; k < 20000; k++) { let did = false; for (const i of order) if (v[i] - v[i + 1] > 1e-12) { coll(m, v, i); did = true; break; } if (!did) break; }
+    return v;
+  }
+  function springTraj(m, v0, s0, p, k) {
+    const N = m.length, s = s0.slice(), v = v0.slice(), dt = 0.0015;
+    const F = () => { const f = new Array(N).fill(0); for (let i = 0; i < N - 1; i++) { const o = s[i] - s[i + 1]; if (o > 0) { const q = k * Math.pow(o, p); f[i] -= q; f[i + 1] += q; } } return f; };
+    let f = F(), t = 0, nextRec = 0, sepAt = null, vOut = null;
+    const pts = [];
+    for (let st = 0; st < 120000; st++) {
+      if (t >= nextRec) { pts.push({ t, s: s.slice(), v: v.slice() }); nextRec += 0.02; }
+      for (let i = 0; i < N; i++) { v[i] += 0.5 * dt * f[i] / m[i]; s[i] += dt * v[i]; }
+      f = F();
+      for (let i = 0; i < N; i++) v[i] += 0.5 * dt * f[i] / m[i];
+      t += dt;
+      if (sepAt === null && st % 20 === 0) {
+        let contactHappened = pts.length > 2, done = true;
+        for (let i = 0; i < N - 1; i++) { if (s[i] - s[i + 1] > 0 || v[i] > v[i + 1] + 1e-9) { done = false; break; } }
+        if (done && contactHappened && t > 0.05 && f.every((x) => x === 0)) { sepAt = t; vOut = v.slice(); }
+      }
+      if (sepAt !== null && t > sepAt + 2.4) break;
+    }
+    return { pts, v: vOut || v.slice() };
+  }
+  // all touching, zero gaps: outcome of a gap direction
+  function seqOutcome(m, v0, g) { return seqTraj(m, v0, new Array(m.length).fill(0), g).v; }
+  function springOutcome(m, v0, p) {
+    // start in contact (zero gaps), k = 1; the answer is independent of k
+    const N = m.length, s = new Array(N).fill(0), v = v0.slice(), dt = 0.002;
+    const F = () => { const f = new Array(N).fill(0); for (let i = 0; i < N - 1; i++) { const o = s[i] - s[i + 1]; if (o > 0) { const q = Math.pow(o, p); f[i] -= q; f[i + 1] += q; } } return f; };
+    let f = F();
+    for (let st = 0; st < 400000; st++) {
+      for (let i = 0; i < N; i++) { v[i] += 0.5 * dt * f[i] / m[i]; s[i] += dt * v[i]; }
+      f = F();
+      for (let i = 0; i < N; i++) v[i] += 0.5 * dt * f[i] / m[i];
+      if (st % 25 === 0 && st > 10) { let done = true; for (let i = 0; i < N - 1; i++) if (s[i] - s[i + 1] > 0 || v[i] > v[i + 1] + 1e-9) { done = false; break; } if (done) break; }
+    }
+    return v;
+  }
+  const keyOf = (v) => v.map((x) => (Math.abs(x) < 5e-7 ? 0 : x).toFixed(5)).join(",");
+  const energy = (m, v) => v.reduce((e, x, i) => e + 0.5 * m[i] * x * x, 0);
+
+  /* ---------- state ---------- */
+  const st = { n: 4, start: "one", pattern: "light", logm: [], play: null, rows: [], chambers: [], seed: 7 };
+  function patternMasses(n, pat) {
+    const mid = (n - 1) / 2;
+    return [...Array(n)].map((_, i) => {
+      if (pat === "equal") return 1;
+      if (pat === "heavy") return Math.abs(i - mid) < 0.6 ? 3 : 1;
+      if (pat === "light") return Math.abs(i - mid) < 1.1 && i !== 0 && i !== n - 1 ? 0.3 : 1;
+      if (pat === "up") return Math.pow(2, i - mid);
+      if (pat === "down") return Math.pow(2, mid - i);
+      st.seed = (st.seed * 16807) % 2147483647; return Math.pow(10, -0.7 + 1.4 * (st.seed / 2147483647));
+    });
+  }
+  const masses = () => st.logm.map((l) => Math.pow(10, l));
+  function v0() {
+    const n = st.n, v = new Array(n).fill(0);
+    if (st.start === "one") v[0] = 1;
+    else if (st.start === "two") { v[0] = 1; v[1] = 1; }
+    else { v[0] = 1; v[n - 1] = -1; }
+    return v;
+  }
+  function buildMassInputs() {
+    const box = $("#masses"); box.innerHTML = "";
+    st.logm.forEach((l, i) => {
+      const lab = document.createElement("label");
+      lab.innerHTML = `<span>Ball ${i + 1} mass <output id="mo${i}">${Math.pow(10, l).toFixed(2)}</output></span><input id="mi${i}" type="range" min="-1" max="1" step="0.01" value="${l}" aria-label="Mass of ball ${i + 1}">`;
+      box.appendChild(lab);
+      lab.querySelector("input").addEventListener("input", (e) => { st.logm[i] = +e.target.value; $("#mo" + i).textContent = Math.pow(10, st.logm[i]).toFixed(2); document.querySelectorAll("#mp button").forEach((b) => b.setAttribute("aria-pressed", "false")); scheduleRecompute(); });
+    });
+  }
+
+  /* ---------- gap-ratio sampling (the exceptional set) ---------- */
+  function samples() {
+    const n = st.n - 1, out = [];
+    if (n === 1) { out.push({ g: [1], pos: null }); return out; }
+    if (n === 2) { const R = 160; for (let k = 0; k < R; k++) { const u = (k + 0.5) / R; out.push({ g: [u, 1 - u], cell: k, R }); } return out; }
+    if (n === 3) {
+      const R = 30;
+      for (let i = 0; i < R; i++) for (let j = 0; j < R - i; j++) {
+        // up triangle (i,j),(i+1,j),(i,j+1); down triangle (i+1,j),(i,j+1),(i+1,j+1)
+        const up = [[i, j], [i + 1, j], [i, j + 1]];
+        const c = [(i + (i + 1) + i) / 3, (j + j + (j + 1)) / 3];
+        out.push({ g: [c[0] / R, c[1] / R, 1 - (c[0] + c[1]) / R], tri: up, R });
+        if (i + j < R - 1) {
+          const dn = [[i + 1, j], [i, j + 1], [i + 1, j + 1]];
+          const d = [(i + 1 + i + i + 1) / 3, (j + j + 1 + j + 1) / 3];
+          out.push({ g: [d[0] / R, d[1] / R, 1 - (d[0] + d[1]) / R], tri: dn, R });
+        }
+      }
+      return out;
+    }
+    let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    for (let k = 0; k < 1500; k++) { const e = [...Array(n)].map(() => -Math.log(rnd() + 1e-12)); const s = e.reduce((a, b) => a + b, 0); out.push({ g: e.map((x) => x / s) }); }
+    return out;
+  }
+
+  /* ---------- compute everything ---------- */
+  const CH = ["--ch1", "--ch2", "--ch3", "--ch4", "--ch5", "--ch6"];
+  let S = [];
+  function recompute() {
+    const m = masses(), vin = v0(), n = st.n;
+    S = samples();
+    const map = new Map();
+    S.forEach((smp) => { const v = seqOutcome(m, vin, smp.g); const k = keyOf(v); smp.key = k; if (!map.has(k)) map.set(k, { v, members: [] }); map.get(k).members.push(smp); });
+    const chambers = [...map.entries()].map(([k, o]) => ({ key: k, v: o.v, share: o.members.length / S.length, members: o.members }));
+    chambers.sort((a, b) => b.share - a.share);
+    chambers.forEach((c, i) => {
+      c.label = String.fromCharCode(65 + i); c.colVar = i < CH.length ? CH[i] : "--muted"; c.minor = i >= CH.length;
+      // representative: member closest to the chamber's mean ratio
+      const mean = c.members[0].g.map((_, j) => c.members.reduce((s, x) => s + x.g[j], 0) / c.members.length);
+      c.rep = c.members.reduce((b, x) => { const d = x.g.reduce((s, y, j) => s + (y - mean[j]) ** 2, 0); return d < b[0] ? [d, x] : b; }, [Infinity, null])[1].g;
+    });
+    st.chambers = chambers;
+    const findCh = (v) => chambers.find((c) => c.key === keyOf(v));
+    const order = [...Array(n - 1).keys()];
+    const rows = [];
+    const bL = bubble(m, vin, order), bR = bubble(m, vin, order.slice().reverse());
+    rows.push({ id: "bL", name: "Bubble sort, contacts numbered left to right", v: bL, kind: "jump", match: findCh(bL) });
+    rows.push({ id: "bR", name: "Bubble sort, numbered right to left", v: bR, kind: "jump", match: findCh(bR) });
+    chambers.filter((c) => !c.minor).forEach((c) => rows.push({ id: "c" + c.label, name: `Blowup, chamber ${c.label}`, v: c.v, kind: "chamber", ch: c, share: c.share }));
+    const minor = chambers.filter((c) => c.minor);
+    if (minor.length) rows.push({ id: "minor", name: `${minor.length} smaller chambers (gray on the map)`, v: null, kind: "none", share: minor.reduce((a, c) => a + c.share, 0) });
+    if (chambers.length > 1) { const avg = vin.map((_, i) => chambers.reduce((s, c) => s + c.share * c.v[i], 0)); rows.push({ id: "avg", name: "Average of the chambers, weighted by share", v: avg, kind: "jump", avg: true }); }
+    const s1 = springOutcome(m, vin, 1), s15 = springOutcome(m, vin, 1.5);
+    rows.push({ id: "s1", name: "Nash-style: linear springs (p = 1)", v: s1, kind: "spring", p: 1, match: findCh(s1) });
+    rows.push({ id: "s15", name: "Nash-style: Hertz contact (p = 3/2)", v: s15, kind: "spring", p: 1.5, match: findCh(s15) });
+    st.rows = rows;
+    if (!st.play || !rows.find((r) => r.id === st.play)) st.play = chambers.length > 1 ? "c" + chambers[0].label : "bL";
+    drawRows(); drawMap(); drawChips(); startPlay(st.play);
+  }
+  let pending = null;
+  function scheduleRecompute() { if (pending) cancelAnimationFrame(pending); pending = requestAnimationFrame(() => { pending = null; recompute(); }); }
+
+  /* ---------- table, chips, map ---------- */
+  const fmtV = (v) => v.map((x) => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(2)).join("  ");
+  function drawRows() {
+    const m = masses(), E0 = energy(m, v0());
+    const html = st.rows.map((r) => {
+      const sw = r.ch ? `<span class="sw" style="background:var(${r.ch.colVar})"></span>` : r.match ? `<span class="sw" style="background:var(${r.match.colVar})"></span>` : `<span class="sw" style="background:var(--ink)"></span>`;
+      let note = "";
+      if (r.kind === "none") return `<tr><td><span class="sw" style="background:var(--muted)"></span>${r.name}</td><td class="v">—</td><td class="note">${(100 * r.share).toFixed(1)}% of gap ratios together</td></tr>`;
+      if (r.kind === "chamber") note = `${(100 * r.share).toFixed(1)}% of gap ratios`;
+      else if (r.avg) note = `<span style="color:var(--bad)">loses ${(100 * (1 - energy(m, r.v) / E0)).toFixed(1)}% of the energy</span>`;
+      else if (r.match) note = `same as chamber ${r.match.label}`;
+      else note = st.chambers.length ? "matches no chamber" : "";
+      return `<tr class="pick ${st.play === r.id ? "on" : ""}" data-id="${r.id}" tabindex="0"><td>${sw}${r.name}</td><td class="v">${fmtV(r.v)}</td><td class="note">${note}</td></tr>`;
+    }).join("");
+    $("#rows").innerHTML = `<table><thead><tr><th>Resolution (click to play)</th><th>Outgoing velocities, ball 1 → ${st.n}</th><th></th></tr></thead><tbody>${html}</tbody></table>`;
+    document.querySelectorAll("#rows tr.pick").forEach((tr) => {
+      const go = () => { st.play = tr.dataset.id; customG = null; drawRows(); startPlay(st.play); };
+      tr.addEventListener("click", go); tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    });
+  }
+  function drawChips() {
+    const c = st.chambers.length, bAgree = keyOf(st.rows[0].v) === keyOf(st.rows[1].v);
+    $("#chips").innerHTML =
+      `<span class="chip">Chambers: <b style="color:var(${c > 1 ? "--bad" : "--good"})">${c}</b></span>` +
+      `<span class="chip">Both numberings agree: <b style="color:var(${bAgree ? "--good" : "--bad"})">${bAgree ? "yes" : "no"}</b></span>` +
+      (st.n === 2 ? `<span class="chip">Two balls have one contact, so there is nothing to resolve</span>` : "");
+  }
+  let customG = null;
+  function drawMap() {
+    const svg = $("#map"); svg.innerHTML = "";
+    const n = st.n - 1, INK = css("--ink"), MUT = css("--muted"), SURF = css("--surface");
+    const colOf = (smp) => css(st.chambers.find((c) => c.key === smp.key).colVar);
+    if (n === 1) {
+      svg.setAttribute("viewBox", "0 0 640 40");
+      svg.appendChild(svgEl("text", { x: 0, y: 24 }, "One contact only: the set of gap ratios is a single point."));
+      $("#mapcap").textContent = "";
+      return;
+    }
+    if (n === 2) {
+      svg.setAttribute("viewBox", "0 0 640 92");
+      const x0 = 70, x1 = 570, y = 30, h = 26, R = S[0].R;
+      S.forEach((smp) => svg.appendChild(svgEl("rect", { x: x0 + (x1 - x0) * smp.cell / R, y, width: (x1 - x0) / R + 0.6, height: h, fill: colOf(smp) })));
+      svg.appendChild(svgEl("rect", { x: x0, y, width: x1 - x0, height: h, fill: "none", stroke: MUT }));
+      svg.appendChild(svgEl("text", { x: x0, y: y + h + 20, "text-anchor": "start" }, "only gap 2–3 open"));
+      svg.appendChild(svgEl("text", { x: x1, y: y + h + 20, "text-anchor": "end" }, "only gap 1–2 open"));
+      svg.appendChild(svgEl("text", { x: (x0 + x1) / 2, y: y - 8, "text-anchor": "middle" }, "share of the total gap that sits between balls 1 and 2 →"));
+      if (customG) { const xx = x0 + (x1 - x0) * customG[0]; svg.appendChild(svgEl("path", { d: `M${xx} ${y - 2} l-6 -9 l12 0 z`, fill: INK })); }
+      svg.onclick = (e) => { const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse()); const u = Math.min(0.995, Math.max(0.005, (q.x - x0) / (x1 - x0))); playCustom([u, 1 - u]); };
+      $("#mapcap").textContent = "Each point is one way of slightly separating the three balls: the left end has all the slack between balls 2 and 3, the right end all between 1 and 2. Click to play that ratio.";
+      return;
+    }
+    if (n === 3) {
+      svg.setAttribute("viewBox", "0 0 640 300");
+      const V = [[150, 268], [320, 28], [490, 268]], R = S[0].R;
+      const P = (i, j) => { const b1 = i / R, b2 = j / R, b3 = 1 - b1 - b2; return [b1 * V[0][0] + b2 * V[1][0] + b3 * V[2][0], b1 * V[0][1] + b2 * V[1][1] + b3 * V[2][1]]; };
+      S.forEach((smp) => { const pts = smp.tri.map(([i, j]) => P(i, j)); svg.appendChild(svgEl("polygon", { points: pts.map((q) => q.join(",")).join(" "), fill: colOf(smp), stroke: colOf(smp), "stroke-width": 0.6 })); });
+      svg.appendChild(svgEl("polygon", { points: V.map((q) => q.join(",")).join(" "), fill: "none", stroke: MUT, "stroke-width": 1.2 }));
+      svg.appendChild(svgEl("text", { x: V[0][0] - 8, y: V[0][1] + 18, "text-anchor": "middle" }, "only gap 1–2 open"));
+      svg.appendChild(svgEl("text", { x: V[1][0], y: V[1][1] - 10, "text-anchor": "middle" }, "only gap 2–3 open"));
+      svg.appendChild(svgEl("text", { x: V[2][0] + 8, y: V[2][1] + 18, "text-anchor": "middle" }, "only gap 3–4 open"));
+      st.chambers.forEach((c) => {
+        const mem = c.members; const cx = mem.reduce((s, x) => s + (x.g[0] * V[0][0] + x.g[1] * V[1][0] + x.g[2] * V[2][0]), 0) / mem.length, cy = mem.reduce((s, x) => s + (x.g[0] * V[0][1] + x.g[1] * V[1][1] + x.g[2] * V[2][1]), 0) / mem.length;
+        svg.appendChild(svgEl("text", { x: cx, y: cy + 5, "text-anchor": "middle", style: `fill:${INK};font-weight:700;font-size:15px;paint-order:stroke;stroke:${SURF};stroke-width:4px` }, c.label));
+      });
+      if (customG) { const q = [customG[0] * V[0][0] + customG[1] * V[1][0] + customG[2] * V[2][0], customG[0] * V[0][1] + customG[1] * V[1][1] + customG[2] * V[2][1]]; svg.appendChild(svgEl("circle", { cx: q[0], cy: q[1], r: 6, fill: SURF, stroke: INK, "stroke-width": 2.5 })); }
+      svg.onclick = (e) => {
+        const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; const q = p.matrixTransform(svg.getScreenCTM().inverse());
+        const [a, b, c] = V, det = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1]);
+        const l1 = ((b[1] - c[1]) * (q.x - c[0]) + (c[0] - b[0]) * (q.y - c[1])) / det, l2 = ((c[1] - a[1]) * (q.x - c[0]) + (a[0] - c[0]) * (q.y - c[1])) / det, l3 = 1 - l1 - l2;
+        if (l1 < 0 || l2 < 0 || l3 < 0) return;
+        playCustom([l1, l2, l3].map((x) => Math.max(0.003, x)));
+      };
+      $("#mapcap").textContent = "Each point is one way of slightly separating the four balls; corners put all the slack in one gap. Letters mark the chambers. Click inside the triangle to play that ratio." + (st.start === "one" ? " With one ball coming in, gap 1–2 only delays everything, so colors change only along the other two gaps." : "");
+      return;
+    }
+    svg.setAttribute("viewBox", "0 0 640 70");
+    let x = 20; const W = 600;
+    st.chambers.forEach((c) => { const w = W * c.share; svg.appendChild(svgEl("rect", { x, y: 10, width: Math.max(0.5, w), height: 28, fill: css(c.colVar), stroke: css("--surface"), "stroke-width": c.minor ? 0.5 : 0 })); if (w > 22 && !c.minor) svg.appendChild(svgEl("text", { x: x + w / 2, y: 29, "text-anchor": "middle", style: `fill:${SURF};font-weight:700` }, c.label)); x += w; });
+    svg.appendChild(svgEl("text", { x: 20, y: 60 }, `Shares of ${S.length} random gap ratios, one bar segment per chamber`));
+    svg.onclick = null;
+    $("#mapcap").textContent = `With ${st.n} balls the set of gap ratios has ${n - 1} dimensions, too many to draw, so this bar shows each chamber's share instead. Play a chamber from the table.`;
+  }
+
+  /* ---------- animation ---------- */
+  const cv = $("#cv"), ctx = cv.getContext("2d");
+  let traj = null, t0 = 0, raf = null, playLabel = "";
+  const D = 2.6;
+  function radii(m) { return m.map((x) => 0.42 * Math.cbrt(x)); }
+  function initialDisp(n) {
+    const s = new Array(n).fill(0);
+    if (st.start === "one") s[0] = -D; else if (st.start === "two") { s[0] = -D; s[1] = -D; } else { s[0] = -D; s[n - 1] = D; }
+    return s;
+  }
+  function startPlay(id) {
+    const r = st.rows.find((x) => x.id === id); if (!r) return;
+    const m = masses(), vin = v0(), n = st.n, s0 = initialDisp(n);
+    let gaps = new Array(n - 1).fill(0), pts;
+    if (r.kind === "chamber") { const G = 0.55; gaps = r.ch.rep.map((x) => x * G); pts = seqTraj(m, vin, s0, gaps).pts; }
+    else if (r.kind === "spring") pts = springTraj(m, vin, s0, r.p, 260).pts;
+    else { // instantaneous jump at contact time D
+      const sC = s0.map((x, i) => x + vin[i] * D);
+      pts = [{ t: 0, s: s0, v: vin }, { t: D, s: sC, v: r.v.slice() }];
+    }
+    playLabel = r.name;
+    setTraj(pts, gaps, r.kind === "spring" ? "frames" : "events", r.ch ? css(r.ch.colVar) : r.match ? css(r.match.colVar) : css("--ink"));
+  }
+  function playCustom(g) {
+    customG = g;
+    const m = masses(), vin = v0(), n = st.n, s0 = initialDisp(n), G = 0.55;
+    const gaps = g.map((x) => x * G);
+    const out = seqOutcome(m, vin, g), ch = st.chambers.find((c) => c.key === keyOf(out));
+    st.play = null; drawRows(); drawMap();
+    playLabel = `Gap ratio ${g.map((x) => x.toFixed(2)).join(" : ")}` + (ch ? ` (chamber ${ch.label})` : "");
+    setTraj(seqTraj(m, vin, s0, gaps).pts, gaps, "events", ch ? css(ch.colVar) : css("--ink"));
+  }
+  function setTraj(pts, gaps, mode, col) {
+    const last = pts[pts.length - 1], tEnd = last.t + (mode === "events" ? 2.4 : 0);
+    traj = { pts, gaps, mode, col, tEnd };
+    t0 = performance.now();
+    if (raf) cancelAnimationFrame(raf);
+    if (reduce) { drawFrame(tEnd); return; }
+    const loop = (now) => { const t = Math.min(tEnd, (now - t0) / 1000 * 1.7); drawFrame(t); if (t < tEnd) raf = requestAnimationFrame(loop); };
+    raf = requestAnimationFrame(loop);
+  }
+  function stateAt(t) {
+    const P = traj.pts;
+    if (traj.mode === "frames") { const i = Math.min(P.length - 1, Math.max(0, Math.round(t / 0.02))); return P[i]; }
+    let k = 0; while (k + 1 < P.length && P[k + 1].t <= t) k++;
+    const a = P[k], dt = t - a.t;
+    return { s: a.s.map((x, i) => x + a.v[i] * dt), v: a.v };
+  }
+  function drawFrame(t) {
+    const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    ctx.clearRect(0, 0, W, H);
+    if (!traj) return;
+    const m = masses(), R = radii(m), n = st.n;
+    const base = []; let x = 0; for (let i = 0; i < n; i++) { if (i > 0) x += R[i - 1] + R[i] + (traj.gaps[i - 1] || 0); base.push(x); }
+    const mid = (base[0] + base[n - 1]) / 2;
+    const span = (base[n - 1] - base[0]) + 2 * D + 2 * Math.max(...R) + 1.2;
+    const S = Math.min(W / span, H / 4.4);
+    const cx = W / 2, groundY = H * 0.62, barY = H * 0.16;
+    const X = (u) => cx + (u - mid) * S;
+    const sNow = stateAt(t);
+    const INK = css("--ink"), MUT = css("--muted"), RULE = css("--rule"), ST = css("--steel"), HI = css("--steel-hi");
+    ctx.strokeStyle = MUT; ctx.lineWidth = 4 * dpr; ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(X(base[0]) - 1.2 * S, barY); ctx.lineTo(X(base[n - 1]) + 1.2 * S, barY); ctx.stroke();
+    for (let i = 0; i < n; i++) {
+      const bx = X(base[i] + sNow.s[i]), by = groundY - (R[i] - R[0]) * 0 ;
+      ctx.strokeStyle = RULE; ctx.lineWidth = 1.4 * dpr; ctx.beginPath(); ctx.moveTo(X(base[i]), barY); ctx.lineTo(bx, by); ctx.stroke();
+    }
+    for (let i = 0; i < n; i++) {
+      const bx = X(base[i] + sNow.s[i]), by = groundY, rr = R[i] * S;
+      const g = ctx.createRadialGradient(bx - rr * 0.35, by - rr * 0.35, rr * 0.1, bx, by, rr);
+      g.addColorStop(0, HI); g.addColorStop(1, ST);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, by, rr, 0, 2 * Math.PI); ctx.fill();
+      ctx.strokeStyle = INK; ctx.lineWidth = 1.3 * dpr; ctx.stroke();
+      ctx.fillStyle = MUT; ctx.font = `${12 * dpr}px "JetBrains Mono", ui-monospace, monospace`; ctx.textAlign = "center";
+      ctx.fillText(m[i] < 1 ? m[i].toFixed(2) : m[i].toFixed(1), bx, by + rr + 16 * dpr);
+      const vv = sNow.v[i];
+      if (Math.abs(vv) > 0.01) {
+        const L = vv * 0.75 * S, ay = by + rr + 30 * dpr;
+        ctx.strokeStyle = traj.col; ctx.fillStyle = traj.col; ctx.lineWidth = 3 * dpr;
+        ctx.beginPath(); ctx.moveTo(bx, ay); ctx.lineTo(bx + L, ay); ctx.stroke();
+        const d = Math.sign(L); ctx.beginPath(); ctx.moveTo(bx + L + d * 6 * dpr, ay); ctx.lineTo(bx + L - d * 3 * dpr, ay - 5 * dpr); ctx.lineTo(bx + L - d * 3 * dpr, ay + 5 * dpr); ctx.closePath(); ctx.fill();
+      }
+    }
+    $("#tag").innerHTML = `<b>${playLabel}</b>`;
+    $("#now").textContent = reduce ? "Showing the final state (reduced motion is on)." : "";
+  }
+  $("#replay").addEventListener("click", () => { if (traj) setTraj(traj.pts, traj.gaps, traj.mode, traj.col); });
+  if ("ResizeObserver" in window) new ResizeObserver(() => { if (traj) drawFrame(reduce ? traj.tEnd : Math.min(traj.tEnd, (performance.now() - t0) / 1000 * 1.7)); }).observe(cv);
+
+  /* ---------- controls ---------- */
+  function setN(n) {
+    st.n = n; $("#n-out").textContent = n;
+    const two = document.querySelector('#start button[data-v="two"]'); two.disabled = n < 3;
+    if (n < 3 && st.start === "two") { st.start = "one"; document.querySelectorAll("#start button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === "one"))); }
+    st.logm = patternMasses(n, st.pattern === "custom" ? "equal" : st.pattern).map(Math.log10);
+    customG = null; st.play = null;
+    buildMassInputs(); recompute();
+  }
+  $("#n").addEventListener("input", (e) => setN(+e.target.value));
+  document.querySelectorAll("#start button").forEach((b) => b.addEventListener("click", () => {
+    if (b.disabled) return; st.start = b.dataset.v; document.querySelectorAll("#start button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); customG = null; st.play = null; recompute();
+  }));
+  document.querySelectorAll("#mp button").forEach((b) => b.addEventListener("click", () => {
+    st.pattern = b.dataset.v; document.querySelectorAll("#mp button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    st.logm = patternMasses(st.n, st.pattern).map(Math.log10); customG = null; st.play = null; buildMassInputs(); recompute();
+  }));
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  const rethemed = () => { drawMap(); drawRows(); if (traj) startPlay(st.play || "bL"); if (typeof pv !== "undefined") pv.draw(); if (typeof swDraw !== "undefined") { swLegend(); swDraw(); } if (buReady) { buDraw(); k5v.draw(); } if (typeof cmpUpdate === "function" && cmp.regions.length) cmpUpdate(); };
+  if (mq.addEventListener) mq.addEventListener("change", rethemed);
+  new MutationObserver(rethemed).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  /* ---------- Figure 2: the cradle's polynomial ---------- */
+  function View3(canvas, build) {
+    this.c = canvas; this.ctx = canvas.getContext("2d"); this.build = build; this.yaw = -0.6; this.pitch = 0.55;
+    let drag = null;
+    canvas.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, yaw: this.yaw, pitch: this.pitch }; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener("pointerup", (e) => { if (drag && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 5 && this.onPick && this._picks) { const r = canvas.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1), x = (e.clientX - r.left) * dpr, y = (e.clientY - r.top) * dpr; let best = null, bd = 12 * dpr; this._picks.forEach((p) => { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } }); if (best) this.onPick(best.payload); } });
+    canvas.addEventListener("pointermove", (e) => { if (!drag) return; this.yaw = drag.yaw + (e.clientX - drag.x) * 0.01; this.pitch = Math.max(-0.2, Math.min(1.45, drag.pitch + (e.clientY - drag.y) * 0.01)); this.draw(); });
+    const end = () => { drag = null; }; canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+    canvas.addEventListener("keydown", (e) => { const k = { ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.1], ArrowDown: [0, 0.1] }[e.key]; if (!k) return; e.preventDefault(); this.yaw += k[0]; this.pitch = Math.max(-0.2, Math.min(1.45, this.pitch + k[1])); this.draw(); });
+    if ("ResizeObserver" in window) new ResizeObserver(() => this.draw()).observe(canvas);
+  }
+  View3.prototype.draw = function () {
+    const r = this.c.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (this.c.width !== W || this.c.height !== H) { this.c.width = W; this.c.height = H; }
+    const sc = this.build(), ctx = this.ctx; ctx.clearRect(0, 0, W, H);
+    const S = Math.min(W, H) / (2 * sc.radius), cy = Math.cos(this.yaw), sy = Math.sin(this.yaw), cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const T = (p) => { const x1 = p[0] * cy - p[1] * sy, y1 = p[0] * sy + p[1] * cy, z1 = p[2]; return [W / 2 + x1 * S, H / 2 + 0.06 * H - (y1 * sp + z1 * cp) * S, y1 * cp - z1 * sp]; };
+    const L = [-0.35, -0.6, 0.72], Ln = Math.hypot(...L);
+    const items = [];
+    for (const t of sc.tris || []) {
+      const P = t.p.map(T), d = (P[0][2] + P[1][2] + P[2][2]) / 3;
+      const u = t.p[1].map((v, i) => v - t.p[0][i]), w = t.p[2].map((v, i) => v - t.p[0][i]);
+      const n = [u[1] * w[2] - u[2] * w[1], u[2] * w[0] - u[0] * w[2], u[0] * w[1] - u[1] * w[0]], nn = Math.hypot(...n) || 1;
+      const sh = t.flat ? 1 : 0.6 + 0.4 * Math.abs((n[0] * L[0] + n[1] * L[1] + n[2] * L[2]) / (nn * Ln));
+      items.push({ k: "t", d, P, col: t.col.map((c) => c * sh), alpha: t.alpha == null ? 1 : t.alpha });
+    }
+    this._picks = [];
+    for (const q of sc.points || []) { const a = T(q.p); items.push({ k: "p", d: a[2] - 0.005, a, col: q.col, r: q.r || 2.5, alpha: q.alpha == null ? 1 : q.alpha, ring: q.ring }); if (q.pick) this._picks.push({ x: a[0], y: a[1], payload: q.pick }); }
+    for (const l of sc.lines || []) { const a = T(l.a), b = T(l.b); items.push({ k: "l", d: (a[2] + b[2]) / 2 - (l.lift || 0), a, b, col: l.col, w: l.w || 1.5, dash: l.dash, alpha: l.alpha == null ? 1 : l.alpha }); }
+    items.sort((p, q) => q.d - p.d);
+    for (const it of items) {
+      ctx.globalAlpha = it.alpha;
+      if (it.k === "t") { ctx.fillStyle = `rgb(${it.col.map((c) => Math.max(0, Math.min(255, Math.round(c)))).join(",")})`; ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(it.P[0][0], it.P[0][1]); ctx.lineTo(it.P[1][0], it.P[1][1]); ctx.lineTo(it.P[2][0], it.P[2][1]); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      else if (it.k === "p") { ctx.fillStyle = `rgb(${it.col.map(Math.round).join(",")})`; ctx.beginPath(); ctx.arc(it.a[0], it.a[1], it.r * dpr, 0, 2 * Math.PI); ctx.fill(); if (it.ring) { ctx.strokeStyle = `rgb(${it.ring.join(",")})`; ctx.lineWidth = 1.2 * dpr; ctx.stroke(); } }
+      else { ctx.strokeStyle = `rgb(${it.col.map(Math.round).join(",")})`; ctx.lineWidth = it.w * dpr; ctx.lineCap = "round"; ctx.setLineDash(it.dash ? it.dash.map((v) => v * dpr) : []); ctx.beginPath(); ctx.moveTo(it.a[0], it.a[1]); ctx.lineTo(it.b[0], it.b[1]); ctx.stroke(); ctx.setLineDash([]); }
+    }
+    ctx.globalAlpha = 1;
+    ctx.font = `${12.5 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.textAlign = "center";
+    for (const lab of sc.labels || []) { const a = T(lab.p); ctx.fillStyle = `rgb(${lab.col.join(",")})`; ctx.fillText(lab.text, a[0], a[1]); }
+  };
+  const rgbOf = (n) => { let h = css(n).replace("#", ""); if (h.length === 3) h = h.split("").map((c) => c + c).join(""); const v = parseInt(h, 16); return [(v >> 16) & 255, (v >> 8) & 255, v & 255]; };
+  const mixC = (a, b, t) => a.map((x, i) => x + (b[i] - x) * t);
+  const pst = { mode: "three", m2: 1 };
+  const pmFromSlider = (x) => Math.pow(10, -1.3 + 2.6 * x), sliderFromPm = (m) => Math.min(1, Math.max(0, (Math.log10(m) + 1.3) / 2.6));
+  function betaOf(m2) { return Math.acos(Math.sqrt(1 / ((1 + m2) * (m2 + 1)))); }
+  function mirrorInfo(beta) {
+    // mirror angles j*beta mod pi; detect closure
+    let close = null;
+    for (let q = 1; q <= 12; q++) { const x = q * beta / Math.PI; if (Math.abs(x - Math.round(x)) < 2e-5) { close = q; break; } }
+    const count = close || 9, angs = [];
+    for (let j = 0; j < count; j++) { let a = (j * beta) % Math.PI; if (!angs.some((b) => Math.abs(b - a) < 1e-6 || Math.abs(Math.abs(b - a) - Math.PI) < 1e-6)) angs.push(a); }
+    const cuts = angs.filter((a) => a > 1e-6 && a < beta - 1e-6);
+    return { close, angs, cuts };
+  }
+  function orderMatters(beta) {
+    const n = [[0, 1], [Math.sin(beta), -Math.cos(beta)]];
+    const bub = (g, order) => { let v = [-Math.cos(g), -Math.sin(g)]; for (let k = 0; k < 1000; k++) { let mv = false; for (const i of order) { const nn = n[i], vn = v[0] * nn[0] + v[1] * nn[1]; if (vn < -1e-12) { v = [v[0] - 2 * vn * nn[0], v[1] - 2 * vn * nn[1]]; mv = true; break; } } if (!mv) break; } return v; };
+    let mx = 0; for (let s = 1; s < 120; s++) { const g = beta * s / 120, a = bub(g, [0, 1]), c = bub(g, [1, 0]); mx = Math.max(mx, Math.hypot(a[0] - c[0], a[1] - c[1])); }
+    return mx > 1e-3;
+  }
+  function buildPoly() {
+    const INK = rgbOf("--ink"), MUT = rgbOf("--muted"), RULE = rgbOf("--rule"), NASH = rgbOf("--nash"), BAD = rgbOf("--bad"), A = rgbOf("--ch1"), B = rgbOf("--ch2"), C3 = rgbOf("--ch3"), SOFT = rgbOf("--soft"), SURF = rgbOf("--surface");
+    const tris = [], lines = [], labels = [];
+    if (pst.mode === "three") {
+      const beta = betaOf(pst.m2), info = mirrorInfo(beta), angs = info.angs;
+      const P = (u, v) => angs.reduce((p, a) => p * (-Math.sin(a) * u + Math.cos(a) * v), 1);
+      const R = 14, NA = 96, FL = -0.62;
+      let mx = 1e-12; for (let i = 1; i <= R; i++) for (let j = 0; j < NA; j++) { const r = i / R, t = 2 * Math.PI * j / NA; mx = Math.max(mx, Math.abs(P(r * Math.cos(t), r * Math.sin(t)))); }
+      const Z = (u, v) => 0.55 * P(u, v) / mx;
+      const pt = (i, j) => { const r = i / R, t = 2 * Math.PI * j / NA, u = r * Math.cos(t), v = r * Math.sin(t); return [u, v, Z(u, v)]; };
+      const colZ = (z) => mixC(SURF, z >= 0 ? A : B, Math.min(1, 0.25 + 1.3 * Math.abs(z)));
+      for (let i = 0; i < R; i++) for (let j = 0; j < NA; j++) {
+        const a = pt(i, j), b = pt(i + 1, j), c = pt(i + 1, j + 1), d = pt(i, j + 1);
+        if (i === 0) { tris.push({ p: [a, b, c], col: colZ((b[2] + c[2]) / 3) }); continue; }
+        tris.push({ p: [a, b, c], col: colZ((a[2] + b[2] + c[2]) / 3) }); tris.push({ p: [a, c, d], col: colZ((a[2] + c[2] + d[2]) / 3) });
+      }
+      // floor: disk outline, wedge, mirrors, walls
+      for (let j = 0; j < NA; j++) { const t = 2 * Math.PI * j / NA, t2 = 2 * Math.PI * (j + 1) / NA; lines.push({ a: [Math.cos(t), Math.sin(t), FL], b: [Math.cos(t2), Math.sin(t2), FL], col: RULE, w: 1 }); }
+      const WS = 24; for (let j = 0; j < WS; j++) { const t = beta * j / WS, t2 = beta * (j + 1) / WS; tris.push({ p: [[0, 0, FL], [Math.cos(t), Math.sin(t), FL], [Math.cos(t2), Math.sin(t2), FL]], col: mixC(SURF, NASH, 0.35), flat: true, alpha: 0.85 }); }
+      angs.forEach((a) => {
+        const isWall = Math.abs(a) < 1e-6 || Math.abs(a - beta) < 1e-6, cut = info.cuts.some((c) => Math.abs(c - a) < 1e-6);
+        const col = isWall ? INK : cut ? BAD : MUT;
+        lines.push({ a: [-Math.cos(a), -Math.sin(a), FL], b: [Math.cos(a), Math.sin(a), FL], col, w: isWall ? 2.2 : cut ? 2.6 : 1.4, dash: isWall || cut ? null : [5, 4] });
+        // zero line on the surface (z = 0)
+        lines.push({ a: [-Math.cos(a), -Math.sin(a), 0], b: [Math.cos(a), Math.sin(a), 0], col: cut ? BAD : INK, w: 1.6, alpha: 0.85, lift: 0.02 });
+      });
+      lines.push({ a: [0, 0, FL], b: [1.05, 0, FL], col: A.map((x) => x * 0.85), w: 4 });
+      lines.push({ a: [0, 0, FL], b: [1.05 * Math.cos(beta), 1.05 * Math.sin(beta), FL], col: B.map((x) => x * 0.85), w: 4 });
+      labels.push({ p: [1.22, -0.05, FL], text: "1–2 touch", col: A });
+      labels.push({ p: [1.22 * Math.cos(beta), 1.22 * Math.sin(beta), FL], text: "2–3 touch", col: B });
+      const deg = beta * 180 / Math.PI, om = orderMatters(beta);
+      const mName = pst.m2 > 1e4 ? "very heavy" : pst.m2.toFixed(3);
+      $("#ptag").textContent = info.close ? `P = product of ${angs.length} mirror lines (degree ${angs.length})` : `First ${angs.length} mirror lines of infinitely many; they never close up`;
+      $("#pchips").innerHTML =
+        `<span class="chip">Middle mass <b>${mName}</b></span>` +
+        `<span class="chip">Corner angle β <b>${deg.toFixed(2)}°</b></span>` +
+        `<span class="chip">Mirror lines ${info.close ? `close up after <b>${angs.length}</b>` : "<b>never close up</b>"}</span>` +
+        `<span class="chip">Mirrors cutting the wedge <b style="color:var(${info.cuts.length ? "--bad" : "--good"})">${info.cuts.length ? info.cuts.length + (info.close ? "" : "+") : "none"}</b></span>` +
+        `<span class="chip">Order matters <b style="color:var(${om ? "--bad" : "--good"})">${om ? "yes" : "no"}</b></span>` +
+        (info.close && !info.cuts.length ? `<span class="chip">Zeta threshold of P <b>${angs.length === 2 ? "1" : angs.length % 2 === 0 ? "1/" + angs.length / 2 : "2/" + angs.length}</b></span>` : "");
+      $("#pcap").textContent = `Figure 2. With the outer balls of mass 1, cos β = 1/(1 + m₂). The surface is P scaled to fit; only its sign and zero lines matter. ` + (info.close ? "" : "For a generic mass the graph shows the product of the first nine mirrors only; the true set of mirrors is infinite, and no polynomial vanishes on all of them.");
+      return { radius: 1.45, tris, lines, labels };
+    }
+    // four equal balls: six planes x_i = x_j in the center-of-mass-free 3-space
+    const E = [[1, -1, 0, 0].map((x) => x / Math.SQRT2), [1, 1, -2, 0].map((x) => x / Math.sqrt(6)), [1, 1, 1, -3].map((x) => x / Math.sqrt(12))];
+    const proj = (v) => E.map((e) => e.reduce((s, x, i) => s + x * v[i], 0));
+    const pairs = [[0, 1], [1, 2], [2, 3], [0, 2], [1, 3], [0, 3]];
+    const pcol = { "0,1": A, "1,2": B, "2,3": C3 };
+    pairs.forEach(([i, j]) => {
+      const v = [0, 0, 0, 0]; v[i] = 1; v[j] = -1; const n = proj(v), nn = Math.hypot(...n), nu = n.map((x) => x / nn);
+      let a = Math.abs(nu[0]) < 0.9 ? [1, 0, 0] : [0, 1, 0];
+      let e1 = [nu[1] * a[2] - nu[2] * a[1], nu[2] * a[0] - nu[0] * a[2], nu[0] * a[1] - nu[1] * a[0]]; const l1 = Math.hypot(...e1); e1 = e1.map((x) => x / l1);
+      const e2 = [nu[1] * e1[2] - nu[2] * e1[1], nu[2] * e1[0] - nu[0] * e1[2], nu[0] * e1[1] - nu[1] * e1[0]];
+      const key = i + "," + j, contact = !!pcol[key], col = contact ? pcol[key] : MUT;
+      const K = 40;
+      for (let k = 0; k < K; k++) { const t = 2 * Math.PI * k / K, t2 = 2 * Math.PI * (k + 1) / K, P1 = e1.map((x, q) => Math.cos(t) * x + Math.sin(t) * e2[q]), P2 = e1.map((x, q) => Math.cos(t2) * x + Math.sin(t2) * e2[q]); tris.push({ p: [[0, 0, 0], P1, P2], col: mixC(SURF, col, contact ? 0.55 : 0.3), alpha: contact ? 0.42 : 0.22, flat: true }); lines.push({ a: P1, b: P2, col, w: 1.2, alpha: 0.7 }); }
+      const lp = e1.map((x, q) => 1.08 * (0.7 * x + 0.7 * e2[q]));
+      labels.push({ p: lp, text: `x${SUB(i + 1)} = x${SUB(j + 1)}`, col: contact ? col : MUT });
+    });
+    // the physical cone: gaps >= 0; edge rays where two gaps vanish
+    const rays = [[0, 1, 1, 1], [0, 0, 1, 1], [0, 0, 0, 1]].map((x) => { const m = x.reduce((s, y) => s + y, 0) / 4; const p = proj(x.map((y) => y - m)); const n = Math.hypot(...p); return p.map((y) => y / n); });
+    rays.forEach((r) => lines.push({ a: [0, 0, 0], b: r.map((x) => x * 1.02), col: NASH, w: 3.5 }));
+    for (let i = 0; i < 3; i++) { const a = rays[i], b = rays[(i + 1) % 3]; for (let k = 0; k < 12; k++) { const t = k / 12, t2 = (k + 1) / 12; const p1 = a.map((x, q) => x * (1 - t) + b[q] * t), p2 = a.map((x, q) => x * (1 - t2) + b[q] * t2); const n1 = Math.hypot(...p1), n2 = Math.hypot(...p2); lines.push({ a: p1.map((x) => 1.02 * x / n1), b: p2.map((x) => 1.02 * x / n2), col: NASH, w: 2.5 }); } }
+    const tc = rays.reduce((s, r) => s.map((x, q) => x + r[q]), [0, 0, 0]).map((x) => x / 3); const tn = Math.hypot(...tc);
+    for (let i = 0; i < 3; i++) tris.push({ p: [[0, 0, 0], rays[i], rays[(i + 1) % 3]], col: mixC(SURF, NASH, 0.65), alpha: 0.7, flat: true });
+    pst.tc = tc.map((x) => x / Math.hypot(...tc));
+    labels.push({ p: rays[0].map((x, q) => 1.12 * x + 0.1 * tc[q] / tn), text: "balls in order", col: NASH });
+    $("#ptag").textContent = "Zero set of P = ∏ (xᵢ − xⱼ): six planes through the origin";
+    $("#pchips").innerHTML = `<span class="chip">Planes <b>6</b></span><span class="chip">Regions <b>24 = 4!</b>, one per ordering of the balls</span><span class="chip">Contacts <b>3</b> of the 6 planes bound the physical region</span>`;
+    $("#pcap").textContent = "Figure 2. The colored planes are the three contacts (balls 1–2, 2–3, 3–4); the gray ones are the other three ways two balls can trade places. The violet cone is the region where the balls are in order, and its triangular cross-section is the triangle map of Figure 1.";
+    return { radius: 1.55, tris, lines, labels };
+  }
+  const pv = new View3($("#pcv"), buildPoly);
+  function setPm(m) { pst.m2 = m; $("#pm").value = sliderFromPm(m); $("#pm-out").textContent = m > 1e4 ? "∞" : m < 1 ? m.toFixed(3) : m.toFixed(2); pv.draw(); }
+  $("#pm").addEventListener("input", (e) => { const m = pmFromSlider(+e.target.value); pst.m2 = m; $("#pm-out").textContent = m < 1 ? m.toFixed(3) : m.toFixed(2); pv.draw(); });
+  document.querySelectorAll("#ppre button").forEach((b) => b.addEventListener("click", () => setPm(+b.dataset.m)));
+  document.querySelectorAll("#pmode button").forEach((b) => b.addEventListener("click", () => {
+    pst.mode = b.dataset.v; document.querySelectorAll("#pmode button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    $("#p3ctl").hidden = pst.mode !== "three"; $("#p3pre").hidden = pst.mode !== "three";
+    if (pst.mode === "four") {
+      pv.draw();
+      // turn the view so the in-order cone faces the reader, slightly from above
+      const c = pst.tc; let best = [Infinity, 0, 0];
+      for (let yi = 0; yi < 72; yi++) for (let pi = 0; pi <= 12; pi++) { const yaw = -Math.PI + 2 * Math.PI * yi / 72, pitch = 0.1 + pi * 0.08; const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch); const x1 = c[0] * cy - c[1] * sy, y1 = c[0] * sy + c[1] * cy, z1 = c[2]; const depth = y1 * cp - z1 * sp, up = y1 * sp + z1 * cp; const score = depth + 2 * Math.abs(up - 0.35) + 0.6 * Math.abs(x1); if (score < best[0]) best = [score, yaw, pitch]; }
+      pv.yaw = best[1]; pv.pitch = best[2];
+    } else { pv.yaw = -0.6; pv.pitch = 0.55; }
+    pv.draw();
+  }));
+  setPm(1);
+
+
+  /* ---------- Figure 3: swarm of perturbations ---------- */
+  const SWM = { 3: { equal: [1, 1, 1], heavy: [1, 3, 1], light: [1, 0.3, 1], up: [0.5, 1, 2] }, 4: { equal: [1, 1, 1, 1], heavy: [1, 3, 3, 1], light: [1, 0.3, 0.3, 1], up: [0.35, 0.7, 1.4, 2.8] } };
+  const sw = { n: 4, mp: "light", start: "one", dist: "box", eps: 1, big: false, proj: 0, projOn: false, parts: [], chambers: [], anim: 1, t0: 0 };
+  const swPos = (g) => { const sm = g.reduce((a, b) => a + b, 0) || 1; return g.map((x) => (x + (x / sm - x) * sw.proj) * sw.eps * sw.anim); };
+  function swV0() { const v = new Array(sw.n).fill(0); v[0] = 1; if (sw.start === "ends") v[sw.n - 1] = -1; return v; }
+  function swSample(rnd) {
+    const k = sw.n - 1;
+    if (sw.dist === "box") return [...Array(k)].map(() => rnd());
+    if (sw.dist === "gauss") return [...Array(k)].map(() => { let u = 0; while (u === 0) u = rnd(); return Math.min(1, 0.4 * Math.abs(Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rnd()))); });
+    const e = [...Array(k)].map(() => -Math.log(rnd() + 1e-12)), sm = e.reduce((a, b) => a + b, 0), r = Math.pow(rnd(), 1 / k);
+    return e.map((x) => r * x / sm);
+  }
+  function swCompute() {
+    const m = SWM[sw.n][sw.mp], vin = swV0();
+    // stable colors: order outcomes by share among equally weighted directions
+    let seed = 5; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const ref = new Map();
+    for (let i = 0; i < 1500; i++) { const e = [...Array(sw.n - 1)].map(() => -Math.log(rnd() + 1e-12)), sm = e.reduce((a, b) => a + b, 0); const v = seqOutcome(m, vin, e.map((x) => x / sm)); const kk = keyOf(v); ref.set(kk, (ref.get(kk) || { v, c: 0 })); ref.get(kk).c++; }
+    const order = [...ref.entries()].sort((a, b) => b[1].c - a[1].c).map(([kk]) => kk);
+    seed = 99;
+    const N = sw.n === 3 ? 700 : 1600, parts = [], tally = new Map();
+    for (let i = 0; i < N; i++) {
+      const g = swSample(rnd); if (g.every((x) => x < 1e-9)) continue;
+      const v = seqOutcome(m, vin, g), kk = keyOf(v);
+      if (!tally.has(kk)) tally.set(kk, { v, c: 0 }); tally.get(kk).c++;
+      parts.push({ g, key: kk });
+    }
+    const keys = [...new Set([...order, ...tally.keys()])];
+    const chambers = keys.filter((kk) => tally.has(kk)).map((kk) => ({ key: kk, v: tally.get(kk).v, share: tally.get(kk).c / parts.length, colVar: keys.indexOf(kk) < CH.length ? CH[keys.indexOf(kk)] : "--muted", label: String.fromCharCode(65 + keys.indexOf(kk)) }));
+    chambers.sort((a, b) => a.label.localeCompare(b.label));
+    const biggest = chambers.reduce((b, c) => (c.share > b.share ? c : b), chambers[0]);
+    const second = chambers.filter((c) => c !== biggest).reduce((b, c) => (c.share > b ? c.share : b), 0);
+    sw.tie = chambers.length > 1 && biggest.share - second < 0.04;
+    const ord = [...Array(sw.n - 1).keys()];
+    const bL = keyOf(bubble(m, vin, ord)), bR = keyOf(bubble(m, vin, ord.slice().reverse()));
+    sw.parts = parts; sw.chambers = chambers; sw.biggest = biggest; sw.bL = bL; sw.bR = bR; sw.m = m;
+    swLegend();
+    if (buReady) { bu.extra.clear(); buDraw(); }
+  }
+  function arrowsSvg(v, col) {
+    const n = v.length, w = 30 * n + 10;
+    let s = `<svg viewBox="0 0 ${w} 22" style="width:${w}px;height:22px;display:inline-block;vertical-align:middle">`;
+    v.forEach((x, i) => { const cx = 18 + 30 * i; s += `<circle cx="${cx}" cy="15" r="5" fill="var(--soft)" stroke="var(--ink)" stroke-width="1"/>`; if (Math.abs(x) > 0.02) { const L = 13 * x; s += `<line x1="${cx}" y1="5" x2="${cx + L}" y2="5" stroke="${col}" stroke-width="2.4"/><path d="M${cx + L + Math.sign(L) * 4} 5 l${-Math.sign(L) * 5} -3.5 l0 7 z" fill="${col}"/>`; } });
+    return s + "</svg>";
+  }
+  function swLegend() {
+    const rows = sw.chambers.map((c) => {
+      const col = css(c.colVar), tags = [];
+      if (c === sw.biggest && sw.chambers.length > 1 && !sw.tie) tags.push("biggest region");
+      if (c.key === sw.bL) tags.push("bubble sort, left to right");
+      if (c.key === sw.bR) tags.push("bubble sort, right to left");
+      return `<tr><td><span class="sw" style="background:${col}"></span>${c.label}</td><td>${arrowsSvg(c.v, col)}</td><td class="v">${fmtV(c.v)}</td><td class="v">${(100 * c.share).toFixed(1)}%</td><td class="note">${tags.join(" · ")}</td></tr>`;
+    }).join("");
+    $("#sw-legend").innerHTML = `<table><thead><tr><th>Region</th><th>Outgoing motion</th><th>Velocities</th><th>Share of swarm</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+    const same = sw.bL === sw.biggest.key && sw.bR === sw.biggest.key;
+    $("#sw-chips").innerHTML =
+      `<span class="chip">Regions <b>${sw.chambers.length}</b></span>` +
+      (sw.tie ? `<span class="chip">Biggest region <b>none: a tie, within sampling noise</b></span>` : `<span class="chip">Biggest region <b style="color:${css(sw.biggest.colVar)}">${sw.biggest.label}, ${(100 * sw.biggest.share).toFixed(1)}%</b></span>`) +
+      `<span class="chip">Particles <b>${sw.parts.length}</b></span>` +
+      (sw.chambers.length > 1 && !sw.tie ? `<span class="chip">Both bubble sorts land in the biggest region <b style="color:var(${same ? "--good" : "--bad"})">${same ? "yes" : "no"}</b></span>` : "");
+    $("#sw-cap").textContent = `Figure 3. Masses ${sw.m.join(", ")}. Every particle is simulated exactly, one two-ball collision at a time. ` + (sw.n === 4 ? "The faint triangle is the slice where the gaps add up to ε: the triangle map of Figure 1. Drag to rotate." : "Dashed rays separate the regions; each is a cone from the corner.");
+  }
+  function swBuild3D(k) {
+    const INK = rgbOf("--ink"), MUT = rgbOf("--muted"), RULE = rgbOf("--rule"), NASH = rgbOf("--nash"), SOFT = rgbOf("--soft");
+    const points = [], lines = [], labels = [];
+    const O = [-0.6, -0.6, -0.6], S = 1.25;
+    const P = (g) => [O[0] + S * g[0], O[1] + S * g[1], O[2] + S * g[2]];
+    [[1, 0, 0], [0, 1, 0], [0, 0, 1]].forEach((e, i) => { lines.push({ a: P([0, 0, 0]), b: P(e.map((x) => x * 1.08)), col: MUT, w: 1.5 }); labels.push({ p: P(e.map((x) => x * 1.2)), text: ["gap 1–2", "gap 2–3", "gap 3–4"][i], col: MUT }); });
+    const e = sw.eps;
+    [[[1, 0, 0], [0, 1, 0]], [[0, 1, 0], [0, 0, 1]], [[0, 0, 1], [1, 0, 0]]].forEach(([a, b]) => lines.push({ a: P(a.map((x) => x * e)), b: P(b.map((x) => x * e)), col: NASH, w: 1.4, alpha: 0.6, dash: [4, 3] }));
+    const colors = Object.fromEntries(sw.chambers.map((c) => [c.key, rgbOf(c.colVar)]));
+    sw.parts.forEach((p) => {
+      const isBig = p.key === sw.biggest.key, col = sw.big && !isBig ? mixC(SOFT, MUT, 0.25) : colors[p.key];
+      points.push({ p: P(swPos(p.g)), col, r: sw.big && !isBig ? 1.6 : 2.3, pick: { n: sw.n, m: sw.m, start: sw.start, g: p.g } });
+    });
+    points.push({ p: P([0, 0, 0]), col: INK, r: 4.5 });
+    labels.push({ p: P([-0.08, -0.08, -0.12]), text: "collision", col: INK });
+    return { radius: 1.25, tris: [], lines, points, labels };
+  }
+  const swView = new View3($("#sw-cv"), () => swBuild3D(sw.anim));
+  swView.yaw = -0.75; swView.pitch = 0.42;
+  { const orig = swView.draw; swView.draw = function () { if (sw.n === 4) orig.call(this); else swDraw2D(sw.anim); }; }
+  function swDraw2D(k) {
+    const cv = $("#sw-cv"), ctx = cv.getContext("2d"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    ctx.clearRect(0, 0, W, H);
+    const pad = 54 * dpr, size = Math.min(W - 2 * pad, H - 2 * pad), x0 = (W - size) / 2, y0 = H - pad;
+    const X = (g) => x0 + g * size, Y = (g) => y0 - g * size;
+    const MUT = css("--muted"), INK = css("--ink"), RULE = css("--rule"), SOFT = css("--soft");
+    ctx.strokeStyle = RULE; ctx.lineWidth = 1 * dpr;
+    for (let t = 0; t <= 4; t++) { ctx.beginPath(); ctx.moveTo(X(t / 4), Y(0)); ctx.lineTo(X(t / 4), Y(1)); ctx.stroke(); ctx.beginPath(); ctx.moveTo(X(0), Y(t / 4)); ctx.lineTo(X(1), Y(t / 4)); ctx.stroke(); }
+    ctx.fillStyle = MUT; ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.textAlign = "center";
+    ctx.fillText("gap 1–2 →", X(0.5), Y(0) + 34 * dpr);
+    ctx.save(); ctx.translate(X(0) - 34 * dpr, Y(0.5)); ctx.rotate(-Math.PI / 2); ctx.fillText("gap 2–3 →", 0, 0); ctx.restore();
+    for (let t = 0; t <= 4; t++) { ctx.fillText((t / 4).toFixed(2), X(t / 4), Y(0) + 16 * dpr); }
+    // region boundaries as rays: sort by angle
+    const ps = sw.parts.slice().sort((a, b) => Math.atan2(a.g[1], a.g[0]) - Math.atan2(b.g[1], b.g[0]));
+    ctx.setLineDash([5 * dpr, 4 * dpr]); ctx.strokeStyle = INK; ctx.lineWidth = 1.2 * dpr;
+    for (let i = 1; i < ps.length; i++) if (ps[i].key !== ps[i - 1].key) {
+      const a = (Math.atan2(ps[i].g[1], ps[i].g[0]) + Math.atan2(ps[i - 1].g[1], ps[i - 1].g[0])) / 2;
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1.05 * Math.cos(a)), Y(1.05 * Math.sin(a))); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    const colors = Object.fromEntries(sw.chambers.map((c) => [c.key, css(c.colVar)]));
+    sw.parts.forEach((p) => {
+      const isBig = p.key === sw.biggest.key;
+      ctx.globalAlpha = sw.big && !isBig ? 0.25 : 0.95;
+      ctx.fillStyle = sw.big && !isBig ? MUT : colors[p.key];
+      const q = swPos(p.g); ctx.beginPath(); ctx.arc(X(q[0]), Y(q[1]), (sw.big && !isBig ? 1.8 : 2.8) * dpr, 0, 2 * Math.PI); ctx.fill();
+    });
+    ctx.globalAlpha = 1; ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(X(0), Y(0), 5 * dpr, 0, 2 * Math.PI); ctx.fill();
+    ctx.textAlign = "left"; ctx.fillText("collision", X(0) + 8 * dpr, Y(0) - 8 * dpr);
+  }
+  function swDraw() {
+    const k = sw.anim;
+    if (sw.n === 4) swView.draw(); else swDraw2D(k);
+    $("#sw-tag").textContent = `${sw.n} balls: ${sw.n === 3 ? "plane" : "space"} of gaps (${sw.n - 1} numbers per particle), scale ε = ${sw.eps.toFixed(2)}`;
+  }
+  function swRelease() {
+    const reduce2 = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce2) { sw.anim = 1; swDraw(); return; }
+    sw.t0 = performance.now();
+    const loop = (now) => { const t = Math.min(1, (now - sw.t0) / 1400); sw.anim = 1 - Math.pow(1 - t, 3); swDraw(); if (t < 1) requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  }
+  const swSeg = (id, key, conv) => document.querySelectorAll(`#${id} button`).forEach((b) => b.addEventListener("click", () => { sw[key] = conv ? conv(b.dataset.v) : b.dataset.v; document.querySelectorAll(`#${id} button`).forEach((x) => x.setAttribute("aria-pressed", String(x === b))); swCompute(); swRelease(); }));
+  swSeg("sw-n", "n", (v) => +v); swSeg("sw-m", "mp"); swSeg("sw-s", "start"); swSeg("sw-d", "dist");
+  $("#sw-eps").addEventListener("input", (e) => { sw.eps = Math.max(0.02, +e.target.value); $("#sw-eps-out").textContent = sw.eps.toFixed(2); swDraw(); });
+  $("#sw-go").addEventListener("click", swRelease);
+  $("#sw-proj").addEventListener("click", (e) => {
+    sw.projOn = !sw.projOn; e.currentTarget.setAttribute("aria-pressed", String(sw.projOn));
+    const from = sw.proj, to = sw.projOn ? 1 : 0, t0 = performance.now();
+    if (sw.n === 4) {
+      // face the slice gap1 + gap2 + gap3 = ε when projecting; return to the default view otherwise
+      const c = [1, 1, 1].map((x) => x / Math.sqrt(3)); let best = [Infinity, -0.75, 0.42];
+      if (sw.projOn) for (let yi = 0; yi < 144; yi++) for (let pi = 0; pi <= 33; pi++) { const yaw = -Math.PI + 2 * Math.PI * yi / 144, pitch = -0.2 + pi * 0.05; const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch); const y1 = c[0] * sy + c[1] * cy, z1 = c[2]; const depth = y1 * cp - z1 * sp; if (depth < best[0]) best = [depth, yaw, pitch]; }
+      const y0 = swView.yaw, p0 = swView.pitch, y1t = best[1], p1t = best[2];
+      swView._target = [y0, p0, y1t, p1t];
+    }
+    const rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (rm) { sw.proj = to; if (sw.n === 4 && swView._target) { swView.yaw = swView._target[2]; swView.pitch = swView._target[3]; } swDraw(); return; }
+    const loop = (now) => { const t = Math.min(1, (now - t0) / 900), e2 = 1 - Math.pow(1 - t, 3); sw.proj = from + (to - from) * e2; if (sw.n === 4 && swView._target) { const [ya, pa, yb, pb] = swView._target; swView.yaw = ya + (yb - ya) * e2; swView.pitch = pa + (pb - pa) * e2; } swDraw(); if (t < 1) requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  });
+  $("#sw-big").addEventListener("click", (e) => { sw.big = !sw.big; e.currentTarget.setAttribute("aria-pressed", String(sw.big)); swDraw(); });
+  if ("ResizeObserver" in window) new ResizeObserver(() => { if (sw.n === 3) swDraw(); }).observe($("#sw-cv"));
+  swCompute(); swDraw();
+
+
+  /* ---------- Figure 4: the blowup, step by step ---------- */
+  var buReady = false;
+  const bu = { step: 1, s: 1, extra: new Map(), meth: "hir" };
+  function buColorKey(k) {
+    const c = sw.chambers.find((x) => x.key === k); if (c) return rgbOf(c.colVar);
+    if (!bu.extra.has(k)) bu.extra.set(k, ["--ch6", "--ch5", "--ch4", "--muted"][Math.min(3, bu.extra.size)]);
+    return rgbOf(bu.extra.get(k));
+  }
+  const buOut = (g) => keyOf(seqOutcome(sw.m, swV0(), g));
+  // map a display point on E (barycentric b) to a true direction, with corner blowups of amount t
+  function buTrue(b, t) {
+    const cut = 0.24 * t, Z = 0.5;
+    if (t > 0 && b[0] > 1 - Z) { const rq = 1 - b[0]; if (rq < cut - 1e-9) return null; const rt = Math.max(1e-5, (rq - cut) / (Z - cut) * Z), w = b[1] + b[2] || 1; return [1 - rt, rt * b[1] / w, rt * b[2] / w]; }
+    if (t > 0 && b[2] > 1 - Z) { const rq = 1 - b[2]; if (rq < cut - 1e-9) return null; const rt = Math.max(1e-5, (rq - cut) / (Z - cut) * Z), w = b[0] + b[1] || 1; return [rt * b[0] / w, rt * b[1] / w, 1 - rt]; }
+    return b;
+  }
+  function buBuild() {
+    const INK = rgbOf("--ink"), MUT = rgbOf("--muted"), RULE = rgbOf("--rule"), NASH = rgbOf("--nash"), SURF = rgbOf("--surface");
+    const tris = [], lines = [], points = [], labels = [], s = bu.s;
+    if (bu.meth === "nash") {
+      const BAD = rgbOf("--bad"), A = rgbOf("--ch1"), B = rgbOf("--ch2"), C3 = rgbOf("--ch3");
+      if (sw.n === 3) {
+        const O = [-0.55, -0.55, -0.1], P = (x, y, z) => [O[0] + x * 1.1, O[1] + y * 1.1, O[2] + z], H = 0.5 * s;
+        sw.parts.forEach((p) => points.push({ p: P(p.g[0], p.g[1], 0), col: buColorKey(p.key), r: 2.1 }));
+        lines.push({ a: P(0, 0, -H), b: P(1.2, 0, -H), col: A, w: 4 }); lines.push({ a: P(0, 0, H), b: P(0, 1.2, H), col: B, w: 4 });
+        points.push({ p: P(0, 0, -H), col: A, r: 5, ring: INK }); points.push({ p: P(0, 0, H), col: B, r: 5, ring: INK });
+        points.push({ p: P(0, 0, 0), col: SURF, r: 9, ring: BAD });
+        labels.push({ p: P(1.25, 0, -H - 0.08), text: "wall: 2·3 touch", col: A }); labels.push({ p: P(0, 1.3, H + 0.06), text: "wall: 1·2 touch", col: B });
+        labels.push({ p: P(0.18, 0.05, -0.18), text: "colors still meet here", col: BAD });
+        $("#bu-tag").textContent = "Nash lifts the walls by their direction; the swarm is untouched";
+        return { radius: 1.2, tris, lines, points, labels };
+      }
+      const O = [-0.5, -0.5, -0.5], P = (g) => [O[0] + g[0], O[1] + g[1], O[2] + g[2]], off = 0.28 * s;
+      const cols = [A, B, C3], names = ["1·2 touch", "2·3 touch", "3·4 touch"];
+      for (let i = 0; i < 3; i++) {
+        const u = (i + 1) % 3, v = (i + 2) % 3, sh = [0, 0, 0]; sh[i] = -off;
+        const q = (a2, b2) => { const g = [0, 0, 0]; g[u] = a2; g[v] = b2; return P(g.map((x, k) => x + sh[k])); };
+        const M = 6; for (let a2 = 0; a2 < M; a2++) for (let b2 = 0; b2 < M; b2++) { const x0 = 1.05 * a2 / M, x1 = 1.05 * (a2 + 1) / M, y0 = 1.05 * b2 / M, y1 = 1.05 * (b2 + 1) / M; tris.push({ p: [q(x0, y0), q(x1, y0), q(x1, y1)], col: mixC(SURF, cols[i], 0.5), alpha: 0.35, flat: true }); tris.push({ p: [q(x0, y0), q(x1, y1), q(x0, y1)], col: mixC(SURF, cols[i], 0.5), alpha: 0.35, flat: true }); }
+        points.push({ p: P(sh), col: cols[i], r: 5, ring: INK });
+        labels.push({ p: q(0.75, 0.75), text: "wall: " + ["gap 1–2 closed", "gap 2–3 closed", "gap 3–4 closed"][i], col: cols[i] });
+      }
+      sw.parts.forEach((p) => points.push({ p: P(p.g.map((x) => 0.9 * x)), col: buColorKey(p.key), r: 1.5, alpha: 0.75 }));
+      points.push({ p: P([0, 0, 0]), col: SURF, r: 9, ring: BAD });
+      $("#bu-tag").textContent = "Nash pushes the three walls apart; the swarm is untouched";
+      return { radius: 1.3, tris, lines, points, labels };
+    }
+    if (sw.n === 3) {
+      const H = 1.0, O = [-0.55, -0.55, -0.5];
+      const P = (x, y, z) => [O[0] + x * 1.1, O[1] + y * 1.1, O[2] + z];
+      const h = (th) => s * H * th / (Math.PI / 2);
+      // floor
+      [[0, 0, 1, 0], [0, 0, 0, 1], [1, 0, 1, 1], [0, 1, 1, 1]].forEach(([a, b2, c, d2]) => lines.push({ a: P(a, b2, 0), b: P(c, d2, 0), col: RULE, w: 1 }));
+      // lifted sheet colored by outcome of each direction
+      const NT = 48, NR = 8;
+      for (let j = 0; j < NT; j++) {
+        const t0 = (Math.PI / 2) * j / NT, t1 = (Math.PI / 2) * (j + 1) / NT, tm = (t0 + t1) / 2;
+        const col = mixC(SURF, buColorKey(buOut([Math.cos(tm), Math.sin(tm)])), 0.55);
+        for (let i = 0; i < NR; i++) {
+          const r0 = 1.25 * i / NR, r1 = 1.25 * (i + 1) / NR;
+          const q = (r, t) => { const x = r * Math.cos(t), y = r * Math.sin(t); return P(Math.min(1.25, x), Math.min(1.25, y), h(t)); };
+          tris.push({ p: [q(r0, t0), q(r1, t0), q(r1, t1)], col, alpha: 0.55 }); tris.push({ p: [q(r0, t0), q(r1, t1), q(r0, t1)], col, alpha: 0.55 });
+        }
+        // stalk E
+        lines.push({ a: P(0, 0, h(t0)), b: P(0, 0, h(t1)), col: buColorKey(buOut([Math.cos(tm), Math.sin(tm)])), w: 7 });
+      }
+      lines.push({ a: P(0, 0, 0), b: P(0, 0, s * H), col: NASH, w: 2, alpha: 0.6 });
+      sw.parts.forEach((p) => { const th = Math.atan2(p.g[1], p.g[0]); points.push({ p: P(p.g[0], p.g[1], 0), col: mixC(SURF, buColorKey(p.key), 0.5), r: 1.4 }); points.push({ p: P(p.g[0], p.g[1], h(th)), col: buColorKey(p.key), r: 2.2 }); });
+      labels.push({ p: P(1.1, -0.08, 0), text: "gap 1–2", col: MUT }); labels.push({ p: P(-0.08, 1.15, 0), text: "gap 2–3", col: MUT });
+      if (s > 0.15) labels.push({ p: P(-0.06, -0.06, s * H + 0.1), text: "E", col: NASH });
+      $("#bu-tag").textContent = "Each particle lifted by its direction";
+      return { radius: 1.25, tris, lines, points, labels };
+    }
+    // four balls: push every particle away from the corner along its own direction
+    const c = 0.8, O = [-0.6, -0.6, -0.6], SC = 1.0, PS = 0.55;
+    const P = (g) => [O[0] + SC * g[0], O[1] + SC * g[1], O[2] + SC * g[2]];
+    [[1, 0, 0], [0, 1, 0], [0, 0, 1]].forEach((e, i) => { lines.push({ a: P([0, 0, 0]), b: P(e.map((x) => x * 1.5)), col: MUT, w: 1.3 }); labels.push({ p: P(e.map((x) => x * 1.62)), text: ["gap 1–2", "gap 2–3", "gap 3–4"][i], col: MUT }); });
+    const t = bu.step === 2 ? s : 0, sE = bu.step === 2 ? 1 : s;
+    const R = 22;
+    const bary = (i, j) => [i / R, j / R, 1 - (i + j) / R];
+    for (let i = 0; i < R; i++) for (let j = 0; j < R - i; j++) {
+      const tri = [[i, j], [i + 1, j], [i, j + 1]], tri2 = i + j < R - 1 ? [[i + 1, j], [i, j + 1], [i + 1, j + 1]] : null;
+      [tri, tri2].forEach((T) => {
+        if (!T) return;
+        const B = T.map(([a, b2]) => bary(a, b2)), cb = [0, 1, 2].map((k) => (B[0][k] + B[1][k] + B[2][k]) / 3);
+        const g = buTrue(cb, t); if (!g) return;
+        tris.push({ p: B.map((b2) => P(b2.map((x) => x * c * sE))), col: buColorKey(buOut(g)), flat: true, alpha: 0.95 });
+      });
+    }
+    sw.parts.forEach((p) => { const sm = p.g.reduce((a, b2) => a + b2, 0) || 1; points.push({ p: P(p.g.map((x) => PS * x + sE * c * x / sm)), col: buColorKey(p.key), r: 1.5, alpha: 0.75 }); });
+    if (sE < 0.05) points.push({ p: P([0, 0, 0]), col: INK, r: 4.5 });
+    $("#bu-tag").textContent = sE > 0.05 ? "The corner opened into E, a triangle of directions" : "The collision point";
+    return { radius: 1.3, tris, lines, points, labels };
+  }
+  const buView = new View3($("#bu-3d"), buBuild);
+  buView.yaw = -0.75; buView.pitch = 0.42;
+  function buDraw2D() {
+    const cv = $("#bu-2d"), ctx = cv.getContext("2d"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    ctx.clearRect(0, 0, W, H);
+    const INK = css("--ink"), MUT = css("--muted"), BAD = css("--bad"), GOOD = css("--good"), NASH = css("--nash"), SURF = css("--surface");
+    const rgbS = (c) => `rgb(${c.map(Math.round).join(",")})`;
+    ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.textAlign = "center";
+    if (bu.meth === "nash") {
+      const k = sw.n - 1, cols = ["--ch1", "--ch2", "--ch3"].map(css), y = H * 0.24;
+      ctx.fillStyle = INK; ctx.font = `600 ${13 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.fillText("Over the collision point, Nash puts:", W / 2, y - 34 * dpr);
+      ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`;
+      for (let i = 0; i < k; i++) { const x = W / 2 + (i - (k - 1) / 2) * 110 * dpr; ctx.fillStyle = cols[i]; ctx.beginPath(); ctx.arc(x, y, 9 * dpr, 0, 2 * Math.PI); ctx.fill(); ctx.fillStyle = INK; ctx.fillText(`contact ${i + 1}–${i + 2}`, x, y + 26 * dpr); }
+      ctx.fillStyle = MUT; ctx.fillText(`${k} points, one per contact. No directions, so no room for the outcome regions.`, W / 2, y + 54 * dpr);
+      const v = springOutcome(sw.m, swV0(), 1.5), y2 = H * 0.66, n = v.length, gap = Math.min(70 * dpr, (W - 60 * dpr) / n);
+      ctx.fillStyle = INK; ctx.font = `600 ${13 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.fillText("Nash-style physics brings its own answer (Hertz springs):", W / 2, y2 - 46 * dpr);
+      ctx.font = `${12 * dpr}px "JetBrains Mono", ui-monospace, monospace`;
+      v.forEach((vv, i) => { const x = W / 2 + (i - (n - 1) / 2) * gap; ctx.strokeStyle = INK; ctx.lineWidth = 1.3 * dpr; ctx.fillStyle = css("--soft"); ctx.beginPath(); ctx.arc(x, y2, 13 * dpr, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); if (Math.abs(vv) > 0.02) { const L = vv * 26 * dpr, ay = y2 - 24 * dpr, dd = Math.sign(L); ctx.strokeStyle = INK; ctx.fillStyle = INK; ctx.lineWidth = 2.5 * dpr; ctx.beginPath(); ctx.moveTo(x, ay); ctx.lineTo(x + L, ay); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x + L + dd * 5 * dpr, ay); ctx.lineTo(x + L - dd * 3 * dpr, ay - 4.5 * dpr); ctx.lineTo(x + L - dd * 3 * dpr, ay + 4.5 * dpr); ctx.closePath(); ctx.fill(); } ctx.fillStyle = MUT; ctx.fillText((vv >= 0 ? "+" : "−") + Math.abs(vv).toFixed(2), x, y2 + 30 * dpr); });
+      const match = sw.chambers.find((c) => c.key === keyOf(v));
+      ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.fillStyle = match ? css("--good") : BAD;
+      ctx.fillText(match ? `Same as region ${match.label}` : "Not any region of the swarm", W / 2, y2 + 56 * dpr);
+      $("#bu-tag2").textContent = "Nash's version of E";
+      return;
+    }
+    if (sw.n === 3) {
+      const x0 = W * 0.5, yTop = H * 0.12, yBot = H * 0.86, bw = 26 * dpr, N = 160;
+      for (let k = 0; k < N; k++) { const th = (Math.PI / 2) * (k + 0.5) / N; ctx.fillStyle = rgbS(buColorKey(buOut([Math.cos(th), Math.sin(th)]))); const y = yBot - (yBot - yTop) * (k + 1) / N; ctx.fillRect(x0 - bw / 2, y, bw, (yBot - yTop) / N + 1); }
+      ctx.strokeStyle = MUT; ctx.lineWidth = 1 * dpr; ctx.strokeRect(x0 - bw / 2, yTop, bw, yBot - yTop);
+      ctx.fillStyle = INK; ctx.fillText("all slack between 2 and 3: 1·2 meet first, (12)3", x0, yTop - 10 * dpr);
+      ctx.fillText("all slack between 1 and 2: 2·3 meet first, 1(23)", x0, yBot + 20 * dpr);
+      $("#bu-tag2").textContent = "E for three balls: a segment of directions";
+      return;
+    }
+    const t = bu.step === 2 ? bu.s : 0;
+    const pad = 40 * dpr, side = Math.min(W - 2 * pad, (H - 2 * pad) / 0.866);
+    const V = [[W / 2 - side / 2, H / 2 + side * 0.433], [W / 2, H / 2 - side * 0.433], [W / 2 + side / 2, H / 2 + side * 0.433]];
+    const det = (V[1][1] - V[2][1]) * (V[0][0] - V[2][0]) + (V[2][0] - V[1][0]) * (V[0][1] - V[2][1]);
+    const toB = (x, y) => { const l1 = ((V[1][1] - V[2][1]) * (x - V[2][0]) + (V[2][0] - V[1][0]) * (y - V[2][1])) / det, l2 = ((V[2][1] - V[0][1]) * (x - V[2][0]) + (V[0][0] - V[2][0]) * (y - V[2][1])) / det; return [l1, l2, 1 - l1 - l2]; };
+    const cell = 3 * dpr;
+    for (let y = V[1][1]; y <= V[0][1]; y += cell) for (let x = V[0][0]; x <= V[2][0]; x += cell) {
+      const b = toB(x + cell / 2, y + cell / 2); if (b.some((v) => v < 0)) continue;
+      const g = buTrue(b, t); if (!g) continue;
+      ctx.fillStyle = rgbS(buColorKey(buOut(g))); ctx.fillRect(x, y, cell + 0.5, cell + 0.5);
+    }
+    const at = (b) => [b[0] * V[0][0] + b[1] * V[1][0] + b[2] * V[2][0], b[0] * V[0][1] + b[1] * V[1][1] + b[2] * V[2][1]];
+    const cut = 0.24 * t;
+    const poly = t > 0 ? [[1 - cut, cut, 0], [0, 1, 0], [0, cut, 1 - cut], [cut, 0, 1 - cut], [1 - cut, 0, cut]] : [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+    ctx.strokeStyle = INK; ctx.lineWidth = 1.5 * dpr; ctx.beginPath(); poly.forEach((b, i) => { const p = at(b); if (i) ctx.lineTo(p[0], p[1]); else ctx.moveTo(p[0], p[1]); }); ctx.closePath(); ctx.stroke();
+    if (t > 0) { ctx.strokeStyle = NASH; ctx.lineWidth = 4 * dpr; [[poly[4], poly[0]], [poly[2], poly[3]]].forEach(([a, b]) => { const p = at(a), q = at(b); ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); }); }
+    const lab = (b, text, col, dx, dy, align) => { const p = at(b); ctx.fillStyle = col; ctx.textAlign = align || "center"; ctx.fillText(text, p[0] + dx * dpr, p[1] + dy * dpr); };
+    if (t < 0.05) {
+      [[V[0], BAD], [V[2], BAD], [V[1], GOOD]].forEach(([p, col]) => { ctx.strokeStyle = col; ctx.lineWidth = 2.6 * dpr; ctx.beginPath(); ctx.arc(p[0], p[1], 11 * dpr, 0, 2 * Math.PI); ctx.stroke(); });
+      lab([1, 0, 0], "2·3·4 touch at once", BAD, 0, 30, "left"); lab([0, 0, 1], "1·2·3 touch at once", BAD, 0, 30, "right");
+      lab([0, 1, 0], "1·2 and 3·4 touch: already clean", GOOD, 0, -18);
+    } else {
+      ctx.font = `600 ${12.5 * dpr}px "JetBrains Mono", ui-monospace, monospace`;
+      lab(poly[0], "1(2(34))", INK, -6, -6, "right"); lab(poly[1], "(12)(34)", INK, 0, -12); lab(poly[2], "((12)3)4", INK, 6, -6, "left");
+      lab(poly[3], "(1(23))4", INK, 4, 22, "left"); lab(poly[4], "1((23)4)", INK, -4, 22, "right");
+      ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`;
+      const mid = (a, b) => a.map((x, i) => (x + b[i]) / 2);
+      ctx.lineJoin = "round"; ctx.strokeStyle = SURF; ctx.lineWidth = 4 * dpr;
+      const halo = (b, text, dx, dy, align) => { const p = at(b); ctx.textAlign = align; ctx.strokeText(text, p[0] + dx * dpr, p[1] + dy * dpr); ctx.fillStyle = NASH; ctx.fillText(text, p[0] + dx * dpr, p[1] + dy * dpr); };
+      halo(mid(poly[4], poly[0]), "new: inside 2·3·4", 10, 4, "left");
+      halo(mid(poly[2], poly[3]), "new: inside 1·2·3", -10, 4, "right");
+    }
+    $("#bu-tag2").textContent = t > 0 ? "E after step 2: a pentagon" : "E after step 1: a triangle of directions";
+  }
+  function buDraw() {
+    buView.draw(); buDraw2D();
+    const twoOk = sw.n === 4 && bu.meth === "hir";
+    document.querySelector('#bu-step button[data-v="2"]').disabled = !twoOk;
+    if (!twoOk && bu.step === 2) { bu.step = 1; document.querySelectorAll("#bu-step button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.v === "1"))); }
+    // count outcomes meeting at each corner of E (step 1)
+    let chipsHtml = "";
+    if (bu.meth === "nash") chipsHtml = `<span class="chip">Walls separated: <b>yes, in one step</b></span><span class="chip">Outcome at the collision point: <b style="color:var(--bad)">still undetermined</b></span>`;
+    else if (sw.n === 4) {
+      const ring = (center, other) => { const ks = new Set(); for (let k = 0; k < 60; k++) { const a = k / 60; const b = center.map((x, i) => x * (1 - 0.01) + 0.01 * (i === other[0] ? a : i === other[1] ? 1 - a : 0)); ks.add(buOut(b)); } return ks.size; };
+      const n0 = ring([1, 0, 0], [1, 2]), n2 = ring([0, 0, 1], [0, 1]);
+      chipsHtml = `<span class="chip">Outcomes meeting at corner 2·3·4 <b style="color:var(${n0 > 1 ? "--bad" : "--good"})">${n0}</b></span><span class="chip">at corner 1·2·3 <b style="color:var(${n2 > 1 ? "--bad" : "--good"})">${n2}</b></span><span class="chip">After step 2: <b>a pentagon, the associahedron</b></span>`;
+    } else chipsHtml = `<span class="chip">One blowup suffices: <b>E is a segment</b></span>`;
+    $("#bu-chips").innerHTML = chipsHtml;
+    $("#bu-cap").textContent = `Figure 4. Same balls, masses, and motion as Figure 3 (${sw.n} balls, masses ${sw.m.join(", ")}). Colors match Figure 3's regions. Every color on E is computed exactly from that direction's sequence of collisions; on step 2's new edges, from directions inside the three-ball cluster.`;
+  }
+  document.querySelectorAll("#bu-meth button").forEach((b) => b.addEventListener("click", () => { bu.meth = b.dataset.v; document.querySelectorAll("#bu-meth button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); if (bu.meth === "nash") { bu.step = 1; document.querySelectorAll("#bu-step button").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.v === "1"))); } bu.s = 0; $("#bu-s").value = 0; buDraw(); buAnimate(); }));
+  document.querySelectorAll("#bu-step button").forEach((b) => b.addEventListener("click", () => { if (b.disabled) return; bu.step = +b.dataset.v; document.querySelectorAll("#bu-step button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); bu.s = 0; $("#bu-s").value = 0; buDraw(); buAnimate(); }));
+  $("#bu-s").addEventListener("input", (e) => { bu.s = +e.target.value; buDraw(); });
+  function buAnimate() {
+    const rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (rm) { bu.s = 1; $("#bu-s").value = 1; buDraw(); return; }
+    const t0 = performance.now(); const loop = (now) => { const t = Math.min(1, (now - t0) / 1400); bu.s = 1 - Math.pow(1 - t, 3); $("#bu-s").value = bu.s; buView.draw(); if (t >= 1) buDraw2D(); if (t < 1) requestAnimationFrame(loop); else buDraw(); };
+    requestAnimationFrame(loop);
+  }
+  if ("ResizeObserver" in window) new ResizeObserver(() => buDraw2D()).observe($("#bu-2d"));
+  buReady = true;
+  buDraw();
+
+
+  /* ---------- Figure 5: five balls, the 3D associahedron ---------- */
+  const K5M = { equal: [1, 1, 1, 1, 1], light: [1, 0.3, 0.3, 0.3, 1], up: [0.3, 0.6, 1.2, 2.4, 4.8], ends: [3, 1, 1, 1, 3] };
+  const k5 = { mp: "light", start: "one", labels: true };
+  const K5D2 = 0.12, K5D3 = 0.3, K5Z2 = 0.28, K5Z3 = 0.62;
+  const K5C = [];
+  for (let i = 0; i < 4; i++) { const a = [0, 0, 0, 0]; a[i] = 1; K5C.push({ a, b: 0, iv: [i + 1, i + 2], cut: false }); }
+  [[0, 1], [1, 2], [2, 3]].forEach((S) => { const a = [0, 0, 0, 0]; S.forEach((i) => (a[i] = 1)); K5C.push({ a, b: K5D2, iv: [S[0] + 1, S[S.length - 1] + 2], cut: true, S, Z: K5Z2 }); });
+  [[0, 1, 2], [1, 2, 3]].forEach((S) => { const a = [0, 0, 0, 0]; S.forEach((i) => (a[i] = 1)); K5C.push({ a, b: K5D3, iv: [S[0] + 1, S[S.length - 1] + 2], cut: true, S, Z: K5Z3 }); });
+  const dot4 = (a, x) => a[0] * x[0] + a[1] * x[1] + a[2] * x[2] + a[3] * x[3];
+  function solve4(A, b) { const M = A.map((r, i) => [...r, b[i]]); for (let c = 0; c < 4; c++) { let p = c; for (let r = c + 1; r < 4; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r; if (Math.abs(M[p][c]) < 1e-12) return null; [M[c], M[p]] = [M[p], M[c]]; for (let r = 0; r < 4; r++) if (r !== c) { const f = M[r][c] / M[c][c]; for (let k = c; k <= 4; k++) M[r][k] -= f * M[c][k]; } } return M.map((r, i) => r[4] / r[i]); }
+  const K5V = [];
+  for (let i = 0; i < K5C.length; i++) for (let j = i + 1; j < K5C.length; j++) for (let k = j + 1; k < K5C.length; k++) {
+    const x = solve4([[1, 1, 1, 1], K5C[i].a, K5C[j].a, K5C[k].a], [1, K5C[i].b, K5C[j].b, K5C[k].b]); if (!x) continue;
+    if (K5C.every((c) => dot4(c.a, x) >= c.b - 1e-9) && !K5V.some((v) => v.x.every((y, q) => Math.abs(y - x[q]) < 1e-7))) K5V.push({ x, act: K5C.map((c, q) => (Math.abs(dot4(c.a, x) - c.b) < 1e-9 ? q : -1)).filter((q) => q >= 0) });
+  }
+  function bracketStr(ivs, a, b) { const inside = ivs.filter(([p, q]) => p >= a && q <= b && !(p === a && q === b)); const max = inside.filter((I) => !inside.some((J) => J !== I && J[0] <= I[0] && J[1] >= I[1] && (J[0] < I[0] || J[1] > I[1]))); let out = "", x = a; while (x <= b) { const I = max.find(([p]) => p === x); if (I) { out += "(" + bracketStr(ivs, I[0], I[1]) + ")"; x = I[1] + 1; } else { out += x; x++; } } return out; }
+  K5V.forEach((v) => { v.label = bracketStr(v.act.map((q) => K5C[q].iv), 1, 5); });
+  const TET = [[1, 1, 1], [1, -1, -1], [-1, 1, -1], [-1, -1, 1]].map((p) => p.map((x) => x * 0.95));
+  const emb = (g) => [0, 1, 2].map((k) => g.reduce((s2, w, i) => s2 + w * TET[i][k], 0));
+  // display point in the truncated simplex -> true direction (undo edge cuts, then corner cuts)
+  function k5True(x) {
+    let g = x.slice();
+    const undo = (c) => { const rho = c.S.reduce((s2, i) => s2 + g[i], 0); if (rho >= c.Z || rho <= 0) return; const rt = Math.max(1e-6, (rho - c.b) / (c.Z - c.b) * c.Z), f = rt / rho; c.S.forEach((i) => (g[i] *= f)); const sm = g.reduce((a2, b2) => a2 + b2, 0); g = g.map((y) => y / sm); };
+    K5C.filter((c) => c.cut && c.S.length === 2).forEach(undo);
+    K5C.filter((c) => c.cut && c.S.length === 3).forEach(undo);
+    return g;
+  }
+  let k5pts = [], k5ch = [];
+  function k5V0() { const v = [1, 0, 0, 0, 0]; if (k5.start === "ends") v[4] = -1; return v; }
+  function k5Compute() {
+    const m = K5M[k5.mp], vin = k5V0();
+    let seed = 21; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const dir = () => { const e = [0, 0, 0, 0].map(() => -Math.log(rnd() + 1e-12)), sm = e.reduce((a, b) => a + b, 0); return e.map((x) => x / sm); };
+    const tally = new Map();
+    for (let i = 0; i < 2500; i++) { const g = dir(), v = seqOutcome(m, vin, g), k = keyOf(v); if (!tally.has(k)) tally.set(k, { v, c: 0 }); tally.get(k).c++; }
+    const pts = []; let tries = 0;
+    while (pts.length < 2600 && tries < 40000) { tries++; const x = dir(); if (!K5C.every((c) => dot4(c.a, x) >= c.b)) continue; const g = k5True(x), v = seqOutcome(m, vin, g), k = keyOf(v); if (!tally.has(k)) tally.set(k, { v, c: 0 }); pts.push({ x, key: k }); }
+    const order = [...tally.entries()].sort((a, b) => b[1].c - a[1].c);
+    const total = order.reduce((s2, [, o]) => s2 + o.c, 0);
+    k5ch = order.map(([k, o], i) => ({ key: k, v: o.v, share: o.c / 2500, colVar: i < CH.length ? CH[i] : "--muted", label: String.fromCharCode(65 + i) }));
+    k5pts = pts;
+    const shown = k5ch.filter((c) => c.share > 0).slice(0, 8);
+    $("#k5-legend").innerHTML = `<table><thead><tr><th>Region</th><th>Outgoing motion</th><th>Velocities</th><th>Share of directions</th></tr></thead><tbody>${shown.map((c) => `<tr><td><span class="sw" style="background:var(${c.colVar})"></span>${c.label}</td><td>${arrowsSvg(c.v, css(c.colVar))}</td><td class="v">${fmtV(c.v)}</td><td class="v">${(100 * c.share).toFixed(1)}%</td></tr>`).join("")}</tbody></table>` + (k5ch.length > shown.length ? `<p class="cap" style="margin:6px 0 0">${k5ch.length - shown.length} more small regions are drawn in gray.</p>` : "");
+    const ord = [0, 1, 2, 3], bL = keyOf(bubble(m, vin, ord)), bR = keyOf(bubble(m, vin, ord.slice().reverse()));
+    const lab = (k) => (k5ch.find((c) => c.key === k) || { label: "?" }).label;
+    $("#k5-chips").innerHTML = `<span class="chip">Corners <b>${K5V.length}</b></span><span class="chip">Faces <b>9</b> (5 new from blowups)</span><span class="chip">Outcome regions <b>${k5ch.filter((c) => c.share > 0).length}</b></span><span class="chip">Bubble sort lands in <b>${lab(bL)}</b> (left to right) and <b>${lab(bR)}</b> (right to left)</span>`;
+  }
+  function k5Build() {
+    const INK = rgbOf("--ink"), MUT = rgbOf("--muted"), NASH = rgbOf("--nash"), SURF = rgbOf("--surface"), RULE = rgbOf("--rule");
+    const tris = [], lines = [], points = [], labels = [];
+    // faces
+    K5C.forEach((c, q) => {
+      const vs = K5V.filter((v) => v.act.includes(q)); if (vs.length < 3) return;
+      const P = vs.map((v) => emb(v.x)), cen = P.reduce((a, p) => a.map((x, k) => x + p[k] / P.length), [0, 0, 0]);
+      const u = P[0].map((x, k) => x - cen[k]); const nrm0 = [P[1][0] - cen[0], P[1][1] - cen[1], P[1][2] - cen[2]];
+      const n = [u[1] * nrm0[2] - u[2] * nrm0[1], u[2] * nrm0[0] - u[0] * nrm0[2], u[0] * nrm0[1] - u[1] * nrm0[0]];
+      const w = [n[1] * u[2] - n[2] * u[1], n[2] * u[0] - n[0] * u[2], n[0] * u[1] - n[1] * u[0]];
+      const ang = (p) => Math.atan2(p.reduce((s2, x, k) => s2 + (x - cen[k]) * w[k], 0), p.reduce((s2, x, k) => s2 + (x - cen[k]) * u[k], 0));
+      const ordd = P.slice().sort((a, b) => ang(a) - ang(b));
+      for (let i = 0; i < ordd.length; i++) tris.push({ p: [cen, ordd[i], ordd[(i + 1) % ordd.length]], col: c.cut ? mixC(SURF, NASH, 0.45) : mixC(SURF, MUT, 0.2), alpha: c.cut ? 0.22 : 0.1, flat: true });
+      if (c.cut) labels.push({ p: cen.map((x) => x * 1.12), text: "(" + Array.from({ length: c.iv[1] - c.iv[0] + 1 }, (_, i) => c.iv[0] + i).join("") + ")", col: NASH });
+    });
+    for (let i = 0; i < K5V.length; i++) for (let j = i + 1; j < K5V.length; j++) { const sh = K5V[i].act.filter((a) => K5V[j].act.includes(a)); if (sh.length >= 2) { const cut = sh.some((q) => K5C[q].cut); lines.push({ a: emb(K5V[i].x), b: emb(K5V[j].x), col: cut ? NASH : INK, w: 1.6, alpha: 0.8 }); } }
+    const colors = Object.fromEntries(k5ch.map((c) => [c.key, rgbOf(c.colVar)]));
+      k5pts.forEach((p) => points.push({ p: emb(p.x), col: colors[p.key], r: 2, pick: { n: 5, m: K5M[k5.mp], start: k5.start, g: k5True(p.x) } }));
+    if (k5.labels) K5V.forEach((v) => labels.push({ p: emb(v.x).map((x) => x * 1.1), text: v.label, col: INK }));
+    $("#k5-tag").textContent = "Directions of approach for five balls, after every blowup";
+    return { radius: 1.45, tris, lines, points, labels };
+  }
+  const k5v = new View3($("#k5-cv"), k5Build);
+  k5v.yaw = 0.6; k5v.pitch = 0.35;
+  const k5seg = (id, key) => document.querySelectorAll(`#${id} button`).forEach((b) => b.addEventListener("click", () => { k5[key] = b.dataset.v; document.querySelectorAll(`#${id} button`).forEach((x) => x.setAttribute("aria-pressed", String(x === b))); k5Compute(); k5v.draw(); }));
+  k5seg("k5-m", "mp"); k5seg("k5-s", "start");
+  $("#k5-lab").addEventListener("click", (e) => { k5.labels = !k5.labels; e.currentTarget.setAttribute("aria-pressed", String(k5.labels)); k5v.draw(); });
+  k5Compute(); k5v.draw();
+
+
+  /* ---------- Figure 6: three resolutions side by side ---------- */
+  const CMPM = { 3: { equal: [1, 1, 1], heavy: [1, 3, 1], light: [1, 0.3, 1], up: [0.5, 1, 2] }, 4: { equal: [1, 1, 1, 1], heavy: [1, 3, 3, 1], light: [1, 0.3, 0.3, 1], up: [0.35, 0.7, 1.4, 2.8] } };
+  const cmp = { n: 4, m: CMPM[4].light, start: "one", g: [0.25, 0.45, 0.3], regions: [], dots: [], e: 1 };
+  const collE = (m, v, i, e) => { const a = m[i], b = m[i + 1], u = v[i], w = v[i + 1], P = a * u + b * w; v[i] = (P - b * e * (u - w)) / (a + b); v[i + 1] = (P + a * e * (u - w)) / (a + b); };
+  const CMP_CAP = 4000;
+  // fully sticky simultaneous impact = mass-weighted isotonic regression of the velocities (pool adjacent violators)
+  function sticky(m, v) { const blocks = []; v.forEach((x, i) => { blocks.push({ w: m[i], s: m[i] * x, n: 1 }); while (blocks.length > 1 && blocks[blocks.length - 2].s / blocks[blocks.length - 2].w > blocks[blocks.length - 1].s / blocks[blocks.length - 1].w) { const b = blocks.pop(), a = blocks[blocks.length - 1]; a.w += b.w; a.s += b.s; a.n += b.n; } }); const out = []; blocks.forEach((b) => { for (let k = 0; k < b.n; k++) out.push(b.s / b.w); }); return out; }
+  const cmpV0 = () => { const v = new Array(cmp.n).fill(0); v[0] = 1; if (cmp.start === "ends") v[cmp.n - 1] = -1; return v; };
+  function seqEvents(m, v0, s0, g) {
+    const N = m.length, v = v0.slice(), s = s0.slice(); let t = 0; const pts = [{ t, s: s.slice(), v: v.slice() }];
+    pts.tiny = 0;
+    for (let ev = 0; ev < CMP_CAP; ev++) {
+      let tb = Infinity, ib = -1;
+      for (let i = 0; i < N - 1; i++) { const rel = v[i] - v[i + 1]; if (rel > 1e-12) { const gap = g[i] + s[i + 1] - s[i]; const tt = Math.max(0, gap) / rel; if (tt < tb - 1e-13) { tb = tt; ib = i; } } }
+      if (ib < 0) break;
+      for (let i = 0; i < N; i++) s[i] += v[i] * tb;
+      if (v[ib] - v[ib + 1] < 1e-7) pts.tiny++;
+      t += tb; collE(m, v, ib, cmp.e); pts.push({ t, s: s.slice(), v: v.slice(), pair: ib });
+    }
+    pts.capped = pts.length > CMP_CAP;
+    return pts;
+  }
+  function bubbleSteps(m, v0, order, e) { const ee = e == null ? cmp.e : e, v = v0.slice(), steps = []; let done = false; for (let k = 0; k < CMP_CAP; k++) { let did = -1; for (const i of order) if (v[i] - v[i + 1] > 1e-9) { collE(m, v, i, ee); did = i; break; } if (did < 0) { done = true; break; } steps.push(did); } return { v, steps, done }; }
+  const cmpOut = (g) => { const p = seqEvents(cmp.m, cmpV0(), new Array(cmp.n).fill(0), g); return p[p.length - 1].v; };
+  function springTrajE(m, v0, s0, e, k) {
+    if (e >= 0.999) return springTraj(m, v0, s0, 1.5, k);
+    const N = m.length, s = s0.slice(), v = v0.slice(), dt = 0.0012, L = Math.log(Math.max(1e-3, e)), zeta = -L / Math.sqrt(Math.PI * Math.PI + L * L);
+    const c = [...Array(N - 1)].map((_, i) => 2 * zeta * Math.sqrt(k * m[i] * m[i + 1] / (m[i] + m[i + 1])));
+    const F = () => { const f = new Array(N).fill(0); for (let i = 0; i < N - 1; i++) { const o = s[i] - s[i + 1]; if (o > 0) { const q = Math.max(0, k * o + c[i] * (v[i] - v[i + 1])); f[i] -= q; f[i + 1] += q; } } return f; };
+    let f = F(), t = 0, nextRec = 0, sepAt = null, vOut = null; const pts = [];
+    for (let st = 0; st < 150000; st++) {
+      if (t >= nextRec) { pts.push({ t, s: s.slice(), v: v.slice() }); nextRec += 0.02; }
+      for (let i = 0; i < N; i++) { v[i] += 0.5 * dt * f[i] / m[i]; s[i] += dt * v[i]; }
+      f = F(); for (let i = 0; i < N; i++) v[i] += 0.5 * dt * f[i] / m[i]; t += dt;
+      if (sepAt === null && st % 20 === 0 && pts.length > 2) { let done = true; for (let i = 0; i < N - 1; i++) if (s[i] - s[i + 1] > 0 || v[i] > v[i + 1] + 1e-6) { done = false; break; } if (done) { sepAt = t; vOut = v.slice(); } }
+      if (sepAt !== null && t > sepAt + 2.4) break;
+    }
+    return { pts, v: vOut || v.slice() };
+  }
+  function cmpRegions() {
+    const m = cmp.m, vin = cmpV0(); let seed = 31; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const tally = new Map(), dots = [];
+    for (let i = 0; i < 1200; i++) { const e = [...Array(cmp.n - 1)].map(() => -Math.log(rnd() + 1e-12)), sm = e.reduce((a, b) => a + b, 0), g = e.map((x) => x / sm); const v = cmpOut(g), k = keyOf(v); if (!tally.has(k)) tally.set(k, { v, c: 0 }); tally.get(k).c++; if (i < 260) dots.push({ g, key: k, r: 0.12 + 0.85 * rnd() }); }
+    cmp.regions = [...tally.entries()].sort((a, b) => b[1].c - a[1].c).map(([k, o], i) => ({ key: k, v: o.v, share: o.c / 1200, colVar: i < CH.length ? CH[i] : "--muted", label: String.fromCharCode(65 + i) }));
+    cmp.dots = dots;
+  }
+  const cmpReg = (k) => cmp.regions.find((r) => r.key === k);
+  const cmpCol = (k) => { const r = cmpReg(k); return r ? css(r.colVar) : css("--muted"); };
+  function cmpMapGeom(W, H, dpr) {
+    if (cmp.n === 3) { const pad = 46 * dpr, size = Math.min(W, H) - 2 * pad; return { x0: (W - size) / 2, y0: (H + size) / 2, size }; }
+    const pad = 36 * dpr, side = Math.min(W - 2 * pad, (H - 2 * pad) / 0.866);
+    return { V: [[W / 2 - side / 2, H / 2 + side * 0.433], [W / 2, H / 2 - side * 0.433], [W / 2 + side / 2, H / 2 + side * 0.433]] };
+  }
+  function drawCmpMap() {
+    const cv = $("#cmp-map"), ctx = cv.getContext("2d"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    ctx.clearRect(0, 0, W, H);
+    const INK = css("--ink"), MUT = css("--muted"), SURF = css("--surface"), m = cmp.m, vin = cmpV0();
+    ctx.font = `${12 * dpr}px "Schibsted Grotesk", Arial, sans-serif`;
+    if (cmp.n === 5) { ctx.fillStyle = MUT; ctx.textAlign = "center"; ctx.fillText("Five balls: direction picked in Figure 5", W / 2, H / 2 - 10 * dpr); ctx.fillText(`gaps in the ratio ${cmp.g.map((x) => x.toFixed(2)).join(" : ")}`, W / 2, H / 2 + 12 * dpr); $("#cmp-maptag").textContent = ""; return; }
+    const G = cmpMapGeom(W, H, dpr);
+    if (cmp.n === 3) {
+      const { x0, y0, size } = G, NA = 120;
+      for (let k = 0; k < NA; k++) { const a0 = (Math.PI / 2) * k / NA, a1 = (Math.PI / 2) * (k + 1) / NA, am = (a0 + a1) / 2; ctx.fillStyle = cmpCol(keyOf(cmpOut([Math.cos(am), Math.sin(am)]))); ctx.globalAlpha = 0.35; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + 1.5 * size * Math.cos(a0), y0 - 1.5 * size * Math.sin(a0)); ctx.lineTo(x0 + 1.5 * size * Math.cos(a1), y0 - 1.5 * size * Math.sin(a1)); ctx.closePath(); ctx.save(); ctx.beginPath(); ctx.rect(x0, y0 - size, size, size); ctx.clip(); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + 1.5 * size * Math.cos(a0), y0 - 1.5 * size * Math.sin(a0)); ctx.lineTo(x0 + 1.5 * size * Math.cos(a1), y0 - 1.5 * size * Math.sin(a1)); ctx.closePath(); ctx.fill(); ctx.restore(); }
+      ctx.globalAlpha = 1; ctx.strokeStyle = MUT; ctx.lineWidth = 1 * dpr; ctx.strokeRect(x0, y0 - size, size, size);
+      cmp.dots.forEach((d) => { const gn2 = Math.hypot(d.g[0], d.g[1]), px = d.g[0] / gn2 * d.r, py = d.g[1] / gn2 * d.r; if (px > 1 || py > 1) return; ctx.fillStyle = cmpCol(d.key); ctx.beginPath(); ctx.arc(x0 + px * size, y0 - py * size, 3 * dpr, 0, 2 * Math.PI); ctx.fill(); });
+      const gn = Math.hypot(cmp.g[0], cmp.g[1]), ux = cmp.g[0] / gn, uy = cmp.g[1] / gn;
+      ctx.strokeStyle = INK; ctx.lineWidth = 2 * dpr; ctx.setLineDash([5 * dpr, 4 * dpr]); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + ux * size * 1.4, y0 - uy * size * 1.4); ctx.stroke(); ctx.setLineDash([]);
+      const sx = x0 + ux * size * 0.6, sy = y0 - uy * size * 0.6; ctx.fillStyle = SURF; ctx.beginPath(); ctx.arc(sx, sy, 8 * dpr, 0, 2 * Math.PI); ctx.fill(); ctx.lineWidth = 3 * dpr; ctx.stroke();
+      ctx.fillStyle = MUT; ctx.textAlign = "center"; ctx.fillText("gap 1–2 →", x0 + size / 2, y0 + 28 * dpr); ctx.save(); ctx.translate(x0 - 22 * dpr, y0 - size / 2); ctx.rotate(-Math.PI / 2); ctx.fillText("gap 2–3 →", 0, 0); ctx.restore();
+      ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(x0, y0, 4.5 * dpr, 0, 2 * Math.PI); ctx.fill();
+      $("#cmp-maptag").textContent = "Click to choose a direction (only the direction matters)";
+      return;
+    }
+    const V = G.V, det = (V[1][1] - V[2][1]) * (V[0][0] - V[2][0]) + (V[2][0] - V[1][0]) * (V[0][1] - V[2][1]);
+    const toB = (x, y) => { const l1 = ((V[1][1] - V[2][1]) * (x - V[2][0]) + (V[2][0] - V[1][0]) * (y - V[2][1])) / det, l2 = ((V[2][1] - V[0][1]) * (x - V[2][0]) + (V[0][0] - V[2][0]) * (y - V[2][1])) / det; return [l1, l2, 1 - l1 - l2]; };
+    const at = (b) => [b[0] * V[0][0] + b[1] * V[1][0] + b[2] * V[2][0], b[0] * V[0][1] + b[1] * V[1][1] + b[2] * V[2][1]];
+    const cell = 4 * dpr; ctx.globalAlpha = 0.45;
+    for (let y = V[1][1]; y <= V[0][1]; y += cell) for (let x = V[0][0]; x <= V[2][0]; x += cell) { const b = toB(x + cell / 2, y + cell / 2); if (b.some((t) => t < 0)) continue; ctx.fillStyle = cmpCol(keyOf(cmpOut(b))); ctx.fillRect(x, y, cell + 0.5, cell + 0.5); }
+    ctx.globalAlpha = 1;
+    cmp.dots.forEach((d) => { const p = at(d.g); ctx.fillStyle = cmpCol(d.key); ctx.beginPath(); ctx.arc(p[0], p[1], 3 * dpr, 0, 2 * Math.PI); ctx.fill(); });
+    ctx.strokeStyle = MUT; ctx.lineWidth = 1 * dpr; ctx.beginPath(); V.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath(); ctx.stroke();
+    const sp = at(cmp.g); ctx.fillStyle = SURF; ctx.strokeStyle = INK; ctx.lineWidth = 3 * dpr; ctx.beginPath(); ctx.arc(sp[0], sp[1], 8 * dpr, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = MUT; ctx.textAlign = "center";
+    ctx.fillText("only gap 2–3 open", V[1][0], V[1][1] - 10 * dpr); ctx.textAlign = "left"; ctx.fillText("only gap 1–2 open", V[0][0] - 6 * dpr, V[0][1] + 20 * dpr); ctx.textAlign = "right"; ctx.fillText("only gap 3–4 open", V[2][0] + 6 * dpr, V[2][1] + 20 * dpr);
+    $("#cmp-maptag").textContent = "Click to choose a direction of approach";
+    cv._toB = toB; cv._G = G;
+  }
+  $("#cmp-map").addEventListener("click", (e) => {
+    const cv = $("#cmp-map"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1), x = (e.clientX - r.left) * dpr, y = (e.clientY - r.top) * dpr;
+    if (cmp.n === 3) { const G = cmpMapGeom(cv.width, cv.height, dpr), gx = (x - G.x0) / G.size, gy = (G.y0 - y) / G.size; if (gx <= 0.005 && gy <= 0.005) return; cmp.g = [Math.max(0.003, gx), Math.max(0.003, gy)]; }
+    else if (cmp.n === 4 && cv._toB) { const b = cv._toB(x, y); if (b.some((t) => t < -0.02)) return; cmp.g = b.map((t) => Math.max(0.004, t)); }
+    else return;
+    cmpUpdate();
+  });
+  function drawST(cv, pts, mode, opts) {
+    const ctx = cv.getContext("2d"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = Math.max(10, Math.round(r.width * dpr)), H = Math.max(10, Math.round(r.height * dpr));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    ctx.clearRect(0, 0, W, H);
+    const { R, base, tEnd, xmin, xmax } = opts, n = R.length, INK = css("--ink"), MUT = css("--muted"), BAD = css("--bad"), RULE = css("--rule");
+    const padX = 12 * dpr, top = 26 * dpr, bot = 30 * dpr;
+    const X = (x) => padX + (x - xmin) / (xmax - xmin) * (W - 2 * padX), T = (t) => top + t / tEnd * (H - top - bot);
+    const sAt = (t) => { if (mode === "frames") { const i = Math.min(pts.length - 1, Math.max(0, Math.round(t / 0.02))); return pts[i].s; } let k = 0; while (k + 1 < pts.length && pts[k + 1].t <= t) k++; const a = pts[k]; return a.s.map((x, i) => x + a.v[i] * (t - a.t)); };
+    const NS = 160, shades = [0.18, 0.32, 0.46, 0.6, 0.74];
+    for (let i = 0; i < n; i++) {
+      ctx.beginPath();
+      for (let k = 0; k <= NS; k++) { const t = tEnd * k / NS, x = base[i] + sAt(t)[i]; const px = X(x - R[i]), py = T(t); if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py); }
+      for (let k = NS; k >= 0; k--) { const t = tEnd * k / NS, x = base[i] + sAt(t)[i]; ctx.lineTo(X(x + R[i]), T(t)); }
+      ctx.closePath(); ctx.fillStyle = css("--steel"); ctx.globalAlpha = 0.35 + shades[i % 5] * 0.6; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = INK; ctx.lineWidth = 0.9 * dpr; ctx.stroke();
+      ctx.fillStyle = INK; ctx.font = `600 ${11.5 * dpr}px "JetBrains Mono", ui-monospace, monospace`; ctx.textAlign = "center"; ctx.fillText(String(i + 1), X(base[i] + sAt(0)[i]), top - 8 * dpr);
+    }
+    ctx.fillStyle = MUT; ctx.font = `${11 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.textAlign = "left"; ctx.fillText("time ↓", padX, H - 10 * dpr);
+    if (opts.events) opts.events.forEach((e, k) => { const s2 = e.s, x = base[e.pair] + s2[e.pair] + R[e.pair]; ctx.fillStyle = BAD; ctx.beginPath(); ctx.arc(X(x), T(e.t), 4.2 * dpr, 0, 2 * Math.PI); ctx.fill(); ctx.fillStyle = INK; ctx.font = `600 ${10.5 * dpr}px "JetBrains Mono", ui-monospace, monospace`; ctx.textAlign = "left"; ctx.fillText(String(k + 1), X(x) + 6 * dpr, T(e.t) + 4 * dpr); });
+    if (opts.instant != null) { const y = T(opts.instant); ctx.strokeStyle = BAD; ctx.setLineDash([4 * dpr, 3 * dpr]); ctx.lineWidth = 1.5 * dpr; ctx.beginPath(); ctx.moveTo(padX, y); ctx.lineTo(W - padX, y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = BAD; ctx.font = `${11 * dpr}px "Schibsted Grotesk", Arial, sans-serif`; ctx.textAlign = "left"; ctx.fillText(opts.instantLabel, padX, y - 6 * dpr); }
+    if (opts.springs) { for (let f = 0; f < pts.length; f += 2) { const s2 = pts[f].s; for (let i = 0; i < n - 1; i++) if (s2[i] - s2[i + 1] > 1e-4) { const x = base[i] + s2[i] + R[i]; ctx.fillStyle = BAD; ctx.globalAlpha = 0.8; ctx.fillRect(X(x) - 2 * dpr, T(pts[f].t), 4 * dpr, Math.max(1.5 * dpr, (H - top - bot) * 0.04 / tEnd)); ctx.globalAlpha = 1; } } }
+  }
+  function cmpUpdate() {
+    const m = cmp.m, vin = cmpV0(), n = cmp.n, Rr = m.map((x) => 0.42 * Math.cbrt(x)), D = 1.8;
+    const s0 = new Array(n).fill(0); s0[0] = -D; if (cmp.start === "ends") s0[n - 1] = D;
+    const gs = cmp.g.reduce((a, b) => a + b, 0), gaps = cmp.g.map((x) => 0.7 * x / gs);
+    const baseG = [], base0 = []; let xg = 0, x0b = 0;
+    for (let i = 0; i < n; i++) { if (i) { xg += Rr[i - 1] + Rr[i] + gaps[i - 1]; x0b += Rr[i - 1] + Rr[i]; } baseG.push(xg); base0.push(x0b); }
+    const evH = seqEvents(m, vin, s0, gaps), vH = evH[evH.length - 1].v;
+    const bub = bubbleSteps(m, vin, [...Array(n - 1).keys()]);
+    const sT = springTrajE(m, vin, s0, cmp.e, 300), vN = sT.v;
+    const vV = sticky(m, vin).map((x, i) => (1 - cmp.e) * x + cmp.e * bubbleSteps(m, vin, [...Array(n - 1).keys()], 1).v[i]);
+    const tLast = Math.max(evH[evH.length - 1].t, D, sT.pts[sT.pts.length - 1].t - 2.4);
+    const tEnd = tLast + 2.2;
+    const bubPts = [{ t: 0, s: s0, v: vin }, { t: D, s: s0.map((x, i) => x + vin[i] * D), v: bub.v }];
+    // shared x range
+    let xmin = Infinity, xmax = -Infinity;
+    const scan = (pts, base, mode) => { for (let k = 0; k <= 60; k++) { const t = tEnd * k / 60; let s2; if (mode === "frames") { s2 = pts[Math.min(pts.length - 1, Math.round(t / 0.02))].s; } else { let j = 0; while (j + 1 < pts.length && pts[j + 1].t <= t) j++; s2 = pts[j].s.map((x, i) => x + pts[j].v[i] * (t - pts[j].t)); } s2.forEach((x, i) => { xmin = Math.min(xmin, base[i] + x - Rr[i]); xmax = Math.max(xmax, base[i] + x + Rr[i]); }); } };
+    scan(evH, baseG, "events"); scan(bubPts, base0, "events"); scan(sT.pts, base0, "frames");
+    const opt = { R: Rr, tEnd, xmin: xmin - 0.1, xmax: xmax + 0.1 };
+    drawST($("#st-h"), evH, "events", { ...opt, base: baseG, events: evH.slice(1, 61) });
+    const pairName = (i) => `${i + 1}–${i + 2}`;
+    drawST($("#st-b"), bubPts, "events", { ...opt, base: base0, instant: D, instantLabel: bub.done ? `${bub.steps.length} impulses at once` : `${CMP_CAP}+ impulses and still going` });
+    drawST($("#st-n"), sT.pts, "frames", { ...opt, base: base0, springs: true });
+    const rH = cmpReg(keyOf(vH)), rB = cmpReg(keyOf(bub.v)), rN = cmpReg(keyOf(vN));
+    const nH = evH.length - 1, collapse = evH.tiny > 0 || evH.capped;
+    const list = (arr) => arr.length > 14 ? arr.slice(0, 12).join(", ") + `, … (${arr.length} in all)` : arr.join(", ");
+    $("#st-h-cap").textContent = collapse ? `Collisions pile up faster and faster: ${nH} computed before they become too small to resolve${nH > 60 ? " (the first 60 are marked)" : ""}. In exact arithmetic there are infinitely many, in finite time: inelastic collapse.` : `Collisions in order: ${list(evH.slice(1).map((e) => pairName(e.pair)))}.`;
+    $("#st-b-cap").textContent = bub.done ? `Impulses, all at the same instant: ${list(bub.steps.map(pairName))}.` : `Still firing after ${CMP_CAP} impulses: the loop never ends (the Zeno behavior Vouga et al. describe).`;
+    $("#st-n-title").textContent = cmp.e >= 0.999 ? "Nash-style: Hertz springs" : "Nash-style: damped springs";
+    $("#st-n-cap").textContent = cmp.e >= 0.999 ? "Hertz springs: contacts push simultaneously and overlap in time." : `Springs with dampers tuned so that a single pair bounces back with e = ${cmp.e.toFixed(2)}.`;
+    const row = (name, v, reg, note) => `<div class="ans"><div class="ah">${name}<span class="note">${reg ? `region <b style="color:${css(reg.colVar)}">${reg.label}</b>` : `<b style="color:var(--bad)">no region</b>`} · ${note}</span></div><div>${arrowsSvg(v, reg ? css(reg.colVar) : css("--ink"))}</div><div class="v">${fmtV(v)}</div></div>`;
+    $("#cmp-card").innerHTML = `<div class="title">The three answers</div><p style="margin:0 0 8px;color:var(--muted)">Direction clicked: gaps in the ratio <span class="m">${cmp.g.map((x) => (x / gs).toFixed(2)).join(" : ")}</span></p><div>` +
+      row(`<b style="color:var(--nash)">Hironaka</b>`, vH, rH, collapse ? `changes with the click · ${nH}+ collisions` : `changes with the click · ${nH} collisions`) + row("<b>Bubble sort</b>", bub.v, rB, bub.done ? `same for every click · ${bub.steps.length} impulses` : `never finishes · stopped at ${CMP_CAP}`) + row("<b>Nash-style</b>", vN, rN, "same for every click") +
+      (cmp.e < 0.999 ? row("<b>Vouga et al.'s blend</b>", vV, cmpReg(keyOf(vV)), `sticky answer × ${(1 - cmp.e).toFixed(2)} + elastic answer × ${cmp.e.toFixed(2)}`) : "") +
+      `</div>` +
+      `<p style="margin:10px 0 0;font-size:13.5px;color:var(--muted)">Regions on the map: ${cmp.regions.map((r) => `<b style="color:${css(r.colVar)}">${r.label}</b> ${(100 * r.share).toFixed(0)}%`).join(", ")} of directions.</p>`;
+    drawCmpMap();
+  }
+  function cmpSet(cfg) {
+    cmp.n = cfg.n; cmp.m = cfg.m.slice(); cmp.start = cfg.start; cmp.g = cfg.g.slice();
+    document.querySelectorAll("#cmp-n button").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.v === cmp.n)));
+    document.querySelectorAll("#cmp-m button").forEach((b) => b.setAttribute("aria-pressed", String(CMPM[cmp.n] && JSON.stringify(CMPM[cmp.n][b.dataset.v]) === JSON.stringify(cmp.m))));
+    document.querySelectorAll("#cmp-s button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === cmp.start)));
+    cmpRegions(); cmpUpdate();
+  }
+  const goCmp = (cfg) => { cmpSet(cfg); const rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; $("#cmp-panel").scrollIntoView({ behavior: rm ? "auto" : "smooth", block: "start" }); };
+  swView.onPick = goCmp; k5v.onPick = goCmp;
+  // clicks on the 2D swarm (three balls) in Figure 3
+  $("#sw-cv").addEventListener("click", (e) => {
+    if (sw.n !== 3) return;
+    const cv = $("#sw-cv"), r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1), x = (e.clientX - r.left) * dpr, y = (e.clientY - r.top) * dpr;
+    const W = cv.width, H = cv.height, pad = 54 * dpr, size = Math.min(W - 2 * pad, H - 2 * pad), x0 = (W - size) / 2, y0 = H - pad;
+    let best = null, bd = 12 * dpr; sw.parts.forEach((p) => { const q = swPos(p.g), d = Math.hypot(x0 + q[0] * size - x, y0 - q[1] * size - y); if (d < bd) { bd = d; best = p; } });
+    if (best) goCmp({ n: 3, m: sw.m, start: sw.start, g: best.g });
+  });
+  document.querySelectorAll("#cmp-n button").forEach((b) => b.addEventListener("click", () => { const n = +b.dataset.v; const pat = [...document.querySelectorAll("#cmp-m button")].find((x) => x.getAttribute("aria-pressed") === "true"); cmpSet({ n, m: CMPM[n][pat ? pat.dataset.v : "light"], start: cmp.start, g: n === 3 ? [0.4, 0.6] : [0.25, 0.45, 0.3] }); }));
+  document.querySelectorAll("#cmp-m button").forEach((b) => b.addEventListener("click", () => { const n = cmp.n === 5 ? 4 : cmp.n; cmpSet({ n, m: CMPM[n][b.dataset.v], start: cmp.start, g: cmp.n === 5 ? [0.25, 0.45, 0.3] : cmp.g }); }));
+  document.querySelectorAll("#cmp-s button").forEach((b) => b.addEventListener("click", () => cmpSet({ n: cmp.n, m: cmp.m, start: b.dataset.v, g: cmp.g })));
+  let cmpEPending = null;
+  $("#cmp-e").addEventListener("input", (e) => { cmp.e = +e.target.value; $("#cmp-e-out").textContent = cmp.e.toFixed(2); if (cmpEPending) cancelAnimationFrame(cmpEPending); cmpEPending = requestAnimationFrame(() => { cmpEPending = null; cmpRegions(); cmpUpdate(); }); });
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver(() => cmpUpdate()); ro.observe($("#cmp-map")); }
+  cmpSet({ n: 4, m: CMPM[4].light, start: "one", g: [0.25, 0.45, 0.3] });
+  { // start on a direction whose answer differs from bubble sort's, to make the contrast visible
+    const bk = keyOf(bubbleSteps(cmp.m, cmpV0(), [0, 1, 2]).v), d = cmp.dots.find((x) => x.key !== bk && x.g.every((y) => y > 0.12));
+    if (d) { cmp.g = d.g.slice(); cmpUpdate(); }
+  }
+
+  setN(4);
+})();
+</script>
+</body>
+</html>
