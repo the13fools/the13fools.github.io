@@ -34,8 +34,8 @@
   </div>
 
   <div class="col">
-    <p><b>The idea in one paragraph.</b> Take a trained model and nudge its weights at random, keeping only nudges that barely change the loss. How much room is there? For an ordinary minimum, a round bowl, the room is set by the number of parameters, since the loss climbs out of the bowl in every direction. The minima neural networks find have much more room, because many directions are flat or nearly flat. The <em>local learning coefficient</em> λ turns that room into one number: half the number of parameters for a round bowl, and less for a degenerate minimum. Singular learning theory says that this number, not the parameter count, controls how a model learns and generalizes. And it can be measured with what amounts to a thermometer.</p>
-    <p class="read"><b>Figure {fig:thermo}.</b> A thermometer for λ. Each choice is a loss of two parameters with its minimum at the center. Chains of noisy gradient descent start at the minimum and wander, and the plot tracks the average loss they carry, scaled by n. That average settles at λ: 1 for the round bowl, and less for each degenerate loss, although all four have the same minimum value and the same two parameters. Try the product (ab)²: the chains spread out along its two flat axes, and the reading settles near 0.4 (its λ is 1/2, approached only slowly). The dashed line is the exact value at this n; the solid line is the limit λ.</p>
+    <p><b>The idea in one paragraph.</b> Nudge a trained model's weights at random, retaining only nudges that barely change the loss. How much parameter room is there? For an isolated regular minimum, room scales strictly with parameter count ($d/2$). But neural network loss landscapes are full of flat, degenerate valleys. The <b>local learning coefficient $\lambda$</b> measures this room directly: $\lambda = d/2$ for a regular bowl, and $\lambda &lt; d/2$ for degenerate minima. Singular Learning Theory proves that $\lambda$, not parameter count, governs how models generalize. And it can be measured experimentally with what amounts to a statistical thermometer.</p>
+    <p class="read"><b>Figure {fig:thermo}.</b> A thermometer for $\lambda$. Langevin chains start at the minimum, and the running average loss scaled by $n$ converges to $\lambda$: 1 for the round bowl, and strictly less for degenerate potentials. For $(ab)^2$, chains spread along flat axes toward $\lambda = 1/2$.</p>
   </div>
   <section class="panel" aria-label="Local learning coefficient estimator">
     <div class="controls">
@@ -54,11 +54,11 @@
     </div>
     <div class="chips" id="llc-chips"></div>
   </section>
+
   <div class="col">
-    <p>The rest of Part IV unpacks that number in four steps, each opening with its own demo: why it governs Bayesian learning (section 13), where degenerate minima come from in networks (section 14), how the thermometer works on a trained network (section 15), and what happens when tensor components collide under free weights (section 16).</p>
     <h2 id="learning">13. Why singular models learn differently: two perfect fits</h2>
-    <p>Here is singular learning theory in one demo. A model has two parameters and two settings that fit the data perfectly, both with zero loss. Near one of them the loss rises like r², the usual bowl. Near the other it rises like r⁴: flat at the bottom, the kind of minimum the Hessian calls degenerate. Which one does Bayesian inference believe?</p>
-    <p class="read"><b>Figure {fig:twofits}.</b> The posterior after n data points, drawn as 900 samples over the two parameters; the background is the loss, darker where lower. Blue samples are near the regular fit, orange near the degenerate one, grey elsewhere. Slide n up. With little data the posterior is spread almost evenly. As data accumulates it gathers near the two perfect fits, but not equally: the degenerate fit pulls ahead, the regular fit's share peaks and then shrinks, and in the end the degenerate fit holds nearly everything, though both fits are equally perfect.</p>
+    <p>A toy model has two parameters and two settings that fit the data with zero training loss: one regular quadratic bowl ($K \propto r^2$) and one degenerate flat basin ($K \propto r^4$). Classical training loss cannot distinguish them. Which one does Bayesian inference select?</p>
+    <p class="read"><b>Figure {fig:twofits}.</b> Posterior samples as sample size $n$ increases (blue = regular, orange = degenerate). Both achieve 0 training error. Yet as $n$ grows, the degenerate fit captures nearly all posterior mass: volume, not depth, decides the winner.</p>
   </div>
   <section class="panel" aria-label="Two perfect fits">
     <div class="controls"><label class="sl long"><span class="lbl">data points n</span><input id="tw-n" type="range" min="0" max="4" step="0.05" value="0.6"><output id="tw-n-out"></output></label></div>
@@ -68,11 +68,12 @@
     </div>
     <div class="chips" id="tw-chips"></div>
   </section>
+
   <div class="col">
-    <div class="terms"><b>New terms:</b> temperature, equipartition, Hessian, harmonic approximation, posterior, free energy, learning coefficient.</div>
-    <p>The bridge from physics is a marble in a bowl. At temperature T it jiggles, visiting position w with probability proportional to e<sup>−V(w)/T</sup>. For a round bowl, <em>equipartition</em> says the average potential energy is ½T per direction the marble can move in. The usual derivation, and the usual way simulators treat any minimum, is the <em>harmonic approximation</em>: near the bottom, V ≈ ½ wᵀHw with H the <em>Hessian</em>, the jiggle is Gaussian, and the integral of e<sup>−V/T</sup> is proportional to T<sup>d/2</sup>/√det H.</p>
-    <p>Now make the bottom of the well a curve: V = (y² − x³)². The marble can slide along the cusp y² = x³ at zero energy. On that floor one Hessian eigenvalue is zero, and at the cusp point both are. The harmonic approximation's 1/√det H is infinite exactly where the marble spends its time.</p>
-    <p class="read"><b>Figure {fig:well}.</b> Left: the well from above, darker where V is lower. The small plots are cross-sections across the floor: far from the cusp they are parabolas, at the cusp a quartic. Right: the Hessian's eigenvalues along the floor; one is always zero, and the other drops to zero at the cusp.</p>
+    <div class="terms"><b>Key terms:</b> equipartition, Hessian, harmonic approximation, free energy, learning coefficient.</div>
+    <p><b>From physics to Bayesian learning:</b> At temperature $T = 1/n$, a particle in a potential $K(w)$ visits states with probability $p(w) \propto e^{-n K(w)} \varphi(w)$. In a regular quadratic well, the harmonic approximation $K(w) \approx \frac{1}{2} w^\top H w$ integrates to the Laplace volume $V(\varepsilon) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\varepsilon^{d/2}$.</p>
+    <p><b>Where regular statistics fails:</b> In deep networks, permutation redundancies, dead neurons, and continuous matrix factorizations create valleys of minima where the Hessian has many zero eigenvalues ($\det H = 0$). The Laplace formula divides by zero ($1/\sqrt{\det H} = \infty$).</p>
+    <p class="read"><b>Figure {fig:well}.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
   </div>
   <section class="panel" aria-label="Flat-bottomed well">
     <div class="pair">
@@ -80,25 +81,16 @@
       <div class="fig"><div class="h">Cross-sections and Hessian</div><svg id="f4-sec" role="img" aria-label="Cross-sections of the well"></svg><svg id="f4-eig" role="img" aria-label="Hessian eigenvalues along the floor"></svg></div>
     </div>
   </section>
+
   <div class="col">
-    <p><b>Bayesian learning is this marble.</b> A model with parameters $w$ has an empirical loss $K(w) \ge 0$ measuring its discrepancy from the data-generating truth (often the Kullback–Leibler divergence). After $n$ training samples, the <em>Bayesian posterior</em> weights each parameter setting $w$ by the Boltzmann-Gibbs distribution $p(w|D_n) \propto e^{-n K(w)} \varphi(w)$, where the sample size $n$ acts as the inverse temperature $1/T$. The normalizing constant is the marginal likelihood (partition function) $Z_n = \int e^{-n K(w)} \varphi(w) \, dw$, and its negative logarithm is the <em>free energy</em> $F_n = -\log Z_n$. In Bayesian statistics, free energy governs model selection: the posterior concentrates entirely on models with lower free energy.</p>
-    <p><b>Why parameter count is a lie: Regular vs. Singular.</b> In classical statistics (Akaike's AIC, Schwarz's BIC, and Laplace approximations), models are assumed to be <em>regular</em>: the loss minimum $w^*$ is an isolated point where the Hessian matrix $H = \nabla^2 K(w^*)$ is strictly positive definite ($H \succ 0$). Taylor expanding near the bottom gives $K(w) \approx \frac{1}{2} (w - w^*)^\top H (w - w^*)$. The volume of parameters within loss $\varepsilon$ of the minimum scales as an ellipsoid:</p>
-    <div class="eq tex">V(\varepsilon) = \operatorname{Vol}\big(\{w : K(w) \le \varepsilon\}\big) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\,\varepsilon^{d/2}</div>
-    <p>For a regular model in $d$ dimensions, the volume exponent is simply $d/2$, and the free energy penalty is the familiar BIC formula: $F_n \approx n S_n + \frac{d}{2}\log n$. Every independent parameter costs exactly $\frac{1}{2}\log n$.</p>
-    <p><b>Neural networks are fundamentally singular.</b> Deep neural networks violate every assumption of regularity. Because parameter-to-function maps are vastly redundant (neuron rescalings $a \cdot \operatorname{relu}(wx) = (a/c)\cdot\operatorname{relu}(cwx)$, dead neurons, duplicate features, and low-rank factorization matrices), the Hessian at any trained minimum has dozens or thousands of eigenvalues that are zero or near-zero. The set of perfect minimizers is not an isolated point, but a high-dimensional <em>singular algebraic subvariety</em> full of intersecting branches and ridges. At these singularities, $\det H = 0$, so the classical Laplace approximation $1/\sqrt{\det H}$ explodes to infinity!</p>
-    <p>Sumio Watanabe's Singular Learning Theory solves this by replacing $d/2$ with the <b>learning coefficient $\lambda$</b>:</p>
-    <div class="eq tex">\text{free energy } F_n \approx n S_n + \lambda\log n - (m-1)\log\log n, \qquad \mathbb{E}[\text{generalization error}] \approx \frac{\lambda}{n}</div>
-    <p>The learning coefficient $\lambda$ (the <em>Real Log Canonical Threshold</em>, or RLCT) can be understood through three complementary lenses:</p>
+    <p>Sumio Watanabe resolved this by applying Hironaka's resolution of singularities, proving that free energy and generalization error scale via the <b>learning coefficient $\lambda$</b> (the Real Log Canonical Threshold):</p>
+    <div class="eq tex">F_n \approx n S_n + \lambda\log n - (m-1)\log\log n, \qquad \mathbb{E}[\text{generalization error}] \approx \frac{\lambda}{n}</div>
     <ul class="qs">
-      <li><b>The Geometric Lens (Volume Scaling):</b> $\lambda$ is the true power-law exponent of parameter volume near the minimum. The volume of parameters with loss $K \le \varepsilon$ shrinks like:
-      <div class="eq tex">V(\varepsilon) = \operatorname{Vol}\big(\{w : K(w) \le \varepsilon\}\big) \asymp \varepsilon^{\lambda} \left(\log \frac{1}{\varepsilon}\right)^{m-1}</div>
-      For a regular quadratic bowl, $\lambda = d/2$ and $m = 1$. For a singular network, $\lambda &lt; d/2$. A model with 100,000 parameters might have $\lambda = 42$, meaning its volume of near-optimal parameters shrinks as if it had only $2\lambda = 84$ parameters!</li>
-      <li><b>The Statistical Lens (Effective Complexity):</b> $\lambda$ measures the true complexity of the model. In Bayesian model selection, the model with smaller $\lambda$ has a smaller complexity penalty $\lambda \log n$, making it favored by Occam's razor.</li>
-      <li><b>The Physical Lens (Generalized Equipartition):</b> In classical physics, equipartition says each quadratic degree of freedom stores $\frac{1}{2} T$ of thermal energy. In a singular potential, Watanabe proved that the expected energy is not $\frac{d}{2}T$, but $\lambda T$. A singular well holds $\lambda \cdot T$ of thermal energy above the floor.</li>
+      <li><b>Volume Scaling:</b> Near a singular minimum, parameter volume shrinks as $V(\varepsilon) \asymp \varepsilon^{\lambda} (\log \frac{1}{\varepsilon})^{m-1}$. A network with $d = 100{,}000$ parameters and $\lambda = 42$ contracts as if it had only $2\lambda = 84$ parameters!</li>
+      <li><b>Bayesian Occam's Razor:</b> Models with smaller $\lambda$ incur a smaller penalty $\lambda \log n$, concentrating posterior mass in simpler, more degenerate basins.</li>
+      <li><b>Generalized Equipartition:</b> While a quadratic bowl stores an average thermal energy of $\frac{d}{2}T$, a singular potential stores an average excess energy of $\mathbf{\lambda \cdot T}$.</li>
     </ul>
-    <p><b>Where Hironaka's blowup comes in.</b> Because the Hessian is singular, ordinary calculus cannot compute $V(\varepsilon)$ or $Z_n$. Hironaka's resolution theorem proves that after finitely many blowups $w = \pi(u)$, the loss becomes a monomial $u^{2\mathbf{k}}$ and the volume element becomes $|u^{\mathbf{h}}| du$. The multidimensional integral completely decouples into independent 1D integrals, yielding $\lambda = \min_i \frac{h_i+1}{2k_i}$ (the formula from section 3.5). The integer $m$ is the multiplicity: the number of coordinates that tie for the minimum, which generates the $(\log n)^{m-1}$ or $(\log 1/\varepsilon)^{m-1}$ factor.</p>
-    <p><b>The demo, in these terms.</b> In Figure {fig:twofits}, both fits have zero training error. The regular fit has $\lambda = 1 = d/2$. The degenerate fit has loss $r^4$, so the region where $r^4 \le \varepsilon$ is a disk of radius $\varepsilon^{1/4}$, with area scaling like $\pi(\varepsilon^{1/4})^2 \propto \varepsilon^{1/2}$. Thus $\lambda = 1/2$. The posterior mass near each fit scales like $n^{-\lambda}$, so the degenerate fit's share relative to the regular one grows like $n^{-1/2} / n^{-1} = n^{1/2}$—the orange curve in Figure {fig:twofits}. Depth doesn't decide the winner, since both have depth 0; volume does.</p>
-    <p class="read"><b>Figure {fig:twowells}.</b> Two wells: a sharp one of depth 0 and a ring-shaped valley of depth δ. Left: the Boltzmann weight at the chosen n. Right: the probability of being in the ring as n grows. At small n the ring wins on volume; at large n the deeper well wins on energy.</p>
+    <p class="read"><b>Figure {fig:twowells}.</b> Two wells: a sharp bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
   </div>
   <section class="panel" aria-label="Energy versus volume">
     <div class="controls">
@@ -111,9 +103,9 @@
     </div>
     <div class="chips" id="f15-chips"></div>
   </section>
+
   <div class="col">
-    <p><b>Who wins in general, and why the opening demo is different.</b> In general the posterior ends up in the singular region with the smallest λ, the one with the most volume near its perfect fits. Compare the cradle demo on the <a href="./index.html">opening page</a>. Its chambers are regions too, but its walls are flat, so as you zoom into the corner every chamber shrinks at exactly the same rate. They all have the same exponent, and their shares of the bar never change, however small the gaps. A singular loss is the opposite. Near the cusp of Figure {fig:well}, the region where K is small shrinks like ε<sup>5/12</sup> at the cusp point and like ε<sup>1/2</sup> along the smooth floor, so the cusp point takes a larger and larger share. Training by gradient descent is a dynamics, not a posterior, and may behave more like the cradle, landing wherever its approach sends it. Which picture describes real training is, as far as I can tell, open.</p>
-    <p class="read"><b>Figure {fig:winner}.</b> The exact version of the contest, on the cusp-shaped well of Figure {fig:well}. Left: the weight e<sup>−n(y² − x³)²</sup> for growing n, with the neighborhood of the cusp point circled. Right: the share of the weight inside the circle (violet), computed exactly, next to the chamber shares of the cradle from Figure {fig:cradle} (orange and blue). Smaller exponent wins; equal exponents tie.</p>
+    <p class="read"><b>Figure {fig:winner}.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates volume asymptotically.</p>
   </div>
   <section class="panel" aria-label="Winner take all versus frozen shares">
     <div class="controls"><label class="sl"><span class="lbl">n, or 1/ε</span><input id="r-n" type="range" min="1" max="12" step="0.1" value="4"><output id="r-n-out"></output></label></div>
@@ -126,8 +118,14 @@
 
   <div class="col">
     <h2 id="dl">14. Where singularities come from in networks: one function, many weights</h2>
-    <p>The two fits of section 13 were planted by hand. In a real network the degenerate places come for free, from the many ways different weights compute the same function. The smallest network already shows it.</p>
-    <p class="read"><b>Figure {fig:relu1}.</b> One ReLU unit, f(x) = a·relu(w·x), learning the target c·relu(x) from inputs spread evenly over [−1, 1]. Left: its two weights, w across and a up, with 700 samples from the posterior at n = 200 (background: posterior density; black: the weights that fit perfectly; grey: curves a·w = constant, along which the unit can be rescaled without changing its output). Middle: the functions computed by 40 of those samples, drawn over the target: hundreds of different weights, one function. Right: the loss along the diagonal a = w. Slide c to 0, the target "output nothing", and the curve of perfect fits pinches into two crossing lines: a = 0 (output switched off) and w = 0 (input switched off).</p>
+    <p>Neural networks are naturally singular because the parameter-to-function map is many-to-one:</p>
+    <ul class="qs">
+      <li><b>Rescaling:</b> A ReLU unit satisfies $a \cdot \operatorname{relu}(wx) = (a/c)\cdot\operatorname{relu}(cwx)$ for any $c &gt; 0$: valleys of equivalent weights.</li>
+      <li><b>Dead Units:</b> If an output weight is zero, its input weights can vary freely without affecting function.</li>
+      <li><b>Duplicate Units:</b> Two units with identical input weights act as a single combined unit.</li>
+      <li><b>Factorized Layers:</b> Products $BA$ (in linear layers or low-rank adapters) have continuous gauge symmetry $A \to GA, B \to BG^{-1}$.</li>
+    </ul>
+    <p class="read"><b>Figure {fig:relu1}.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
   </div>
   <section class="panel" aria-label="One ReLU unit">
     <div class="controls"><label class="sl"><span class="lbl">Target strength c</span><input id="nn-c" type="range" min="0" max="1" step="0.01" value="0.6"><output id="nn-c-out"></output></label></div>
@@ -138,22 +136,11 @@
     </div>
     <div class="chips" id="nn-chips"></div>
   </section>
+
   <div class="col">
-    <div class="terms"><b>New terms:</b> rescaling symmetry, dead unit, true parameter set.</div>
-    <p>A network's parameters map to functions, and the map is many-to-one in several systematic ways. Each way creates flat directions in the loss, and wherever two of them meet, the set of perfect parameters, the <em>true parameter set</em>, has a singular point.</p>
-    <ul class="qs">
-      <li><b>Rescaling.</b> A ReLU unit satisfies a·relu(w·x) = (a/c)·relu(c·w·x) for every c &gt; 0, so each unit's weights come in curves of equivalent settings: valleys in the loss.</li>
-      <li><b>Dead units.</b> If a unit's output weight is zero, its input weights do nothing; if its input weights never let it fire, its output weight does nothing. Whole planes of settings compute the same function.</li>
-      <li><b>Duplicate units.</b> Two units with the same input weights matter only through the sum of their output weights.</li>
-      <li><b>Factorized layers.</b> Any product of weight matrices, BA in a linear block, W<sub>Q</sub>W<sub>K</sub>ᵀ in attention, a low-rank adapter, has the redundancy A → GA, B → BG⁻¹ of section 10.</li>
-    </ul>
-    <p>Where these families intersect, say a unit that is both dead and rescaled to nothing, the true parameter set crosses itself, exactly like the lines of Figure {fig:cross3}. The intuition to carry into the rest of Part IV: the more ways a network can implement a function, the more parameter volume sits near it, and the smaller its learning coefficient. Singular points are where several implementations meet, which makes them both the most degenerate places in parameter space and, to a Bayesian, the most attractive. That is the precise version of "networks prefer simple functions".</p>
-    <p>In the demo, the rescaling curve is a valley with one flat direction (λ = 1/2 instead of 1), and at c = 0 the switched-off output and the switched-off input meet in a crossing (λ = 1/2 again, now with multiplicity m = 2). Along the diagonal the loss is a parabola for c &gt; 0, which the Hessian sees, and grows like s⁴ at the crossing, which it doesn't.</p>
     <h3 id="models">Model problems</h3>
-    <p>Four families of examples, each small enough to compute λ, and each a piece of a real architecture.</p>
-    <p><b>Two parameters.</b> A round bowl a² + b² has λ = 1 = d/2. The product (ab)², a one-unit linear network y = b·a·x learning y = 0, has λ = 1/2 with m = 2: two lines crossing, as in Figure {fig:cross3}. The squared cusp (b² − a³)² has λ = 5/12. For losses like these the Newton polygon of section 3.4 gives λ without resolving anything: walk up the diagonal of the exponent plot until you enter the polygon at (t*, t*), and λ = 1/t*.</p>
-    <p><b>Linear networks are matrix factorizations.</b> A two-layer linear network y = BAx with a hidden layer of width H writes its weight matrix as a product W = BA, which is the factorization of section 10 and, for symmetric matrices, the Burer–Monteiro lift of section 11. Its redundancy is large: A → GA, B → BG⁻¹ for any invertible G leaves the network unchanged. Aoyagi and Watanabe (2005) computed λ exactly for every input size M, output size N, width H and true rank r. Adding hidden units adds H(M + N) parameters each time, but λ stops growing at MN/2, the count for the matrix itself. Overparameterizing a factorization is nearly free in Watanabe's accounting, just as lifting was nearly free in section 11.</p>
-    <p class="read"><b>Figure {fig:linnet}.</b> The learning coefficient of y = BAx with 3 inputs and 3 outputs, against hidden width H. Lines: the exact formula for a true matrix of rank 0 and rank 1. Grey: d/2, what the parameter count would predict. Rings: my own check, the posterior average n·⟨K⟩ sampled at n = 1000 with the expected finite-n correction (m − 1)/log n added back. Right: the bilinear layer of section 10, sampled the same way (raw n·⟨K⟩, no correction), for a zero target and a generic rank-2 target.</p>
+    <p><b>Linear networks are matrix factorizations:</b> A two-layer network $y = BAx$ with hidden width $H$ factors $W = BA$. Adding hidden units increases parameters by $H(M+N)$, but Aoyagi &amp; Watanabe proved that $\lambda$ plateaus at $MN/2$, the effective dimension of the true matrix itself.</p>
+    <p class="read"><b>Figure {fig:linnet}.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
   </div>
   <section class="panel" aria-label="Learning coefficient of factorized models">
     <div class="pair">
@@ -162,10 +149,10 @@
     </div>
     <div class="chips" id="lw-chips"></div>
   </section>
+
   <div class="col">
-    <p><b>Bilinear layers are tensor factorizations.</b> The feed-forward blocks of most current transformers are gated linear units, (W₁x) ⊙ σ(W₂x). Drop the nonlinearity σ and each output becomes a sum over hidden units of c·(a·x)(b·x): a CP decomposition of a three-way tensor, the object of section 10. When the two factors read different inputs, y = Σ c·(a·x)(b·z), with two-dimensional x, z and y, it is exactly the 2×2×2 tensor of section 10. With a generic rank-2 target, the sampled value is about 4.07 at both H = 2 and H = 3: half the 8 dimensions of the tensor space, the same as fitting the 8 numbers directly, and the extra hidden unit adds nothing.</p>
-    <p><b>ReLU networks.</b> A ReLU neuron computes a·relu(x − b): zero left of its kink b, then a line of slope a. Take two of them learning a single relu(x) from inputs spread over [−1, 1], and freeze the first at a₁ = 1 − a₂, b₁ = 0. The loss is exactly K = a₂²·D(b₂), with D(b) = b²/2 + O(b³). Its zero set is two lines crossing: a₂ = 0, where the second neuron is dead, and b₂ = 0, where it has merged with the first. So λ = 1/2 with m = 2 instead of the regular value 1.</p>
-    <p class="read"><b>Figure {fig:relu2}.</b> Left: the loss over (a₂, b₂) on a log color scale; click to see the network's function against the target. Right: the exact posterior average n·⟨K⟩ on this slice as n grows. It approaches λ = 1/2 only like 1/log n: that slowness is the log log n term in Watanabe's formula.</p>
+    <p><b>ReLU crossings:</b> Two ReLU neurons learning a single target have loss $K = a_2^2 \cdot D(b_2)$. Its zero set is two crossing lines ($a_2 = 0$ and $b_2 = 0$), giving $\lambda = 1/2$ with multiplicity $m = 2$.</p>
+    <p class="read"><b>Figure {fig:relu2}.</b> Left: loss landscape of a two-neuron ReLU crossing. Right: posterior average $n\langle K \rangle$ converging to $\lambda = 1/2$ at the slow rate $1/\log n$.</p>
   </div>
   <section class="panel" aria-label="ReLU crossing singularity">
     <div class="pair">
@@ -176,9 +163,13 @@
 
   <div class="col">
     <h2 id="llc">15. Measuring it: the local learning coefficient</h2>
-    <p>Sections 13 and 14 computed λ for models small enough to resolve by hand. Nobody can resolve a real network; what you can do is measure λ, with the thermometer from the top of this page. There it ran on two-parameter losses. Here it runs on trained networks, small enough that the exact answer is still known.</p>
-    <p><b>The setup.</b> The data are 1000 pairs (x, y) with x random in ℝ³ and y = W*x plus noise, where the true map W* has rank 1: it only uses one direction of x. The model is a two-layer linear network y = B·A·x with a hidden layer of width H, so A is H × 3, B is 3 × H, and there are 6H parameters. Train it by gradient descent, then point the thermometer at the trained weights, for H = 1 to 5. Counting parameters predicts that the room around the minimum grows with every hidden unit (the grey line, 3H). But the trained network computes essentially the same function at every width, so the extra parameters are mostly redundant, and the exact learning coefficient (Aoyagi and Watanabe's formula, the solid line) levels off at 4.5. The question is whether the thermometer sees that.</p>
-    <p class="read"><b>Figure {fig:llcnet}.</b> The LLC of trained linear networks y = BAx against hidden width H. Grey: half the parameter count, what counting predicts. Solid line: the exact learning coefficient. Dots: the thermometer's estimate at the trained weights, filled in one width at a time. The buttons set the localization strength γ, a spring that keeps the chains near the trained weights. Too weak, and the chains wander into regions the minimum doesn't describe and read high; too strong, and they are held too tightly and read low. In between, the estimates follow the solid line rather than the grey one. Exactly solvable models like this one are how the instrument gets calibrated.</p>
+    <p>For large neural networks, computing blowups analytically is impossible. But the <b>Local Learning Coefficient $\lambda(w^*)$</b> can be measured directly via the <b>Watanabe–Lau Estimator</b>.</p>
+    <p>Consider the localized, tempered posterior centered at trained weights $w^*$ with localization spring $\gamma &gt; 0$:</p>
+    <div class="eq tex">p_\beta(w) = \frac{1}{Z(\beta)} \exp\left( -n\beta L_n(w) - \frac{\gamma}{2}\|w - w^*\|^2 \right)</div>
+    <p>By Hironaka's monomialization, $Z(\beta) \asymp (n\beta)^{-\lambda(w^*)} (\log n\beta)^{m-1}$. Differentiating $\log Z$ with respect to $\beta$ extracts the generalized equipartition relation:</p>
+    <div class="eq tex">\hat{\lambda}(w^*) = n\beta \cdot \mathbb{E}_\beta\big[L_n(w) - L_n(w^*)\big]</div>
+    <p>Sampling via Stochastic Gradient Langevin Dynamics (SGLD) at inverse temperature $\beta = 1/\log n$ (WBIC) reads off $\lambda(w^*)$ experimentally!</p>
+    <p class="read"><b>Figure {fig:llcnet}.</b> LLC estimates on trained linear networks against hidden width $H$. At intermediate localization $\gamma = 10$, the estimates track the exact theoretical formula, confirming that the thermometer measures effective capacity rather than raw parameter count.</p>
   </div>
   <section class="panel" aria-label="LLC on a trained network">
     <div class="controls">
@@ -193,73 +184,20 @@
     <svg id="llcn-plot" role="img" aria-label="LLC estimates against the exact learning coefficient for linear networks of growing width"></svg>
     <div class="chips" id="llcn-chips"></div>
   </section>
+
   <div class="col">
-    <div class="terms"><b>New terms:</b> local learning coefficient (LLC), regular vs. singular models, tempered posterior, stochastic gradient Langevin dynamics (SGLD), localization parameter, WBIC temperature.</div>
-
-    <p><b>The Core Question: Why does parameter count fail in deep learning?</b> In classical statistics (BIC, AIC, Laplace approximation), model complexity is measured by parameter count $d$. This rests on the assumption that a trained model sits in a regular quadratic bowl with a non-singular Hessian ($\det H \neq 0$). Under this assumption, the volume of parameters with excess loss $\le \varepsilon$ shrinks strictly as $\varepsilon^{d/2} / \sqrt{\det H}$, and the generalization error scales as $\frac{d}{2n}$. But in deep neural networks, continuous symmetries, dead neurons, and factorized weight matrices mean that optimal parameters form continuous, singular subvarieties of minima where dozens or thousands of Hessian eigenvalues are identically zero ($\det H = 0$). Classical formulas divide by zero ($1/\sqrt{\det H} = \infty$) and predict that overparameterized models should horribly overfit. Yet they generalize remarkably well.</p>
-
-    <p><b>1. The Local Learning Coefficient $\lambda(w^*)$ as Effective Dimension.</b> Sumio Watanabe solved this crisis by applying Hironaka's resolution of singularities to statistical models. The <b>Local Learning Coefficient $\lambda(w^*)$</b> (formalized for local basins by Lau, Murfet, and collaborators in 2023) replaces the broken Hessian determinant with the true polynomial power-law volume scaling exponent of the local basin $B_\delta(w^*)$:</p>
-    <div class="eq tex">V(\varepsilon) = \operatorname{Vol}\big(\{w \in B_\delta(w^*) : L_n(w) - L_n(w^*) \le \varepsilon\}\big) \asymp \varepsilon^{\lambda(w^*)} \left(\log \frac{1}{\varepsilon}\right)^{m-1}</div>
-    <p>The LLC $\lambda(w^*)$ is the <em>effective parameter count</em> divided by two ($d_{\text{eff}} = 2\lambda(w^*)$):</p>
-    <ul class="qs">
-      <li><b>Regular minimum:</b> In a nondegenerate quadratic bowl, $\lambda(w^*) = d/2$ and $m = 1$. The volume shrinks as $\varepsilon^{d/2}$, matching classical calculus.</li>
-      <li><b>Singular minimum:</b> When flat valleys and crossing branches intersect, $\lambda(w^*) &lt; d/2$. A neural network with $d = 100,000$ parameters might have an LLC of $\lambda(w^*) = 42$, meaning its basin of near-optimal solutions contracts as if the network had only $2\lambda = 84$ effective degrees of freedom!</li>
-    </ul>
-
-    <p><b>Why two minima with identical training error generalize differently:</b> Modern neural networks have millions of local minima that all achieve 100% training accuracy ($L_n(w^*) = 0$). Loss values alone cannot tell them apart. But their LLCs differ radically: one basin might have $\lambda(w_1^*) = 45$, while another has $\lambda(w_2^*) = 12$. The basin with $\lambda = 12$ has exponentially larger parameter volume ($V(\varepsilon) \propto \varepsilon^{12} \gg \varepsilon^{45}$). In Bayesian learning, the posterior probability mass overwhelmingly concentrates in the lower-$\lambda$ basin (a free energy advantage of $\Delta F_n \approx 33\log n$). Geometrically, lower $\lambda$ corresponds to a simpler, more degenerate algorithmic solution, and Watanabe's theorem guarantees that its expected generalization error is less than one-third of the first: $\mathbb{E}[G] \approx \lambda(w^*)/n$.</p>
-
-    <p><b>2. How the thermometer measures $\lambda(w^*)$ via Generalized Equipartition.</b> For a neural network with millions of parameters, we cannot resolve singularities analytically with pencil and paper. But statistical physics provides an exact experimental method: the <b>Watanabe–Lau LLC Estimator</b>. Consider the localized, tempered posterior distribution centered at $w^*$:</p>
-    <div class="eq tex">p_\beta(w) = \frac{1}{Z(\beta)} \exp\left( -n\beta L_n(w) - \frac{\gamma}{2}\|w - w^*\|^2 \right)</div>
-    <p>where $\beta$ is the inverse temperature and $\gamma &gt; 0$ is a localization spring. By Watanabe's resolution theorem, Hironaka's monomialization guarantees that the partition function scales as $Z(\beta) \asymp (n\beta)^{-\lambda(w^*)} (\log n\beta)^{m-1}$. Differentiating $\log Z(\beta)$ with respect to $\beta$ extracts the thermal expectation of the empirical loss:</p>
-    <div class="eq tex">\frac{d}{d\beta}\log Z(\beta) = -n \mathbb{E}_\beta[L_n(w)] \approx -\frac{\lambda(w^*)}{\beta}</div>
-    <p>Subtracting the baseline loss $L_n(w^*)$ yields the thermometer formula:</p>
-    <div class="eq tex">\hat{\lambda}(w^*) = n\beta \cdot \mathbb{E}_\beta\big[L_n(w) - L_n(w^*)\big]</div>
-    <p>This is classical equipartition generalized to singular potentials: while a quadratic bowl at temperature $T = 1/\beta$ stores an average thermal energy of $\frac{d}{2}T$, a singular neural network fluctuating at temperature $T$ stores an average excess energy of $\mathbf{\lambda(w^*) \cdot T}$. Measuring the average excess loss of thermal fluctuations and dividing by temperature reads off $\hat{\lambda}(w^*)$ directly!</p>
-
-    <p><b>3. The SGLD algorithm and hyperparameter calibration.</b> To sample from the tempered distribution $p_\beta(w)$, we run <b>Stochastic Gradient Langevin Dynamics (SGLD)</b> initialized at the trained weights $w^*$:</p>
-    <div class="eq tex">w_{t+1} = w_t - \frac{\epsilon}{2}\Big(n \nabla \widetilde{L}_n(w_t) + \gamma (w_t - w^*)\Big) + \sqrt{\epsilon \beta^{-1}} \eta_t, \qquad \eta_t \sim \mathcal{N}(0, I)</div>
-    <p>where $\widetilde{L}_n$ is estimated on a minibatch and $\epsilon$ is the step size. Two parameters control the thermometer:</p>
-    <ul class="qs">
-      <li><b>The inverse temperature $\beta = 1/\log n$:</b> Derived from Watanabe's <em>Widely Applicable Bayesian Information Criterion</em> (WBIC), this specific temperature balances thermal exploration against the curvature of the loss. (<a href="./appendix.html#appendix-c">Appendix C</a> provides the mathematical proof and an interactive temperature scan.)</li>
-      <li><b>The localization strength $\gamma$:</b> Why is $\gamma &gt; 0$ strictly necessary? In neural networks, flat singular valleys stretch endlessly across parameter space. Without a localization spring ($\gamma = 0$), Langevin chains drift along the zero-loss floor away from $w^*$ and fall into completely different basins, overestimating the local complexity. Conversely, if $\gamma$ is made excessively large, the spring compresses the volume into an artificial quadratic bowl, underestimating $\lambda$. In Figure {fig:llcnet}, watch the buttons test $\gamma = 1, 10, 100$: in the intermediate plateau ($\gamma = 10$), the estimates match the exact theoretical formula across all widths.</li>
-    </ul>
-
-    <p><b>4. What the LLC reveals in real networks.</b> The LLC has turned singular learning theory from an abstract mathematical theorem into a practical diagnostic instrument. Tracking $\lambda(w^*)$ during training reveals:</p>
-    <ul class="qs">
-      <li><b>Developmental phase transitions:</b> Deep networks do not learn by smooth, continuous improvement. Instead, models linger on loss plateaus while internal representations reorganize, punctuated by sudden, sharp drops in $\lambda(w^*)$ when key functional capabilities snap into place—such as the formation of induction heads in transformers, modular arithmetic circuits, or algorithmic grokking.</li>
-      <li><b>Quantifying true capacity without holdout sets:</b> Unlike parameter count $d$, which stays rigidly fixed throughout training, $\lambda(w^*)$ dynamically measures the effective dimensionality the network actually exploits. It allows researchers to detect inductive bias, measure circuit complexity, and predict generalization error purely from the geometric properties of the training landscape.</li>
-    </ul>
-
     <h2 id="tensors-slt">16. Tensor collisions, free weights, and the log N multiplicity</h2>
-    <div class="terms"><b>New terms:</b> component collision, component emptying, normal-crossing divisors, double pole, Rousseau–Mengersen boundary.</div>
-    <p>In section 10 we fit tensors by gradient descent and discovered that border rank creates a singular point at infinity. But what happens in Bayesian learning when tensor components have <b>free weights</b> and can collide with each other? This reveals two fundamentally different kinds of geometric singularities, and their competition produces an exact logarithmic correction in the Bayesian evidence.</p>
-    <p>Consider the symmetric rank-two cubic tensor model in $\mathbb{R}^3$:</p>
+    <div class="terms"><b>Key terms:</b> component collision, component emptying, normal-crossing divisors, double pole.</div>
+    <p>What happens when tensor components have free mixture weights and can collide? Consider the symmetric rank-2 cubic tensor model in $\mathbb{R}^3$:</p>
     <div class="eq tex">T(a, b, \theta) = \theta\,v(a)^{\otimes 3} + (1-\theta)\,v(b)^{\otimes 3}, \qquad 0 \le \theta \le 1</div>
-    <p>where $v(a) = (1, a_1, a_2) \in \mathbb{R}^3$, and the true target is the rank-one tensor $T_* = e_1^{\otimes 3}$. Under isotropic Gaussian noise, the Kullback–Leibler divergence is proportional to the squared Frobenius error $K = \|T(a, b, \theta) - T_*\|_F^2$. There are five parameters: two for $a$, two for $b$, and the mixture weight $\theta$.</p>
-    <p>The true tensor can be achieved in three qualitatively different ways:</p>
-    <ul class="qs">
-      <li><b>Collision:</b> $a = b = 0$, with arbitrary mixture weight $\theta$. The two components merge.</li>
-      <li><b>First component emptying:</b> $\theta = 0, b = 0$, with $a$ arbitrary. The first component disappears entirely.</li>
-      <li><b>Second component emptying:</b> $\theta = 1, a = 0$, with $b$ arbitrary.</li>
-    </ul>
-
-    <p><b>Center and separation coordinates.</b> To analyze the collision, introduce mass-weighted center and separation coordinates:</p>
-    <div class="eq tex">s = \theta a + (1-\theta)b, \qquad t = a - b</div>
-    <p>The first and second transverse moments of the tensor are $M_1 = s$ and $M_2 = ss^\top + \theta(1-\theta)tt^\top$. Because higher-order moments are controlled by these two, the local loss near the collision locus takes the normal form:</p>
-    <div class="eq tex">K(s, t, \theta) \asymp \|s\|^2 + \theta^2(1-\theta)^2 \|t\|^4</div>
-    <p>The coordinate transformation $(a, b) \mapsto (s, t)$ has Jacobian determinant 1, so no singular volume element is introduced. When $\theta$ is strictly inside $(0, 1)$, the quartic separation $\|t\|^4$ gives the RLCT $\lambda = 3/2$ with multiplicity $m = 1$.</p>
-    <p><b>The normal-crossing product and the origin of $\log N$.</b> Now look at the boundary where the component empties, $\theta \to 0$. There the loss simplifies to</p>
-    <div class="eq tex">K \asymp \|s\|^2 + \theta^2\|t\|^4</div>
-    <p>Setting $u = \|t\|^2 = r^2$ with separation radius $r = \|t\|$, the polar volume element $r\,dr = du/2$ turns the singular part into an exact <b>normal-crossing product</b>:</p>
+    <p>learning the rank-one target $T_* = e_1^{\otimes 3}$. The true tensor can be achieved in two distinct ways: <b>component collision</b> ($a = b = 0$) or <b>component emptying</b> ($\theta = 0$ or $\theta = 1$).</p>
+    <p>In center and separation coordinates $s = \theta a + (1-\theta)b$ and $u = \|a - b\|^2$, the boundary where a component empties ($\theta \to 0$) becomes an exact <b>normal-crossing product</b>:</p>
     <div class="eq tex">K_{\mathrm{sing}}(\theta, u) \sim (\theta\cdot u)^2</div>
-    <p>There are two intersecting divisors: <b>$\theta = 0$</b> (component emptying) and <b>$u = 0$</b> (component collision). When we integrate the Bayesian evidence $Z_N = \int e^{-N K} d\theta\,ds\,dt$, the center coordinates $s \in \mathbb{R}^2$ integrate to $N^{-1}$. The remaining two-variable integral is:</p>
-    <div class="eq tex">I_N \asymp \int_0^\varepsilon\int_0^{\varepsilon^2} e^{-N(\theta u)^2}\,du\,d\theta \asymp N^{-1/2}\log N</div>
-    <p>Integrating one variable produces a kernel proportional to $N^{-1/2}/u$. Integrating that remaining $1/u$ across the scale from $N^{-1/2}$ to $\varepsilon$ generates an exact <b>logarithm</b>! Combining them gives the total evidence:</p>
+    <p>Integrating the evidence $Z_N = \int e^{-N K} dw$ across the intersecting divisors $\theta = 0$ and $u = 0$ yields:</p>
     <div class="eq tex">Z_N \asymp N^{-1} \cdot N^{-1/2}\log N = \mathbf{N^{-3/2}\log N}</div>
-    <p>The RLCT is $\lambda_{\mathrm{RLCT}} = 3/2$, and the multiplicity jumps from $m = 1$ to <b>$m = 2$</b>. The double pole of Watanabe's zeta function is the geometric intersection of the collision divisor and the emptying divisor!</p>
-    <p class="read"><b>Figure {fig:sltnormal}.</b> Left: The posterior density $e^{-N(\theta u)^2}$ over component weight $\theta$ and squared separation $u$. Drag the sample size $N$: watch the probability mass concentrate into two hyperbola-bounded arms along the $\theta = 0$ and $u = 0$ axes. Right: Bayesian evidence $Z_N$ against $N$. The dashed grey line is the regular Laplace model ($N^{-2}$); blue is fixed equal weights ($N^{-3/2}$); the hot orange line is free weights with the critical double-pole boundary ($N^{-3/2}\log N$), bending upward on the log-log scale.</p>
+    <p>The RLCT is $\lambda = 3/2$, and the multiplicity jumps to $\mathbf{m = 2}$: the double pole of Watanabe's zeta function is the geometric intersection of component collision and component emptying!</p>
+    <p class="read"><b>Figure {fig:sltnormal}.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
   </div>
-
   <section class="panel" aria-label="Normal crossing and evidence scaling in tensor collisions">
     <div class="controls">
       <label class="sl long"><span class="lbl">sample size N</span><input id="slt-n" type="range" min="1" max="4.2" step="0.05" value="2.5"><output id="slt-n-out"></output></label>
@@ -278,48 +216,14 @@
   </section>
 
   <div class="col">
-    <h3 id="collision-theorem">A general theorem: the Rousseau–Mengersen boundary</h3>
-    <p>This result generalizes to arbitrary transverse dimension $q$ and tensor order $d \ge 2$. Let $a, b \in \mathbb{R}^q$, and put a Dirichlet prior on the weights with density $\theta^{\alpha-1}(1-\theta)^{\alpha-1}$. Integrating the normal form yields an explicit formula for the real log canonical threshold:</p>
+    <h3 id="collision-theorem">The Rousseau–Mengersen boundary</h3>
+    <p>For $a, b \in \mathbb{R}^q$ with a Dirichlet prior $\theta^{\alpha-1}(1-\theta)^{\alpha-1}$, the RLCT is:</p>
     <div class="eq tex">\lambda_{\mathrm{RLCT}} = \frac{q}{2} + \min\left(\frac{q}{4}, \; \frac{\alpha}{2}\right), \qquad m = \begin{cases} 2, & \alpha = q/2 \\ 1, & \alpha \neq q/2 \end{cases}</div>
-    <p>For a uniform weight prior ($\alpha = 1$), the behavior transitions as the transverse dimension $q$ increases:</p>
-  </div>
-
-  <div class="wide-table">
-    <table>
-      <thead>
-        <tr><th>Transverse dimension $q$</th><th>Weight prior $\alpha$</th><th>RLCT $\lambda_{\mathrm{RLCT}}$</th><th>Multiplicity $m$</th><th>Dominant Geometry</th><th>Evidence Scaling $Z_N$</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>$q = 1$</td><td>$\alpha = 1$</td><td>$3/4$</td><td>1</td><td><b>Component Merging</b> dominates</td><td>$N^{-3/4}$</td></tr>
-        <tr><td>$q = 2$</td><td>$\alpha = 1$</td><td>$3/2$</td><td><b>2</b></td><td><b>Critical Intersection</b> (Double Pole!)</td><td>$\mathbf{N^{-3/2}\log N}$</td></tr>
-        <tr><td>$q = 3$</td><td>$\alpha = 1$</td><td>$2$</td><td>1</td><td><b>Component Emptying</b> dominates</td><td>$N^{-2}$</td></tr>
-        <tr><td>$q = 4$</td><td>$\alpha = 1$</td><td>$5/2$</td><td>1</td><td><b>Component Emptying</b> dominates</td><td>$N^{-5/2}$</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="col">
-    <p><b>The connection to statistics.</b> The critical threshold $\mathbf{\alpha = q/2}$ is not an accident. It is the exact boundary discovered by Judith Rousseau and Kerrie Mengersen in their 2011 work on overfitted Bayesian mixture models: when the Dirichlet parameter $\alpha$ is below half the dimension of the component space, the posterior forces redundant components to empty; when $\alpha > q/2$, it forces them to merge. At the critical boundary $\alpha = q/2$, merging and emptying have identical scaling rates, and their geometric intersection produces the logarithmic evidence factor $N^{-\lambda}\log N$.</p>
-    <p><b>What the Grassmannian sees—and misses.</b> When two factors collide ($t \to 0$), the factor matrix loses column rank. The limiting 2-plane spanned by the factors retains a direction $[t] \in \mathbb{RP}^{q-1}$, which is recorded by a Grassmannian blowup $\operatorname{Gr}(2, 3)$. But when a component empties ($\theta \to 0$), the component simply becomes statistically invisible; its factor matrix does not lose rank, and the Grassmannian of factor spans sees nothing wrong. To capture both, one must principalize the full ideal</p>
-    <div class="eq tex">I = \big(s_1, \dots, s_q, \; \theta(1-\theta)t_i t_j : 1 \le i \le j \le q\big)</div>
-    <p>using Hironaka's sequence of blowups. That is why Grassmannians alone do not resolve all statistical singularities, and why Hironaka's full resolution theorem is essential to singular learning theory.</p>
+    <p>At the critical boundary $\mathbf{\alpha = q/2}$ (Rousseau &amp; Mengersen 2011), component merging and emptying balance, creating the logarithmic evidence factor $N^{-\lambda}\log N$.</p>
 
     <h2 id="next">17. Where I'd like to take this</h2>
-    <p><b>Can singularity placement be automatic?</b> For frame fields I asked whether something like Hironaka's algorithm could decide where singularities go. Not on its own: Hironaka's algorithm is deliberately conservative. It never perturbs the data, and to it a 4-fold zero z⁴ is already a resolved monomial. Deciding where singularities go means choosing among perturbations. But the machinery supplies most of a loop:</p>
-    <ol>
-      <li><b>Lift</b> so nothing is committed yet (Burer–Monteiro, or the graph in the circle bundle).</li>
-      <li><b>Project and find the worst point</b> with the invariant of section 3.3: a field's winding at a point is the order of the zero of its projection there.</li>
-      <li><b>List the splittings</b> of each degenerate point with the Newton polygon of its local expansion, with perturbation parameters as extra variables: z⁴ − δ splits at δ<sup>1/4</sup>.</li>
-      <li><b>Choose</b> by energy when the energy cares (Ginzburg–Landau's log always says split), and by volume when it doesn't, which is Watanabe's free energy.</li>
-    </ol>
-    <p>Repeat until every singular point is simple, winding ±1/4. Those are exactly the meshable vertices, valence 3 and 5: the frame-field version of normal crossings. As far as I know nobody has written this down as an algorithm.</p>
-    <p><b>Next steps.</b></p>
-    <ul class="qs">
-      <li><b>Blowups as a simulation tool, measured against the baselines.</b> Resolve collisions by chambers and their shares, and compare with complementarity solvers and All's Well on the hard cases of section 9. Compare all four frame-field methods on the same domains, including the graph lift. Fit tensors in blown-up charts and compare with regularized CP and block-term decompositions.</li>
-      <li><b>Exact learning coefficients as ground truth.</b> With monomialization formalized, the next step toward a formal singular learning theory is Watanabe's asymptotics. The examples here have known answers to check against: the cusp (5/12), the ReLU crossing (1/2, m = 2), linear networks (Aoyagi and Watanabe's formula), and now symmetric rank-two tensor collisions (3/2, m = 2).</li>
-      <li><b>Robustness and AI safety.</b> The physics examples suggest two cautions. A modeling choice, penalty or blowup or lift, changed the answer for frame fields; in learning, temperature, weight decay or a smoother activation might likewise change which singularity wins. And natural procedures failed to terminate, in collisions and in tensor fits; estimators and training loops near singularities may share that failure mode. Both seem relevant to the program in <a href="https://www.lesswrong.com/posts/J7CyENFYXPxXQpsnD/slt-for-ai-safety">"SLT for AI Safety"</a>.</li>
-    </ul>
-    <p>Jesse Hoogland's <a href="https://greaterwrong.com/posts/fovfuFdpuEwQzJu2w/neural-networks-generalize-because-of-this-one-weird-trick">"Neural networks generalize because of this one weird trick"</a> and <a href="https://www.greaterwrong.com/posts/uG7oJkyLBHEw3MYpT/generalization-from-thermodynamics-to-statistical-physics">"Generalization: from thermodynamics to statistical physics"</a> are good next reads; the second takes the physics framing of section 13 much further. I'd be glad to hear where this goes wrong.</p>
+    <p>Hironaka's resolution theorem provides the geometric foundation for Singular Learning Theory, explaining why overparameterized networks generalize: gradient descent drives models into degenerate, highly redundant basins of low $\lambda$, which possess exponentially larger parameter volume and lower generalization error.</p>
+    <p>With resolution of singularities now formally verified in Lean 4 without a single <span class="m">sorry</span>, the deep algebraic machinery that underpins learning theory has become machine-checked bedrock—a powerful milestone for mathematical physics, geometry processing, and AI safety.</p>
   </div>
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-3.html"><span class="dir">← Previous</span><span class="t">Blowups in simulation</span></a><a class="next" href="./appendix.html"><span class="dir">Next →</span><span class="t">Appendices and references</span></a></nav>

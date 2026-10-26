@@ -35,10 +35,10 @@
   </div>
 
   <div class="col">
-    <p>Part I built our intuition on plane curves: lifting points by their direction untangles crossing lines, reduces the contact between touching parabolas, and smooths out cusps. But Hironaka's 1964 resolution theorem is monumental precisely because it works in <em>every</em> dimension. In machine learning, the parameter spaces of neural networks live in hundreds or thousands of dimensions, and even the simplest non-trivial geometric failures appear only when we reach four dimensions.</p>
-    <p>At the close of Part I, we mentioned that John Nash's choice-free blowup—which requires no manual selection of a center—fails in dimension four and higher (Castillo, Duarte, Leyton-Álvarez, and Liendo, <em>Annals of Mathematics</em> 2026). In Part I that counterexample was presented only as an algebra table, because the toric variety lives in seven dimensions. But how can we actually <em>see</em> what goes wrong? How does a higher-dimensional singularity look, why does Nash get stuck, and what exactly does Hironaka do in his first blowup?</p>
-    <p>The answer is to view the <b>zero level set as a 3-manifold</b>. By taking 3D spatial slices through 4D space, we can watch both algorithms operate side by side. Play with the interactive explorer below: Hironaka is placed first so you can watch it open the throat immediately on mobile or desktop, while Nash remains trapped in a persistent pinch.</p>
-    <p class="read"><b>Figure 10.</b> Higher-order 3-manifold singularities: Hironaka vs. Nash. <b>How to play with it:</b> Choose a geometry from the selector: the <b>A₃ Tacnode</b> (two kissing paraboloids with second-order contact), the <b>Fermat Cubic</b> (a 3-lobed cone with 27 lines), the <b>Brieskorn Cusp</b> (fractional scaling), or the <b>A₁ Conifold</b> (the standard quadratic double cone). Step through blowups 0 to 3 using the stepper buttons. Drag either 3D canvas to rotate. Notice that Hironaka's blowup 1 excavates the pinched apex into a glowing cyan throat (exceptional divisor $E_1$) and fully resolves the space, whereas Nash's tangent lift preserves the pinch radius $r = 0$ and cycles back onto itself at Step 3.</p>
+    <p>Part I resolved singularities on plane curves. But Hironaka's theorem is monumental because it holds across <em>all</em> dimensions. In machine learning, neural network parameter spaces live in thousands or millions of dimensions—and the first fundamental obstruction to automatic resolution appears in four dimensions.</p>
+    <p>At the close of Part I, we noted that John Nash's choice-free tangent blowup fails in dimension 4 (Castillo, Duarte, Leyton-Álvarez, and Liendo, <em>Annals of Mathematics</em> 2026). How does a 4D singularity actually look, why does Nash get stuck, and what does Hironaka do in his very first step?</p>
+    <p>The answer is to visualize the <b>zero level set as a 3-manifold</b>. By taking 3D spatial slices through 4-space, we can watch both algorithms operate side by side.</p>
+    <p class="read"><b>Figure 10.</b> 3-manifold singularities: Hironaka vs. Nash. Select a geometry: the <b>A₃ Tacnode</b> (kissing sheets), the <b>Fermat Cubic</b> (3-lobed cone with 27 lines), the <b>Brieskorn Cusp</b> (fractional scaling), or the <b>A₁ Conifold</b> (quadratic double cone). Step through blowups 0 to 3. Notice that Hironaka's blowup 1 radially excavates the pinched apex into an open throat (cyan rings show the exceptional divisor $E_1$) and fully resolves the space, whereas Nash's tangent lift preserves the pinch radius $r = 0$ and cycles back onto itself at Step 3.</p>
   </div>
 
   <section class="panel" aria-label="3-Manifold Singularity Explorer: Hironaka vs Nash">
@@ -123,52 +123,38 @@
 
   <div class="col">
     <h2 id="zero-level-sets">6. Zero level sets in 4D as 3-manifolds</h2>
-    <div class="terms"><b>New terms:</b> 3-manifold, hypersurface, regular point, singular locus, slice.</div>
-    <p>A single polynomial equation in four variables, $F(x, y, z, w) = 0$, defines a three-dimensional geometric space sitting inside $\mathbb{R}^4$: a <em>hypersurface</em>, or <em>3-manifold</em>. At any point where the gradient vector</p>
+    <div class="terms"><b>Key terms:</b> 3-manifold, hypersurface, regular point, singular locus, 3D slice.</div>
+    <p>A single polynomial $F(x, y, z, w) = 0$ in four variables cuts out a 3-manifold in $\mathbb{R}^4$. Wherever the gradient</p>
     <div class="eq tex">\nabla F = \left(\frac{\partial F}{\partial x}, \frac{\partial F}{\partial y}, \frac{\partial F}{\partial z}, \frac{\partial F}{\partial w}\right) \neq (0, 0, 0, 0)</div>
-    <p>is non-zero, the implicit function theorem guarantees that the solution set is locally smooth. If you zoom in close enough to a regular point, the 3-manifold looks completely indistinguishable from flat three-dimensional Euclidean space $\mathbb{R}^3$. It possesses a unique, well-defined tangent 3-plane perpendicular to $\nabla F$.</p>
-    <p>The trouble begins at points where the gradient vanishes entirely: $\nabla F = 0$. There, the implicit function theorem provides no guidance. The tangent space collapses, and the geometry develops a singularity. Depending on the equation, this can be an isolated pinch point (like the apex of a double cone), two sheets kissing with high-order tangency (a tacnode), or whole lines and planes of singular points.</p>
-    <p>To visualize a 3-manifold, we do what magnetic resonance imaging (MRI) does to a three-dimensional brain: we slice it along coordinate planes. Fix $w = 0$ (or a constant time-slice $w = c$) and examine the resulting two-dimensional surface in the remaining three coordinates $(x, y, z)$. For instance:</p>
+    <p>is non-zero, the implicit function theorem guarantees local smoothness: zoomed in, the space is indistinguishable from flat $\mathbb{R}^3$, with a unique tangent 3-plane orthogonal to $\nabla F$. But where $\nabla F = 0$, the tangent space collapses into a <b>singularity</b>.</p>
+    <p>To inspect a 4D hypersurface, we slice it along coordinate planes (setting $w = 0$), yielding a 2D surface in $(x, y, z)$:</p>
     <ul class="qs">
-      <li><b>The A₁ Conifold:</b> $x^2 + y^2 - z^2 - w^2 = 0$. At $w = 0$, this is the cone $x^2 + y^2 = z^2$. Two conical nappes meet at an isolated sharp apex $(0, 0, 0, 0)$. The neck radius at the waist is strictly zero.</li>
-      <li><b>The A₃ Tacnode:</b> $x^2 + y^2 = z^4 + w^4$. At $w = 0$, the radius in the $(x, y)$-plane is $r = \sqrt{x^2+y^2} = z^2$. Instead of straight conical rays, two parabolic sheets kiss with second-order contact at the origin.</li>
-      <li><b>The Fermat Cubic:</b> $x^3 + y^3 + z^3 + w^3 = 0$. Slicing at $w = 0$ gives a fluted cone with 3-fold symmetry, radiating 27 lines from a triple-point singularity.</li>
-      <li><b>The Brieskorn Cusp:</b> $x^2 + y^2 = z^3 + w^2$. The cross-section has a fractional scaling exponent $r \propto |z|^{3/2}$, creating a 3D needle tip.</li>
+      <li><b>The A₁ Conifold:</b> $x^2 + y^2 - z^2 - w^2 = 0$. At $w = 0$, this is the double cone $x^2 + y^2 = z^2$, meeting at a sharp pinch $(0, 0, 0, 0)$ with throat radius $r = 0$.</li>
+      <li><b>The A₃ Tacnode:</b> $x^2 + y^2 = z^4 + w^4$. At $w = 0$, two parabolic sheets kiss with second-order contact ($r = z^2$).</li>
+      <li><b>The Fermat Cubic:</b> $x^3 + y^3 + z^3 + w^3 = 0$. Slicing at $w = 0$ yields a fluted 3-lobed cone with 27 lines radiating from a triple point.</li>
+      <li><b>The Brieskorn Cusp:</b> $x^2 + y^2 = z^3 + w^2$. Exhibits fractional scaling $r \propto |z|^{3/2}$, creating a 3D needle tip.</li>
     </ul>
 
     <h2 id="blowup-1">7. What Hironaka actually does in Blow-Up 1: Radial excavation</h2>
-    <div class="terms"><b>New terms:</b> blowup center, exceptional divisor, radial excavation, strict transform, normal crossing.</div>
-    <p>When algebraic geometers say "blow up the singular point", what is the actual mathematical surgery being performed? Why does it turn a pinched cone into an open, smooth surface?</p>
-    <p>Consider the conical double point $X^2 + Y^2 - Z^2 = 0$ in $\mathbb{R}^3$. At the origin, the gradient is $(2X, 2Y, -2Z) = (0, 0, 0)$. The origin has lost its direction: rays approach it from every angle in the cone $X^2 + Y^2 = Z^2$.</p>
-    <p><b>Step 1: Write in direction coordinates.</b> Choose the origin as the center. In spherical coordinates, every point is written as a radius $R$ and a direction $(\xi, \eta, \zeta)$ on the unit sphere $S^2$ with $\xi^2 + \eta^2 + \zeta^2 = 1$. In standard affine charts, we set $X = u$, $Y = uv$, $Z = uw$, where $u$ plays the role of the radial distance from the center, and $(v, w) = (Y/X, Z/X)$ record the directions of approach.</p>
-    <p><b>Step 2: Substitute and factor out the center.</b> Substitute these coordinates into the cone's equation:</p>
+    <div class="terms"><b>Key terms:</b> radial excavation, exceptional divisor, strict transform.</div>
+    <p>How does blowing up a singular point turn a pinched cone into an open, smooth manifold? Take the quadratic cone $X^2 + Y^2 - Z^2 = 0$. At the origin $\nabla F = (0, 0, 0)$, and rays approach from every direction on the cone.</p>
+    <p><b>1. Express in directional coordinates:</b> Set $X = u, Y = uv, Z = uw$, where $u$ is the radial distance from the origin and $(v, w) = (Y/X, Z/X)$ record the direction of approach.</p>
+    <p><b>2. Factor out the center:</b> Substituting into the cone equation gives:</p>
     <div class="eq tex">F(u, uv, uw) = u^2 + (uv)^2 - (uw)^2 = u^2\big(1 + v^2 - w^2\big) = 0</div>
-    <p>Notice what happened: a common factor of $u^2$ factored out cleanly from every term! That factor $u^2 = 0$ is the <em>exceptional divisor</em> $E_1$. It is the algebraic memory of the origin: the origin has been replaced by the entire projective sphere of directions $\mathbb{RP}^2$.</p>
-    <p><b>Step 3: The strict transform is smooth.</b> What remains after factoring out $u^2$ is the <em>strict transform</em>:</p>
+    <p>The factor $u^2 = 0$ is the <b>exceptional divisor</b> $E_1 \cong \mathbb{RP}^2$: the algebraic memory of the origin replaced by its projectivized sphere of directions.</p>
+    <p><b>3. The strict transform is smooth:</b> Dividing out $u^2$ leaves the strict transform:</p>
     <div class="eq tex">1 + v^2 - w^2 = 0 \quad\Longleftrightarrow\quad w^2 - v^2 = 1</div>
-    <p>This is no longer a cone! It is a <b>smooth one-sheeted hyperboloid</b>. Its gradient with respect to $(u, v, w)$ is $(0, -2v, 2w)$, which never vanishes on the surface because $w^2 - v^2 = 1$ ensures $w \neq 0$.</p>
-    <p><b>The physical intuition: radial excavation.</b> Hironaka's blowup 1 does not merely redraw the coordinates; it physically <em>excavates</em> the singular apex. It drills out the point $R = 0$ where the equations broke down and glues in a smooth sphere of directions. In Figure 10, watch the waist radius jump from $R = 0.00$ to $R = 0.92$: traffic can now flow smoothly through the throat! The exceptional divisor $E_1$ (the cyan ring) sits right at the neck, marking where the point was removed.</p>
-    <p>For higher-order singularities like the $A_3$ Tacnode ($x^2 + y^2 = z^4$), two parabolic sheets kissed with fourth-degree contact. The first blowup factors out $\rho^2$, widening the throat and reducing the tangency from degree 4 to degree 2 (kissing parabolas become crossing cones). A second blowup then factors out the remaining quadratic factor, opening the crossing into two smooth, non-intersecting necks. That is why Hironaka's loop is guaranteed to terminate: every step strictly reduces the order of contact.</p>
+    <p>This is a <b>smooth one-sheeted hyperboloid</b>! Its gradient $(0, -2v, 2w)$ never vanishes because $w^2 - v^2 = 1 \implies w \neq 0$.</p>
+    <p><b>Radial excavation:</b> Hironaka's blowup 1 literally drills out the singular apex $r = 0$ and glues in a smooth throat of directions. In Figure 10, the waist jumps from $r = 0.00$ to $r = 0.92$: the pinch opens into an accessible, nonsingular channel.</p>
 
     <h2 id="nash-4d-failure">8. The 4D failure of Nash: Why choice-free blowups loop forever</h2>
-    <div class="terms"><b>New terms:</b> Nash blowup, Gauss map, Grassmannian fiber, limit cycle, toric counterexample.</div>
-    <p>In the 1950s, John Nash proposed a wonderfully egalitarian alternative to Hironaka. Why should a mathematician have to make arbitrary choices about where to place the centers of blowups? If an algorithm is to run automatically inside a geometry engine, on a 3D scan, or during neural network training, it should not require a human to inspect the geometry and choose centers.</p>
-    <p><b>Nash's idea:</b> Take a $d$-dimensional shape $X \subset \mathbb{R}^N$. At every smooth point $p$, the tangent space is a $d$-dimensional plane $T_p X$. That plane is a single point in the <em>Grassmannian</em> $\operatorname{Gr}(d, N)$, the space of all $d$-dimensional planes in $N$-dimensional space. This gives the <em>Gauss map</em> $\gamma: p \mapsto T_p X$. At singular points, $\gamma$ is undefined. Nash proposed taking the closure of the graph of $\gamma$:</p>
+    <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, Grassmannian $\operatorname{Gr}(d, N)$, periodic limit cycle.</div>
+    <p>John Nash proposed a choice-free alternative: the Gauss map $\gamma: p \mapsto T_p X$ assigns to each smooth point its tangent $d$-plane in the Grassmannian $\operatorname{Gr}(d, N)$. The <b>Nash blowup</b> $\widetilde{X}_{\mathrm{Nash}}$ is the closure of its graph:</p>
     <div class="eq tex">\widetilde{X}_{\mathrm{Nash}} = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N)</div>
-    <p>Over each singular point, Nash attaches all possible limiting tangent spaces. It requires no center, no chart choices, and no human intervention.</p>
-    <p>For curves (dimension 1), Nash's method works miracles. In Part I we saw that for the cusp $y^2 = x^3$, one Nash step immediately produces the smooth space $(\tau^2, \tau^3, 3\tau/2)$. In 1990, Mark Spivakovsky proved that for surfaces (dimension 2), alternating Nash blowups with normalization always terminates in a smooth surface. It was widely conjectured that Nash blowups would resolve singularities in all dimensions.</p>
-    <p><b>The 2026 counterexample.</b> In 2024 and published in the <em>Annals of Mathematics</em> in 2026, Ana Belén de Felipe, Daniel Duarte, Pedro Fortuny Ayuso, and Antonio Liendo discovered that Nash's dream breaks down starting in dimension four. They constructed a 4-dimensional toric variety $X \subset \mathbb{R}^7$ whose Nash blowup fails to make any progress.</p>
-    <p><b>Why Nash gets trapped: the geometry of the cycle.</b> Unlike Hironaka, <b>Nash does not excavate the singular point</b>. It retains the original positions and merely appends the limiting tangent hyperplanes. When the singularity is a higher-order pinch—such as our $A_3$ Tacnode or the toric cone of Castillo et al.—the Gauss map $\gamma$ folds over itself in the Grassmannian $\operatorname{Gr}(3, 4)$.</p>
-    <p>Watch the right-hand panel of Figure 10:</p>
-    <ul class="qs">
-      <li><b>Step 0 ($M^3_0$):</b> The initial pinched cone sits at the origin with waist $r = 0$.</li>
-      <li><b>Step 1 ($M^3_1$):</b> Nash records tangent planes. Because the normal field folds along the crease, the blown-up chart tilts the cone along its first axis. But the apex is not excavated; it remains pinched at $r = 0$.</li>
-      <li><b>Step 2 ($M^3_2$):</b> The second Nash blowup shears the cone along its transverse coordinates, rotating the crease in $\operatorname{Gr}(3, 4)$.</li>
-      <li><b>Step 3 ($M^3_3$):</b> A unimodular integer coordinate transformation $U \in \operatorname{GL}(4, \mathbb{Z})$ maps the exponent fan of $M^3_3$ <em>identically back</em> to $M^3_0$!</li>
-    </ul>
-    <p>The sequence has closed into an <b>infinite periodic limit cycle of length 4</b>:</p>
+    <p>For curves (1D), Nash resolves the cusp in a single step. For surfaces (2D), Spivakovsky (1990) proved that normalized Nash blowups always terminate. It was widely conjectured that Nash blowups always resolve singularities.</p>
+    <p><b>The 4D Counterexample:</b> In 2026, Castillo, Duarte, Leyton-Álvarez, and Liendo proved this false in dimension four. Unlike Hironaka, <b>Nash does not excavate the singular point</b>: it retains original positions and merely appends limiting tangent planes. When the Gauss map folds over itself in $\operatorname{Gr}(3, 4)$, the pinch radius stays shut ($r = 0$). In the counterexample, an integer matrix $U \in \operatorname{GL}(4, \mathbb{Z})$ maps the exponent configuration of Step 3 identically back to Step 0:</p>
     <div class="eq tex">M^3_0 \;\xrightarrow{\text{Nash}}\; M^3_1 \;\xrightarrow{\text{Nash}}\; M^3_2 \;\xrightarrow{\text{Nash}}\; M^3_3 \;\cong\; M^3_0 \;\xrightarrow{\text{Nash}}\; \cdots</div>
-    <p>Because Nash makes no choices, it cannot break symmetry: on the next step it repeats the exact same sequence. It is trapped forever, like a traveler on a four-dimensional Penrose staircase. No measure of complexity drops, because the fourth chart is literally isomorphic to the first.</p>
+    <p>Because Nash is completely deterministic and choice-free, it cannot change tactics: it is trapped in an infinite periodic cycle of length 4.</p>
   </div>
 
   <div class="wide-table">
@@ -196,7 +182,7 @@
           <td>Conifolds, Terminal singularities</td>
           <td class="ok">Terminates (Lean formalization 2026)</td>
           <td style="color:var(--muted);font-weight:600">Open problem</td>
-          <td>In 3D, whether un-normalized Nash blowups can loop remains an active open question.</td>
+          <td>In 3D, whether un-normalized Nash blowups can loop remains open.</td>
         </tr>
         <tr>
           <td><b>4D+ (4-folds+)</b></td>
@@ -210,8 +196,7 @@
   </div>
 
   <div class="col">
-    <p><b>The takeaway for practitioners:</b> When designing algorithms for non-manifold meshes, neural network loss surfaces, or physical simulators, Nash's choice-free approach is tempting because it requires no heuristics. But in dimensions four and above, choice-free methods can march in circles. Hironaka's algorithm succeeds because it insists on picking a center where the invariant is strictly worst, excavates the singularity radially, and proves that its invariant drops at every step.</p>
-    <p>With this geometric understanding of level sets, radial excavations, and 4D tangent failures in hand, we are ready to bring these tools back to problems where I have hands-on intuition: colliding physical bodies, low-rank tensor factorizations, and symmetric cross fields.</p>
+    <p><b>The takeaway:</b> Choice-free methods like Nash's are appealing because they require no manual heuristics. But in four dimensions and higher, they can march in circles. Hironaka's algorithm succeeds because it insists on picking a center where the invariant is maximal, radially excavates the throat, and strictly decreases its invariant at every step.</p>
   </div>
 </main>
 
