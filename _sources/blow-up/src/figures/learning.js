@@ -464,5 +464,67 @@
   let twLast = 0;
   SCHED.add((now) => { if (!TW.samp || !isOn($("#tw-cv")) || now - twLast < 60) return; twLast = now; for (let k = 0; k < 25; k++) TW.pts[Math.floor(RND() * TW.pts.length)] = TW.samp(RND); figTw(); });
 
-  window.__draw4 = () => { fig12(); fig13(); fig17(); fig19(); fig15nn(); fig19ln(); fig10tz(); fig18wb(); figTw(); };
+  // ============================================================ Figure 22: SLT Tensor Collision & Normal Crossing
+  const SLT = { ln: 2.5 };
+  function figSltTensor() {
+    if (!$("#slt-cv")) return;
+    const n = Math.pow(10, SLT.ln);
+    const cv = $("#slt-cv"), { ctx, W, H, d } = cvs(cv);
+    const g = 180, img = new ImageData(g, g), lut = LUT();
+    for (let j = 0; j < g; j++) {
+      for (let i = 0; i < g; i++) {
+        const th = (i + 0.5) / g;
+        const u = 1 - (j + 0.5) / g;
+        const K = (th * u) ** 2;
+        const v = Math.exp(-n * K);
+        const col = lut[Math.round(clamp(v, 0, 1) * 255 * 0.9)];
+        const o = 4 * (j * g + i);
+        img.data[o] = col[0]; img.data[o + 1] = col[1]; img.data[o + 2] = col[2]; img.data[o + 3] = 255;
+      }
+    }
+    const off = document.createElement("canvas");
+    off.width = g; off.height = g;
+    off.getContext("2d").putImageData(img, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(off, 0, 0, W, H);
+
+    // Divisor axis lines
+    ctx.strokeStyle = C.blow; ctx.lineWidth = 3 * d;
+    ctx.beginPath(); ctx.moveTo(0, H); ctx.lineTo(W, H); ctx.stroke(); // u = 0
+    ctx.strokeStyle = C.bad; ctx.lineWidth = 3 * d;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, H); ctx.stroke(); // θ = 0
+
+    ctx.font = `700 ${11 * d}px "JetBrains Mono", monospace`;
+    ctx.fillStyle = C.bad; ctx.fillText("θ = 0 (emptying)", 8 * d, 18 * d);
+    ctx.fillStyle = C.blow; ctx.fillText("u = 0 (merging)", W - 110 * d, H - 8 * d);
+
+    // SVG Evidence Scaling Plot
+    const svg = $("#slt-plot");
+    if (svg) {
+      const F = frame(svg, { W: 360, H: 280, l: 48, r: 14, t: 14, b: 42, xr: [1, 4.2], yr: [-7, 0], xt: [1, 2, 3, 4].map(v => [v, "10" + sup(v)]), yt: [[0, "1"], [-2, "10⁻²"], [-4, "10⁻⁴"], [-6, "10⁻⁶"]], xlab: "sample size N", ylab: "evidence Z_N" });
+      const ptsReg = [], ptsFixed = [], ptsCrit = [];
+      for (let l = 1; l <= 4.2; l += 0.05) {
+        const nVal = Math.pow(10, l);
+        ptsReg.push([l, -2.0 * l]);
+        ptsFixed.push([l, -1.5 * l + 0.3]);
+        ptsCrit.push([l, -1.5 * l + Math.log10(Math.max(1, 0.4 * Math.log(nVal))) + 0.3]);
+      }
+      E("path", { d: pathD(ptsReg, F.X, F.Y), fill: "none", stroke: C.steel, "stroke-width": 2, "stroke-dasharray": "5 4" }, F.g);
+      E("path", { d: pathD(ptsFixed, F.X, F.Y), fill: "none", stroke: C.cold, "stroke-width": 2.4 }, F.g);
+      E("path", { d: pathD(ptsCrit, F.X, F.Y), fill: "none", stroke: C.hot, "stroke-width": 3 }, F.g);
+
+      E("line", { x1: F.X(SLT.ln), x2: F.X(SLT.ln), y1: F.y0, y2: F.y1, stroke: C.muted, "stroke-dasharray": "2 3" }, F.g);
+
+      T(svg, F.x1 - 6, F.Y(-6.6), "dashed: regular Laplace N⁻²", C.steel, { at: { "text-anchor": "end" } });
+      T(svg, F.x1 - 6, F.Y(-4.7), "blue: equal weights N⁻³ᐟ²", C.cold, { at: { "text-anchor": "end" } });
+      T(svg, F.x1 - 6, F.Y(-3.4), "orange: free weights N⁻³ᐟ² log N", C.hot, { at: { "text-anchor": "end" }, st: ";font-weight:700" });
+    }
+
+    $("#slt-n-out").textContent = "N = " + Math.round(n).toLocaleString();
+    $("#slt-chips").innerHTML = `<span class="chip v">RLCT <b>λ = 3/2</b></span><span class="chip v">multiplicity <b>m = 2</b></span><span class="chip">evidence: <b>Z_N ≍ N⁻³ᐟ² log N</b></span>`;
+  }
+  $("#slt-n")?.addEventListener("input", (e) => { SLT.ln = +e.target.value; figSltTensor(); });
+  watch($("#slt-cv"), () => figSltTensor());
+
+  window.__draw4 = () => { fig12(); fig13(); fig17(); fig19(); fig15nn(); fig19ln(); fig10tz(); fig18wb(); figTw(); figSltTensor(); };
 })();

@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blowups in simulation · What is… a blowup?</title>
-  <meta name="description" content="Blowups for rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each with an interactive demo.">
+  <title>3-Manifolds, Hironaka's Radial Excavation, and Why Nash Loops in 4D · What is… a blowup?</title>
+  <meta name="description" content="Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Blowups in simulation · What is… a blowup?">
-  <meta property="og:description" content="Blowups for rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each with an interactive demo.">
-  <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-2.html">
-  <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
+  <meta property="og:title" content="3-Manifolds, Hironaka's Radial Excavation, and Why Nash Loops in 4D · What is… a blowup?">
+  <meta property="og:description" content="Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.">
+  <meta property="og:url" content="https://foolzone.com/blow-up/part-2.html">
+  <meta property="og:image" content="https://foolzone.com/blow-up/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/play/hironaka-blow-up/part-2.html">
+  <link rel="canonical" href="https://foolzone.com/blow-up/part-2.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,219 +24,198 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Simulation</a><a href="./part-3.html">III · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · 3-Manifolds & Nash failure</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
-    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part II of III</p>
-    <h1>Blowups in simulation, where I have more intuition</h1>
-    <p class="dek">Rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each opening with a demo.</p>
+    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part II of IV</p>
+    <h1>3-Manifolds, Hironaka's radial excavation, and why Nash loops in 4D</h1>
+    <p class="dek">Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.</p>
   </div>
 
   <div class="col">
-    <p>Part I built the tools on curves in the plane. Part II takes them back to three problems I have actually worked on, and each section opens with a demo you can play with before any explanation: first the three balls from the <a href="./index.html">opening page</a>, then a tensor fit that never finishes, then a cross field whose singularities you place by hand. The rest of each section unpacks its demo.</p>
-    <h2 id="collisions">6. Rigid-body collisions: the opening demo, unpacked</h2>
-    <p>Here are the three balls from the <a href="./index.html">opening page</a> again, starting from wherever you left them, now with a second view next to them. That second view is the whole explanation, and this section is about reading it.</p>
-    <p class="read"><b>Figure {fig:cradle}.</b> Left: the opening demo, three balls meeting at once (gaps enlarged), with the bar of all tiny gap ratios colored by outcome; drag the marker, or click an outcome below to jump to a gap ratio that produces it. Right: the same motion as a single point bouncing inside a wedge. The point's position encodes all three balls at once; each bounce is one two-ball collision; the red corner is the moment all three touch. Change the middle mass and the wedge opens or closes.</p>
+    <p>Part I built our intuition on plane curves: lifting points by their direction untangles crossing lines, reduces the contact between touching parabolas, and smooths out cusps. But Hironaka's 1964 resolution theorem is monumental precisely because it works in <em>every</em> dimension. In machine learning, the parameter spaces of neural networks live in hundreds or thousands of dimensions, and even the simplest non-trivial geometric failures appear only when we reach four dimensions.</p>
+    <p>At the close of Part I, we mentioned that John Nash's choice-free blowup—which requires no manual selection of a center—fails in dimension four and higher (Castillo, Duarte, Leyton-Álvarez, and Liendo, <em>Annals of Mathematics</em> 2026). In Part I that counterexample was presented only as an algebra table, because the toric variety lives in seven dimensions. But how can we actually <em>see</em> what goes wrong? How does a higher-dimensional singularity look, why does Nash get stuck, and what exactly does Hironaka do in his first blowup?</p>
+    <p>The answer is to view the <b>zero level set as a 3-manifold</b>. By taking 3D spatial slices through 4D space, we can watch both algorithms operate side by side. Play with the interactive explorer below: Hironaka is placed first so you can watch it open the throat immediately on mobile or desktop, while Nash remains trapped in a persistent pinch.</p>
+    <p class="read"><b>Figure {fig:manifold3d}.</b> Higher-order 3-manifold singularities: Hironaka vs. Nash. <b>How to play with it:</b> Choose a geometry from the selector: the <b>A₃ Tacnode</b> (two kissing paraboloids with second-order contact), the <b>Fermat Cubic</b> (a 3-lobed cone with 27 lines), the <b>Brieskorn Cusp</b> (fractional scaling), or the <b>A₁ Conifold</b> (the standard quadratic double cone). Step through blowups 0 to 3 using the stepper buttons. Drag either 3D canvas to rotate. Notice that Hironaka's blowup 1 excavates the pinched apex into a glowing cyan throat (exceptional divisor $E_1$) and fully resolves the space, whereas Nash's tangent lift preserves the pinch radius $r = 0$ and cycles back onto itself at Step 3.</p>
   </div>
-  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
-    <div class="controls">
-      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
+
+  <section class="panel" aria-label="3-Manifold Singularity Explorer: Hironaka vs Nash">
+    <div class="controls" style="justify-content:space-between">
+      <div class="seg" role="group" aria-label="Singularity">
+        <button type="button" id="btn-sing-tacnode" style="border-color:var(--blow);color:var(--blow);font-weight:700">A₃ Tacnode (Kissing Sheets)</button>
+        <button type="button" id="btn-sing-cubic">Fermat Cubic (3-Lobe)</button>
+        <button type="button" id="btn-sing-brieskorn">Brieskorn Cusp</button>
+        <button type="button" id="btn-sing-conifold">A₁ Conifold</button>
+      </div>
+      <span class="m" id="sing-formula-badge" style="background:var(--soft);padding:4px 10px;border-radius:6px;color:var(--hot);font-weight:600">x² + y² = z⁴ + w⁴</span>
     </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
-      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
+
+    <!-- Stepper Controls -->
+    <div class="controls" style="background:var(--soft);padding:10px 14px;border-radius:10px;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="chip v" id="step-badge" style="font-size:12px;font-weight:700">Step 0 / 3</span>
+        <span id="step-name" style="font-weight:700;font-size:14px">Initial Tacnode: Kissing Parabolas (r = 0)</span>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="btn" id="btn-step-prev">◀ Prev</button>
+        <button type="button" class="btn go" id="btn-step-next">Next Step ▶</button>
+      </div>
     </div>
-    <div class="chips" id="f2-chips"></div>
+
+    <div class="seg" role="group" aria-label="Step selector" style="width:100%;display:grid;grid-template-columns:repeat(4, 1fr);gap:8px">
+      <button type="button" id="pill-step-0" style="border-color:var(--good);background:color-mix(in srgb, var(--good) 15%, transparent);font-weight:700">0. Pinch (r=0)</button>
+      <button type="button" id="pill-step-1">1. Blowup 1</button>
+      <button type="button" id="pill-step-2">2. Blowup 2</button>
+      <button type="button" id="pill-step-3">3. Outcome</button>
+    </div>
+
+    <!-- Dual Viewports: Hironaka FIRST for mobile -->
+    <div class="grid2">
+      <!-- 1. Hironaka Resolution Viewport -->
+      <div class="fig" style="background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--good);letter-spacing:0.05em">Hironaka Track (Smooth Resolution)</span>
+            <div class="h" id="hiro-header" style="font-size:14px;margin-top:2px">Step 0: Kissing Parabolas (r = 0)</div>
+          </div>
+          <span class="chip" id="hiro-waist-badge" style="font-size:11px;font-weight:700;color:var(--good)">Throat: 0.00</span>
+        </div>
+        <div class="box sq drag" style="position:relative">
+          <canvas id="canvas-hiro" aria-label="3D rendering of Hironaka resolution on a 3-manifold"></canvas>
+          <div id="hiro-success-banner" style="display:none;position:absolute;left:10px;right:10px;top:10px;background:color-mix(in srgb, var(--good) 90%, #000);color:#fff;border-radius:8px;padding:8px 12px;font-size:12px">
+            <b>✓ FULL RESOLUTION ACHIEVED</b><br>Waist excavated into a smooth throat with glowing exceptional divisors E₁ & E₂. 100% nonsingular!
+          </div>
+          <span class="tag">Hironaka opens throat • Cyan rings = Exceptional Divisors E</span>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--muted);line-height:1.4">
+          <div style="display:flex;justify-content:space-between"><span>Throat Radius:</span> <b id="hiro-stat-radius" style="color:var(--good)">r = 0.00 (Kissing Pinch)</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Status:</span> <b id="hiro-stat-status" style="color:var(--good)">2nd-order tangency at apex</b></div>
+          <p id="hiro-stat-desc" style="margin:6px 0 0;border-top:1px solid var(--rule);padding-top:4px">Initial A₃ Tacnodal 3-manifold: x² + y² = z⁴ + w⁴. Two branches kiss with 2nd-order tangency.</p>
+        </div>
+      </div>
+
+      <!-- 2. Nash Blowup Viewport -->
+      <div class="fig" style="background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <span style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--bad);letter-spacing:0.05em">Nash Track (Trapped Loop)</span>
+            <div class="h" id="nash-header" style="font-size:14px;margin-top:2px">Step 0: Kissing Parabolas (r = 0)</div>
+          </div>
+          <span class="chip" id="nash-waist-badge" style="font-size:11px;font-weight:700;color:var(--bad)">Throat: 0.00</span>
+        </div>
+        <div class="box sq drag" style="position:relative">
+          <canvas id="canvas-nash" aria-label="3D rendering of Nash blowup on a 3-manifold"></canvas>
+          <div id="nash-cycle-banner" style="display:none;position:absolute;left:10px;right:10px;top:10px;background:color-mix(in srgb, var(--bad) 90%, #000);color:#fff;border-radius:8px;padding:8px 12px;font-size:12px">
+            <b>⚠️ INFINITE PERIODIC CYCLE DETECTED</b><br>M³₃ ≅ M³₀. Tangent hyperplanes fold back onto themselves; the pinch regenerated. Trapped forever!
+          </div>
+          <span class="tag">Pinch stays shut (r = 0) • Folds in Gr(3,4)</span>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--muted);line-height:1.4">
+          <div style="display:flex;justify-content:space-between"><span>Throat Radius:</span> <b id="nash-stat-radius" style="color:var(--bad)">r = 0.00 (Kissing Pinch)</b></div>
+          <div style="display:flex;justify-content:space-between"><span>Status:</span> <b id="nash-stat-status" style="color:var(--bad)">Rank drops to 0 at apex</b></div>
+          <p id="nash-stat-desc" style="margin:6px 0 0;border-top:1px solid var(--rule);padding-top:4px">Two branches kiss with order-2 contact. Tangent hyperplanes coincide, creating a highly degenerate singularity.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
+  <div class="col">
+    <h2 id="zero-level-sets">6. Zero level sets in 4D as 3-manifolds</h2>
+    <div class="terms"><b>New terms:</b> 3-manifold, hypersurface, regular point, singular locus, slice.</div>
+    <p>A single polynomial equation in four variables, $F(x, y, z, w) = 0$, defines a three-dimensional geometric space sitting inside $\mathbb{R}^4$: a <em>hypersurface</em>, or <em>3-manifold</em>. At any point where the gradient vector</p>
+    <div class="eq tex">\nabla F = \left(\frac{\partial F}{\partial x}, \frac{\partial F}{\partial y}, \frac{\partial F}{\partial z}, \frac{\partial F}{\partial w}\right) \neq (0, 0, 0, 0)</div>
+    <p>is non-zero, the implicit function theorem guarantees that the solution set is locally smooth. If you zoom in close enough to a regular point, the 3-manifold looks completely indistinguishable from flat three-dimensional Euclidean space $\mathbb{R}^3$. It possesses a unique, well-defined tangent 3-plane perpendicular to $\nabla F$.</p>
+    <p>The trouble begins at points where the gradient vanishes entirely: $\nabla F = 0$. There, the implicit function theorem provides no guidance. The tangent space collapses, and the geometry develops a singularity. Depending on the equation, this can be an isolated pinch point (like the apex of a double cone), two sheets kissing with high-order tangency (a tacnode), or whole lines and planes of singular points.</p>
+    <p>To visualize a 3-manifold, we do what magnetic resonance imaging (MRI) does to a three-dimensional brain: we slice it along coordinate planes. Fix $w = 0$ (or a constant time-slice $w = c$) and examine the resulting two-dimensional surface in the remaining three coordinates $(x, y, z)$. For instance:</p>
+    <ul class="qs">
+      <li><b>The A₁ Conifold:</b> $x^2 + y^2 - z^2 - w^2 = 0$. At $w = 0$, this is the cone $x^2 + y^2 = z^2$. Two conical nappes meet at an isolated sharp apex $(0, 0, 0, 0)$. The neck radius at the waist is strictly zero.</li>
+      <li><b>The A₃ Tacnode:</b> $x^2 + y^2 = z^4 + w^4$. At $w = 0$, the radius in the $(x, y)$-plane is $r = \sqrt{x^2+y^2} = z^2$. Instead of straight conical rays, two parabolic sheets kiss with second-order contact at the origin.</li>
+      <li><b>The Fermat Cubic:</b> $x^3 + y^3 + z^3 + w^3 = 0$. Slicing at $w = 0$ gives a fluted cone with 3-fold symmetry, radiating 27 lines from a triple-point singularity.</li>
+      <li><b>The Brieskorn Cusp:</b> $x^2 + y^2 = z^3 + w^2$. The cross-section has a fractional scaling exponent $r \propto |z|^{3/2}$, creating a 3D needle tip.</li>
+    </ul>
 
-  <div class="col">
-    <div class="terms"><b>New terms:</b> elastic collision, gap, configuration space, mass-weighted coordinates, wedge, chamber.</div>
-    <p><b>What the balls are doing.</b> <em>Newton's cradle</em> is the desk toy: a row of steel balls hanging in contact. Lift the first ball and let it go; it strikes the row, and the last ball flies off while the others barely move. The demo is that toy with three balls, all meeting at the same instant.</p>
-    <p><b>Two balls are easy.</b> In an <em>elastic collision</em> between balls of masses m₁ and m₂, momentum and kinetic energy are both conserved:</p>
-    <div class="eq tex">m_1v_1+m_2v_2 = m_1v_1'+m_2v_2', \qquad m_1v_1^2+m_2v_2^2 = m_1v_1'^2+m_2v_2'^2</div>
-    <p>Two equations, two unknowns, and apart from "nothing happened" there is exactly one solution: v₁′ = ((m₁ − m₂)v₁ + 2m₂v₂)/(m₁ + m₂), and symmetrically for v₂′.</p>
-    <p><b>Three at once is the singular problem.</b> Now there are three unknown outgoing velocities and still only two conservation laws. In velocity space the solutions form a whole curve (the ellipse where the momentum plane cuts the energy ellipsoid), and rigid-body mechanics gives no way to pick one point on it. That is why the opening demo needed the bar at all.</p>
-    <p><b>Reading the right panel.</b> Write the <em>gaps</em> between neighbors as g₁ = x₂ − x₁ − (r₁ + r₂) and g₂ = x₃ − x₂ − (r₂ + r₃). The balls may only be where g₁ ≥ 0 and g₂ ≥ 0. Now use <em>mass-weighted coordinates</em> qᵢ = √mᵢ·xᵢ, in which the kinetic energy is just ½|q̇|². Each constraint gᵢ ≥ 0 is a half-space, and an elastic collision is a mirror reflection off its boundary: energy conservation keeps the speed, momentum conservation keeps the component along the wall. Both walls contain the direction of uniform motion (√m₁, √m₂, √m₃), so after removing it the whole three-ball system is a single point moving in a plane, its <em>configuration space</em>, confined to a <em>wedge</em> between the walls g₁ = 0 and g₂ = 0. The wedge's angle is</p>
-    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1m_3}{(m_1+m_2)(m_2+m_3)}}</div>
-    <p>A sequence of two-ball collisions is the billiard path bouncing between the walls, and the simultaneous collision is the path hitting the corner exactly: the crossing lines of Figure {fig:cross3}, g₁·g₂ = 0.</p>
-    <p><b>Reading the bar.</b> The bar is the corner blown up. Each point on it is a ratio of the two tiny gaps just before impact, a direction from which the path can approach the corner, exactly the "record the direction" of section 3. Every direction gives a definite sequence of two-ball collisions, so the bar splits into <em>chambers</em>, ranges of gap ratios that share an outcome: the colors. With equal masses β = 60°, which divides 180° evenly, and every chamber agrees; that is why a real cradle is so predictable. With the light middle ball of the opening demo they don't, and rigid-body physics alone can't say which color you get. Each color's share of the bar is the probability of that outcome if the gaps are unknown, a number that comes back in Part III.</p>
-    <p>Simulators resolve such events in one of three ways. A <b>penalty</b> replaces hard contact by stiff springs: one answer, no choices, like Nash's blowup, but the answer depends on the force law. A <b>constraint solver</b> computes impulses and, when several contacts are active, picks an outcome through the order in which it visits them: one chart of the blowup, chosen by the code. The <b>blowup</b> keeps every chart, with its share. <a href="./appendix.html#appendix">Appendix A</a> compares the three on several events, including narrow wedges and touching walls.</p>
-    <p><b>When a solver never finishes.</b> Make collisions slightly inelastic, so each keeps a fraction e of the relative speed. Squeeze a ball between two others and, below e = 7 − 4√3 ≈ 0.072 (McNamara and Young), it bounces infinitely many times in finite time. A pairwise solver inherits this as a loop that never ends. Vouga, Smith, Kaufman, Tamstorf and Grinspun's <a href="https://media.disneyanimation.com/uploads/production/publication_asset/159/asset/All_s_Well_That_Ends_Well_Guaranteed_Resolution_of_Simultaneous_Rigid_Body_Impact.pdf">All's Well That Ends Well</a> makes such solvers provably terminate: detect implied equalities, and blend the elastic answer with the perfectly inelastic one according to the restitution.</p>
-    <p class="read"><b>Figure {fig:collapse}.</b> Three equal balls, the outer two moving inward, the middle one at rest and closer to the left. Top: the balls, in slow motion. Bottom left: the same motion as a space-time diagram, time running upward; the horizontal line is the current moment. Lower the restitution and watch the middle ball zigzag. Above the threshold the number of collisions is finite; below, the bounces pile up toward a single instant.</p>
-  </div>
-  <section class="panel" aria-label="Inelastic collapse">
-    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
-    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
-    <div class="pair">
-      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of inelastic collisions"></canvas></div></div>
-      <div class="fig"><div class="h">Collisions before the balls separate</div><svg id="ic-n" role="img" aria-label="Number of collisions against restitution"></svg></div>
-    </div>
-    <div class="chips" id="ic-chips"></div>
-  </section>
+    <h2 id="blowup-1">7. What Hironaka actually does in Blow-Up 1: Radial excavation</h2>
+    <div class="terms"><b>New terms:</b> blowup center, exceptional divisor, radial excavation, strict transform, normal crossing.</div>
+    <p>When algebraic geometers say "blow up the singular point", what is the actual mathematical surgery being performed? Why does it turn a pinched cone into an open, smooth surface?</p>
+    <p>Consider the conical double point $X^2 + Y^2 - Z^2 = 0$ in $\mathbb{R}^3$. At the origin, the gradient is $(2X, 2Y, -2Z) = (0, 0, 0)$. The origin has lost its direction: rays approach it from every angle in the cone $X^2 + Y^2 = Z^2$.</p>
+    <p><b>Step 1: Write in direction coordinates.</b> Choose the origin as the center. In spherical coordinates, every point is written as a radius $R$ and a direction $(\xi, \eta, \zeta)$ on the unit sphere $S^2$ with $\xi^2 + \eta^2 + \zeta^2 = 1$. In standard affine charts, we set $X = u$, $Y = uv$, $Z = uw$, where $u$ plays the role of the radial distance from the center, and $(v, w) = (Y/X, Z/X)$ record the directions of approach.</p>
+    <p><b>Step 2: Substitute and factor out the center.</b> Substitute these coordinates into the cone's equation:</p>
+    <div class="eq tex">F(u, uv, uw) = u^2 + (uv)^2 - (uw)^2 = u^2\big(1 + v^2 - w^2\big) = 0</div>
+    <p>Notice what happened: a common factor of $u^2$ factored out cleanly from every term! That factor $u^2 = 0$ is the <em>exceptional divisor</em> $E_1$. It is the algebraic memory of the origin: the origin has been replaced by the entire projective sphere of directions $\mathbb{RP}^2$.</p>
+    <p><b>Step 3: The strict transform is smooth.</b> What remains after factoring out $u^2$ is the <em>strict transform</em>:</p>
+    <div class="eq tex">1 + v^2 - w^2 = 0 \quad\Longleftrightarrow\quad w^2 - v^2 = 1</div>
+    <p>This is no longer a cone! It is a <b>smooth one-sheeted hyperboloid</b>. Its gradient with respect to $(u, v, w)$ is $(0, -2v, 2w)$, which never vanishes on the surface because $w^2 - v^2 = 1$ ensures $w \neq 0$.</p>
+    <p><b>The physical intuition: radial excavation.</b> Hironaka's blowup 1 does not merely redraw the coordinates; it physically <em>excavates</em> the singular apex. It drills out the point $R = 0$ where the equations broke down and glues in a smooth sphere of directions. In Figure {fig:manifold3d}, watch the waist radius jump from $R = 0.00$ to $R = 0.92$: traffic can now flow smoothly through the throat! The exceptional divisor $E_1$ (the cyan ring) sits right at the neck, marking where the point was removed.</p>
+    <p>For higher-order singularities like the $A_3$ Tacnode ($x^2 + y^2 = z^4$), two parabolic sheets kissed with fourth-degree contact. The first blowup factors out $\rho^2$, widening the throat and reducing the tangency from degree 4 to degree 2 (kissing parabolas become crossing cones). A second blowup then factors out the remaining quadratic factor, opening the crossing into two smooth, non-intersecting necks. That is why Hironaka's loop is guaranteed to terminate: every step strictly reduces the order of contact.</p>
 
-  <div class="col">
-    <h2 id="tensors">7. Tensor factorization: a fit that never finishes</h2>
-    <p>Balls are too linear: each gap is a linear function of the positions, so the walls are flat and the only singular point is the corner. For a genuinely nonlinear problem I turned to something I have fit many times, low-rank tensor factorization, which is also the shape of the layers Part III is about.</p>
-    <div class="terms"><b>New terms:</b> tensor, rank-one tensor, rank, border rank.</div>
-    <p><b>The setup, as formulas.</b> A 2×2×2 tensor T is a cube of 8 numbers T<sub>ijk</sub>, with i, j, k each 0 or 1. A <em>rank-one</em> tensor is built from three 2-vectors by multiplying:</p>
-    <div class="eq tex">(a\otimes b\otimes c)_{ijk} = a_i\,b_j\,c_k</div>
-    <p>A <em>rank-2 fit</em> of a target W looks for two of them whose sum is W, by gradient descent on the squared error over the twelve numbers in a₁, b₁, c₁, a₂, b₂, c₂:</p>
-    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2</div>
-    <p>The target in the demo is the tensor W with W₀₀₁ = W₀₁₀ = W₁₀₀ = 1 and every other entry 0. For almost every target this fit works. For this one it doesn't.</p>
-    <p class="read"><b>Figure {fig:tzfit}.</b> Gradient descent fitting W (right) with two rank-one pieces. Each tensor is drawn as its two 2×2 slices (k = 0 and k = 1); orange cells are positive, blue negative, and the number is the entry. Watch the two pieces: their entries grow without bound, and they are almost exact opposites, so their sum creeps toward W. Below, the error keeps falling and the pieces keep growing, for as long as you run it. Drag the slider to scrub through four million steps.</p>
+    <h2 id="nash-4d-failure">8. The 4D failure of Nash: Why choice-free blowups loop forever</h2>
+    <div class="terms"><b>New terms:</b> Nash blowup, Gauss map, Grassmannian fiber, limit cycle, toric counterexample.</div>
+    <p>In the 1950s, John Nash proposed a wonderfully egalitarian alternative to Hironaka. Why should a mathematician have to make arbitrary choices about where to place the centers of blowups? If an algorithm is to run automatically inside a geometry engine, on a 3D scan, or during neural network training, it should not require a human to inspect the geometry and choose centers.</p>
+    <p><b>Nash's idea:</b> Take a $d$-dimensional shape $X \subset \mathbb{R}^N$. At every smooth point $p$, the tangent space is a $d$-dimensional plane $T_p X$. That plane is a single point in the <em>Grassmannian</em> $\operatorname{Gr}(d, N)$, the space of all $d$-dimensional planes in $N$-dimensional space. This gives the <em>Gauss map</em> $\gamma: p \mapsto T_p X$. At singular points, $\gamma$ is undefined. Nash proposed taking the closure of the graph of $\gamma$:</p>
+    <div class="eq tex">\widetilde{X}_{\mathrm{Nash}} = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N)</div>
+    <p>Over each singular point, Nash attaches all possible limiting tangent spaces. It requires no center, no chart choices, and no human intervention.</p>
+    <p>For curves (dimension 1), Nash's method works miracles. In Part I we saw that for the cusp $y^2 = x^3$, one Nash step immediately produces the smooth space $(\tau^2, \tau^3, 3\tau/2)$. In 1990, Mark Spivakovsky proved that for surfaces (dimension 2), alternating Nash blowups with normalization always terminates in a smooth surface. It was widely conjectured that Nash blowups would resolve singularities in all dimensions.</p>
+    <p><b>The 2026 counterexample.</b> In 2024 and published in the <em>Annals of Mathematics</em> in 2026, Ana Belén de Felipe, Daniel Duarte, Pedro Fortuny Ayuso, and Antonio Liendo discovered that Nash's dream breaks down starting in dimension four. They constructed a 4-dimensional toric variety $X \subset \mathbb{R}^7$ whose Nash blowup fails to make any progress.</p>
+    <p><b>Why Nash gets trapped: the geometry of the cycle.</b> Unlike Hironaka, <b>Nash does not excavate the singular point</b>. It retains the original positions and merely appends the limiting tangent hyperplanes. When the singularity is a higher-order pinch—such as our $A_3$ Tacnode or the toric cone of Castillo et al.—the Gauss map $\gamma$ folds over itself in the Grassmannian $\operatorname{Gr}(3, 4)$.</p>
+    <p>Watch the right-hand panel of Figure {fig:manifold3d}:</p>
+    <ul class="qs">
+      <li><b>Step 0 ($M^3_0$):</b> The initial pinched cone sits at the origin with waist $r = 0$.</li>
+      <li><b>Step 1 ($M^3_1$):</b> Nash records tangent planes. Because the normal field folds along the crease, the blown-up chart tilts the cone along its first axis. But the apex is not excavated; it remains pinched at $r = 0$.</li>
+      <li><b>Step 2 ($M^3_2$):</b> The second Nash blowup shears the cone along its transverse coordinates, rotating the crease in $\operatorname{Gr}(3, 4)$.</li>
+      <li><b>Step 3 ($M^3_3$):</b> A unimodular integer coordinate transformation $U \in \operatorname{GL}(4, \mathbb{Z})$ maps the exponent fan of $M^3_3$ <em>identically back</em> to $M^3_0$!</li>
+    </ul>
+    <p>The sequence has closed into an <b>infinite periodic limit cycle of length 4</b>:</p>
+    <div class="eq tex">M^3_0 \;\xrightarrow{\text{Nash}}\; M^3_1 \;\xrightarrow{\text{Nash}}\; M^3_2 \;\xrightarrow{\text{Nash}}\; M^3_3 \;\cong\; M^3_0 \;\xrightarrow{\text{Nash}}\; \cdots</div>
+    <p>Because Nash makes no choices, it cannot break symmetry: on the next step it repeats the exact same sequence. It is trapped forever, like a traveler on a four-dimensional Penrose staircase. No measure of complexity drops, because the fourth chart is literally isomorphic to the first.</p>
   </div>
-  <section class="panel" aria-label="Rank-2 fit of W">
-    <div class="controls">
-      <button type="button" class="btn go" id="tz3-play">Pause</button>
-      <label class="sl long"><span class="lbl">gradient step</span><input id="tz3-s" type="range" min="0" max="64" step="1" value="0"><output id="tz3-s-out"></output></label>
-    </div>
-    <div class="cubes">
-      <div class="fig"><div class="h">Piece 1 <span>rank one</span></div><svg id="tz3-a" role="img" aria-label="First rank-one piece"></svg></div>
-      <div class="op">+</div>
-      <div class="fig"><div class="h">Piece 2 <span>rank one</span></div><svg id="tz3-b" role="img" aria-label="Second rank-one piece"></svg></div>
-      <div class="op">=</div>
-      <div class="fig"><div class="h">Their sum</div><svg id="tz3-c" role="img" aria-label="Sum of the two pieces"></svg></div>
-      <div class="op">≈</div>
-      <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
-      <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
-    </div>
-  </section>
 
-  <div class="col">
-    <p><b>What is singular here.</b> Nothing you can point to. E never reaches 0, but it gets as close to 0 as you like, so the fit has no answer: the problem is singular <em>at infinity</em>. The reason is a fact a graphics person already knows. W is a derivative: differentiate the rank-one tensor v⊗v⊗v, with v = e₀ + h·e₁, with respect to h at h = 0, and the product rule gives e₁⊗e₀⊗e₀ + e₀⊗e₁⊗e₀ + e₀⊗e₀⊗e₁ = W. A derivative is the limit of a finite difference,</p>
-    <div class="eq tex">W = \lim_{h\to 0}\frac{(e_0+h\,e_1)^{\otimes 3} - e_0^{\otimes 3}}{h}</div>
-    <p>and a finite difference is two rank-one pieces, each multiplied by about ±1/h. The smaller h, the smaller the error and the bigger the two pieces, which nearly cancel. Gradient descent rediscovers this and keeps shrinking h; that is the pair of opposite, growing pieces in the demo. In the language of tensors, W has rank 3 but <em>border rank</em> 2: it is not a sum of two rank-one tensors, only a limit of such sums. In the cradle the bad point was a corner you could see. Here it is missing, at the end of a road that goes on forever, and like the inelastic collapse of section 6, the procedure that chases it never finishes.</p>
-    <p><b>Hironaka's blowup: give the limit its own coordinates.</b> The finite difference is also the fix. Make the step h a parameter, and write the rank-2 model as</p>
-    <div class="eq tex">T(a,b,c,a',b',c',h) = \frac{(a+h\,a')\otimes(b+h\,b')\otimes(c+h\,c') - a\otimes b\otimes c}{h}</div>
-    <p>Multiplied out, the a⊗b⊗c terms cancel, and what is left is a polynomial in h and the vectors, perfectly well defined at h = 0, where it is the derivative a′⊗b⊗c + a⊗b′⊗c + a⊗b⊗c′. This is a blowup at infinity: it adds the limit points that the original twelve parameters could only approach, the way the cradle's bar added the directions at the corner. In the new coordinates the fit reaches W with bounded parameters, and h simply drifts to 0 (Appendix B runs both fits side by side). Stegeman and De Lathauwer use the same limit in practice, as a <em>block-term decomposition</em> that replaces two diverging CP components.</p>
-    <p><b>Nash's blowup: record the tangent.</b> Nash's version works on the set of tensors that rank-2 fits can approach, a 7-dimensional surface in the 8-dimensional space of tensors, with W on its edge. It records the tangent plane of that surface at each point. At W the tangent plane is determined by a single rank-one tensor, the one the finite difference is taken around, e₀⊗e₀⊗e₀. So Nash's blowup records exactly the base point a⊗b⊗c of the formula above, and the two blowups land on the same coordinates. This agreement is special to tensors, and Appendix B explains it with a picture you can rotate.</p>
-    <p><b>How common this is.</b> Brown, Kileel and Kolda's <a href="https://arxiv.org/abs/2504.03937">"The fascinating world of 2×2×2 tensors"</a> maps it out: a random 2×2×2 tensor needs three rank-one pieces with probability 1 − π/4 ≈ 21%, and <a href="https://arxiv.org/abs/math/0607647">de Silva and Lim</a> proved that every one of those has no best rank-2 approximation. A rank-2 fit of any of them runs off to infinity as in Figure {fig:tzfit}, though its error levels off above zero.</p>
-    <p>Compared with standard practice: a penalty on the factor norms (ridge regularization) is the penalty method of section 6, with the same trade-off: it always gives an answer, but the answer depends on the penalty weight. Constraining the factors to stay well conditioned is the constraint method. The blown-up chart is the third option: keep the limit as a legitimate answer, in new coordinates. And factorization has a gentler kind of singularity that matters even when everything converges: the redundant parameters. Those are the subject of Part III.</p>
-
-    <h2 id="frames">8. Symmetric frame fields: where should the singularities go?</h2>
-    <p>The third problem is the one I've spent the most time on: designing a cross field to guide a quad mesh. Every such field on a disk has to have singular points, and the whole question is where they go. Try it yourself first.</p>
-    <p><b>Why this example belongs here.</b> A cross-field solver is an automatic singularity-placement machine: nobody tells it where the irregular vertices go, it decides. Each of its singular points is a point where the field has no direction, exactly the kind of point a blowup replaces by all its directions (section 3), and the competing methods below differ in the same way Hironaka and Nash do: some choose the singular points first and fill in the rest, others let them appear wherever an energy puts them. The question this section leads to, whether resolution machinery can do the placing itself, is taken up again in section 13.</p>
-    <p class="read"><b>Figure {fig:crossdrag}.</b> A cross field on a disk, aligned with its boundary, with its singular points (the dots) wherever you drag them. The color is the cross's direction, so each singular point is a little color wheel. The bars show the field's Ginzburg–Landau energy (explained below) for your layout, for the best layout of four points, and for all four merged into one point. "Let the energy decide" rolls downhill from wherever you put them. "Merge" pushes the four into one, and the energy shoots up.</p>
-  </div>
-  <section class="panel" aria-label="Place the singularities of a cross field">
-    <div class="controls">
-      <button type="button" class="btn go" id="cd-relax">Let the energy decide</button>
-      <button type="button" class="btn" id="cd-merge">Merge into one point</button>
-      <button type="button" class="btn" id="cd-scatter">Scatter</button>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">The field <span>drag the dots</span></div><div class="box sq drag"><canvas id="cd-cv" aria-label="Cross field on a disk; drag its singular points" tabindex="0"></canvas><span class="tag" id="cd-tag"></span></div></div>
-      <div class="fig"><div class="h">Energy</div><svg id="cd-bars" role="img" aria-label="Energy of your layout compared with the best and the merged layouts"></svg><p class="cap" id="cd-cap"></p></div>
-    </div>
-  </section>
-  <div class="col">
-    <div class="terms"><b>New terms:</b> cross field, representation vector, winding number, Dirichlet energy, Ginzburg–Landau energy, vortex core, lift.</div>
-    <p>To cover a shape with quadrilaterals, a common first step is a <em>cross field</em>: at every point, four directions at right angles, aligned with the boundary and as smooth as possible inside. A cross at angle θ looks the same after a quarter turn, so represent it by the unit complex number u = e<sup>4iθ</sup>, its <em>representation vector</em>. The quarter-turn ambiguity is gone, and smoothness of crosses becomes ordinary smoothness of u. Being a unit vector is the polynomial equation |u|² = 1.</p>
-    <p><b>Why the field must have singular points.</b> On a disk, aligning with the boundary forces u = e<sup>4iφ</sup> at the boundary point at angle φ, so u turns around the circle four times as you walk once around the edge: its <em>winding number</em> is 4. A continuous unit field inside cannot do that, for the same topological reason that a hairy ball can't be combed flat, so somewhere inside the field must break. Those break points are the singular points, and they become the irregular vertices of the quad mesh: winding +1 in u is a quarter turn of the cross, a valence-3 vertex.</p>
-    <p><b>Why a singular point costs infinite energy.</b> "As smooth as possible" usually means the <em>Dirichlet energy</em> E(u) = ½∫|∇u|², the same energy whose minimizers are harmonic functions in every smoothing and interpolation problem in graphics. Near a point where u winds d times, u looks like e<sup>idφ</sup> in polar coordinates (r, φ), so |∇u| = d/r. The energy in the ring between radius r and 2r is then</p>
-    <div class="eq tex">\frac12\int_r^{2r}\Big(\frac{d}{\rho}\Big)^2\,2\pi\rho\,d\rho = \pi d^2\log 2</div>
-    <p>the same for every ring. Every halving of the distance to the singular point costs the same amount, and there are infinitely many halvings, so the energy is infinite. As posed, the problem has no solution: every unit field that matches the boundary has infinite energy. Some modeling choice has to enlarge the problem, and the methods below differ exactly in what they enlarge.</p>
-    <p><b>Ginzburg–Landau.</b> The oldest fix comes from superconductivity. In Ginzburg and Landau's 1950 theory, u is a complex number describing the superconducting electrons, |u|² is their density, and in a magnetic field the material threads itself with <em>vortices</em>, points where |u| drops to zero and the phase of u winds around. For fields, the idea is to let u leave the unit circle and charge a penalty for doing so:</p>
-    <div class="eq tex">E_\varepsilon(u) = \frac12\int|\nabla u|^2 + \frac{1}{4\varepsilon^2}\int\big(1-|u|^2\big)^2</div>
-    <p>Now u may shrink to zero at a point, and a field of length zero has no direction, so winding around that point is no contradiction. Shrinking costs penalty, so it happens only in a <em>core</em> of radius about ε, the length scale set by the penalty (the superconductor's coherence length). Outside the core |u| ≈ 1 and the halvings argument applies, but only down to radius ε, which is about log₂(1/ε) halvings. So a core of winding d costs</p>
-    <div class="eq tex">E \approx \pi d^2\log\frac1\varepsilon + C_d</div>
-    <p>finite for every ε &gt; 0, with C<sub>d</sub> a constant from inside the core. As ε → 0 the cores shrink to points and the field approaches a unit field with point singularities; the log(1/ε) is the infinite cost above, cut off at the core.</p>
-    <p class="read"><b>Figure {fig:vortex}.</b> One vortex up close, computed by minimizing E<sub>ε</sub> over radial profiles u = f(r)·e<sup>idφ</sup>. Left: the field as crosses over |u|, dark in the core. Middle: the energy per unit of log r, against r on a log scale. Outside the core it is flat at height π d², the same in every ring: that is the log. Inside the core it falls away. The shaded area is the whole energy, so shrinking ε stretches the plateau to the left without changing its height. Right: the total energy against ε for one core of winding 4 and for four separate cores of winding 1, which is the comparison that decides what the field does next.</p>
-  </div>
-  <section class="panel" aria-label="One Ginzburg–Landau vortex">
-    <div class="controls">
-      <span class="lbl">Winding d</span>
-      <span class="seg" role="group" aria-label="Winding" id="vx-d">
-        <button type="button" data-v="1" aria-pressed="true">1</button>
-        <button type="button" data-v="2" aria-pressed="false">2</button>
-        <button type="button" data-v="4" aria-pressed="false">4</button>
-      </span>
-      <label class="sl"><span class="lbl">core size ε</span><input id="vx-e" type="range" min="0.5" max="4" step="0.1" value="1.3"><output id="vx-e-out"></output></label>
-    </div>
-    <div class="grid3">
-      <div class="fig"><div class="h">The field <span>crosses over |u|</span></div><div class="box sq"><canvas id="vx-cv" aria-label="A single vortex as a cross field"></canvas></div></div>
-      <div class="fig"><div class="h">Where the energy lives</div><svg id="vx-den" role="img" aria-label="Energy per unit log radius"></svg></div>
-      <div class="fig"><div class="h">Merge or split?</div><svg id="vx-cost" role="img" aria-label="Energy of one 4-fold core versus four simple cores"></svg></div>
-    </div>
-    <div class="chips" id="vx-chips"></div>
-  </section>
-  <div class="col">
-    <p><b>Back to the demo: why the cores split, and where they go.</b> The d² is the whole story of splitting: one core of winding 4 costs about 16·π log(1/ε), four cores of winding 1 cost about 4·π log(1/ε), and as ε shrinks the difference grows without bound. So a Ginzburg–Landau field never keeps a combined core; that is the orange bar in Figure {fig:crossdrag}. Once separated, the cores interact. Two cores of the same sign repel, with an energy that grows like −log of their distance, like charged particles in the plane, and the boundary condition pushes them back in. Bethuel, Brezis and Hélein worked out this leftover, finite part of the energy, the <em>renormalized energy</em>; on a disk it has a closed form, and it is exactly what the demo evaluates as you drag:</p>
-    <div class="eq tex">W(a_1,\dots,a_4) = -\pi\sum_{i\neq j}\log|a_i-a_j| \;-\; \pi\sum_{i,j}\log|1-\bar a_i a_j|</div>
-    <p>The first sum is the repulsion; the second is the boundary pushing back. Four points on a circle of radius ρ minimize it when ρ⁸ = 3/11, ρ ≈ 0.85: the familiar O-grid of a quad-meshed disk, and the layout "Let the energy decide" rolls into. The field drawn in the demo is the matching closed form u = Π (z − aᵢ)(1 − āᵢz)/|…|, which winds once around each aᵢ and points the right way on the boundary.</p>
-    <p>Viertel and Osting brought this to quad meshing, and Macq and coauthors use it to place singularities. In the language of section 6, Ginzburg–Landau is a penalty method: like soft springs for collisions, it never forms the singular point itself, it smooths it over at scale ε and lets the energy decide. Here are the alternatives side by side, each enlarging something different to make room for the singularity:</p>
-  </div>
   <div class="wide-table">
     <table>
-      <thead><tr><th>Method</th><th>What it enlarges</th><th>Cost of a singular point</th><th>Answer on the disk</th></tr></thead>
+      <thead>
+        <tr><th>Dimension</th><th>Singularity Type</th><th>Hironaka Resolution</th><th>Nash Tangent Blowup</th><th>Why They Differ</th></tr>
+      </thead>
       <tbody>
-        <tr><td><b>Ginzburg–Landau</b> (Viertel and Osting; Macq and coauthors)</td><td>Lets u inside the unit circle, with penalty (1 − |u|²)²/ε²</td><td>≈ π·d²·log(1/ε) for winding d: grows with the square</td><td>Four cores of winding 1 at r ≈ 0.85</td></tr>
-        <tr><td><b>Drilled hole</b>: a blowup at a chosen center</td><td>Replaces the center by its circle of directions, cut off at radius ρ</td><td>≈ π·d²·log(1/ρ)</td><td>One core holding all 4 turns, by construction</td></tr>
-        <tr><td><b>Burer–Monteiro</b>: lift the target</td><td>Puts u on a sphere in ℝ<sup>k</sup>, k ≥ 3</td><td>Finite: no log at all</td><td>One 4-fold core, smoothed in the lift; layouts nearly free</td></tr>
-        <tr><td><b>Graph in the circle bundle</b>: lift the domain (Palmer, Chern and Solomon)</td><td>Adds the circle of directions over every point at once</td><td>Area of the lifted surface, plus a penalty on singularities</td><td>Not reproduced here; the paper notes the symmetric disk is a degenerate case</td></tr>
+        <tr>
+          <td><b>1D (Curves)</b></td>
+          <td>Cusp $y^2 = x^3$, Node $y^2 = x^2$</td>
+          <td class="ok">Terminates (1–3 steps)</td>
+          <td class="ok">Terminates (1 step for cusp!)</td>
+          <td>Curves have 1D tangents; $\operatorname{Gr}(1, 2) \cong \mathbb{RP}^1$ separates branches immediately.</td>
+        </tr>
+        <tr>
+          <td><b>2D (Surfaces)</b></td>
+          <td>Cone $z^2 = xy$, Pinch points</td>
+          <td class="ok">Terminates (Jung / Hironaka)</td>
+          <td class="ok">Terminates (Spivakovsky 1990)</td>
+          <td>Normalized Nash blowups reduce surface multiplicities monotonically.</td>
+        </tr>
+        <tr>
+          <td><b>3D (3-folds)</b></td>
+          <td>Conifolds, Terminal singularities</td>
+          <td class="ok">Terminates (Lean formalization 2026)</td>
+          <td style="color:var(--muted);font-weight:600">Open problem</td>
+          <td>In 3D, whether un-normalized Nash blowups can loop remains an active open question.</td>
+        </tr>
+        <tr>
+          <td><b>4D+ (4-folds+)</b></td>
+          <td>Toric cones, higher tacnodes</td>
+          <td class="ok"><b>Terminates guaranteed</b></td>
+          <td class="no"><b>FAILS (Periodic limit cycles)</b></td>
+          <td>Castillo et al. (2026): Tangent hyperplanes fold in $\operatorname{Gr}(4, 7)$, regenerating $M^3_3 \cong M^3_0$.</td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <div class="col">
-    <p>Blowing up the center instead means drilling a small hole and letting the field wind around it: the cradle's move, replacing a bad point by its circle of directions, with the center chosen in advance. Macq and coauthors use exactly this construction to place singularities. It wins only once the hole is wider than about ε<sup>1/4</sup>, and it gives a single 4-fold singularity, which no quad mesh can have.</p>
-    <p><b>The Burer–Monteiro lift</b> is newer to me, so here it is from the start. On a mesh, the field is one unit vector uᵢ ∈ ℝ² per vertex (the representation vector, so a cross is one vector), and smoothness is the sum over edges of |uᵢ − uⱼ|². That energy is quadratic; the only hard part is the constraint |uᵢ| = 1. This is a <em>synchronization</em> problem, and its standard convex relaxation replaces the vectors by their matrix of inner products, X<sub>ij</sub> = uᵢ·uⱼ, asking only that X be positive semidefinite with ones on the diagonal: a semidefinite program. <a href="https://doi.org/10.1007/s10107-002-0352-8">Burer and Monteiro (2003)</a> noticed that you can solve that program without ever forming X, by factoring X = VᵀV with V of only k rows. That is the same as giving each vertex a unit vector in ℝ<sup>k</sup> instead of ℝ² and minimizing the same edge energy by gradient descent on spheres. For k large enough, about √(2n) for n vertices, every local minimum of the factored problem is a global minimum of the relaxation (<a href="https://arxiv.org/abs/1606.04970">Boumal, Voroninski and Bandeira 2016</a>), and in practice much smaller k is enough. <a href="https://doi.org/10.1145/3799902.3811225">Pacheco-Tallaj, Couplet, Chien and Palmer (SIGGRAPH 2026)</a> use this lift for field design. A sphere in three or more dimensions has no hole for the boundary loop to wind around, so the lifted field needs no singularity at all: near the trouble spot it simply leaves the plane, as liquid crystals do when their defects "escape into the third dimension". You get a field back by projecting onto the plane, and singular points appear wherever the projection vanishes.</p>
-    <p>On this disk the lift's best answer is striking. Its energy is 8π, finite, and the lifted field wraps once around a hemisphere: the map z ↦ z⁴, which projects back to one 4-fold core, the drilled hole's answer. Because the lift charges nothing extra for a combined core, it has no reason to split it. In practice the core does split, into four cores at radius about 0.22, but only because the grid perturbs z⁴ into roughly z⁴ − δ with δ ≈ 0.002, whose roots sit at |z| = δ<sup>1/4</sup>. That exponent is the Newton polygon of section 3.4 again, now saying how fast a degenerate singularity splits apart. Layouts near the giant core are nearly free in the lifted energy, a very flat valley. Section 13 comes back to what should decide among them.</p>
-    <p class="read"><b>Figure {fig:glthree}.</b> The same disk three ways, each showing crosses over the color of u (dark spots are cores). Left: Ginzburg–Landau, started from a single 4-fold core, which splits on its own. Middle: Ginzburg–Landau outside a drilled hole of radius ρ. Right: the Burer–Monteiro lift with k = 3; here the color is the height of the lifted field out of the plane, and the crosses are its projection.</p>
-  </div>
-  <section class="panel" aria-label="Cross field on a disk">
-    <div class="controls">
-      <label class="sl"><span class="lbl">Hole radius ρ (middle)</span><input id="gl-rho" type="range" min="0.05" max="0.6" step="0.05" value="0.55"><output id="gl-rho-out"></output></label>
-      <button type="button" class="btn go" id="gl-run">Restart</button>
-    </div>
-    <div class="grid3">
-      <div class="fig"><div class="h">Ginzburg–Landau</div><div class="box sq"><canvas id="gl-a" aria-label="Ginzburg–Landau cross field"></canvas><span class="tag" id="gl-a-tag"></span></div></div>
-      <div class="fig"><div class="h">Blowup at the center <span>drilled hole</span></div><div class="box sq"><canvas id="gl-b" aria-label="Cross field around a drilled hole"></canvas><span class="tag" id="gl-b-tag"></span></div></div>
-      <div class="fig"><div class="h">Lift to a sphere <span>Burer–Monteiro, k = 3</span></div><div class="box sq"><canvas id="gl-c" aria-label="Burer–Monteiro lifted field"></canvas><span class="tag" id="gl-c-tag"></span></div></div>
-    </div>
-    <div class="chips" id="gl-chips"></div>
-  </section>
-  <div class="col">
-    <p>In three dimensions, octahedral frame fields for hexahedral meshing (Ray and Sokolov; Palmer, Bommes and Solomon) have singular <em>curves</em> instead of points, and the same four choices reappear with higher stakes. The graph lift is the one I'd most like to compare directly; its singularities are part of the optimization's boundary condition rather than something placed by hand.</p>
 
-    <h2 id="physics">9. The three demos side by side, and the usual physics tools</h2>
-    <p>Each demo in Part II had one bad point, and each was handled in the same three ways. A penalty smooths the bad point over and gives one answer that depends on a modeling constant. Picking a chart gives one answer that depends on a choice nobody wrote down. A blowup keeps every answer, organized by the direction you arrived from.</p>
-  </div>
-  <div class="wide-table">
-    <table>
-      <thead><tr><th>Demo</th><th>The bad point</th><th>Penalty</th><th>Pick one chart</th><th>Blow up</th></tr></thead>
-      <tbody>
-        <tr><td><b>Three balls</b> (Figure {fig:cradle})</td><td>The instant all three touch</td><td>Stiff springs: the answer depends on the force law</td><td>A constraint solver: the answer depends on the order it visits contacts</td><td>The gap-ratio bar: every outcome, with its share</td></tr>
-        <tr><td><b>Tensor fit</b> (Figure {fig:tzfit})</td><td>A limit at infinity</td><td>Ridge penalty on the factors: the answer depends on its weight</td><td>Constrain the factors to stay well conditioned</td><td>Keep the step h as a coordinate: the fit lands at h = 0</td></tr>
-        <tr><td><b>Cross field</b> (Figure {fig:crossdrag})</td><td>Where the field must wind</td><td>Ginzburg–Landau: cores of size ε</td><td>Place the singular points by hand</td><td>Drill a hole at a chosen center, or lift the target (Burer–Monteiro)</td></tr>
-      </tbody>
-    </table>
-  </div>
   <div class="col">
-    <p>Applied mathematicians already use weighted blowups, one singularity at a time. McGehee's 1974 blowup of the collision in the Kepler problem and the "blowup method" of geometric singular perturbation theory (Dumortier and Roussarie; Krupa and Szmolyan) are section 3.4 done by hand, and similarity solutions for shocks are weighted blowups by another name. What Hironaka adds is a guarantee that works in every dimension, an algorithm that never has to guess where to blow up, a way to keep every outcome rather than pick one, and now a machine-checked proof. The companion page <a href="./extras/physics.html">Blowups in physics</a> works through more singular systems:</p>
-  </div>
-  <div class="wide-table">
-    <table>
-      <thead><tr><th>System</th><th>Usual tool</th><th>What the blowup says</th></tr></thead>
-      <tbody>
-        <tr><td><a href="./extras/physics.html#kepler">Two bodies colliding</a></td><td>Regularization (Levi-Civita, Kustaanheimo–Stiefel)</td><td>McGehee's blowup turns the collision into rest points; every collision orbit arrives the same way</td></tr>
-        <tr><td><a href="./extras/physics.html#burgers">A shock forming</a></td><td>Similarity solutions</td><td>The first shock is a cusp in space-time, weights 1 : 2 : 3</td></tr>
-        <tr><td><a href="./extras/physics.html#caustic">A caustic in a cup</a></td><td>Diffraction integrals, catastrophe theory</td><td>Weights 2 : 3 give the brightness growth k<sup>1/2</sup></td></tr>
-        <tr><td><a href="./extras/physics.html#painleve">A rod sliding with friction</a></td><td>Compliant contact</td><td>The 0/0 normal force becomes a circle of directions; the motion picks one</td></tr>
-        <tr><td><a href="./extras/physics.html#dcone">Crumpled paper</a></td><td>Shell simulation, scaling arguments</td><td>Blowing up the tip gives a rod on a circle that lifts off over 139°</td></tr>
-        <tr><td><a href="./extras/physics.html#vortex">Superconducting vortices</a></td><td>Ginzburg–Landau</td><td>As in section 8: the blowup keeps one giant vortex</td></tr>
-        <tr><td><a href="./extras/physics.html#euler">Blowup of the Euler equations</a></td><td>Self-similar ansatz</td><td>The self-similar exponent is a weight, found as an eigenvalue</td></tr>
-        <tr><td><a href="./extras/physics.html#heat">A particle in a flat-bottomed well</a></td><td>Harmonic approximation</td><td>Fails; the heat capacity is a volume exponent λ (section 10)</td></tr>
-      </tbody>
-    </table>
+    <p><b>The takeaway for practitioners:</b> When designing algorithms for non-manifold meshes, neural network loss surfaces, or physical simulators, Nash's choice-free approach is tempting because it requires no heuristics. But in dimensions four and above, choice-free methods can march in circles. Hironaka's algorithm succeeds because it insists on picking a center where the invariant is strictly worst, excavates the singularity radially, and proves that its invariant drops at every step.</p>
+    <p>With this geometric understanding of level sets, radial excavations, and 4D tangent failures in hand, we are ready to bring these tools back to problems where I have hands-on intuition: colliding physical bodies, low-rank tensor factorizations, and symmetric cross fields.</p>
   </div>
 </main>
-  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">Singular learning theory</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5) and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+
+  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">Blowups in simulation</span></a></nav>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>

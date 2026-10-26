@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 
 // The essay's pages, in reading order. Figure numbers run continuously
 // through them in this order.
-export const PAGES = ["index.html", "part-1.html", "part-2.html", "part-3.html", "appendix.html"];
+export const PAGES = ["index.html", "part-1.html", "part-2.html", "part-3.html", "part-4.html", "appendix.html"];
 
 // Figures are referenced by key, never by number: a caption is written
 // `<b>Figure {fig:cradle}.</b>` and a reference `Figure {fig:cradle}`.

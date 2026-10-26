@@ -23,7 +23,7 @@ console.log(`Checked essay ready to publish at ${destination}`);
 
 // Keep already published chapter links working after the address change.
 const legacy = resolve(root, "hironaka-blow-up");
-const pages = ["index.html", "part-1.html", "part-2.html", "part-3.html", "appendix.html", "extras/cradle.html", "extras/physics.html", "extras/two-ways.html"];
+const pages = ["index.html", "part-1.html", "part-2.html", "part-3.html", "part-4.html", "appendix.html", "extras/cradle.html", "extras/physics.html", "extras/two-ways.html"];
 for (const page of pages) {
   const target = `/play/hironaka-blow-up/${page === "index.html" ? "" : page}`;
   const path = resolve(legacy, page);

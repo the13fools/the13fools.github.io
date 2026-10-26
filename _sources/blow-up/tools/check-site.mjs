@@ -6,7 +6,7 @@ import { join, dirname, normalize } from "node:path";
 
 const dist = "dist";
 const problems = [];
-const pages = ["index.html", "part-1.html", "part-2.html", "part-3.html", "appendix.html"];
+const pages = ["index.html", "part-1.html", "part-2.html", "part-3.html", "part-4.html", "appendix.html"];
 for (const p of pages) if (!existsSync(join(dist, p))) problems.push(`missing page ${p}`);
 
 const files = [];

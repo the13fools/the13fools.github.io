@@ -3,235 +3,243 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Singular learning theory · What is… a blowup?</title>
-  <meta name="description" content="Why Bayesian learning prefers degenerate fits, where singularities come from in networks, and the local learning coefficient.">
+  <title>Blowups in simulation · What is… a blowup?</title>
+  <meta name="description" content="Blowups for rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each with an interactive demo.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Singular learning theory · What is… a blowup?">
-  <meta property="og:description" content="Why Bayesian learning prefers degenerate fits, where singularities come from in networks, and the local learning coefficient.">
-  <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-3.html">
-  <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
+  <meta property="og:title" content="Blowups in simulation · What is… a blowup?">
+  <meta property="og:description" content="Blowups for rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each with an interactive demo.">
+  <meta property="og:url" content="https://foolzone.com/blow-up/part-3.html">
+  <meta property="og:image" content="https://foolzone.com/blow-up/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/play/hironaka-blow-up/part-3.html">
+  <link rel="canonical" href="https://foolzone.com/blow-up/part-3.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-DLvZcv5C.js"></script>
+  <script type="module" crossorigin src="./assets/main-CNSjeRxr.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/main-gbYfz69p.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Simulation</a><a href="./part-3.html" aria-current="page">III · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · 3-Manifolds & Nash failure</a><a href="./part-3.html" aria-current="page">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
-    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of III</p>
-    <h1>Singular learning theory</h1>
-    <p class="dek">The local learning coefficient: one number for how much room a trained network has around its weights, why that number governs learning, and how to measure it.</p>
+    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p>
+    <h1>Blowups in simulation, where I have more intuition</h1>
+    <p class="dek">Rigid-body collisions, low-rank tensor factorization and symmetric frame fields, each opening with a demo.</p>
   </div>
 
   <div class="col">
-    <p><b>The idea in one paragraph.</b> Take a trained model and nudge its weights at random, keeping only nudges that barely change the loss. How much room is there? For an ordinary minimum, a round bowl, the room is set by the number of parameters, since the loss climbs out of the bowl in every direction. The minima neural networks find have much more room, because many directions are flat or nearly flat. The <em>local learning coefficient</em> λ turns that room into one number: half the number of parameters for a round bowl, and less for a degenerate minimum. Singular learning theory says that this number, not the parameter count, controls how a model learns and generalizes. And it can be measured with what amounts to a thermometer.</p>
-    <p class="read"><b>Figure 16.</b> A thermometer for λ. Each choice is a loss of two parameters with its minimum at the center. Chains of noisy gradient descent start at the minimum and wander, and the plot tracks the average loss they carry, scaled by n. That average settles at λ: 1 for the round bowl, and less for each degenerate loss, although all four have the same minimum value and the same two parameters. Try the product (ab)²: the chains spread out along its two flat axes, and the reading settles near 0.4 (its λ is 1/2, approached only slowly). The dashed line is the exact value at this n; the solid line is the limit λ.</p>
+    <p>Parts I and II built the tools on curves in the plane and 3-manifolds in four dimensions. Part III takes them back to three problems I have actually worked on in simulation and graphics, and each section opens with a demo you can play with before any explanation: first the three balls from the <a href="./index.html">opening page</a>, then a tensor fit that never finishes, then a cross field whose singularities you place by hand. The rest of each section unpacks its demo.</p>
+    <h2 id="collisions">9. Rigid-body collisions: the opening demo, unpacked</h2>
+    <p>Here are the three balls from the <a href="./index.html">opening page</a> again, starting from wherever you left them, now with a second view next to them. That second view is the whole explanation, and this section is about reading it.</p>
+    <p class="read"><b>Figure 11.</b> Left: the opening demo, three balls meeting at once (gaps enlarged), with the bar of all tiny gap ratios colored by outcome; drag the marker, or click an outcome below to jump to a gap ratio that produces it. Right: the same motion as a single point bouncing inside a wedge. The point's position encodes all three balls at once; each bounce is one two-ball collision; the red corner is the moment all three touch. Change the middle mass and the wedge opens or closes.</p>
   </div>
-  <section class="panel" aria-label="Local learning coefficient estimator">
+  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
     <div class="controls">
-      <span class="seg" role="group" aria-label="Loss" id="llc-k">
-        <button type="button" data-v="bowl" aria-pressed="false">Bowl a² + b²</button>
-        <button type="button" data-v="prod" aria-pressed="true">Product (ab)²</button>
-        <button type="button" data-v="quart" aria-pressed="false">Flat direction a⁴ + b²</button>
-        <button type="button" data-v="cusp" aria-pressed="false">Cusp (b² − a³)²</button>
+      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
+      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
+    </div>
+    <div class="chips" id="f2-chips"></div>
+  </section>
+
+
+  <div class="col">
+    <div class="terms"><b>New terms:</b> elastic collision, gap, configuration space, mass-weighted coordinates, wedge, chamber.</div>
+    <p><b>What the balls are doing.</b> <em>Newton's cradle</em> is the desk toy: a row of steel balls hanging in contact. Lift the first ball and let it go; it strikes the row, and the last ball flies off while the others barely move. The demo is that toy with three balls, all meeting at the same instant.</p>
+    <p><b>Two balls are easy.</b> In an <em>elastic collision</em> between balls of masses m₁ and m₂, momentum and kinetic energy are both conserved:</p>
+    <div class="eq tex">m_1v_1+m_2v_2 = m_1v_1'+m_2v_2', \qquad m_1v_1^2+m_2v_2^2 = m_1v_1'^2+m_2v_2'^2</div>
+    <p>Two equations, two unknowns, and apart from "nothing happened" there is exactly one solution: v₁′ = ((m₁ − m₂)v₁ + 2m₂v₂)/(m₁ + m₂), and symmetrically for v₂′.</p>
+    <p><b>Three at once is the singular problem.</b> Now there are three unknown outgoing velocities and still only two conservation laws. In velocity space the solutions form a whole curve (the ellipse where the momentum plane cuts the energy ellipsoid), and rigid-body mechanics gives no way to pick one point on it. That is why the opening demo needed the bar at all.</p>
+    <p><b>Reading the right panel.</b> Write the <em>gaps</em> between neighbors as g₁ = x₂ − x₁ − (r₁ + r₂) and g₂ = x₃ − x₂ − (r₂ + r₃). The balls may only be where g₁ ≥ 0 and g₂ ≥ 0. Now use <em>mass-weighted coordinates</em> qᵢ = √mᵢ·xᵢ, in which the kinetic energy is just ½|q̇|². Each constraint gᵢ ≥ 0 is a half-space, and an elastic collision is a mirror reflection off its boundary: energy conservation keeps the speed, momentum conservation keeps the component along the wall. Both walls contain the direction of uniform motion (√m₁, √m₂, √m₃), so after removing it the whole three-ball system is a single point moving in a plane, its <em>configuration space</em>, confined to a <em>wedge</em> between the walls g₁ = 0 and g₂ = 0. The wedge's angle is</p>
+    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1m_3}{(m_1+m_2)(m_2+m_3)}}</div>
+    <p>A sequence of two-ball collisions is the billiard path bouncing between the walls, and the simultaneous collision is the path hitting the corner exactly: the crossing lines of Figure 3, g₁·g₂ = 0.</p>
+    <p><b>Reading the bar.</b> The bar is the corner blown up. Each point on it is a ratio of the two tiny gaps just before impact, a direction from which the path can approach the corner, exactly the "record the direction" of section 3. Every direction gives a definite sequence of two-ball collisions, so the bar splits into <em>chambers</em>, ranges of gap ratios that share an outcome: the colors. With equal masses β = 60°, which divides 180° evenly, and every chamber agrees; that is why a real cradle is so predictable. With the light middle ball of the opening demo they don't, and rigid-body physics alone can't say which color you get. Each color's share of the bar is the probability of that outcome if the gaps are unknown, a number that comes back in Part III.</p>
+    <p>Simulators resolve such events in one of three ways. A <b>penalty</b> replaces hard contact by stiff springs: one answer, no choices, like Nash's blowup, but the answer depends on the force law. A <b>constraint solver</b> computes impulses and, when several contacts are active, picks an outcome through the order in which it visits them: one chart of the blowup, chosen by the code. The <b>blowup</b> keeps every chart, with its share. <a href="./appendix.html#appendix">Appendix A</a> compares the three on several events, including narrow wedges and touching walls.</p>
+    <p><b>When a solver never finishes.</b> Make collisions slightly inelastic, so each keeps a fraction e of the relative speed. Squeeze a ball between two others and, below e = 7 − 4√3 ≈ 0.072 (McNamara and Young), it bounces infinitely many times in finite time. A pairwise solver inherits this as a loop that never ends. Vouga, Smith, Kaufman, Tamstorf and Grinspun's <a href="https://media.disneyanimation.com/uploads/production/publication_asset/159/asset/All_s_Well_That_Ends_Well_Guaranteed_Resolution_of_Simultaneous_Rigid_Body_Impact.pdf">All's Well That Ends Well</a> makes such solvers provably terminate: detect implied equalities, and blend the elastic answer with the perfectly inelastic one according to the restitution.</p>
+    <p class="read"><b>Figure 12.</b> Three equal balls, the outer two moving inward, the middle one at rest and closer to the left. Top: the balls, in slow motion. Bottom left: the same motion as a space-time diagram, time running upward; the horizontal line is the current moment. Lower the restitution and watch the middle ball zigzag. Above the threshold the number of collisions is finite; below, the bounces pile up toward a single instant.</p>
+  </div>
+  <section class="panel" aria-label="Inelastic collapse">
+    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
+    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of inelastic collisions"></canvas></div></div>
+      <div class="fig"><div class="h">Collisions before the balls separate</div><svg id="ic-n" role="img" aria-label="Number of collisions against restitution"></svg></div>
+    </div>
+    <div class="chips" id="ic-chips"></div>
+  </section>
+
+  <div class="col">
+    <h2 id="tensors">10. Tensor factorization: a fit that never finishes</h2>
+    <p>Balls are too linear: each gap is a linear function of the positions, so the walls are flat and the only singular point is the corner. For a genuinely nonlinear problem I turned to something I have fit many times, low-rank tensor factorization, which is also the shape of the layers Part IV is about.</p>
+    <div class="terms"><b>New terms:</b> tensor, rank-one tensor, rank, border rank, Veronese variety, secant line, tangent limit.</div>
+    <p><b>The setup, as formulas.</b> A 2×2×2 tensor T is a cube of 8 numbers T<sub>ijk</sub>, with i, j, k each 0 or 1. A <em>rank-one</em> tensor is built from three 2-vectors by multiplying:</p>
+    <div class="eq tex">(a\otimes b\otimes c)_{ijk} = a_i\,b_j\,c_k</div>
+    <p>A <em>rank-2 fit</em> of a target W looks for two of them whose sum is W, by gradient descent on the squared error over the twelve numbers in a₁, b₁, c₁, a₂, b₂, c₂:</p>
+    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2</div>
+    <p>The target in the demo is the tensor W with W₀₀₁ = W₀₁₀ = W₁₀₀ = 1 and every other entry 0. For almost every target this fit works. For this one it doesn't.</p>
+    <p class="read"><b>Figure 13.</b> Gradient descent fitting W (right) with two rank-one pieces. Each tensor is drawn as its two 2×2 slices (k = 0 and k = 1); orange cells are positive, blue negative, and the number is the entry. Watch the two pieces: their entries grow without bound, and they are almost exact opposites, so their sum creeps toward W. Below, the error keeps falling and the pieces keep growing, for as long as you run it. Drag the slider to scrub through four million steps.</p>
+  </div>
+  <section class="panel" aria-label="Rank-2 fit of W">
+    <div class="controls">
+      <button type="button" class="btn go" id="tz3-play">Pause</button>
+      <label class="sl long"><span class="lbl">gradient step</span><input id="tz3-s" type="range" min="0" max="64" step="1" value="0"><output id="tz3-s-out"></output></label>
+    </div>
+    <div class="cubes">
+      <div class="fig"><div class="h">Piece 1 <span>rank one</span></div><svg id="tz3-a" role="img" aria-label="First rank-one piece"></svg></div>
+      <div class="op">+</div>
+      <div class="fig"><div class="h">Piece 2 <span>rank one</span></div><svg id="tz3-b" role="img" aria-label="Second rank-one piece"></svg></div>
+      <div class="op">=</div>
+      <div class="fig"><div class="h">Their sum</div><svg id="tz3-c" role="img" aria-label="Sum of the two pieces"></svg></div>
+      <div class="op">≈</div>
+      <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
+      <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <p><b>What is singular here.</b> Nothing you can point to. E never reaches 0, but it gets as close to 0 as you like, so the fit has no answer: the problem is singular <em>at infinity</em>. The reason is a fact a graphics person already knows. W is a derivative: differentiate the rank-one tensor v⊗v⊗v, with v = e₀ + h·e₁, with respect to h at h = 0, and the product rule gives e₁⊗e₀⊗e₀ + e₀⊗e₁⊗e₀ + e₀⊗e₀⊗e₁ = W. A derivative is the limit of a finite difference,</p>
+    <div class="eq tex">W = \lim_{h\to 0}\frac{(e_0+h\,e_1)^{\otimes 3} - e_0^{\otimes 3}}{h}</div>
+    <p>and a finite difference is two rank-one pieces, each multiplied by about ±1/h. The smaller h, the smaller the error and the bigger the two pieces, which nearly cancel. Gradient descent rediscovers this and keeps shrinking h; that is the pair of opposite, growing pieces in the demo. In the language of tensors, W has rank 3 but <em>border rank</em> 2: it is not a sum of two rank-one tensors, only a limit of such sums. In the cradle the bad point was a corner you could see. Here it is missing, at the end of a road that goes on forever, and like the inelastic collapse of section 9, the procedure that chases it never finishes.</p>
+    <p><b>Secants becoming tangents on the Veronese variety.</b> Geometrically, every rank-one tensor $v^{\otimes 3}$ sits on the <em>Veronese variety</em>. A sum of two rank-one pieces sits on a secant line connecting two points on that variety. When the two points merge while their coefficients diverge like $\pm 1/\varepsilon$, the secant line tilts into a <em>tangent vector</em>:</p>
+    <div class="eq tex">\lim_{\varepsilon\to 0}\frac{(v+\varepsilon w)^{\otimes 3} - v^{\otimes 3}}{\varepsilon} = 3\,\operatorname{Sym}\big(v^{\otimes 2}\otimes w\big)</div>
+    <p>Border-rank tensors live on this tangential variety! In Part IV, we will analyze what happens when rank-two tensor components collide with free weights in singular learning theory.</p>
+    <p><b>Hironaka's blowup: give the limit its own coordinates.</b> The finite difference is also the fix. Make the step h a parameter, and write the rank-2 model as</p>
+    <div class="eq tex">T(a,b,c,a',b',c',h) = \frac{(a+h\,a')\otimes(b+h\,b')\otimes(c+h\,c') - a\otimes b\otimes c}{h}</div>
+    <p>Multiplied out, the a⊗b⊗c terms cancel, and what is left is a polynomial in h and the vectors, perfectly well defined at h = 0, where it is the derivative a′⊗b⊗c + a⊗b′⊗c + a⊗b⊗c′. This is a blowup at infinity: it adds the limit points that the original twelve parameters could only approach, the way the cradle's bar added the directions at the corner. In the new coordinates the fit reaches W with bounded parameters, and h simply drifts to 0 (Appendix B runs both fits side by side). Stegeman and De Lathauwer use the same limit in practice, as a <em>block-term decomposition</em> that replaces two diverging CP components.</p>
+    <p><b>Nash's blowup: record the tangent.</b> Nash's version works on the set of tensors that rank-2 fits can approach, a 7-dimensional surface in the 8-dimensional space of tensors, with W on its edge. It records the tangent plane of that surface at each point. At W the tangent plane is determined by a single rank-one tensor, the one the finite difference is taken around, e₀⊗e₀⊗e₀. So Nash's blowup records exactly the base point a⊗b⊗c of the formula above, and the two blowups land on the same coordinates. This agreement is special to tensors, and Appendix B explains it with a picture you can rotate.</p>
+    <p><b>How common this is.</b> Brown, Kileel and Kolda's <a href="https://arxiv.org/abs/2504.03937">"The fascinating world of 2×2×2 tensors"</a> maps it out: a random 2×2×2 tensor needs three rank-one pieces with probability 1 − π/4 ≈ 21%, and <a href="https://arxiv.org/abs/math/0607647">de Silva and Lim</a> proved that every one of those has no best rank-2 approximation. A rank-2 fit of any of them runs off to infinity as in Figure 13, though its error levels off above zero.</p>
+    <p>Compared with standard practice: a penalty on the factor norms (ridge regularization) is the penalty method of section 9, with the same trade-off: it always gives an answer, but the answer depends on the penalty weight. Constraining the factors to stay well conditioned is the constraint method. The blown-up chart is the third option: keep the limit as a legitimate answer, in new coordinates. And factorization has a gentler kind of singularity that matters even when everything converges: the redundant parameters. Those are the subject of Part IV.</p>
+
+    <h2 id="frames">11. Symmetric frame fields: where should the singularities go?</h2>
+    <p>The third problem is the one I've spent the most time on: designing a cross field to guide a quad mesh. Every such field on a disk has to have singular points, and the whole question is where they go. Try it yourself first.</p>
+    <p><b>Why this example belongs here.</b> A cross-field solver is an automatic singularity-placement machine: nobody tells it where the irregular vertices go, it decides. Each of its singular points is a point where the field has no direction, exactly the kind of point a blowup replaces by all its directions (section 3), and the competing methods below differ in the same way Hironaka and Nash do: some choose the singular points first and fill in the rest, others let them appear wherever an energy puts them. The question this section leads to, whether resolution machinery can do the placing itself, is taken up again in section 17.</p>
+    <p class="read"><b>Figure 14.</b> A cross field on a disk, aligned with its boundary, with its singular points (the dots) wherever you drag them. The color is the cross's direction, so each singular point is a little color wheel. The bars show the field's Ginzburg–Landau energy (explained below) for your layout, for the best layout of four points, and for all four merged into one point. "Let the energy decide" rolls downhill from wherever you put them. "Merge" pushes the four into one, and the energy shoots up.</p>
+  </div>
+  <section class="panel" aria-label="Place the singularities of a cross field">
+    <div class="controls">
+      <button type="button" class="btn go" id="cd-relax">Let the energy decide</button>
+      <button type="button" class="btn" id="cd-merge">Merge into one point</button>
+      <button type="button" class="btn" id="cd-scatter">Scatter</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">The field <span>drag the dots</span></div><div class="box sq drag"><canvas id="cd-cv" aria-label="Cross field on a disk; drag its singular points" tabindex="0"></canvas><span class="tag" id="cd-tag"></span></div></div>
+      <div class="fig"><div class="h">Energy</div><svg id="cd-bars" role="img" aria-label="Energy of your layout compared with the best and the merged layouts"></svg><p class="cap" id="cd-cap"></p></div>
+    </div>
+  </section>
+  <div class="col">
+    <div class="terms"><b>New terms:</b> cross field, representation vector, winding number, Dirichlet energy, Ginzburg–Landau energy, vortex core, lift.</div>
+    <p>To cover a shape with quadrilaterals, a common first step is a <em>cross field</em>: at every point, four directions at right angles, aligned with the boundary and as smooth as possible inside. A cross at angle θ looks the same after a quarter turn, so represent it by the unit complex number u = e<sup>4iθ</sup>, its <em>representation vector</em>. The quarter-turn ambiguity is gone, and smoothness of crosses becomes ordinary smoothness of u. Being a unit vector is the polynomial equation |u|² = 1.</p>
+    <p><b>Why the field must have singular points.</b> On a disk, aligning with the boundary forces u = e<sup>4iφ</sup> at the boundary point at angle φ, so u turns around the circle four times as you walk once around the edge: its <em>winding number</em> is 4. A continuous unit field inside cannot do that, for the same topological reason that a hairy ball can't be combed flat, so somewhere inside the field must break. Those break points are the singular points, and they become the irregular vertices of the quad mesh: winding +1 in u is a quarter turn of the cross, a valence-3 vertex.</p>
+    <p><b>Why a singular point costs infinite energy.</b> "As smooth as possible" usually means the <em>Dirichlet energy</em> E(u) = ½∫|∇u|², the same energy whose minimizers are harmonic functions in every smoothing and interpolation problem in graphics. Near a point where u winds d times, u looks like e<sup>idφ</sup> in polar coordinates (r, φ), so |∇u| = d/r. The energy in the ring between radius r and 2r is then</p>
+    <div class="eq tex">\frac12\int_r^{2r}\Big(\frac{d}{\rho}\Big)^2\,2\pi\rho\,d\rho = \pi d^2\log 2</div>
+    <p>the same for every ring. Every halving of the distance to the singular point costs the same amount, and there are infinitely many halvings, so the energy is infinite. As posed, the problem has no solution: every unit field that matches the boundary has infinite energy. Some modeling choice has to enlarge the problem, and the methods below differ exactly in what they enlarge.</p>
+    <p><b>Ginzburg–Landau.</b> The oldest fix comes from superconductivity. In Ginzburg and Landau's 1950 theory, u is a complex number describing the superconducting electrons, |u|² is their density, and in a magnetic field the material threads itself with <em>vortices</em>, points where |u| drops to zero and the phase of u winds around. For fields, the idea is to let u leave the unit circle and charge a penalty for doing so:</p>
+    <div class="eq tex">E_\varepsilon(u) = \frac12\int|\nabla u|^2 + \frac{1}{4\varepsilon^2}\int\big(1-|u|^2\big)^2</div>
+    <p>Now u may shrink to zero at a point, and a field of length zero has no direction, so winding around that point is no contradiction. Shrinking costs penalty, so it happens only in a <em>core</em> of radius about ε, the length scale set by the penalty (the superconductor's coherence length). Outside the core |u| ≈ 1 and the halvings argument applies, but only down to radius ε, which is about log₂(1/ε) halvings. So a core of winding d costs</p>
+    <div class="eq tex">E \approx \pi d^2\log\frac1\varepsilon + C_d</div>
+    <p>finite for every ε &gt; 0, with C<sub>d</sub> a constant from inside the core. As ε → 0 the cores shrink to points and the field approaches a unit field with point singularities; the log(1/ε) is the infinite cost above, cut off at the core.</p>
+    <p class="read"><b>Figure 15.</b> One vortex up close, computed by minimizing E<sub>ε</sub> over radial profiles u = f(r)·e<sup>idφ</sup>. Left: the field as crosses over |u|, dark in the core. Middle: the energy per unit of log r, against r on a log scale. Outside the core it is flat at height π d², the same in every ring: that is the log. Inside the core it falls away. The shaded area is the whole energy, so shrinking ε stretches the plateau to the left without changing its height. Right: the total energy against ε for one core of winding 4 and for four separate cores of winding 1, which is the comparison that decides what the field does next.</p>
+  </div>
+  <section class="panel" aria-label="One Ginzburg–Landau vortex">
+    <div class="controls">
+      <span class="lbl">Winding d</span>
+      <span class="seg" role="group" aria-label="Winding" id="vx-d">
+        <button type="button" data-v="1" aria-pressed="true">1</button>
+        <button type="button" data-v="2" aria-pressed="false">2</button>
+        <button type="button" data-v="4" aria-pressed="false">4</button>
       </span>
-      <label class="sl"><span class="lbl">n</span><input id="llc-n" type="range" min="2" max="4" step="1" value="3"><output id="llc-n-out"></output></label>
-      <button type="button" class="btn" id="llc-run">Restart chains</button>
+      <label class="sl"><span class="lbl">core size ε</span><input id="vx-e" type="range" min="0.5" max="4" step="0.1" value="1.3"><output id="vx-e-out"></output></label>
     </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Samples on the loss</div><div class="box sq"><canvas id="llc-cv" aria-label="Langevin samples over the loss landscape"></canvas></div></div>
-      <div class="fig"><div class="h">Running estimate <span>n·⟨K⟩</span></div><svg id="llc-plot" role="img" aria-label="Running estimate of the learning coefficient"></svg></div>
-    </div>
-    <div class="chips" id="llc-chips"></div>
-  </section>
-  <div class="col">
-    <p>The rest of Part III unpacks that number in three steps, each opening with its own demo: why it governs Bayesian learning (section 10), where degenerate minima come from in networks (section 11), and how the thermometer works on a trained network (section 12).</p>
-    <h2 id="learning">10. Why singular models learn differently: two perfect fits</h2>
-    <p>Here is singular learning theory in one demo. A model has two parameters and two settings that fit the data perfectly, both with zero loss. Near one of them the loss rises like r², the usual bowl. Near the other it rises like r⁴: flat at the bottom, the kind of minimum the Hessian calls degenerate. Which one does Bayesian inference believe?</p>
-    <p class="read"><b>Figure 17.</b> The posterior after n data points, drawn as 900 samples over the two parameters; the background is the loss, darker where lower. Blue samples are near the regular fit, orange near the degenerate one, grey elsewhere. Slide n up. With little data the posterior is spread almost evenly. As data accumulates it gathers near the two perfect fits, but not equally: the degenerate fit pulls ahead, the regular fit's share peaks and then shrinks, and in the end the degenerate fit holds nearly everything, though both fits are equally perfect.</p>
-  </div>
-  <section class="panel" aria-label="Two perfect fits">
-    <div class="controls"><label class="sl long"><span class="lbl">data points n</span><input id="tw-n" type="range" min="0" max="4" step="0.05" value="0.6"><output id="tw-n-out"></output></label></div>
-    <div class="pair">
-      <div class="fig"><div class="h">The posterior <span>900 samples</span></div><div class="box sq"><canvas id="tw-cv" aria-label="Posterior samples near two perfect fits"></canvas></div></div>
-      <div class="fig"><div class="h">Share of the posterior near each fit</div><svg id="tw-plot" role="img" aria-label="Posterior share of each fit against n"></svg></div>
-    </div>
-    <div class="chips" id="tw-chips"></div>
-  </section>
-  <div class="col">
-    <div class="terms"><b>New terms:</b> temperature, equipartition, Hessian, harmonic approximation, posterior, free energy, learning coefficient.</div>
-    <p>The bridge from physics is a marble in a bowl. At temperature T it jiggles, visiting position w with probability proportional to e<sup>−V(w)/T</sup>. For a round bowl, <em>equipartition</em> says the average potential energy is ½T per direction the marble can move in. The usual derivation, and the usual way simulators treat any minimum, is the <em>harmonic approximation</em>: near the bottom, V ≈ ½ wᵀHw with H the <em>Hessian</em>, the jiggle is Gaussian, and the integral of e<sup>−V/T</sup> is proportional to T<sup>d/2</sup>/√det H.</p>
-    <p>Now make the bottom of the well a curve: V = (y² − x³)². The marble can slide along the cusp y² = x³ at zero energy. On that floor one Hessian eigenvalue is zero, and at the cusp point both are. The harmonic approximation's 1/√det H is infinite exactly where the marble spends its time.</p>
-    <p class="read"><b>Figure 18.</b> Left: the well from above, darker where V is lower. The small plots are cross-sections across the floor: far from the cusp they are parabolas, at the cusp a quartic. Right: the Hessian's eigenvalues along the floor; one is always zero, and the other drops to zero at the cusp.</p>
-  </div>
-  <section class="panel" aria-label="Flat-bottomed well">
-    <div class="pair">
-      <div class="fig"><div class="h">The well, from above <span>V = (y² − x³)²</span></div><div class="box sq"><canvas id="f4-top" aria-label="Top view of the well with its floor"></canvas></div></div>
-      <div class="fig"><div class="h">Cross-sections and Hessian</div><svg id="f4-sec" role="img" aria-label="Cross-sections of the well"></svg><svg id="f4-eig" role="img" aria-label="Hessian eigenvalues along the floor"></svg></div>
-    </div>
-  </section>
-  <div class="col">
-    <p>Bayesian learning is this marble. A model with parameters w has a <em>loss</em> K(w) ≥ 0 measuring how far it is from the truth. After n data points, the <em>posterior</em> weights each w by e<sup>−nK(w)</sup> times a prior: the Boltzmann distribution with K as the potential and n as 1/T. The <em>free energy</em> −log ∫ e<sup>−nK</sup> measures how well the model as a whole explains the data, and governs which model Bayesian model selection prefers.</p>
-    <p>For a regular model, a round bowl in d dimensions, the free energy grows like (d/2)·log n: the BIC penalty. Neural networks are not round bowls. Whole families of weights compute the same function, so their minima are flat-bottomed wells like the one above. Watanabe's theorem says that in general</p>
-    <div class="eq tex">\text{free energy} \approx nS_n + \lambda\log n - (m-1)\log\log n, \qquad \text{expected generalization error} \approx \frac{\lambda}{n}</div>
-    <p>where λ, the <em>learning coefficient</em>, is a volume exponent: the volume of parameters with K &lt; ε shrinks like ε<sup>λ</sup>(log 1/ε)<sup>m−1</sup>. Resolution of singularities is what computes it. After resolving, K is a monomial u<sup>2k</sup> with volume element |u<sup>h</sup>|du, each coordinate contributes (h + 1)/2k, and λ is the smallest such number. It plays the role of d/2, and can be much smaller. In physics terms this is <em>generalized equipartition</em>: a singular well holds λ·T of potential energy instead of (d/2)·T. That is why Resolution formalized Hironaka.</p>
-    <p>The practical consequence is that the posterior prefers volume, not just depth. A sharp, slightly deeper well (λ = 1) loses to a slightly shallower valley with a flat direction (λ = 1/2) until n is large enough for the depth difference to dominate.</p>
-    <p><b>Where blowups come in.</b> λ is a volume exponent, and computing it is exactly what resolving singularities is for. Take the product loss from the thermometer, K = (ab)², whose zero set is the crossing a = 0 or b = 0 from Part I. Blow up the origin: in the chart a = u, b = u·v the loss becomes K = u⁴v², and the area element da db becomes |u| du dv. Every factor is now a power of a single coordinate, so the volume where K &lt; ε can be computed one coordinate at a time. The coordinate u appears as u⁴ in the loss and u¹ in the area, so it contributes (1 + 1)/4 = 1/2; v appears as v² with v⁰, and contributes (0 + 1)/2 = 1/2. λ is the smallest contribution, 1/2, and because two coordinates tie it carries multiplicity m = 2, which is the log log n term above. That is the recipe of section 3.5, run by hand: resolve, read off the monomials, take the smallest ratio. For the round bowl a² + b² the same recipe gives 1, half of two parameters.</p>
-    <p><b>The demo, in these terms.</b> The regular fit has λ = 1, the round-bowl value d/2. The degenerate one has λ = 1/2: the set where r⁴ &lt; ε is a disk of radius ε<sup>1/4</sup>, whose area shrinks like ε<sup>1/2</sup>. The posterior mass near each fit scales like n<sup>−λ</sup>, so the degenerate fit's share relative to the regular one grows like n<sup>1/2</sup>: the orange curve in Figure 17. Depth doesn't decide it, since both fits are perfect; volume does. And the Hessian can't see volume. At the degenerate fit the Hessian is zero, so the harmonic approximation's 1/√det H, which is how a Laplace approximation would weigh the two fits, is infinite at every n.</p>
-    <p class="read"><b>Figure 19.</b> Two wells: a sharp one of depth 0 and a ring-shaped valley of depth δ. Left: the Boltzmann weight at the chosen n. Right: the probability of being in the ring as n grows. At small n the ring wins on volume; at large n the deeper well wins on energy.</p>
-  </div>
-  <section class="panel" aria-label="Energy versus volume">
-    <div class="controls">
-      <label class="sl"><span class="lbl">n, or 1/T</span><input id="f15-n" type="range" min="0" max="5" step="0.05" value="1.6"><output id="f15-n-out"></output></label>
-      <label class="sl"><span class="lbl">Ring depth δ</span><input id="f15-d" type="range" min="0.001" max="0.05" step="0.001" value="0.01"><output id="f15-d-out"></output></label>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Boltzmann weight <span>e<sup>−n·V</sup></span></div><div class="box wide"><canvas id="f15-cv" aria-label="Two wells and their Boltzmann weight"></canvas></div></div>
-      <div class="fig"><div class="h">Probability of the ring</div><svg id="f15-p" role="img" aria-label="Probability of the ring valley against n"></svg></div>
-    </div>
-    <div class="chips" id="f15-chips"></div>
-  </section>
-  <div class="col">
-    <p><b>Who wins in general, and why the opening demo is different.</b> In general the posterior ends up in the singular region with the smallest λ, the one with the most volume near its perfect fits. Compare the cradle demo on the <a href="./index.html">opening page</a>. Its chambers are regions too, but its walls are flat, so as you zoom into the corner every chamber shrinks at exactly the same rate. They all have the same exponent, and their shares of the bar never change, however small the gaps. A singular loss is the opposite. Near the cusp of Figure 18, the region where K is small shrinks like ε<sup>5/12</sup> at the cusp point and like ε<sup>1/2</sup> along the smooth floor, so the cusp point takes a larger and larger share. Training by gradient descent is a dynamics, not a posterior, and may behave more like the cradle, landing wherever its approach sends it. Which picture describes real training is, as far as I can tell, open.</p>
-    <p class="read"><b>Figure 20.</b> The exact version of the contest, on the cusp-shaped well of Figure 18. Left: the weight e<sup>−n(y² − x³)²</sup> for growing n, with the neighborhood of the cusp point circled. Right: the share of the weight inside the circle (violet), computed exactly, next to the chamber shares of the cradle from Figure 10 (orange and blue). Smaller exponent wins; equal exponents tie.</p>
-  </div>
-  <section class="panel" aria-label="Winner take all versus frozen shares">
-    <div class="controls"><label class="sl"><span class="lbl">n, or 1/ε</span><input id="r-n" type="range" min="1" max="12" step="0.1" value="4"><output id="r-n-out"></output></label></div>
-    <div class="pair">
-      <div class="fig"><div class="h">Where the weight sits</div><div class="box sq"><canvas id="r-cv" aria-label="Weight concentrating near the cusp"></canvas></div></div>
-      <div class="fig"><div class="h">Shares as ε shrinks</div><svg id="r-plot" role="img" aria-label="Share near the cusp rising while cradle shares stay flat"></svg></div>
-    </div>
-    <div class="chips" id="r-chips"></div>
-  </section>
-
-  <div class="col">
-    <h2 id="dl">11. Where singularities come from in networks: one function, many weights</h2>
-    <p>The two fits of section 10 were planted by hand. In a real network the degenerate places come for free, from the many ways different weights compute the same function. The smallest network already shows it.</p>
-    <p class="read"><b>Figure 21.</b> One ReLU unit, f(x) = a·relu(w·x), learning the target c·relu(x) from inputs spread evenly over [−1, 1]. Left: its two weights, w across and a up, with 700 samples from the posterior at n = 200 (background: posterior density; black: the weights that fit perfectly; grey: curves a·w = constant, along which the unit can be rescaled without changing its output). Middle: the functions computed by 40 of those samples, drawn over the target: hundreds of different weights, one function. Right: the loss along the diagonal a = w. Slide c to 0, the target "output nothing", and the curve of perfect fits pinches into two crossing lines: a = 0 (output switched off) and w = 0 (input switched off).</p>
-  </div>
-  <section class="panel" aria-label="One ReLU unit">
-    <div class="controls"><label class="sl"><span class="lbl">Target strength c</span><input id="nn-c" type="range" min="0" max="1" step="0.01" value="0.6"><output id="nn-c-out"></output></label></div>
     <div class="grid3">
-      <div class="fig"><div class="h">Posterior weight over (w, a)</div><div class="box sq"><canvas id="nn-cv" aria-label="Posterior weight of a single ReLU unit over its two parameters"></canvas></div></div>
-      <div class="fig"><div class="h">What those weights compute <span>one function</span></div><svg id="nn-fn" role="img" aria-label="Functions computed by posterior samples, over the target"></svg></div>
-      <div class="fig"><div class="h">The loss across the valley <span>along the line a = w</span></div><svg id="nn-cut" role="img" aria-label="Loss along the diagonal"></svg><p class="cap" id="nn-cap"></p></div>
+      <div class="fig"><div class="h">The field <span>crosses over |u|</span></div><div class="box sq"><canvas id="vx-cv" aria-label="A single vortex as a cross field"></canvas></div></div>
+      <div class="fig"><div class="h">Where the energy lives</div><svg id="vx-den" role="img" aria-label="Energy per unit log radius"></svg></div>
+      <div class="fig"><div class="h">Merge or split?</div><svg id="vx-cost" role="img" aria-label="Energy of one 4-fold core versus four simple cores"></svg></div>
     </div>
-    <div class="chips" id="nn-chips"></div>
+    <div class="chips" id="vx-chips"></div>
   </section>
   <div class="col">
-    <div class="terms"><b>New terms:</b> rescaling symmetry, dead unit, true parameter set.</div>
-    <p>A network's parameters map to functions, and the map is many-to-one in several systematic ways. Each way creates flat directions in the loss, and wherever two of them meet, the set of perfect parameters, the <em>true parameter set</em>, has a singular point.</p>
-    <ul class="qs">
-      <li><b>Rescaling.</b> A ReLU unit satisfies a·relu(w·x) = (a/c)·relu(c·w·x) for every c &gt; 0, so each unit's weights come in curves of equivalent settings: valleys in the loss.</li>
-      <li><b>Dead units.</b> If a unit's output weight is zero, its input weights do nothing; if its input weights never let it fire, its output weight does nothing. Whole planes of settings compute the same function.</li>
-      <li><b>Duplicate units.</b> Two units with the same input weights matter only through the sum of their output weights.</li>
-      <li><b>Factorized layers.</b> Any product of weight matrices, BA in a linear block, W<sub>Q</sub>W<sub>K</sub>ᵀ in attention, a low-rank adapter, has the redundancy A → GA, B → BG⁻¹ of section 7.</li>
-    </ul>
-    <p>Where these families intersect, say a unit that is both dead and rescaled to nothing, the true parameter set crosses itself, exactly like the lines of Figure 3. The intuition to carry into the rest of Part III: the more ways a network can implement a function, the more parameter volume sits near it, and the smaller its learning coefficient. Singular points are where several implementations meet, which makes them both the most degenerate places in parameter space and, to a Bayesian, the most attractive. That is the precise version of "networks prefer simple functions".</p>
-    <p>In the demo, the rescaling curve is a valley with one flat direction (λ = 1/2 instead of 1), and at c = 0 the switched-off output and the switched-off input meet in a crossing (λ = 1/2 again, now with multiplicity m = 2). Along the diagonal the loss is a parabola for c &gt; 0, which the Hessian sees, and grows like s⁴ at the crossing, which it doesn't.</p>
-    <h3 id="models">Model problems</h3>
-    <p>Four families of examples, each small enough to compute λ, and each a piece of a real architecture.</p>
-    <p><b>Two parameters.</b> A round bowl a² + b² has λ = 1 = d/2. The product (ab)², a one-unit linear network y = b·a·x learning y = 0, has λ = 1/2 with m = 2: two lines crossing, as in Figure 3. The squared cusp (b² − a³)² has λ = 5/12. For losses like these the Newton polygon of section 3.4 gives λ without resolving anything: walk up the diagonal of the exponent plot until you enter the polygon at (t*, t*), and λ = 1/t*.</p>
-    <p><b>Linear networks are matrix factorizations.</b> A two-layer linear network y = BAx with a hidden layer of width H writes its weight matrix as a product W = BA, which is the factorization of section 7 and, for symmetric matrices, the Burer–Monteiro lift of section 8. Its redundancy is large: A → GA, B → BG⁻¹ for any invertible G leaves the network unchanged. Aoyagi and Watanabe (2005) computed λ exactly for every input size M, output size N, width H and true rank r. Adding hidden units adds H(M + N) parameters each time, but λ stops growing at MN/2, the count for the matrix itself. Overparameterizing a factorization is nearly free in Watanabe's accounting, just as lifting was nearly free in section 8.</p>
-    <p class="read"><b>Figure 22.</b> The learning coefficient of y = BAx with 3 inputs and 3 outputs, against hidden width H. Lines: the exact formula for a true matrix of rank 0 and rank 1. Grey: d/2, what the parameter count would predict. Rings: my own check, the posterior average n·⟨K⟩ sampled at n = 1000 with the expected finite-n correction (m − 1)/log n added back. Right: the bilinear layer of section 7, sampled the same way (raw n·⟨K⟩, no correction), for a zero target and a generic rank-2 target.</p>
+    <p><b>Back to the demo: why the cores split, and where they go.</b> The d² is the whole story of splitting: one core of winding 4 costs about 16·π log(1/ε), four cores of winding 1 cost about 4·π log(1/ε), and as ε shrinks the difference grows without bound. So a Ginzburg–Landau field never keeps a combined core; that is the orange bar in Figure 14. Once separated, the cores interact. Two cores of the same sign repel, with an energy that grows like −log of their distance, like charged particles in the plane, and the boundary condition pushes them back in. Bethuel, Brezis and Hélein worked out this leftover, finite part of the energy, the <em>renormalized energy</em>; on a disk it has a closed form, and it is exactly what the demo evaluates as you drag:</p>
+    <div class="eq tex">W(a_1,\dots,a_4) = -\pi\sum_{i\neq j}\log|a_i-a_j| \;-\; \pi\sum_{i,j}\log|1-\bar a_i a_j|</div>
+    <p>The first sum is the repulsion; the second is the boundary pushing back. Four points on a circle of radius ρ minimize it when ρ⁸ = 3/11, ρ ≈ 0.85: the familiar O-grid of a quad-meshed disk, and the layout "Let the energy decide" rolls into. The field drawn in the demo is the matching closed form u = Π (z − aᵢ)(1 − āᵢz)/|…|, which winds once around each aᵢ and points the right way on the boundary.</p>
+    <p>Viertel and Osting brought this to quad meshing, and Macq and coauthors use it to place singularities. In the language of section 6, Ginzburg–Landau is a penalty method: like soft springs for collisions, it never forms the singular point itself, it smooths it over at scale ε and lets the energy decide. Here are the alternatives side by side, each enlarging something different to make room for the singularity:</p>
   </div>
-  <section class="panel" aria-label="Learning coefficient of factorized models">
-    <div class="pair">
-      <div class="fig"><div class="h">Linear network y = BAx <span>3 → H → 3</span></div><svg id="lw-plot" role="img" aria-label="Learning coefficient against hidden width"></svg></div>
-      <div class="fig"><div class="h">Bilinear layer <span>2 × 2 × 2 tensor, width H</span></div><svg id="lw-cp" role="img" aria-label="Sampled learning coefficients for a bilinear layer"></svg></div>
-    </div>
-    <div class="chips" id="lw-chips"></div>
-  </section>
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>Method</th><th>What it enlarges</th><th>Cost of a singular point</th><th>Answer on the disk</th></tr></thead>
+      <tbody>
+        <tr><td><b>Ginzburg–Landau</b> (Viertel and Osting; Macq and coauthors)</td><td>Lets u inside the unit circle, with penalty (1 − |u|²)²/ε²</td><td>≈ π·d²·log(1/ε) for winding d: grows with the square</td><td>Four cores of winding 1 at r ≈ 0.85</td></tr>
+        <tr><td><b>Drilled hole</b>: a blowup at a chosen center</td><td>Replaces the center by its circle of directions, cut off at radius ρ</td><td>≈ π·d²·log(1/ρ)</td><td>One core holding all 4 turns, by construction</td></tr>
+        <tr><td><b>Burer–Monteiro</b>: lift the target</td><td>Puts u on a sphere in ℝ<sup>k</sup>, k ≥ 3</td><td>Finite: no log at all</td><td>One 4-fold core, smoothed in the lift; layouts nearly free</td></tr>
+        <tr><td><b>Graph in the circle bundle</b>: lift the domain (Palmer, Chern and Solomon)</td><td>Adds the circle of directions over every point at once</td><td>Area of the lifted surface, plus a penalty on singularities</td><td>Not reproduced here; the paper notes the symmetric disk is a degenerate case</td></tr>
+      </tbody>
+    </table>
+  </div>
   <div class="col">
-    <p><b>Bilinear layers are tensor factorizations.</b> The feed-forward blocks of most current transformers are gated linear units, (W₁x) ⊙ σ(W₂x). Drop the nonlinearity σ and each output becomes a sum over hidden units of c·(a·x)(b·x): a CP decomposition of a three-way tensor, the object of section 7. When the two factors read different inputs, y = Σ c·(a·x)(b·z), with two-dimensional x, z and y, it is exactly the 2×2×2 tensor of section 7. No closed formula for λ is known to me here, so the right panel shows sampled values. With a generic rank-2 target, the sampled value is about 4.07 at both H = 2 and H = 3: half the 8 dimensions of the tensor space, the same as fitting the 8 numbers directly, and the extra hidden unit adds nothing. With the zero tensor as target it rises slowly with width, from 0.75 at H = 1 (whose exact λ is 1, with m = 3, so a finite-n reading sits below it) to 2.1 at H = 3, far below d/2 = 9. The border-rank tensor W of Figure 12 is where the theory runs out: no finite parameters fit it exactly, so Watanabe's theorem doesn't apply as stated. Sampling shows the symptom. As n grows from 30 to 1000, the posterior's typical parameter size keeps growing (3.3 to 3.9) and n·⟨K⟩ drifts upward (4.7 to 4.9) instead of settling, the statistical version of the fit that never finishes.</p>
-    <p><b>ReLU networks.</b> A ReLU neuron computes a·relu(x − b): zero left of its kink b, then a line of slope a. Take two of them learning a single relu(x) from inputs spread over [−1, 1], and freeze the first at a₁ = 1 − a₂, b₁ = 0. The loss is exactly K = a₂²·D(b₂), with D(b) = b²/2 + O(b³). Its zero set is two lines crossing: a₂ = 0, where the second neuron is dead, and b₂ = 0, where it has merged with the first. So λ = 1/2 with m = 2 instead of the regular value 1. (Watanabe's proofs assume analytic models, and ReLU networks are only piecewise linear, but the volume exponent still makes sense.)</p>
-    <p class="read"><b>Figure 23.</b> Left: the loss over (a₂, b₂) on a log color scale; click to see the network's function against the target. Right: the exact posterior average n·⟨K⟩ on this slice as n grows. It approaches λ = 1/2 only like 1/log n: that slowness is the log log n term in Watanabe's formula.</p>
+    <p>Blowing up the center instead means drilling a small hole and letting the field wind around it: the cradle's move, replacing a bad point by its circle of directions, with the center chosen in advance. Macq and coauthors use exactly this construction to place singularities. It wins only once the hole is wider than about ε<sup>1/4</sup>, and it gives a single 4-fold singularity, which no quad mesh can have.</p>
+    <p><b>The Burer–Monteiro lift</b> is newer to me, so here it is from the start. On a mesh, the field is one unit vector uᵢ ∈ ℝ² per vertex (the representation vector, so a cross is one vector), and smoothness is the sum over edges of |uᵢ − uⱼ|². That energy is quadratic; the only hard part is the constraint |uᵢ| = 1. This is a <em>synchronization</em> problem, and its standard convex relaxation replaces the vectors by their matrix of inner products, X<sub>ij</sub> = uᵢ·uⱼ, asking only that X be positive semidefinite with ones on the diagonal: a semidefinite program. <a href="https://doi.org/10.1007/s10107-002-0352-8">Burer and Monteiro (2003)</a> noticed that you can solve that program without ever forming X, by factoring X = VᵀV with V of only k rows. That is the same as giving each vertex a unit vector in ℝ<sup>k</sup> instead of ℝ² and minimizing the same edge energy by gradient descent on spheres. For k large enough, about √(2n) for n vertices, every local minimum of the factored problem is a global minimum of the relaxation (<a href="https://arxiv.org/abs/1606.04970">Boumal, Voroninski and Bandeira 2016</a>), and in practice much smaller k is enough. <a href="https://doi.org/10.1145/3799902.3811225">Pacheco-Tallaj, Couplet, Chien and Palmer (SIGGRAPH 2026)</a> use this lift for field design. A sphere in three or more dimensions has no hole for the boundary loop to wind around, so the lifted field needs no singularity at all: near the trouble spot it simply leaves the plane, as liquid crystals do when their defects "escape into the third dimension". You get a field back by projecting onto the plane, and singular points appear wherever the projection vanishes.</p>
+    <p>On this disk the lift's best answer is striking. Its energy is 8π, finite, and the lifted field wraps once around a hemisphere: the map z ↦ z⁴, which projects back to one 4-fold core, the drilled hole's answer. Because the lift charges nothing extra for a combined core, it has no reason to split it. In practice the core does split, into four cores at radius about 0.22, but only because the grid perturbs z⁴ into roughly z⁴ − δ with δ ≈ 0.002, whose roots sit at |z| = δ<sup>1/4</sup>. That exponent is the Newton polygon of section 3.4 again, now saying how fast a degenerate singularity splits apart. Layouts near the giant core are nearly free in the lifted energy, a very flat valley. Section 13 comes back to what should decide among them.</p>
+    <p class="read"><b>Figure 16.</b> The same disk three ways, each showing crosses over the color of u (dark spots are cores). Left: Ginzburg–Landau, started from a single 4-fold core, which splits on its own. Middle: Ginzburg–Landau outside a drilled hole of radius ρ. Right: the Burer–Monteiro lift with k = 3; here the color is the height of the lifted field out of the plane, and the crosses are its projection.</p>
   </div>
-  <section class="panel" aria-label="ReLU crossing singularity">
-    <div class="pair">
-      <div class="fig"><div class="h">Loss over (a₂, b₂) <span>click to probe</span></div><div class="box sq"><canvas id="rl-cv" aria-label="Loss landscape slice of a two-neuron ReLU network; click to probe"></canvas></div></div>
-      <div class="fig"><div class="h">The network at that point</div><svg id="rl-f" role="img" aria-label="Network function against target"></svg><svg id="rl-t" role="img" aria-label="Posterior average approaching one half"></svg></div>
-    </div>
-  </section>
-
-  <div class="col">
-    <h2 id="llc">12. Measuring it: the local learning coefficient</h2>
-    <p>Sections 10 and 11 computed λ for models small enough to resolve by hand. Nobody can resolve a real network; what you can do is measure λ, with the thermometer from the top of this page. There it ran on two-parameter losses. Here it runs on trained networks, small enough that the exact answer is still known.</p>
-    <p><b>The setup.</b> The data are 1000 pairs (x, y) with x random in ℝ³ and y = W*x plus noise, where the true map W* has rank 1: it only uses one direction of x. The model is a two-layer linear network y = B·A·x with a hidden layer of width H, so A is H × 3, B is 3 × H, and there are 6H parameters. Train it by gradient descent, then point the thermometer at the trained weights, for H = 1 to 5. Counting parameters predicts that the room around the minimum grows with every hidden unit (the grey line, 3H). But the trained network computes essentially the same function at every width, so the extra parameters are mostly redundant, and the exact learning coefficient (Aoyagi and Watanabe's formula, the solid line) levels off at 4.5. The question is whether the thermometer sees that.</p>
-    <p class="read"><b>Figure 24.</b> The LLC of trained linear networks y = BAx against hidden width H. Grey: half the parameter count, what counting predicts. Solid line: the exact learning coefficient. Dots: the thermometer's estimate at the trained weights, filled in one width at a time. The buttons set the localization strength γ, a spring that keeps the chains near the trained weights. Too weak, and the chains wander into regions the minimum doesn't describe and read high; too strong, and they are held too tightly and read low. In between, the estimates follow the solid line rather than the grey one. Exactly solvable models like this one are how the instrument gets calibrated.</p>
-  </div>
-  <section class="panel" aria-label="LLC on a trained network">
+  <section class="panel" aria-label="Cross field on a disk">
     <div class="controls">
-      <span class="lbl">Localization γ</span>
-      <span class="seg" role="group" aria-label="Localization" id="llcn-g">
-        <button type="button" data-v="1" aria-pressed="false">1</button>
-        <button type="button" data-v="10" aria-pressed="true">10</button>
-        <button type="button" data-v="100" aria-pressed="false">100</button>
-      </span>
-      <button type="button" class="btn go" id="llcn-run">Run again</button><span class="lbl" id="llcn-status"></span>
+      <label class="sl"><span class="lbl">Hole radius ρ (middle)</span><input id="gl-rho" type="range" min="0.05" max="0.6" step="0.05" value="0.55"><output id="gl-rho-out"></output></label>
+      <button type="button" class="btn go" id="gl-run">Restart</button>
     </div>
-    <svg id="llcn-plot" role="img" aria-label="LLC estimates against the exact learning coefficient for linear networks of growing width"></svg>
-    <div class="chips" id="llcn-chips"></div>
+    <div class="grid3">
+      <div class="fig"><div class="h">Ginzburg–Landau</div><div class="box sq"><canvas id="gl-a" aria-label="Ginzburg–Landau cross field"></canvas><span class="tag" id="gl-a-tag"></span></div></div>
+      <div class="fig"><div class="h">Blowup at the center <span>drilled hole</span></div><div class="box sq"><canvas id="gl-b" aria-label="Cross field around a drilled hole"></canvas><span class="tag" id="gl-b-tag"></span></div></div>
+      <div class="fig"><div class="h">Lift to a sphere <span>Burer–Monteiro, k = 3</span></div><div class="box sq"><canvas id="gl-c" aria-label="Burer–Monteiro lifted field"></canvas><span class="tag" id="gl-c-tag"></span></div></div>
+    </div>
+    <div class="chips" id="gl-chips"></div>
   </section>
   <div class="col">
+    <p>In three dimensions, octahedral frame fields for hexahedral meshing (Ray and Sokolov; Palmer, Bommes and Solomon) have singular <em>curves</em> instead of points, and the same four choices reappear with higher stakes. The graph lift is the one I'd most like to compare directly; its singularities are part of the optimization's boundary condition rather than something placed by hand.</p>
+
+    <h2 id="physics">12. The three demos side by side, and the usual physics tools</h2>
+    <p>Each demo in Part III had one bad point, and each was handled in the same three ways. A penalty smooths the bad point over and gives one answer that depends on a modeling constant. Picking a chart gives one answer that depends on a choice nobody wrote down. A blowup keeps every answer, organized by the direction you arrived from.</p>
+  </div>
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>Demo</th><th>The bad point</th><th>Penalty</th><th>Pick one chart</th><th>Blow up</th></tr></thead>
+      <tbody>
+        <tr><td><b>Three balls</b> (Figure 11)</td><td>The instant all three touch</td><td>Stiff springs: the answer depends on the force law</td><td>A constraint solver: the answer depends on the order it visits contacts</td><td>The gap-ratio bar: every outcome, with its share</td></tr>
+        <tr><td><b>Tensor fit</b> (Figure 13)</td><td>A limit at infinity</td><td>Ridge penalty on the factors: the answer depends on its weight</td><td>Constrain the factors to stay well conditioned</td><td>Keep the step h as a coordinate: the fit lands at h = 0</td></tr>
+        <tr><td><b>Cross field</b> (Figure 14)</td><td>Where the field must wind</td><td>Ginzburg–Landau: cores of size ε</td><td>Place the singular points by hand</td><td>Drill a hole at a chosen center, or lift the target (Burer–Monteiro)</td></tr>
+      </tbody>
+    </table>
   </div>
   <div class="col">
-    <div class="terms"><b>New terms:</b> local learning coefficient (LLC), tempered posterior, stochastic gradient Langevin dynamics (SGLD), localization.</div>
-    <p><b>What the thermometer reads.</b> The <em>local learning coefficient</em> λ(w*) is the volume exponent of section 10, computed only in a small neighborhood of a trained weight vector w*: how fast the volume of nearly-as-good parameters around w* shrinks as "nearly" tightens. It is local because a network has many singular regions, and the question is about the one training found.</p>
-    <p><b>Why a thermometer measures it.</b> Put a <em>tempered posterior</em> around w*, with weight e<sup>−nβL<sub>n</sub>(w)</sup>, where L<sub>n</sub> is the training loss and β an inverse temperature. Its normalizing integral Z behaves like (nβ)<sup>−λ</sup> for large n, the same volume law as before. Differentiate log Z with respect to β and you get the average excess loss:</p>
-    <div class="eq tex">n\big(\mathbb{E}_\beta[L_n(w)] - L_n(w^*)\big) \approx \frac{\lambda}{\beta} \quad\Longrightarrow\quad \hat\lambda = n\beta\big(\mathbb{E}_\beta[L_n(w)] - L_n(w^*)\big)</div>
-    <p>That is equipartition read backwards: measure the average energy above the minimum, divide by the temperature, and you get the number of effective quadratic directions, halved, which for a singular minimum is λ. Any temperature works in the limit. The standard choice is β = 1/log n, which comes from Watanabe's <em>widely applicable Bayesian information criterion</em> (WBIC): a way to estimate the free energy of section 10 from samples at a single temperature. <a href="./appendix.html#appendix-c">Appendix C</a> explains where 1/log n comes from, with a figure.</p>
-    <p><b>How it's computed</b> (Lau, Furman, Wang, Murfet and Wei):</p>
-    <ol>
-      <li>Train to w*.</li>
-      <li>Run chains of <em>stochastic gradient Langevin dynamics</em> starting at w*: w ← w − (ε/2)·(nβ·∇L(w) + γ·(w − w*)) + √ε·ξ, with ∇L computed on a minibatch and ξ standard Gaussian noise. It is training with a random kick, run at temperature 1/(nβ).</li>
-      <li>The γ term, the <em>localization</em>, is a spring tying the chains to w*, so they measure this minimum and not a neighboring one.</li>
-      <li>Average L<sub>n</sub> along the chains after a burn-in, and apply the formula.</li>
-    </ol>
-    <p>The knobs are the step size ε, the chain length, γ and β, and in practice you check that the loss along the chains has stopped drifting.</p>
-    <p>In Figure 16 the prior is the square and there is no data noise, so β = 1 and γ = 0: the chains sample the posterior of section 10 directly. In Figure 24, β = 1/log n and γ is the knob you can turn.</p>
-  <div class="col">
-  <div class="col">
-    <p><b>Why not just look at the Hessian?</b> Many complexity measures count the large eigenvalues of the Hessian at w*, an "effective number of parameters". At the cusp of section 10 the Hessian is exactly zero, so that count says 0, yet λ = 5/12; for the product (ab)² the Hessian is also zero and λ = 1/2. The Hessian sees only the quadratic part of the loss. The LLC sees how the loss actually grows, quartic and higher terms included, which is exactly where singular models differ from regular ones.</p>
-    <p><b>What it's for.</b> Three uses stand out to me.</p>
-    <ul class="qs">
-      <li><b>A complexity measure that ignores redundancy.</b> Two networks with the same parameter count can have very different λ, and λ, not the parameter count, sets the generalization error in Watanabe's theorem. Jesse Hoogland's <a href="https://www.greaterwrong.com/posts/6g8cAftfQufLmFDYT">"You're measuring model complexity wrong"</a> makes this case.</li>
-      <li><b>Watching development.</b> Hoogland and coauthors tracked the LLC through transformer training and found that it changes in distinct stages, which line up with the model acquiring identifiable behaviors (<a href="https://arxiv.org/abs/2402.02364">Loss landscape degeneracy and stagewise development in transformers</a>). Moving between singular regions shows up as a change in λ.</li>
-      <li><b>Pointing at parts.</b> Restricting the estimate to a subset of weights, or to particular data, gives refined versions that can say which components are doing something complex. For safety work, this is a way to notice when what a model has learned changes, from the geometry of its loss alone.</li>
-    </ul>
-
-    <h2 id="next">13. Where I'd like to take this</h2>
-    <p><b>Can singularity placement be automatic?</b> For frame fields I asked whether something like Hironaka's algorithm could decide where singularities go. Not on its own: Hironaka's algorithm is deliberately conservative. It never perturbs the data, and to it a 4-fold zero z⁴ is already a resolved monomial. Deciding where singularities go means choosing among perturbations. But the machinery supplies most of a loop:</p>
-    <ol>
-      <li><b>Lift</b> so nothing is committed yet (Burer–Monteiro, or the graph in the circle bundle).</li>
-      <li><b>Project and find the worst point</b> with the invariant of section 3.3: a field's winding at a point is the order of the zero of its projection there.</li>
-      <li><b>List the splittings</b> of each degenerate point with the Newton polygon of its local expansion, with perturbation parameters as extra variables: z⁴ − δ splits at δ<sup>1/4</sup>.</li>
-      <li><b>Choose</b> by energy when the energy cares (Ginzburg–Landau's log always says split), and by volume when it doesn't, which is Watanabe's free energy.</li>
-    </ol>
-    <p>Repeat until every singular point is simple, winding ±1/4. Those are exactly the meshable vertices, valence 3 and 5: the frame-field version of normal crossings. As far as I know nobody has written this down as an algorithm.</p>
-    <p><b>Next steps.</b></p>
-    <ul class="qs">
-      <li><b>Blowups as a simulation tool, measured against the baselines.</b> Resolve collisions by chambers and their shares, and compare with complementarity solvers and All's Well on the hard cases of section 6. Compare all four frame-field methods on the same domains, including the graph lift. Fit tensors in blown-up charts and compare with regularized CP and block-term decompositions.</li>
-      <li><b>Exact learning coefficients as ground truth.</b> With monomialization formalized, the next step toward a formal singular learning theory is Watanabe's asymptotics. The examples here have known answers to check against: the cusp (5/12), the ReLU crossing (1/2, m = 2), linear networks (Aoyagi and Watanabe's formula). Bilinear layers are a natural next family, and border-rank targets show where the theorem's hypotheses run out.</li>
-      <li><b>Robustness and AI safety.</b> The physics examples suggest two cautions. A modeling choice, penalty or blowup or lift, changed the answer for frame fields; in learning, temperature, weight decay or a smoother activation might likewise change which singularity wins. And natural procedures failed to terminate, in collisions and in tensor fits; estimators and training loops near singularities may share that failure mode. Both seem relevant to the program in <a href="https://www.lesswrong.com/posts/J7CyENFYXPxXQpsnD/slt-for-ai-safety">"SLT for AI Safety"</a>.</li>
-    </ul>
-    <p>Jesse Hoogland's <a href="https://greaterwrong.com/posts/fovfuFdpuEwQzJu2w/neural-networks-generalize-because-of-this-one-weird-trick">"Neural networks generalize because of this one weird trick"</a> and <a href="https://www.greaterwrong.com/posts/uG7oJkyLBHEw3MYpT/generalization-from-thermodynamics-to-statistical-physics">"Generalization: from thermodynamics to statistical physics"</a> are good next reads; the second takes the physics framing of section 10 much further. I'd be glad to hear where this goes wrong.</p>
-
-
+    <p>Applied mathematicians already use weighted blowups, one singularity at a time. McGehee's 1974 blowup of the collision in the Kepler problem and the "blowup method" of geometric singular perturbation theory (Dumortier and Roussarie; Krupa and Szmolyan) are section 3.4 done by hand, and similarity solutions for shocks are weighted blowups by another name. What Hironaka adds is a guarantee that works in every dimension, an algorithm that never has to guess where to blow up, a way to keep every outcome rather than pick one, and now a machine-checked proof. The companion page <a href="./extras/physics.html">Blowups in physics</a> works through more singular systems:</p>
+  </div>
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>System</th><th>Usual tool</th><th>What the blowup says</th></tr></thead>
+      <tbody>
+        <tr><td><a href="./extras/physics.html#kepler">Two bodies colliding</a></td><td>Regularization (Levi-Civita, Kustaanheimo–Stiefel)</td><td>McGehee's blowup turns the collision into rest points; every collision orbit arrives the same way</td></tr>
+        <tr><td><a href="./extras/physics.html#burgers">A shock forming</a></td><td>Similarity solutions</td><td>The first shock is a cusp in space-time, weights 1 : 2 : 3</td></tr>
+        <tr><td><a href="./extras/physics.html#caustic">A caustic in a cup</a></td><td>Diffraction integrals, catastrophe theory</td><td>Weights 2 : 3 give the brightness growth k<sup>1/2</sup></td></tr>
+        <tr><td><a href="./extras/physics.html#painleve">A rod sliding with friction</a></td><td>Compliant contact</td><td>The 0/0 normal force becomes a circle of directions; the motion picks one</td></tr>
+        <tr><td><a href="./extras/physics.html#dcone">Crumpled paper</a></td><td>Shell simulation, scaling arguments</td><td>Blowing up the tip gives a rod on a circle that lifts off over 139°</td></tr>
+        <tr><td><a href="./extras/physics.html#vortex">Superconducting vortices</a></td><td>Ginzburg–Landau</td><td>As in section 8: the blowup keeps one giant vortex</td></tr>
+        <tr><td><a href="./extras/physics.html#euler">Blowup of the Euler equations</a></td><td>Self-similar ansatz</td><td>The self-similar exponent is a weight, found as an eigenvalue</td></tr>
+        <tr><td><a href="./extras/physics.html#heat">A particle in a flat-bottomed well</a></td><td>Harmonic approximation</td><td>Fails; the heat capacity is a volume exponent λ (section 13)</td></tr>
+      </tbody>
+    </table>
   </div>
 </main>
-  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-2.html"><span class="dir">← Previous</span><span class="t">Blowups in simulation</span></a><a class="next" href="./appendix.html"><span class="dir">Next →</span><span class="t">Appendices and references</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5) and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-2.html"><span class="dir">← Previous</span><span class="t">3-Manifolds & why Nash fails</span></a><a class="next" href="./part-4.html"><span class="dir">Next →</span><span class="t">Singular learning theory</span></a></nav>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>
