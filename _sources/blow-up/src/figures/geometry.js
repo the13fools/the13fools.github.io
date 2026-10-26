@@ -327,7 +327,7 @@
     const lift = { xr: [-0.3, 1.2], yr: [-2, 2], cvc: [[par((s) => [s * s, 1.5 * s], 0, 1.2), "hot"], [par((s) => [s * s, 1.5 * s], -1.2, 0), "cold"]], ex: [], bad: [], good: [] };
     miniChart(svg, 210, 24, 130, 86, lift, { label: "x against slope 3τ/2", sub: "smooth", labCol: C.good, border: C.good });
     arrow(svg, 156, 67, 204, 67, C.ink, 2); T(svg, 180, 58, "one Nash step", C.ink, { at: { "text-anchor": "middle" }, st: ";font-size:11px" });
-    T(svg, 10, 168, "In 4D it can loop (schematic):", C.ink, { st: ";font-weight:700" });
+    T(svg, 10, 168, "In 4D a chart recurs (schematic):", C.ink, { st: ";font-weight:700" });
     const glyph = (cx, cy, s, col) => { const p = []; for (let i = -40; i <= 40; i++) { const t = i / 40; p.push([cx + s * (t * t * 1.4 - 0.5), cy - s * t * t * t * 1.1]); } E("path", { d: "M" + p.map((q) => q[0].toFixed(1) + " " + q[1].toFixed(1)).join("L"), fill: "none", stroke: col, "stroke-width": 2.6 }, svg); E("circle", { cx: cx - 0.5 * s, cy, r: 4, fill: "none", stroke: C.bad, "stroke-width": 1.8 }, svg); };
     E("rect", { x: 20, y: 180, width: 110, height: 80, rx: 8, fill: C.surface, stroke: C.rule }, svg); glyph(70, 220, 36, C.hot); T(svg, 28, 196, "X", C.ink, { st: ";font-weight:700" });
     E("rect", { x: 210, y: 180, width: 130, height: 80, rx: 8, fill: C.surface, stroke: C.rule }, svg);
@@ -336,7 +336,7 @@
     T(svg, 275, 276, "Nash blowup: one chart ≅ X", C.ink, { at: { "text-anchor": "middle" }, st: ";font-weight:700;font-size:11.5px" });
     arrow(svg, 136, 210, 204, 210, C.ink, 2); T(svg, 170, 202, "blow up", C.ink, { at: { "text-anchor": "middle" }, st: ";font-size:11px" });
     E("path", { d: "M 300 262 C 300 296, 75 300, 75 266", fill: "none", stroke: C.bad, "stroke-width": 2, "stroke-dasharray": "5 4" }, svg);
-    T(svg, 188, 296, "same shape again: no progress", C.bad, { at: { "text-anchor": "middle" }, st: ";font-weight:600;font-size:11px" });
+    T(svg, 188, 296, "a singular affine chart recurs", C.bad, { at: { "text-anchor": "middle" }, st: ";font-weight:600;font-size:11px" });
   }
 
   // ============================================================ Figure 12: noisy point cloud

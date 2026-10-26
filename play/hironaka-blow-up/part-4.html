@@ -9,23 +9,23 @@
   <meta property="og:type" content="article">
   <meta property="og:title" content="Singular Learning Theory · What is… a blowup?">
   <meta property="og:description" content="Why Bayesian learning prefers degenerate fits, where singularities come from in neural networks, the local learning coefficient, and tensor collisions.">
-  <meta property="og:url" content="https://foolzone.com/blow-up/part-4.html">
-  <meta property="og:image" content="https://foolzone.com/blow-up/og.png">
+  <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-4.html">
+  <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/blow-up/part-4.html">
+  <link rel="canonical" href="https://foolzone.com/play/hironaka-blow-up/part-4.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-C1zESmjV.js"></script>
+  <script type="module" crossorigin src="./assets/main-BL3XLxvg.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/main-gbYfz69p.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · 3-Manifolds & Nash failure</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html" aria-current="page">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html" aria-current="page">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
@@ -35,8 +35,8 @@
   </div>
 
   <div class="col">
-    <p><b>The idea in one paragraph.</b> Nudge a trained model's weights at random, retaining only perturbations that barely alter the loss. How much parameter room is available? In classical statistics, every minimum is assumed to be an isolated quadratic bowl, where room contracts strictly with raw parameter count ($d/2$). But neural network loss landscapes are dominated by degenerate, flat valleys of equivalent functions. The <b>local learning coefficient $\lambda$</b> measures this room directly: $\lambda = d/2$ for a regular bowl, but $\lambda &lt; d/2$ for degenerate singular minima. Singular Learning Theory proves that $\lambda$, not parameter count, dictates Bayesian generalization. And it can be measured directly with what amounts to a statistical thermometer.</p>
-    <p class="read"><b>Figure 17.</b> A thermometer for $\lambda$. Langevin chains start at the minimum, and the running average loss scaled by $n$ converges to $\lambda$: exactly 1 for the round quadratic bowl, and strictly less for degenerate potentials. For $(ab)^2$, chains spread along the crossing axes toward $\lambda = 1/2$.</p>
+    <p><b>The idea in one paragraph.</b> Nudge a trained model's weights at random, retaining only perturbations that barely alter the loss. How much parameter room is available? Regular asymptotic theory describes a minimum by a quadratic bowl, whose sublevel volume contracts with exponent $d/2$. Neural network loss landscapes can instead contain degenerate minima and flat valleys of equivalent functions. The <b>local learning coefficient $\lambda$</b> measures this room directly: $\lambda = d/2$ for a regular bowl, but $\lambda &lt; d/2$ in the degenerate examples below. Under its analytic and statistical assumptions, Singular Learning Theory relates $\lambda$ to Bayesian evidence and excess generalization loss. We can estimate it with what amounts to a statistical thermometer.</p>
+    <p class="read"><b>Figure 17.</b> A thermometer for $\lambda$. Langevin chains start at the minimum. At equilibrium, the average loss scaled by $n$ approaches $\lambda$ in the large-$n$ regime: 1 for the quadratic bowl, and less for the degenerate examples. Finite chains and finite $n$ produce deviations. For $(ab)^2$, chains spread along the crossing axes toward $\lambda = 1/2$.</p>
   </div>
   <section class="panel" aria-label="Local learning coefficient estimator">
     <div class="controls">
@@ -72,9 +72,9 @@
 
   <div class="col">
     <div class="terms"><b>Key terms:</b> equipartition, Hessian, harmonic approximation, free energy, learning coefficient.</div>
-    <p><b>From physics to Bayesian learning:</b> At temperature $T = 1/n$, a particle in an empirical potential $K(w)$ visits parameter states according to the Gibbs posterior $p(w) \propto e^{-n K(w)} \varphi(w)$. In a regular quadratic well, the harmonic approximation $K(w) \approx \frac{1}{2} w^\top H w$ integrates to the Laplace volume:</p>
-    <div class="eq tex">V(\varepsilon) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\,\varepsilon^{d/2}</div>
-    <p><b>Where classical statistics fails:</b> In deep networks, permutation symmetries, dead units, and matrix factorizations create valleys of zero loss where the Hessian has multiple zero eigenvalues ($\det H = 0$). The Laplace formula divides by zero ($1/\sqrt{\det H} = \infty$), rendering BIC and AIC undefined.</p>
+    <p><b>From physics to Bayesian learning:</b> At temperature $T = 1/n$, a particle in an empirical potential $K(w)$ visits parameter states according to the Gibbs posterior $p(w) \propto e^{-n K(w)} \varphi(w)$. In a regular quadratic well, the harmonic approximation $K(w) \approx \frac{1}{2} w^\top H w$, with positive-definite $H$, gives the sublevel volume $V(\varepsilon)=\operatorname{Vol}\{K&lt;\varepsilon\}$:</p>
+    <div class="eq tex">V(\varepsilon) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\,(2\varepsilon)^{d/2}</div>
+    <p><b>Where classical statistics fails:</b> Non-identifiability, dead units, and continuous factorization symmetries can produce minima with zero Hessian eigenvalues ($\det H=0$). Discrete permutation symmetries alone do not force a zero eigenvalue. The regular Laplace approximation then fails: dividing by $\sqrt{\det H}$ is not a valid way to estimate the volume. The usual AIC and BIC formulas can still be evaluated, but their regular-model justifications need not apply.</p>
     <p class="read"><b>Figure 19.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
   </div>
   <section class="panel" aria-label="Flat-bottomed well">
@@ -87,11 +87,12 @@
   <div class="col">
     <p>Sumio Watanabe resolved this impasse by applying Hironaka's resolution of singularities. Pulling back the loss $K(w)$ along an embedded resolution map $w = g(u)$ monomializes both the loss and the volume element into normal-crossing divisors:</p>
     <div class="eq tex">K(g(u)) = u_1^{2k_1} u_2^{2k_2} \cdots u_d^{2k_d}, \qquad |J(u)| = |u_1^{h_1} u_2^{h_2} \cdots u_d^{h_d}|</div>
-    <p>The resulting partition function integrates analytically, proving that free energy and generalization error scale via the <b>Real Log Canonical Threshold (RLCT) $\lambda$</b>:</p>
-    <div class="eq tex">\lambda = \min_{i} \left( \frac{h_i + 1}{2k_i} \right), \qquad F_n \approx n S_n + \lambda\log n - (m-1)\log\log n, \qquad \mathbb{E}[G_n] \approx \frac{\lambda}{n}</div>
+    <p>Under the analytic and prior regularity assumptions of singular learning theory, these local forms determine the leading asymptotic terms through the <b>Real Log Canonical Threshold (RLCT) $\lambda$</b>. With nonvanishing analytic factors suppressed, take the minimum below over contributing resolution charts and indices with $k_i&gt;0$:</p>
+    <div class="eq tex">\lambda = \min_{i} \left( \frac{h_i + 1}{2k_i} \right), \qquad F_n \approx n S_n + \lambda\log n - (m-1)\log\log n, \qquad \mathbb{E}[G_n^{\mathrm{excess}}] \approx \frac{\lambda}{n}</div>
+    <p>Here $m$ is the multiplicity of the leading pole, $S_n$ is the empirical negative log likelihood of the true distribution, and the last relation concerns expected <em>Bayesian excess generalization loss</em> in the realizable, unit-temperature setting. These are asymptotic statements under the relevant SLT hypotheses, not a general finite-sample guarantee for a trained neural network.</p>
     <ul class="qs">
       <li><b>Volume Scaling:</b> Near a singular minimum, parameter volume shrinks as $V(\varepsilon) \asymp \varepsilon^{\lambda} (\log \frac{1}{\varepsilon})^{m-1}$. A network with $d = 100{,}000$ parameters and $\lambda = 42$ contracts under noise as if it had only $2\lambda = 84$ parameters!</li>
-      <li><b>Bayesian Occam's Razor:</b> In model selection, the posterior evidence scales as $n^{-\lambda}(\log n)^{m-1}$. Models with smaller $\lambda$ suffer a strictly smaller complexity penalty, concentrating posterior probability into simpler, more degenerate basins.</li>
+      <li><b>Bayesian Occam's Razor:</b> In model selection, the posterior evidence scales as $n^{-\lambda}(\log n)^{m-1}$. For equally good fits and comparable prior weights, smaller $\lambda$ gives a smaller leading complexity penalty. Differences in fit and prior weight also matter.</li>
       <li><b>Generalized Equipartition:</b> While a quadratic bowl stores an average thermal energy of $\frac{d}{2}T$, a singular potential stores an average excess energy of $\mathbf{\lambda \cdot T}$.</li>
     </ul>
     <p class="read"><b>Figure 20.</b> Two wells: a sharp regular bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
@@ -143,7 +144,7 @@
 
   <div class="col">
     <h3 id="models">Model problems</h3>
-    <p><b>Linear networks are matrix factorizations:</b> A two-layer network $y = BAx$ with hidden width $H$ factors $W = BA$. Adding hidden units increases parameter count $d = H(M+N)$ linearly. But Aoyagi &amp; Watanabe proved that $\lambda$ plateaus at $MN/2$, the effective dimension of the rank-$r$ matrix variety itself!</p>
+    <p><b>Linear networks are matrix factorizations:</b> A two-layer network $y = BAx$ with hidden width $H$ factors $W = BA$. Adding hidden units increases parameter count $d = H(M+N)$ linearly. The Aoyagi–Watanabe formula depends on $M,N,H$ and the true matrix rank $r$. In the plotted family, it reaches $MN/2$ at sufficiently large width. This is half the dimension of the full matrix space; the rank-$r$ matrix stratum instead has dimension $r(M+N-r)$.</p>
     <p class="read"><b>Figure 23.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
   </div>
   <section class="panel" aria-label="Learning coefficient of factorized models">
@@ -167,15 +168,15 @@
 
   <div class="col">
     <h2 id="llc">15. Measuring it: the local learning coefficient</h2>
-    <p>For modern neural networks, computing Hironaka blowups by hand is analytically impossible. But the <b>Local Learning Coefficient $\lambda(w^*)$</b> can be measured directly using the <b>Watanabe–Lau SGLD Estimator</b>.</p>
-    <p>Define the localized, tempered posterior centered at trained weights $w^*$ with quadratic spring $\gamma &gt; 0$:</p>
-    <div class="eq tex">p_\beta(w) = \frac{1}{Z(\beta)} \exp\left( -n\beta L_n(w) - \frac{\gamma}{2}\|w - w^*\|^2 \right)</div>
-    <p>By Hironaka's monomialization, the local partition function scales as $Z(\beta) \asymp (n\beta)^{-\lambda(w^*)} (\log n\beta)^{m-1}$. Differentiating the free energy $-\log Z(\beta)$ with respect to inverse temperature $\beta$ yields:</p>
-    <div class="eq tex">\frac{\partial}{\partial \beta}\big[-\log Z(\beta)\big] = n \cdot \mathbb{E}_\beta\big[L_n(w) - L_n(w^*)\big] \approx \frac{\lambda(w^*)}{\beta}</div>
-    <p>Multiplying by $\beta$ extracts the <b>generalized equipartition relation</b>:</p>
-    <div class="eq tex">\hat{\lambda}(w^*) = n\beta \cdot \mathbb{E}_\beta\big[L_n(w) - L_n(w^*)\big]</div>
-    <p>By simulating Stochastic Gradient Langevin Dynamics (SGLD) at inverse temperature $\beta^* = 1/\log n$ (Watanabe's Widely Applicable Bayesian Information Criterion, WBIC), the average thermal excess loss directly measures the local algebraic dimension $\lambda(w^*)$!</p>
-    <p class="read"><b>Figure 25.</b> LLC estimates on trained linear networks against hidden width $H$. At intermediate localization $\gamma = 10$, the estimates track the exact theoretical formula, confirming that the thermometer measures effective capacity rather than raw parameter count.</p>
+    <p>Explicit resolution charts are usually impractical for modern neural networks. Lau and colleagues propose estimating the <a href="https://proceedings.mlr.press/v258/lau25a.html"><b>local learning coefficient (LLC)</b></a> using a localized tempered posterior and Stochastic Gradient Langevin Dynamics (SGLD).</p>
+    <p>For the ideal local calculation, take a neighborhood $B$ on which $w^*$ minimizes $L_n$, and center the excess loss: $K_n(w)=L_n(w)-L_n(w^*)\geq0$. Define</p>
+    <div class="eq tex">Z_c(\beta)=\int_B\exp\!\left(-n\beta K_n(w)-\frac{\gamma}{2}\|w-w^*\|^2\right)dw,\qquad p_\beta(w)=\frac{\mathbf{1}_B(w)}{Z_c(\beta)}\exp\!\left(-n\beta K_n(w)-\frac{\gamma}{2}\|w-w^*\|^2\right).</div>
+    <p>Assume the nonnegative local loss admits the analytic resolution used above and the local weight is positive and smooth near the relevant minima. Its centered partition function then has leading scale $Z_c(\beta)\asymp(n\beta)^{-\lambda}(\log(n\beta))^{m-1}$ as $n\beta\to\infty$. Differentiation gives the exact expectation identity, followed by its leading asymptotic form:</p>
+    <div class="eq tex">\frac{\partial}{\partial\beta}[-\log Z_c(\beta)]=n\mathbb{E}_\beta[K_n(w)]\approx\frac{\lambda}{\beta}-\frac{m-1}{\beta\log(n\beta)}.</div>
+    <p>Centering matters: an uncentered partition function includes $e^{-n\beta L_n(w^*)}$, and its free-energy derivative is $n\mathbb{E}_\beta[L_n(w)]$. Subtracting the baseline loss leads to the practical estimator</p>
+    <div class="eq tex">\hat\lambda(w^*)=n\beta\left(\frac{1}{S}\sum_{s=1}^{S}L_n(w_s)-L_n(w^*)\right).</div>
+    <p>At inverse temperature $\beta^*=1/\log n$, this is a generalized equipartition measurement of local complexity. Finite chains introduce discretization and mixing error, and the logarithmic correction above need not be negligible. A quadratic spring provides soft localization in the demo; its strength changes which region is sampled. A finite SGLD estimate is not an exact LLC, and applying analytic SLT results to piecewise-analytic networks such as ReLU networks requires additional care.</p>
+    <p class="read"><b>Figure 25.</b> LLC estimates on trained linear networks against hidden width $H$. At intermediate localization $\gamma = 10$, compare the finite-chain estimates with the theoretical curve. Agreement and deviations depend on localization and sampling; the comparison is a diagnostic, not a proof of convergence.</p>
   </div>
   <section class="panel" aria-label="LLC on a trained network">
     <div class="controls">
@@ -228,11 +229,11 @@
     <p>At the critical boundary $\mathbf{\alpha = q/2}$ (Rousseau &amp; Mengersen 2011), component merging and emptying balance, creating the logarithmic evidence factor $N^{-\lambda}\log N$.</p>
 
     <h2 id="next">17. Where I'd like to take this</h2>
-    <p>Hironaka's resolution theorem provides the geometric foundation for Singular Learning Theory, explaining why overparameterized networks generalize: gradient descent drives models into degenerate, highly redundant basins of low $\lambda$, which possess exponentially larger parameter volume and lower generalization error.</p>
+    <p>Hironaka's resolution theorem supplies a geometric foundation for Singular Learning Theory: near singular minima, evidence and excess loss can depend on $\lambda$ rather than raw parameter count. For basins with equal minimum loss and comparable positive prior weight, smaller $\lambda$ gives a larger leading asymptotic evidence contribution, with a power-law advantage in $n$ up to logarithmic factors. These Bayesian results do not by themselves prove that gradient descent selects low-LLC basins or explain all neural-network generalization. They give a precise framework for investigating those questions.</p>
     <p>With resolution of singularities now formally verified in Lean 4 without a single <span class="m">sorry</span>, the deep algebraic machinery that underpins learning theory has become machine-checked bedrock—a powerful milestone for mathematical physics, geometry processing, and AI safety.</p>
   </div>
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-3.html"><span class="dir">← Previous</span><span class="t">Blowups in simulation</span></a><a class="next" href="./appendix.html"><span class="dir">Next →</span><span class="t">Appendices and references</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

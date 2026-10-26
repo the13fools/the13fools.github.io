@@ -3,204 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3-Manifolds, Hironaka's Radial Excavation, and Why Nash Loops in 4D · What is… a blowup?</title>
-  <meta name="description" content="Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.">
+  <title>A cone, its directions, and the limits of Nash blowups · What is… a blowup?</title>
+  <meta name="description" content="An exact cone blowup in direction coordinates, the exceptional circle, and the higher-dimensional limits of Nash blowups.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="3-Manifolds, Hironaka's Radial Excavation, and Why Nash Loops in 4D · What is… a blowup?">
-  <meta property="og:description" content="Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.">
-  <meta property="og:url" content="https://foolzone.com/blow-up/part-2.html">
-  <meta property="og:image" content="https://foolzone.com/blow-up/og.png">
+  <meta property="og:title" content="A cone, its directions, and the limits of Nash blowups · What is… a blowup?">
+  <meta property="og:description" content="An exact cone blowup in direction coordinates, the exceptional circle, and the higher-dimensional limits of Nash blowups.">
+  <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-2.html">
+  <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/blow-up/part-2.html">
+  <link rel="canonical" href="https://foolzone.com/play/hironaka-blow-up/part-2.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-C1zESmjV.js"></script>
+  <script type="module" crossorigin src="./assets/main-BL3XLxvg.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/main-gbYfz69p.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · 3-Manifolds & Nash failure</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part II of IV</p>
-    <h1>3-Manifolds, Hironaka's radial excavation, and why Nash loops in 4D</h1>
-    <p class="dek">Visualizing zero level sets in four dimensions as 3-manifolds, how Hironaka's blowup 1 excavates a pinched throat, and why Nash gets trapped in a 4-step periodic orbit.</p>
+    <h1>A cone, its directions, and the limits of Nash blowups</h1>
+    <p class="dek">Replace a singular point by its directions, then explore the higher-dimensional limits of Nash blowups.</p>
   </div>
 
   <div class="col">
-    <p>Part I resolved singularities on plane curves. But Hironaka's theorem is monumental because it holds across <em>all</em> dimensions. In machine learning, neural network parameter spaces live in thousands or millions of dimensions—and the first fundamental obstruction to automatic resolution appears in four dimensions.</p>
-    <p>At the close of Part I, we noted that John Nash's choice-free tangent blowup fails in dimension 4 (Castillo, Duarte, Leyton-Álvarez, and Liendo, <em>Annals of Mathematics</em> 2026). How does a 4D singularity actually look, why does Nash get stuck, and what does Hironaka do in his very first step?</p>
-    <p>The answer is to visualize the <b>zero level set as a 3-manifold</b>. By taking 3D spatial slices through 4-space, we can watch both algorithms operate side by side.</p>
-    <p class="read"><b>Figure 10.</b> 3-manifold singularities: Hironaka vs. Nash. Select a geometry: the <b>A₃ Tacnode</b> (kissing sheets), the <b>Fermat Cubic</b> (3-lobed cone with 27 lines), the <b>Brieskorn Cusp</b> (fractional scaling), or the <b>A₁ Conifold</b> (quadratic double cone). Step through blowups 0 to 3. Notice that Hironaka's blowup 1 radially excavates the pinched apex into an open throat (cyan rings show the exceptional divisor $E_1$) and fully resolves the space, whereas Nash's tangent lift preserves the pinch radius $r = 0$ and cycles back onto itself at Step 3.</p>
+    <p>At the tip of a cone, many paths meet at one point. Blowing up the tip keeps track of their directions. We can see this operation explicitly on the real surface $X^2 + Y^2 = Z^2$: its strict transform is smooth, and a circle of directions sits above the old apex.</p>
+    <p>This example illustrates an ordinary point blowup, one of the operations used in resolution of singularities. It also helps separate two questions: what does a blowup do locally, and does a particular rule for choosing blowups always resolve every singularity?</p>
+    <p class="read"><b>Figure 10.</b> The cone and its strict transform in the $Z$-direction chart. Both drawings sample the displayed equations. The blue point on the cylinder maps to the blue point on the cone under $(v,w,u) \mapsto (uv,uw,u)$. Set $u=0$, then change the direction: the whole purple circle maps to the apex. The cylinder is drawn in chart coordinates, not in the original $(X,Y,Z)$ coordinates.</p>
   </div>
 
-  <section class="panel" aria-label="3-Manifold Singularity Explorer: Hironaka vs Nash">
-    <div class="controls" style="justify-content:space-between">
-      <div class="seg" role="group" aria-label="Singularity">
-        <button type="button" id="btn-sing-tacnode" style="border-color:var(--blow);color:var(--blow);font-weight:700">A₃ Tacnode (Kissing Sheets)</button>
-        <button type="button" id="btn-sing-cubic">Fermat Cubic (3-Lobe)</button>
-        <button type="button" id="btn-sing-brieskorn">Brieskorn Cusp</button>
-        <button type="button" id="btn-sing-conifold">A₁ Conifold</button>
-      </div>
-      <span class="m" id="sing-formula-badge" style="background:var(--soft);padding:4px 10px;border-radius:6px;color:var(--hot);font-weight:600">x² + y² = z⁴ + w⁴</span>
+  <section class="panel" aria-label="Exact cone blowup explorer">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Chart coordinate u</span><input id="cone-u" type="range" min="-1.2" max="1.2" step="0.02" value="0.6"><output id="cone-u-out" for="cone-u"></output></label>
+      <label class="sl"><span class="lbl">Direction θ</span><input id="cone-theta" type="range" min="0" max="360" step="1" value="45"><output id="cone-theta-out" for="cone-theta"></output></label>
     </div>
-
-    <!-- Stepper Controls -->
-    <div class="controls" style="background:var(--soft);padding:10px 14px;border-radius:10px;display:flex;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="chip v" id="step-badge" style="font-size:12px;font-weight:700">Step 0 / 3</span>
-        <span id="step-name" style="font-weight:700;font-size:14px">Initial Tacnode: Kissing Parabolas (r = 0)</span>
-      </div>
-      <div style="display:flex;gap:6px">
-        <button type="button" class="btn" id="btn-step-prev">◀ Prev</button>
-        <button type="button" class="btn go" id="btn-step-next">Next Step ▶</button>
-      </div>
+    <div class="controls">
+      <button type="button" class="btn go" id="cone-exceptional">At the exceptional circle</button>
+      <label class="sl"><span class="lbl">Viewing angle</span><input id="cone-view" type="range" min="-180" max="180" step="1" value="28"><output id="cone-view-out" for="cone-view"></output></label>
+      <button type="button" class="btn" id="cone-reset">Reset view</button>
     </div>
-
-    <div class="seg" role="group" aria-label="Step selector" style="width:100%;display:grid;grid-template-columns:repeat(4, 1fr);gap:8px">
-      <button type="button" id="pill-step-0" style="border-color:var(--good);background:color-mix(in srgb, var(--good) 15%, transparent);font-weight:700">0. Pinch (r=0)</button>
-      <button type="button" id="pill-step-1">1. Blowup 1</button>
-      <button type="button" id="pill-step-2">2. Blowup 2</button>
-      <button type="button" id="pill-step-3">3. Outcome</button>
+    <div class="pair">
+      <div class="fig"><div class="h">Original cone <span>(X, Y, Z)</span></div><div class="box sq drag"><canvas id="cone-original" aria-label="The cone X squared plus Y squared equals Z squared, with the image of the selected point"></canvas></div><p class="cap">X² + Y² = Z². The apex forgets the direction.</p></div>
+      <div class="fig"><div class="h">Strict transform <span>(v, w, u)</span></div><div class="box sq drag"><canvas id="cone-resolved" aria-label="The smooth cylinder v squared plus w squared equals one, with the exceptional circle at u equals zero"></canvas></div><p class="cap">v² + w² = 1. Purple: the exceptional circle u = 0.</p></div>
     </div>
-
-    <!-- Dual Viewports: Hironaka FIRST for mobile -->
-    <div class="grid2">
-      <!-- 1. Hironaka Resolution Viewport -->
-      <div class="fig" style="background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div>
-            <span style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--good);letter-spacing:0.05em">Hironaka Track (Smooth Resolution)</span>
-            <div class="h" id="hiro-header" style="font-size:14px;margin-top:2px">Step 0: Kissing Parabolas (r = 0)</div>
-          </div>
-          <span class="chip" id="hiro-waist-badge" style="font-size:11px;font-weight:700;color:var(--good)">Throat: 0.00</span>
-        </div>
-        <div class="box sq drag" style="position:relative">
-          <canvas id="canvas-hiro" aria-label="3D rendering of Hironaka resolution on a 3-manifold"></canvas>
-          <div id="hiro-success-banner" style="display:none;position:absolute;left:10px;right:10px;top:10px;background:color-mix(in srgb, var(--good) 90%, #000);color:#fff;border-radius:8px;padding:8px 12px;font-size:12px">
-            <b>✓ FULL RESOLUTION ACHIEVED</b><br>Waist excavated into a smooth throat with glowing exceptional divisors E₁ & E₂. 100% nonsingular!
-          </div>
-          <span class="tag">Hironaka opens throat • Cyan rings = Exceptional Divisors E</span>
-        </div>
-        <div style="margin-top:8px;font-size:12px;color:var(--muted);line-height:1.4">
-          <div style="display:flex;justify-content:space-between"><span>Throat Radius:</span> <b id="hiro-stat-radius" style="color:var(--good)">r = 0.00 (Kissing Pinch)</b></div>
-          <div style="display:flex;justify-content:space-between"><span>Status:</span> <b id="hiro-stat-status" style="color:var(--good)">2nd-order tangency at apex</b></div>
-          <p id="hiro-stat-desc" style="margin:6px 0 0;border-top:1px solid var(--rule);padding-top:4px">Initial A₃ Tacnodal 3-manifold: x² + y² = z⁴ + w⁴. Two branches kiss with 2nd-order tangency.</p>
-        </div>
-      </div>
-
-      <!-- 2. Nash Blowup Viewport -->
-      <div class="fig" style="background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div>
-            <span style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--bad);letter-spacing:0.05em">Nash Track (Trapped Loop)</span>
-            <div class="h" id="nash-header" style="font-size:14px;margin-top:2px">Step 0: Kissing Parabolas (r = 0)</div>
-          </div>
-          <span class="chip" id="nash-waist-badge" style="font-size:11px;font-weight:700;color:var(--bad)">Throat: 0.00</span>
-        </div>
-        <div class="box sq drag" style="position:relative">
-          <canvas id="canvas-nash" aria-label="3D rendering of Nash blowup on a 3-manifold"></canvas>
-          <div id="nash-cycle-banner" style="display:none;position:absolute;left:10px;right:10px;top:10px;background:color-mix(in srgb, var(--bad) 90%, #000);color:#fff;border-radius:8px;padding:8px 12px;font-size:12px">
-            <b>⚠️ INFINITE PERIODIC CYCLE DETECTED</b><br>M³₃ ≅ M³₀. Tangent hyperplanes fold back onto themselves; the pinch regenerated. Trapped forever!
-          </div>
-          <span class="tag">Pinch stays shut (r = 0) • Folds in Gr(3,4)</span>
-        </div>
-        <div style="margin-top:8px;font-size:12px;color:var(--muted);line-height:1.4">
-          <div style="display:flex;justify-content:space-between"><span>Throat Radius:</span> <b id="nash-stat-radius" style="color:var(--bad)">r = 0.00 (Kissing Pinch)</b></div>
-          <div style="display:flex;justify-content:space-between"><span>Status:</span> <b id="nash-stat-status" style="color:var(--bad)">Rank drops to 0 at apex</b></div>
-          <p id="nash-stat-desc" style="margin:6px 0 0;border-top:1px solid var(--rule);padding-top:4px">Two branches kiss with order-2 contact. Tangent hyperplanes coincide, creating a highly degenerate singularity.</p>
-        </div>
-      </div>
-    </div>
+    <div class="algebra" id="cone-point" aria-live="polite" aria-atomic="true"></div>
+    <p class="cap">Drag either drawing to rotate both, or use the viewing-angle slider. The blue points correspond under the blowdown map; the two coordinate systems have independent drawing scales.</p>
   </section>
 
   <div class="col">
-    <h2 id="zero-level-sets">6. Zero level sets in 4D as 3-manifolds</h2>
-    <div class="terms"><b>Key terms:</b> 3-manifold, hypersurface, regular point, singular locus, 3D slice.</div>
-    <p>A single polynomial $F(x, y, z, w) = 0$ in four variables cuts out a 3-manifold in $\mathbb{R}^4$. Wherever the gradient</p>
-    <div class="eq tex">\nabla F = \left(\frac{\partial F}{\partial x}, \frac{\partial F}{\partial y}, \frac{\partial F}{\partial z}, \frac{\partial F}{\partial w}\right) \neq (0, 0, 0, 0)</div>
-    <p>is non-zero, the implicit function theorem guarantees local smoothness: zoomed in, the space is indistinguishable from flat $\mathbb{R}^3$, with a unique tangent 3-plane orthogonal to $\nabla F$. But where $\nabla F = 0$, the tangent space collapses into a <b>singularity</b>.</p>
-    <p>To inspect a 4D hypersurface, we slice it along coordinate planes (setting $w = 0$), yielding a 2D surface in $(x, y, z)$:</p>
-    <ul class="qs">
-      <li><b>The A₁ Conifold:</b> $x^2 + y^2 - z^2 - w^2 = 0$. At $w = 0$, this is the double cone $x^2 + y^2 = z^2$, meeting at a sharp pinch $(0, 0, 0, 0)$ with throat radius $r = 0$.</li>
-      <li><b>The A₃ Tacnode:</b> $x^2 + y^2 = z^4 + w^4$. At $w = 0$, two parabolic sheets kiss with second-order contact ($r = z^2$).</li>
-      <li><b>The Fermat Cubic:</b> $x^3 + y^3 + z^3 + w^3 = 0$. Slicing at $w = 0$ yields a fluted 3-lobed cone with 27 lines radiating from a triple point.</li>
-      <li><b>The Brieskorn Cusp:</b> $x^2 + y^2 = z^3 + w^2$. Exhibits fractional scaling $r \propto |z|^{3/2}$, creating a 3D needle tip.</li>
-    </ul>
+    <h2 id="zero-level-sets">6. Dimension belongs to the space</h2>
+    <div class="terms"><b>Key terms:</b> ambient dimension, hypersurface, regular point, singular point.</div>
+    <p>A hypersurface $F(x,y,z,w)=0$ in four ambient coordinates is locally three-dimensional wherever $\nabla F\neq0$. The implicit function theorem gives a tangent 3-plane there. For a reduced hypersurface, vanishing of all first derivatives signals a singular point; it does not mean the tangent space has collapsed to dimension zero.</p>
+    <p>For example, $x^2+y^2-z^2-w^2=0$ has a singularity at the origin. Its $w=0$ slice is the two-dimensional cone in Figure 10. Neither the slice nor the three-dimensional hypersurface is a four-dimensional variety. The four-dimensional Nash counterexample below concerns the dimension of the variety itself.</p>
 
-    <h2 id="blowup-1">7. What Hironaka actually does in Blow-Up 1: Radial excavation</h2>
-    <div class="terms"><b>Key terms:</b> radial excavation, exceptional divisor, strict transform.</div>
-    <p>How does blowing up a singular point turn a pinched cone into an open, smooth manifold? Take the quadratic cone $X^2 + Y^2 - Z^2 = 0$. At the origin $\nabla F = (0, 0, 0)$, and rays approach from every direction on the cone.</p>
-    <p><b>1. Express in directional coordinates:</b> Set $X = u, Y = uv, Z = uw$, where $u$ is the radial distance from the origin and $(v, w) = (Y/X, Z/X)$ record the direction of approach.</p>
-    <p><b>2. Factor out the center:</b> Substituting into the cone equation gives:</p>
-    <div class="eq tex">F(u, uv, uw) = u^2 + (uv)^2 - (uw)^2 = u^2\big(1 + v^2 - w^2\big) = 0</div>
-    <p>The factor $u^2 = 0$ is the <b>exceptional divisor</b> $E_1 \cong \mathbb{RP}^2$: the algebraic memory of the origin replaced by its projectivized sphere of directions.</p>
-    <p><b>3. The strict transform is smooth:</b> Dividing out $u^2$ leaves the strict transform:</p>
-    <div class="eq tex">1 + v^2 - w^2 = 0 \quad\Longleftrightarrow\quad w^2 - v^2 = 1</div>
-    <p>This is a <b>smooth one-sheeted hyperboloid</b>! Its gradient $(0, -2v, 2w)$ never vanishes because $w^2 - v^2 = 1 \implies w \neq 0$.</p>
-    <p><b>Radial excavation:</b> Hironaka's blowup 1 literally drills out the singular apex $r = 0$ and glues in a smooth throat of directions. In Figure 10, the waist jumps from $r = 0.00$ to $r = 0.92$: the pinch opens into an accessible, nonsingular channel.</p>
 
-    <h2 id="nash-4d-failure">8. The 4D failure of Nash: Why choice-free blowups loop forever</h2>
-    <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, Grassmannian $\operatorname{Gr}(d, N)$, periodic limit cycle.</div>
-    <p>John Nash proposed a choice-free alternative: the Gauss map $\gamma: p \mapsto T_p X$ assigns to each smooth point its tangent $d$-plane in the Grassmannian $\operatorname{Gr}(d, N)$. The <b>Nash blowup</b> $\widetilde{X}_{\mathrm{Nash}}$ is the closure of its graph:</p>
-    <div class="eq tex">\widetilde{X}_{\mathrm{Nash}} = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N)</div>
-    <p>For curves (1D), Nash resolves the cusp in a single step. For surfaces (2D), Spivakovsky (1990) proved that normalized Nash blowups always terminate. It was widely conjectured that Nash blowups always resolve singularities.</p>
-    <p><b>The 4D Counterexample:</b> In 2026, Castillo, Duarte, Leyton-Álvarez, and Liendo proved this false in dimension four. Unlike Hironaka, <b>Nash does not excavate the singular point</b>: it retains original positions and merely appends limiting tangent planes. When the Gauss map folds over itself in $\operatorname{Gr}(3, 4)$, the pinch radius stays shut ($r = 0$). In the counterexample, an integer matrix $U \in \operatorname{GL}(4, \mathbb{Z})$ maps the exponent configuration of Step 3 identically back to Step 0:</p>
-    <div class="eq tex">M^3_0 \;\xrightarrow{\text{Nash}}\; M^3_1 \;\xrightarrow{\text{Nash}}\; M^3_2 \;\xrightarrow{\text{Nash}}\; M^3_3 \;\cong\; M^3_0 \;\xrightarrow{\text{Nash}}\; \cdots</div>
-    <p>Because Nash is completely deterministic and choice-free, it cannot change tactics: it is trapped in an infinite periodic cycle of length 4.</p>
+    <h2 id="blowup-1">7. Replacing the apex by directions</h2>
+    <div class="terms"><b>Key terms:</b> direction chart, total transform, strict transform, exceptional locus.</div>
+    <p>Blow up the origin of real three-space. In the chart where the direction's $Z$ coordinate is nonzero, write</p>
+    <div class="eq tex">X=uv,\qquad Y=uw,\qquad Z=u.</div>
+    <p>Away from $u=0$, the new coordinates are $v=X/Z$ and $w=Y/Z$. The coordinate $u$ is signed; it is not Euclidean distance. Substitution gives the <b>total transform</b>:</p>
+    <div class="eq tex">X^2+Y^2-Z^2=u^2(v^2+w^2-1)=0.</div>
+    <p>The <b>strict transform</b> is the closure of the lifted cone away from the center. Removing the exceptional factor $u^2$ leaves</p>
+    <div class="eq tex">v^2+w^2=1,\qquad u\in\mathbb{R}.</div>
+    <p>This is a cylinder in $(v,w,u)$ coordinates. Its gradient $(2v,2w,0)$ never vanishes on the surface, so it is smooth. A convenient exact parametrization and its blowdown map are</p>
+    <div class="eq tex">(v,w,u)=(\cos\theta,\sin\theta,u)\quad\longmapsto\quad(X,Y,Z)=(u\cos\theta,u\sin\theta,u).</div>
+    <p>At $u=0$, all values of $\theta$ map to $(0,0,0)$. The apex has been replaced by a circle of directions, not by a hole of a prescribed physical radius. Away from that circle, the map is an isomorphism onto the cone away from its apex.</p>
+    <p><b>Which exceptional divisor?</b> In the ambient blowup, the fiber over the origin is $\mathbb{RP}^2$, the space of lines through the origin. On the cone's strict transform, the exceptional locus is the projective conic $[X:Y:Z]$ satisfying $X^2+Y^2=Z^2$, whose real points form a circle. Every real point of this conic has $Z\neq0$, so this chart covers the entire real exceptional circle. Complex points require the other charts as well.</p>
+    <p>In the $X$-direction chart, the same substitution reads $X=a$, $Y=ab$, $Z=ac$, and the strict transform has equation $c^2-b^2=1$ with $a$ free. That is a hyperbola times a line. Different chart drawings describe the same resolution; their shapes and scales need not look alike.</p>
+
+    <h2 id="nash-4d-failure">8. What the Nash counterexamples prove</h2>
+    <div class="terms"><b>Key terms:</b> Gauss graph, Nash blowup, normalization, recurring affine chart.</div>
+    <p>The Nash blowup records each smooth point together with its tangent $d$-plane, then takes the algebraic closure of that graph:</p>
+    <div class="eq tex">\operatorname{Nash}(X)=\overline{\{(p,T_pX):p\in X_{\mathrm{smooth}}\}}\subset X\times\operatorname{Gr}(d,N).</div>
+    <p>The <b>normalized Nash blowup</b> additionally normalizes the resulting variety. This distinction matters: the two operations have different known termination results.</p>
+    <p>For the cusp $x=\tau^2$, $y=\tau^3$, the recorded slope is $3\tau/2$, and the Nash lift is smooth after one step. But success on a cusp does not imply success on all varieties.</p>
+    <p>Castillo, Duarte, Leyton-Álvarez, and Liendo construct <a href="https://arxiv.org/html/2409.19767v3">normal singular affine toric varieties of every dimension $d\geq4$</a> whose Nash and normalized Nash blowups, in characteristic zero, contain an open affine subset isomorphic to the original singular variety:</p>
+    <div class="eq tex">U\subset\operatorname{Nash}(X),\qquad U\cong X.</div>
+    <p>The same local singularity can therefore recur under iteration. This proves nontermination without asserting that the entire blown-up variety returns to its starting state in a three- or four-step orbit. The four-dimensional construction in Part I lives in seven ambient coordinates, so its Gauss map takes values in $\operatorname{Gr}(4,7)$.</p>
+    <p>The authors' <a href="https://arxiv.org/abs/2511.01772">November 2025 paper</a> also gives a three-dimensional characteristic-zero counterexample for <em>non-normalized</em> Nash blowups. It does not settle the normalized three-dimensional question.</p>
   </div>
 
-  <div class="wide-table">
+  <div class="summary">
     <table>
-      <thead>
-        <tr><th>Dimension</th><th>Singularity Type</th><th>Hironaka Resolution</th><th>Nash Tangent Blowup</th><th>Why They Differ</th></tr>
-      </thead>
+      <caption>Resolution by iterated Nash blowups in characteristic zero</caption>
+      <thead><tr><th>Dimension of the variety</th><th>Ordinary Nash blowups</th><th>Normalized Nash blowups</th></tr></thead>
       <tbody>
-        <tr>
-          <td><b>1D (Curves)</b></td>
-          <td>Cusp $y^2 = x^3$, Node $y^2 = x^2$</td>
-          <td class="ok">Terminates (1–3 steps)</td>
-          <td class="ok">Terminates (1 step for cusp!)</td>
-          <td>Curves have 1D tangents; $\operatorname{Gr}(1, 2) \cong \mathbb{RP}^1$ separates branches immediately.</td>
-        </tr>
-        <tr>
-          <td><b>2D (Surfaces)</b></td>
-          <td>Cone $z^2 = xy$, Pinch points</td>
-          <td class="ok">Terminates (Jung / Hironaka)</td>
-          <td class="ok">Terminates (Spivakovsky 1990)</td>
-          <td>Normalized Nash blowups reduce surface multiplicities monotonically.</td>
-        </tr>
-        <tr>
-          <td><b>3D (3-folds)</b></td>
-          <td>Conifolds, Terminal singularities</td>
-          <td class="ok">Terminates (Lean formalization 2026)</td>
-          <td style="color:var(--muted);font-weight:600">Open problem</td>
-          <td>In 3D, whether un-normalized Nash blowups can loop remains open.</td>
-        </tr>
-        <tr>
-          <td><b>4D+ (4-folds+)</b></td>
-          <td>Toric cones, higher tacnodes</td>
-          <td class="ok"><b>Terminates guaranteed</b></td>
-          <td class="no"><b>FAILS (Periodic limit cycles)</b></td>
-          <td>Castillo et al. (2026): Tangent hyperplanes fold in $\operatorname{Gr}(4, 7)$, regenerating $M^3_3 \cong M^3_0$.</td>
-        </tr>
+        <tr><td>1 · Curves</td><td>Terminate; the cusp needs one step.</td><td>Terminate; normal curves are smooth.</td></tr>
+        <tr><td>2 · Surfaces</td><td>No general termination theorem is asserted here.</td><td>Terminate (Spivakovsky, 1990).</td></tr>
+        <tr><td>3 · Threefolds</td><td>Counterexamples (Castillo et al., 2025).</td><td>The three-dimensional counterexample above does not settle this case.</td></tr>
+        <tr><td>4 and higher</td><td>Counterexamples.</td><td>Counterexamples, including normal starting varieties.</td></tr>
       </tbody>
     </table>
   </div>
-
   <div class="col">
-    <p><b>The takeaway:</b> Choice-free methods like Nash's are appealing because they require no manual heuristics. But in four dimensions and higher, they can march in circles. Hironaka's algorithm succeeds because it insists on picking a center where the invariant is maximal, radially excavates the throat, and strictly decreases its invariant at every step.</p>
+    <p>Hironaka's theorem guarantees that suitable sequences of blowups along smooth centers resolve varieties in characteristic zero. Constructive proofs organize those choices using invariants that decrease. The Nash counterexamples show that a particular canonical operation can fail; they do not show that resolution requires an arbitrary choice or that every singularity has a visible “throat” to open.</p>
   </div>
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">Blowups in simulation</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

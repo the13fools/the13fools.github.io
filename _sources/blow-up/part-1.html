@@ -9,12 +9,12 @@
   <meta property="og:type" content="article">
   <meta property="og:title" content="What is a blowup? · What is… a blowup?">
   <meta property="og:description" content="Crossing, touching and cusp singularities, how blowing up resolves each, Hironaka versus Nash, and blowups on noisy data.">
-  <meta property="og:url" content="https://foolzone.com/blow-up/part-1.html">
-  <meta property="og:image" content="https://foolzone.com/blow-up/og.png">
+  <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-1.html">
+  <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://foolzone.com/blow-up/part-1.html">
+  <link rel="canonical" href="https://foolzone.com/play/hironaka-blow-up/part-1.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · 3-Manifolds & Nash failure</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
@@ -217,13 +217,13 @@
     <p>where $\lambda = \min_j \frac{h_j + 1}{2k_j}$ is the <b>real log canonical threshold (RLCT)</b>, or learning coefficient, which governs model complexity and generalization error (<a href="./part-4.html">Part IV</a>). In October 2026, the Resolution team (Snikkers, Newgas, Hoogland, and Elliott) <a href="https://resolution.org/post/formalizing-resolution-of-singularities">formalized this theorem in Lean 4</a> without a single <span class="m">sorry</span> (~500,000 lines), providing a verified bedrock for learning theory.</p>
 
     <h2 id="nash">4. How Nash's works, and how it fails</h2>
-    <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, 4D toric counterexample, periodic loop.</div>
-    <p>Hironaka's algorithm requires choosing a center of maximal invariant. John Nash proposed a radical, choice-free alternative: the <b>Nash blowup</b> $\operatorname{Nash}(X)$, defined as the topological closure of the Gauss map graph $\gamma: p \mapsto (p, T_p X)$ inside $X \times \operatorname{Gr}(d, N)$. On a curve $(x(\tau), y(\tau))$, it simply records the tangent slope $dy/dx$.</p>
+    <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, toric counterexample, recurring affine chart.</div>
+    <p>Hironaka's algorithm requires choosing a center of maximal invariant. John Nash proposed a radical, choice-free alternative: the <b>Nash blowup</b> $\operatorname{Nash}(X)$, defined as the algebraic closure of the Gauss map graph $\gamma: p \mapsto (p, T_p X)$ inside $X \times \operatorname{Gr}(d, N)$. On a curve $(x(\tau), y(\tau))$, it simply records the tangent slope $dy/dx$.</p>
     <p>On the cusp $x = \tau^2, y = \tau^3$, the slope is $dy/dx = \frac{3}{2}\tau$. The Nash lift is $(\tau^2, \tau^3, \frac{3}{2}\tau)$, which is completely smooth! Nash resolves the cusp in <b>1 step</b> without choosing a center. On meshes and point clouds, <a href="https://arxiv.org/abs/2605.18215">Petrov et al. (2026)</a> exploit this automatic property to resolve self-intersections without needing feature detection.</p>
-    <p><b>Where Nash fails:</b> For curves and surfaces, Nash blowups always terminate. But in dimension 4, Castillo, Duarte, Leyton-Álvarez, and Liendo (<em>Annals of Mathematics</em> 2026) discovered an explicit 4-dimensional toric variety $X \subset \mathbb{R}^7$ where one blown-up chart is isomorphic to $X$ via a unimodular matrix $U \in \operatorname{GL}(4, \mathbb{Z})$. Because Nash is deterministic and choice-free, it loops forever:</p>
-    <div class="eq tex">X \xrightarrow{\text{Nash}} X^{(1)} \xrightarrow{\text{Nash}} X^{(2)} \xrightarrow{\text{Nash}} X^{(3)} \cong X</div>
-    <p>In <a href="./part-2.html">Part II</a>, we explore this geometric trap directly by taking 3D spatial slices through 4-space, contrasting Hironaka's radial excavation against Nash's folding limit cycle.</p>
-    <p class="read"><b>Figure {fig:nash4d}.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, trapping Nash in a loop.</p>
+    <p><b>Where Nash fails:</b> In characteristic zero, iterated Nash blowups resolve curves; normalized Nash blowups resolve surfaces. These statements do not give a general termination theorem for ordinary Nash blowups on surfaces. Castillo, Duarte, Leyton-Álvarez, and Liendo construct a <a href="https://arxiv.org/html/2409.19767v3">normal four-dimensional affine toric variety</a> for which a chart of its Nash blowup is isomorphic to the original singular variety. The same obstruction occurs for the normalized Nash blowup:</p>
+    <div class="eq tex">U\subset\operatorname{Nash}(X),\qquad U\cong X.</div>
+    <p>A singular chart can therefore recur after every iteration; this is not an isomorphism between the entire Nash blowup and $X$. Their <a href="https://arxiv.org/abs/2511.01772">three-dimensional counterexample</a> concerns non-normalized Nash blowups. In <a href="./part-2.html">Part II</a>, an exact cone blowup makes the direction coordinates concrete, before we return to these higher-dimensional obstructions.</p>
+    <p class="read"><b>Figure {fig:nash4d}.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
   </div>
   <section class="panel" aria-label="Nash's blowup of X contains X">
     <div class="controls"><button type="button" class="btn go" id="n4-go">Pick a random point of X</button><span class="lbl" id="n4-t"></span></div>
@@ -250,7 +250,7 @@
   </div>
 
   <div class="col">
-    <p class="read"><b>Figure {fig:nashloop}.</b> Left: Hironaka's algorithm on the cusp terminates because the invariant strictly drops. Right: Nash resolves the cusp in 1 step, but in 4D lacks a decreasing invariant and cycles endlessly.</p>
+    <p class="read"><b>Figure {fig:nashloop}.</b> Left: successive point blowups resolve the cusp and its exceptional crossings. Right: Nash resolves the cusp in one step; the lower diagram schematically illustrates a singular affine chart recurring in the four-dimensional example.</p>
   </div>
   <section class="panel" aria-label="Nash loop">
     <div class="pair">
@@ -266,8 +266,8 @@
   </div>
 
 </main>
-  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./index.html"><span class="dir">← Previous</span><span class="t">What is… a blowup?</span></a><a class="next" href="./part-2.html"><span class="dir">Next →</span><span class="t">3-Manifolds & why Nash fails</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), and Gemini Argon. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
+  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./index.html"><span class="dir">← Previous</span><span class="t">What is… a blowup?</span></a><a class="next" href="./part-2.html"><span class="dir">Next →</span><span class="t">Directions &amp; Nash blowups</span></a></nav>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "What is… a blowup? An interactive essay on resolution of singularities, from colliding balls to singular learning theory.",
+  "description": "What is\u2026 a blowup? An interactive essay on resolution of singularities, from colliding balls to singular learning theory.",
   "engines": {
     "node": ">=22"
   },
@@ -12,7 +12,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --port 4174",
     "check:static": "node tools/check-site.mjs",
-    "check": "npm run build && npm run check:static"
+    "check": "npm run check:geometry && npm run build && npm run check:static",
+    "check:geometry": "node tools/check-cone.mjs"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",
