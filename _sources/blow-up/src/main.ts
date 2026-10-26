@@ -1,9 +1,35 @@
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import renderMathInElement from "katex/contrib/auto-render";
 
-// Display equations are written in TeX inside <div class="eq tex"> and typeset here.
-for (const el of document.querySelectorAll<HTMLElement>(".eq.tex")) {
-  katex.render(el.textContent ?? "", el, { displayMode: true, throwOnError: false });
+function renderEquations() {
+  // Display equations are written in TeX inside <div class="eq tex"> and typeset here.
+  for (const el of document.querySelectorAll<HTMLElement>(".eq.tex")) {
+    if (!el.querySelector(".katex")) {
+      katex.render(el.textContent ?? "", el, { displayMode: true, throwOnError: false });
+    }
+  }
+
+  // Render inline math $...$ and display math $$...$$
+  if (document.body) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "$", right: "$", display: false },
+        { left: "\\(", right: "\\)", display: false },
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"],
+      ignoredClasses: ["eq", "katex"],
+      throwOnError: false,
+    });
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", renderEquations);
+} else {
+  renderEquations();
 }
 
 // Every page loads the same figure code. Each figure looks for its own
