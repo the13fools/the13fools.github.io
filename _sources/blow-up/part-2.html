@@ -46,7 +46,7 @@
     <p>Both constructions retain extra geometric information; neither averages neighboring points as Laplacian smoothing does. On $y=x^2$, for example, the two recorded slopes are $x$ and $2x$. They are different rules even when their limiting slopes agree.</p>
     <h3>First see a case where both succeed</h3>
     <p>For the cone $X^2+Y^2=Z^2$, put $(X,Y,Z)=(u\cos\theta,u\sin\theta,u)$. The ordinary blowup records its ray direction $[\cos\theta:\sin\theta:1]$. The tangent plane away from the apex has normal $[\cos\theta:\sin\theta:-1]$, so Nash retains the same angular information in a different form. Here both give a smooth cylinder. Watch how the new circle sits over the one old apex.</p>
-    <p class="read"><b>Figure {fig:manifold3d}.</b> <b>Exact cone blowup vs. Nash tangent resolution.</b> Track two points, A and B, whose directions differ by 90°. Press <b>Approach the apex</b>: as $u \to 0$, their positions on the cone coalesce ($\|A - B\| = \sqrt{2}|u| \to 0$), $\nabla F \to \mathbf{0}$, and the area element $dA$ collapses. Upstairs on the cylinder $v^2+w^2=1$, their resolved positions remain distinct ($\|A - B\| = \sqrt{2} \approx 1.414$), $\|\nabla g\| = 2 \ne 0$ everywhere, and $dA = du\,d\theta$ is non-degenerate. Then press <b>Sweep the exceptional circle</b>: the points rotate along $E$ while both old positions remain fixed at the singular apex. Meanwhile, the tangent plane normals $[\cos\theta : \sin\theta : -1]$ limit to the family of planes $\cos\theta X + \sin\theta Y - Z = 0$, resolving the cone in a single Nash step.</p>
+    <p class="read"><b>Figure {fig:manifold3d}.</b> <b>What becomes of the apex?</b> Track A and B, whose directions differ by 90°. <b>Approach the apex</b>: their old positions merge, while their resolved positions stay apart. <b>Sweep the exceptional circle</b>: they move upstairs while both old images remain fixed. The coordinate records and gradient checks explain what has been resolved; expand the comparison below for the distances, area elements, and Nash tangent planes.</p>
   </div>
 
   <section class="panel" id="cone-blowup-demo" aria-label="Exact cone blowup explorer">
@@ -75,6 +75,7 @@
     <div class="pair cone-checks">
       <div id="cone-original-test" class="cone-test"></div><div id="cone-resolved-test" class="cone-test"></div>
     </div>
+    <details class="derivation cone-invariants"><summary>Compare gradients, distances, area, and tangent planes</summary>
     <div class="map-table-wrap" style="margin-top: 1.2rem;">
       <table class="map-level-table" id="cone-comparison-table" aria-label="Side-by-side metric and geometric invariant comparison between original cone and resolved cylinder">
         <thead>
@@ -98,12 +99,12 @@
           <tr>
             <td style="text-align: left;"><b>Gradient Vector $\nabla$ &amp; Norm</b></td>
             <td style="text-align: left;" id="cone-row-grad-orig">$\nabla F = (2X, 2Y, -2Z)$, $\|\nabla F\| = 2\sqrt{2}|u|$</td>
-            <td style="text-align: left;" id="cone-row-grad-res">$\nabla g = (2v, 2w, 0)$, $\|\nabla g\| = 2$ (constant $\ne 0$ everywhere!)</td>
+            <td style="text-align: left;" id="cone-row-grad-res">$\nabla g = (2v, 2w, 0)$, $\|\nabla g\| = 2$ (constant $\ne 0$ on the cylinder)</td>
           </tr>
           <tr>
             <td style="text-align: left;"><b>Regularity / Smoothness</b></td>
             <td style="text-align: left;" id="cone-row-reg-orig">Singular at apex $(0,0,0)$ where $\nabla F = \mathbf{0}$</td>
-            <td style="text-align: left;"><b>Smooth 2-manifold everywhere</b> (rank 1 gradient on $g=0$)</td>
+            <td style="text-align: left;"><b>Smooth 2-manifold everywhere</b> (one nonzero equation gradient on $g=0$)</td>
           </tr>
           <tr>
             <td style="text-align: left;"><b>Fiber Over Apex ($u = 0$)</b></td>
@@ -128,6 +129,7 @@
         </tbody>
       </table>
     </div>
+    </details>
     <p class="cap" id="cone-point" aria-live="polite"></p>
     <p class="cap">The controls select points and sections in these two fixed spaces. The cylinder is the new space throughout. On it, u and θ remain independent coordinates at u = 0; the projection identifies that whole circle with one old point. Distances above are distances in the displayed coordinate systems.</p>
     <details class="derivation"><summary>Read the substitution and the Nash tangent-plane records</summary>
@@ -167,7 +169,7 @@
     <p>The <b>normalized Nash blowup</b> takes one additional operation at each step: normalization, which adjoins integral algebraic functions missing from the coordinate ring. In characteristic zero, ordinary Nash iteration resolves curves; Spivakovsky proved termination for normalized surface iteration. Neither statement settles ordinary Nash iteration on all surfaces.</p>
     <p>For the counterexample, follow one singular neighborhood through successive Nash steps. If the same singular local type returns, the rule can repeat forever. We will compare that failure with an explicit smooth model of the very same variety.</p>
   </div>
-  <details class="experiment"><summary>Related example: the fourfold and its real zero-level sections</summary><div class="col">
+  <details class="experiment"><summary>Related example: the fourfold and its real zero-level sections <span class="lab-badge">Figures {fig:nash4d}–{fig:toricslice}</span></summary><div class="col">
     <p><a href="https://arxiv.org/abs/2409.19767">Castillo, Duarte, Leyton-Álvarez, and Liendo</a>{cite:nash4} exhibit a singular normal fourfold with an open chart of its Nash blowup isomorphic to the starting variety:</p>
     <div class="eq tex">U \subset \operatorname{Nash}(X), \qquad U \cong X.</div>
     <p>This is a precise obstruction to termination. Nash blowup commutes with restricting to open subsets and with isomorphisms. The same singular local type therefore survives inside every iterate. Their <a href="https://arxiv.org/abs/2511.01772">threefold example</a>{cite:nash3} returns after two ordinary Nash steps and starts from a non-normal variety. Normalized Nash iteration in dimension three remains open.</p>
@@ -175,7 +177,7 @@
 
   <div class="col">
   </div>
-    <details class="experiment"><summary>Optional calculation: an affine chart of the fourfold’s Nash blowup</summary><div class="col">    <p class="read"><b>Figure {fig:nash4d}.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
+    <details class="experiment"><summary>Optional calculation: an affine chart of the fourfold’s Nash blowup</summary><div class="col">    <p class="read"><b>Figure {fig:nash4d}.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The button chooses positive torus parameters $t_1,\ldots,t_4$, forms $x_i=t^{h_i}$ from the exponent vectors in the table, then computes the displayed ratios $y_i$. The resulting exponent vectors are $Uh_i$. This checks the equations numerically; the integer change of basis and the cited paper establish the chart isomorphism.</p>
   </div>
   <section class="panel" aria-label="Nash's blowup of X contains X">
     <div class="controls"><button type="button" class="btn go" id="n4-go">Pick a random point of X</button><span class="lbl" id="n4-t"></span></div>
@@ -390,7 +392,7 @@
         </div>
       </div>
     </div>
-    <p class="cap">The animation shows discrete, computed changes of the fan. It does not morph the real surface to suggest an uncomputed geometric transformation.</p>
+    <p class="cap">Each step changes the fan by the displayed integer calculation. The four determinant-one cones certify smoothness.</p>
   </section>
 <div class="col"><h4>Why the chart cover is a resolution</h4>
     <p>For a final cone with basis vectors $(n_i,n_j,n_k)$ and coordinates $(r,s,t)$, set $x_\ell=r^{\langle h_\ell,n_i\rangle}s^{\langle h_\ell,n_j\rangle}t^{\langle h_\ell,n_k\rangle}$. All exponents are nonnegative integers. Substitution satisfies the five original equations identically. Determinant $\pm1$ makes the torus map invertible with integer monomial exponents. The cones cover the original cone, with unchanged boundary faces, so the charts glue to a proper birational morphism from a smooth variety, unchanged over the original smooth locus.</p>

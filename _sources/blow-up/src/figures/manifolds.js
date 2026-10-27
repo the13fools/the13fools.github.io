@@ -60,11 +60,11 @@ function initCone() {
     $("cone-point").textContent=`π(A): (${fmt(q.A.resolved)}) → (${fmt(q.A.original)}). ${u===0?"The circle E is the fiber over the apex.":"Off E, v = X/Z and w = Y/Z recover the direction uniquely."}`;
     $("cone-nash-record").textContent=`Limiting normal directions: A [${fmt([q.A.resolved[0],q.A.resolved[1],-1])}], B [${fmt([q.B.resolved[0],q.B.resolved[1],-1])}]. These label the planes vX + wY − Z = 0; at the apex they remain different even though the old position is the same.`;
     const gradOrig = $("cone-row-grad-orig"), regOrig = $("cone-row-reg-orig"), distOrig = $("cone-row-dist-orig"), distRes = $("cone-row-dist-res"), areaOrig = $("cone-row-area-orig");
-    if (gradOrig) gradOrig.textContent = `∇F = (${fmt([2*q.A.original[0], 2*q.A.original[1], -2*q.A.original[2]])}), ‖∇F‖ = ${q.originalGradient.toFixed(3)}${u === 0 ? " (zero: singular apex!)" : " > 0"}`;
+    if (gradOrig) gradOrig.textContent = `∇F = (${fmt([2*q.A.original[0], 2*q.A.original[1], -2*q.A.original[2]])}), ‖∇F‖ = ${q.originalGradient.toFixed(3)}${u === 0 ? " (zero: singular apex)" : " > 0"}`;
     if (regOrig) regOrig.innerHTML = u === 0 ? "<b>Singular apex:</b> rank 0, implicit function theorem fails" : "Smooth regular point (away from apex)";
-    if (distOrig) distOrig.textContent = `‖A − B‖ = ${q.originalDistance.toFixed(3)}${u === 0 ? " (coalesce to apex!)" : " (shrinks as √2|u|)"}`;
-    if (distRes) distRes.textContent = `‖A − B‖ = ${q.resolvedDistance.toFixed(3)} (separated on circle E)`;
-    if (areaOrig) areaOrig.textContent = `dA = ${(Math.SQRT2 * Math.abs(u)).toFixed(3)} du dθ${u === 0 ? " (metric collapsed to 0 area!)" : " > 0"}`;
+    if (distOrig) distOrig.textContent = `‖A − B‖ = ${q.originalDistance.toFixed(3)}${u === 0 ? " (both at the apex)" : " (shrinks as √2|u|)"}`;
+    if (distRes) distRes.textContent = `‖A − B‖ = ${q.resolvedDistance.toFixed(3)} (direction records stay distinct)`;
+    if (areaOrig) areaOrig.textContent = `dA = ${(Math.SQRT2 * Math.abs(u)).toFixed(3)} du dθ${u === 0 ? " (pullback area vanishes)" : " > 0"}`;
     draw(original,false,u,theta);draw(resolved,true,u,theta);drawRings(u,theta);
   }
   function stop(){if(animation!==null)cancelAnimationFrame(animation);animation=null;$("cone-stop").disabled=true;}

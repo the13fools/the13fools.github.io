@@ -1,5 +1,15 @@
 # Editorial and mathematical review
 
+## October 27: final clarity and presentation pass
+
+Read Stratum’s final audience critique and preserve the author’s latest comparison table and tensor exposition (`555abf6`). Figure 10 now follows two direction records through an actual blowdown; Figure 15 overlays five coordinate level sets t=x4 with matching colors, a tracked path, contraction-rate explanation, and exact six-coordinate table. The cone metric ledger remains available behind a named disclosure so the picture leads.
+
+Connect the tensor loss s²+d⁴ to Part I’s conjugate touching parabolas and explain why a separable integral is a useful calibration example before the nonseparable cusp. Bring the live LLC thermometer into the main argument. Give side-trip summaries automatic figure ranges, expose the application synthesis, and add a visible grip to the opening ratio control. Keep mechanical/field experiments available without forcing them into the core learning-theory route.
+
+Tighten repeated qualifications and captions while retaining essential scope. The closing returns to the opening question: first retain directions to distinguish paths, then retain loss and volume powers to count good fits. Explain that an LLC measurement can surround an SGD checkpoint; distinguish this from a dynamical theorem about SGD selection, and cite the actual ResNet experiments rather than asserting a universal entropic drift. Explain why the ReLU toy losses admit direct sectorwise calculations. Independently integrate the shifted-ReLU function to verify its asymmetric piecewise formula; the expression suggested in the critique was not the one implemented. Update the fourfold counterexample’s bibliography to its published Annals 203 (2026) citation without changing reference numbers.
+
+Validation: the full geometry/build/structure/link/TeX checks, independent shifted-ReLU quadrature, desktop and 390px layouts, source/target exceptional-fiber controls, overlay toggle, and the now-visible main-text thermometer. This remains a toric resolution of the counterexample, not an execution of the ATW ambient algorithm.
+
 ## October 27: Stratum notes and Figures 14 / 17
 
 Update the former Gemini Argon credit to **Stratum (Gemini 4 Argon)** in the byline, introduction, and all six footers. Read both supplied Stratum notes and the Rabanser–Shchur–Günnemann tutorial (arXiv:1711.10781); add a section-specific reference without renumbering the existing entries.

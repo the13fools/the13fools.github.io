@@ -60,7 +60,7 @@ function init(){
     canvas.width=Math.round(W*d);canvas.height=Math.round(H*d);const ctx=canvas.getContext("2d");ctx.scale(d,d);
     ctx.fillStyle=C.soft;ctx.fillRect(0,0,W,H);
     const [r,s,t]=inputs.map(i=>Number(i.value)),palette=colors();
-    const project=([a,b,c])=>{const x=a*Math.cos(yaw)-b*Math.sin(yaw),y=a*Math.sin(yaw)+b*Math.cos(yaw),k=Math.min(W,H)*.29;return [W/2+k*x,H/2+22-k*(c*Math.cos(pitch)-y*Math.sin(pitch)),c*Math.sin(pitch)+y*Math.cos(pitch)];};
+    const project=([a,b,c])=>{const x=a*Math.cos(yaw)-b*Math.sin(yaw),y=a*Math.sin(yaw)+b*Math.cos(yaw),k=Math.min(W,H)*.26;return [W/2+k*x,H/2+12-k*(c*Math.cos(pitch)-y*Math.sin(pitch)),c*Math.sin(pitch)+y*Math.cos(pitch)];};
     const image=p=>isSource?p:projectPoint(evaluateChart(last,p));
     const quads=[];
     function quad(pts,col,alpha){const pp=pts.map(p=>project(image(p)));quads.push({pp,col,alpha,z:pp.reduce((s,p)=>s+p[2],0)/4});}
@@ -87,7 +87,7 @@ function init(){
     axes.forEach((p,i)=>{const a=project([0,0,0]),b=project(p);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.strokeStyle=C.steel;ctx.lineWidth=1;ctx.stroke();label(names[i],b,C.muted);});
     if(overlay.checked)levels.forEach((level,i)=>{const p=project(image([r,s,level]));ctx.beginPath();ctx.arc(p[0],p[1],4.5,0,2*Math.PI);ctx.fillStyle=palette[i];ctx.fill();ctx.strokeStyle=C.surface;ctx.lineWidth=1.5;ctx.stroke();});
     const origin=project([0,0,0]);
-    if(!isSource){ctx.beginPath();ctx.arc(origin[0],origin[1],6,0,2*Math.PI);ctx.fillStyle=C.blow;ctx.fill();label("E → origin",[origin[0],origin[1]+24],C.blow);}
+    if(!isSource){ctx.beginPath();ctx.arc(origin[0],origin[1],6,0,2*Math.PI);ctx.fillStyle=C.blow;ctx.fill();label("E → origin",[origin[0]-85,origin[1]+28],C.blow);}
     if(isSource){if(overlay.checked)levels.forEach((level,i)=>label(`t = ${levelName(level)}`,project([-1,-1,level]),palette[i]));else label("E: t = 0",project([-1,-1,0]),C.blow);}
     const p=project(image([r,s,t]));ctx.beginPath();ctx.arc(p[0],p[1],6,0,2*Math.PI);ctx.fillStyle=C.surface;ctx.fill();ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;ctx.stroke();
     ctx.font="12px system-ui";ctx.fillStyle=C.muted;ctx.fillText(isSource?"Parallel t-levels · independent r, s":"Their images under the same map π",12,H-14);

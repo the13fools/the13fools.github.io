@@ -110,7 +110,7 @@
   </div><div class="col">
     <h2 id="learning-extras">Appendix D. Further learning-theory experiments</h2>
     <span id="physics-notes"></span><span id="sampling-notes"></span><span id="sampling-twofits"></span><span id="sampling-thermometer"></span><span id="sampling-network"></span>
-    <p>The main text follows the primary narrative from tensor collisions to neural network singularities. These supplementary experiments explore energy-volume tradeoffs, two-neuron ReLU crossings, and two-well posterior competitions.</p>
+    <p>The main text follows one route from tensor collisions to the geometry of learning. These supplementary experiments explore energy-volume tradeoffs, two-neuron ReLU crossings, and two-well posterior competitions.</p>
 
     <h3>D.1 Energy versus volume: two wells tradeoff</h3>
     <p class="read"><b>Figure {fig:D1}.</b> Two wells: a sharp regular bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
@@ -129,7 +129,7 @@
 
   <div class="col">
     <h3>D.2 Two-neuron ReLU crossing singularity</h3>
-    <p>Two ReLU neurons learning a single target have loss $K = a_2^2 \cdot D(b_2)$. Its zero set forms two crossing lines ($a_2 = 0$ and $b_2 = 0$), giving $\lambda = 1/2$ with multiplicity $m = 2$.</p>
+    <p>The target is $\operatorname{relu}(x)$ and the fitted function is $(1-a_2)\operatorname{relu}(x)+a_2\operatorname{relu}(x-b_2)$. With uniform inputs on $[-1,1]$, its mean squared error is $K=a_2^2D(b_2)$. For $|b_2|&lt;1$, integrating the two linear pieces gives $D(b)=b^2(1/2-b/3)$ for $b\ge0$ and $D(b)=b^2(1/2-b/6)$ for $b\le0$. Thus the loss is piecewise polynomial and locally comparable to $a_2^2b_2^2$. Its two axes of perfect fits cross: either the second neuron disappears ($a_2=0$), or its kink merges with the first ($b_2=0$). Direct integration gives $\lambda=1/2$ and multiplicity $m=2$.</p>
     <p class="read"><b>Figure {fig:D2}.</b> Left: loss landscape of a two-neuron ReLU crossing. Right: posterior average $n\langle K \rangle$ converging to $\lambda = 1/2$ at the slow rate $1/\log n$.</p>
   </div>
   <section class="panel" aria-label="ReLU crossing singularity">

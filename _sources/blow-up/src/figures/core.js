@@ -173,13 +173,15 @@
     E("rect", { x: x0, y: 26, width: x1 - x0, height: 30, fill: "none", stroke: C.rule }, svg);
     T(svg, x0, 18, "gap 1 much smaller", null); T(svg, x1, 18, "gap 2 much smaller", null, { at: { "text-anchor": "end" } });
     const mx = X(st.s); E("path", { d: `M${mx} 60 l-8 14 h16 z`, fill: C.ink }, svg); E("line", { x1: mx, x2: mx, y1: 22, y2: 60, stroke: C.ink, "stroke-width": 2 }, svg);
+    E("rect", { x: mx - 15, y: 73, width: 30, height: 9, rx: 4.5, fill: C.surface, stroke: C.ink, "stroke-width": 1.3 }, svg);
+    [-5, 0, 5].forEach(dx => E("circle", { cx: mx + dx, cy: 77.5, r: 1, fill: C.ink }, svg));
     T(svg, 200, 98, hint, null, { at: { "text-anchor": "middle" } });
   }
   function attachBar(svg, st, redraw) { if (!svg) return;
     const setS = (e) => { const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * 400; st.s = clamp((x - 24) / 352, 0.005, 0.995); redraw(); };
     svg.addEventListener("pointerdown", (e) => { st.drag = true; svg.setPointerCapture(e.pointerId); setS(e); });
     svg.addEventListener("pointermove", (e) => { if (st.drag) setS(e); });
-    svg.addEventListener("pointerup", () => { st.drag = false; });
+    for (const event of ["pointerup", "pointercancel", "lostpointercapture"]) svg.addEventListener(event, () => { st.drag = false; });
     svg.addEventListener("keydown", (e) => { if (e.key === "ArrowLeft") st.s = clamp(st.s - 0.02, 0.005, 0.995); else if (e.key === "ArrowRight") st.s = clamp(st.s + 0.02, 0.005, 0.995); else return; e.preventDefault(); redraw(); });
   }
   function ballsAnim(cv, st, now) {

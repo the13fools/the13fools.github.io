@@ -314,3 +314,13 @@ body{position:relative;overflow-x:hidden}
 .map-level-table { border-collapse: collapse; width: 100%; font: 12px var(--f-mono); text-align: right; }
 .map-level-table th,.map-level-table td { padding: 10px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
 #cone-blowup-demo .story-result { font: 15px/1.65 var(--f-display); padding: 14px; background: var(--soft); border-radius: 8px; }
+
+/* A little room at transitions lets the pictures and the argument breathe. */
+.case-study-synthesis { margin: 42px auto 20px; }
+.cone-invariants .map-level-table { font: 13px/1.6 var(--f-display); }
+.cone-invariants .map-level-table th,.cone-invariants .map-level-table td { white-space: normal; min-width: 180px; vertical-align: top; }
+.bar { cursor: ew-resize; touch-action: none; }
+.btn:disabled { cursor: default; opacity: .5; }
+@media (prefers-reduced-motion: no-preference) {
+  a,button { transition: color .15s, background-color .15s, border-color .15s; }
+}
