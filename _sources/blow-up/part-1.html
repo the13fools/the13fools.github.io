@@ -24,7 +24,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Tensor singularities</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
@@ -70,17 +70,17 @@
   <div class="col">
     <h2 id="singular">2. Singular points: crossing, touching, cusp</h2>
     <div class="terms"><b>Key terms:</b> zero set, normal field, smooth point, singular point.</div>
-    <p>For an algebraic curve defined by $f(x, y) = 0$, points where $\nabla f \neq 0$ are <em>smooth</em>: the implicit function theorem guarantees a well-defined tangent line orthogonal to the normal field $n = \nabla f / \|\nabla f\|$. Points where $\nabla f = 0$ are <b>singular points</b>. There the normal field vanishes, the curve has no tangent, and classical calculus breaks.</p>
+    <p>For an algebraic curve defined by $f(x, y) = 0$, points where $\nabla f \neq 0$ are <em>smooth</em>: the implicit function theorem guarantees a well-defined tangent line orthogonal to the normal field $n = \nabla f / \|\nabla f\|$. Points where $\nabla f = 0$ are <b>singular points</b>. There the normalized gradient is undefined. A singularity can have several tangent directions, or a unique tangent with a singular parameterization, as at a cusp.</p>
     <p>Three prototypical singularities form a natural ladder of difficulty:</p>
     <ul class="qs">
       <li><b>Crossing:</b> $f = y^2 - x^2 = 0$ (the lines $y = \pm x$). Two smooth branches crossing with distinct tangents.</li>
       <li><b>Touching:</b> $f = y^2 - x^4 = 0$ (the parabolas $y = \pm x^2$). Two smooth branches sharing the same tangent: order of contact 2.</li>
       <li><b>Cusp:</b> $f = y^2 - x^3 = 0$ (the curve $y = \pm x^{3/2}$). A single branch with non-integer scaling, coming to a sharp point.</li>
     </ul>
-    <p class="read"><b>Figure {fig:cross3}.</b> Color shows $f(x, y)$ (orange $&gt; 0$, blue $&lt; 0$), with level curves in grey and $f = 0$ in black. Arrows show the normal field $\nabla f / \|\nabla f\|$. At the origin $\nabla f = 0$: the normal arrows clash, and the tangent line vanishes.</p>
+    <p class="read"><b>Figure {fig:cross3}.</b> The black curves are the zero sets $f=0$. Move the probe toward the red-ringed origin: violet shows the tangent at the probe and orange the gradient. Turn on the normal field for the surrounding level-set geometry. At the singular point the gradient is zero; a single regular tangent description fails.</p>
   </div>
   <section class="panel" aria-label="Singular points">
-    <div class="controls"><label class="sl"><span class="lbl">Probe position</span><input id="f1-t" type="range" min="-1" max="1" step="0.01" value="0.55"><output id="f1-t-out"></output></label></div>
+    <div class="controls"><label class="sl"><span class="lbl">Probe position</span><input id="f1-t" type="range" min="-1" max="1" step="0.01" value="0.55"><output id="f1-t-out"></output></label><label><input type="checkbox" id="f1-field"> Show normal field and contours</label></div>
     <div class="grid3">
       <div class="fig"><div class="h">Crossing <span>f = y² − x²</span></div><div class="box sq"><canvas id="f1a" aria-label="The function y squared minus x squared"></canvas></div></div>
       <div class="fig"><div class="h">Touching <span>f = y² − x⁴</span></div><div class="box sq"><canvas id="f1t" aria-label="The function y squared minus x to the fourth"></canvas></div></div>

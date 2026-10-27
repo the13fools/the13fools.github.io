@@ -13,7 +13,7 @@
     "preview": "vite preview --port 4174",
     "check:static": "node tools/check-site.mjs",
     "check": "npm run check:geometry && npm run build && npm run check:static",
-    "check:geometry": "node tools/check-cone.mjs && node tools/check-nash-three.mjs"
+    "check:geometry": "node tools/check-cone.mjs && node tools/check-nash-three.mjs && node tools/check-toric-slice.mjs"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",

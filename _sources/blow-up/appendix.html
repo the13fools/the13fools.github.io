@@ -24,13 +24,13 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Simulation</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html" aria-current="page">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Tensor singularities</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html" aria-current="page">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Appendices</p>
     <h1>Appendices and references</h1>
-    <p class="dek">More on collisions, on tensors and on the thermometer's temperature, and everything cited.</p>
+    <p class="dek">Supporting experiments and references.</p><p class="toc"><a href="#appendix">A · Collisions</a> · <a href="#appendix-b">B · Tensors</a> · <a href="#appendix-c">C · Temperature</a> · <a href="#physics-notes">D · Physics</a> · <a href="#learning-extras">E · Learning models</a></p>
   </div>
   <div class="col">
     <h2 id="appendix">Appendix A. More on collisions</h2>
@@ -75,7 +75,7 @@
 
   <div class="col">
     <h2 id="appendix-b">Appendix B. More on tensors</h2>
-    <p><b>Two charts, one target:</b> In <a href="./part-3.html#tensors">section 10</a>, standard rank-2 gradient descent diverged to infinity trying to fit $W$. In the blown-up chart $[(a + s a')\otimes(b + s b')\otimes(c + s c') - a\otimes b\otimes c]/s$, parameters remain strictly bounded while $s$ drifts smoothly to 0.</p>
+    <p><b>Two charts, one target:</b> In <a href="./part-3.html#tensors">Part III</a>, standard rank-2 gradient descent diverged to infinity trying to fit $W$. In the blown-up chart $[(a + s a')\otimes(b + s b')\otimes(c + s c') - a\otimes b\otimes c]/s$, parameters remain strictly bounded while $s$ drifts smoothly to 0.</p>
     <p class="read"><b>Figure {fig:B1}.</b> Gradient descent in standard parameters (orange) vs. blown-up coordinates (violet). The blown-up chart reaches the exact target with bounded parameter norms.</p>
   </div>
   <section class="panel" aria-label="Border rank">
@@ -165,14 +165,279 @@
     </div>
     <svg id="wb-plot" role="img" aria-label="Beta times average energy against log beta, with the WBIC box"></svg>
     <div class="chips" id="wb-chips"></div>
+  <div class="plot-legend"><span><i class="line-blow"></i>Scaled excess energy; shaded integral gives free energy</span><span><i class="line-hot dashed"></i>WBIC rectangle</span><span><i class="line-ink dashed"></i>Asymptotic λ</span></div>
   </section>
 
+  <div class="col"><h2 id="physics-notes">Appendix D. Physics and geometry-processing examples</h2><p>These applications provide additional intuition about directions, limiting configurations, and redundant coordinates. They are optional companions to the algebraic and learning-theory narrative.</p></div>
+  <div class="col">
+    <h3 id="collisions">Rigid-body collisions: the opening demo, unpacked</h3>
+    <p>The three balls from the <a href="./index.html">opening page</a> provide our first mechanical blowup. In an elastic collision between two balls of masses $m_1, m_2$, conservation of momentum and kinetic energy:</p>
+    <div class="eq tex">m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2', \qquad m_1 v_1^2 + m_2 v_2^2 = m_1 v_1'^2 + m_2 v_2'^2</div>
+    <p>uniquely determines the outgoing velocities. But when three balls touch simultaneously, there are three unknown velocities and only two conservation laws: rigid-body mechanics alone cannot pick an outcome.</p>
+    <p><b>Configuration space in a wedge:</b> Write the gaps between neighbors as $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates $q_i = \sqrt{m_i} x_i$, kinetic energy is standard Euclidean $\frac{1}{2}|\dot{q}|^2$. Removing uniform translation reduces the three-ball system to a single point bouncing inside a planar <b>wedge</b> between the constraint walls $g_1 = 0$ and $g_2 = 0$, with wedge angle:</p>
+    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1 m_3}{(m_1 + m_2)(m_2 + m_3)}}</div>
+    <p>A sequence of pairwise collisions is a billiard path bouncing between the walls. Simultaneous impact is the path striking the sharp corner $g_1 \cdot g_2 = 0$.</p>
+    <p><b>The blown-up bar:</b> The color bar replaces the singular corner with all possible incoming directions—the microscopic gap ratio $g_2 / g_1$ immediately before impact. Every direction yields a deterministic sequence of bounces. The bar decomposes into <em>chambers</em> of shared outcomes. When masses are equal ($\beta = 60^\circ$), all incoming directions yield the exact same outcome, explaining why real cradles are predictable. With a light middle ball, different directions produce completely different orders of departure.</p>
+    <p class="read"><b>Figure {fig:D1}.</b> Left: three balls colliding simultaneously, with the gap-ratio bar colored by outcome. Right: the same motion mapped to a single point in a wedge. Drag the marker or click an outcome below to test incoming directions.</p>
+  </div>
+  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
+      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
+    </div>
+    <div class="chips" id="f2-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>Inelastic collapse:</b> When collisions have restitution $e &lt; 1$, energy is dissipated. Below the critical threshold $e = 7 - 4\sqrt{3} \approx 0.072$ (McNamara &amp; Young), three balls bounce infinitely many times in a finite time window! A standard pairwise impulse simulator traps itself in an infinite loop. Vouga, Smith, Kaufman, Tamstorf, and Grinspun's <a href="https://media.disneyanimation.com/uploads/production/publication_asset/159/asset/All_s_Well_That_Ends_Well_Guaranteed_Resolution_of_Simultaneous_Rigid_Body_Impact.pdf">All's Well That Ends Well</a> guarantees termination by detecting implied velocity equalities and blending elastic and inelastic limits.</p>
+    <p class="read"><b>Figure {fig:D2}.</b> Inelastic collapse. Below $e \approx 0.072$, bounces accumulate infinitely before the balls separate, illustrating how numerical solvers get trapped at unresolved physical singularities.</p>
+  </div>
+  <section class="panel" aria-label="Inelastic collapse">
+    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
+    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of inelastic collisions"></canvas></div></div>
+      <div class="fig"><div class="h">Collisions before the balls separate</div><svg id="ic-n" role="img" aria-label="Number of collisions against restitution"></svg></div>
+    </div>
+    <div class="chips" id="ic-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>The geometry of border rank:</b> Differentiating the rank-one tensor $(e_0 + h e_1)^{\otimes 3}$ with respect to $h$ at $h = 0$ yields $W$. Thus $W$ is the limit of a finite difference:</p>
+    <div class="eq tex">W = \lim_{h\to 0}\frac{(e_0+h\,e_1)^{\otimes 3} - e_0^{\otimes 3}}{h}</div>
+    <p>Rank-one tensors live on the <em>Veronese variety</em>. A sum of two rank-one tensors lives on a secant line. As the two points merge while their coefficients diverge like $\pm 1/h$, the secant tilts into a <b>tangent vector</b>:</p>
+    <div class="eq tex">\lim_{\varepsilon\to 0}\frac{(v+\varepsilon w)^{\otimes 3} - v^{\otimes 3}}{\varepsilon} = 3\,\operatorname{Sym}\big(v^{\otimes 2}\otimes w\big)</div>
+    <p>Target $W$ lies on this tangential boundary. Ordinary gradient descent chases an unreachable point at infinity.</p>
+    <p><b>Hironaka's fix: blow up the step $h$.</b> By treating the step $h$ as a parameter, the model becomes:</p>
+    <div class="eq tex">T(a,b,c,a',b',c',h) = \frac{(a+h\,a')\otimes(b+h\,b')\otimes(c+h\,c') - a\otimes b\otimes c}{h}</div>
+    <p>Expanding the product cancels the leading term, leaving a polynomial that is smooth at $h = 0$. The blowup adds the boundary point in bounded coordinates, allowing the fit to converge cleanly. In Part IV, we will see how this boundary generates logarithmic corrections in Bayesian learning.</p>
+
+    <h3 id="frames">Symmetric frame fields: where should the singularities go?</h3>
+    <div class="terms"><b>Key terms:</b> cross field, representation vector, winding number, Ginzburg–Landau energy, Burer–Monteiro lift.</div>
+    <p>To generate quadrilateral meshes, geometry engines compute <em>cross fields</em>: four orthogonal directions at each point. Representing a cross by $u = e^{4i\theta}$ on the unit circle $|u|^2 = 1$ removes the quarter-turn ambiguity. On a disk, boundary alignment forces $u$ to have a total winding number of 4. By the Poincaré–Hopf index theorem, $u$ cannot remain continuous inside: it <em>must</em> contain singularities.</p>
+    <p>Near a singular point of winding $d$, the Dirichlet energy $E(u) = \frac{1}{2}\int |\nabla u|^2$ diverges logarithmically: each halving of radius costs $\pi d^2 \log 2$, producing infinite energy. Three strategies resolve this:</p>
+    <ul class="qs">
+      <li><b>Ginzburg–Landau:</b> Penalize departure from the unit circle: $E_\varepsilon(u) = \frac{1}{2}\int |\nabla u|^2 + \frac{1}{4\varepsilon^2}\int (1-|u|^2)^2$. Inside cores of radius $\varepsilon$, $|u|$ drops to 0. A core of winding $d$ costs $\pi d^2 \log(1/\varepsilon)$. Because $4^2 = 16 &gt; 4 \times 1^2 = 4$, energy forces a 4-fold core to <b>split into four 1-fold cores</b>!</li>
+      <li><b>Renormalized energy:</b> Once split, the four cores repel like 2D charges while the boundary pushes them back, settling into a stable O-grid at $r \approx 0.85$.</li>
+      <li><b>Burer–Monteiro lift:</b> Lift $u$ to a sphere in $\mathbb{R}^k$ ($k \ge 3$). Higher spheres have no hole for the boundary to wrap around, so the lifted field is completely smooth with finite energy $8\pi$, projecting back to a single 4-fold core.</li>
+    </ul>
+    <p class="read"><b>Figure {fig:D3}.</b> Drag singular points on a disk. The bars display Ginzburg–Landau energy. "Merge" forces points together, causing energy to spike quadratically.</p>
+  </div>
+  <section class="panel" aria-label="Place the singularities of a cross field">
+    <div class="controls">
+      <button type="button" class="btn go" id="cd-relax">Let the energy decide</button>
+      <button type="button" class="btn" id="cd-merge">Merge into one point</button>
+      <button type="button" class="btn" id="cd-scatter">Scatter</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">The field <span>drag the dots</span></div><div class="box sq drag"><canvas id="cd-cv" aria-label="Cross field on a disk; drag its singular points" tabindex="0"></canvas><span class="tag" id="cd-tag"></span></div></div>
+      <div class="fig"><div class="h">Energy</div><svg id="cd-bars" role="img" aria-label="Energy of your layout compared with the best and the merged layouts"></svg><p class="cap" id="cd-cap"></p></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <p class="read"><b>Figure {fig:D4}.</b> A Ginzburg–Landau vortex. Left: cross field over $|u|$. Middle: energy density showing flat plateau outside core. Right: four simple cores cost substantially less than one 4-fold core, driving core splitting.</p>
+  </div>
+  <section class="panel" aria-label="One Ginzburg–Landau vortex">
+    <div class="controls">
+      <span class="lbl">Winding d</span>
+      <span class="seg" role="group" aria-label="Winding" id="vx-d">
+        <button type="button" data-v="1" aria-pressed="true">1</button>
+        <button type="button" data-v="2" aria-pressed="false">2</button>
+        <button type="button" data-v="4" aria-pressed="false">4</button>
+      </span>
+      <label class="sl"><span class="lbl">core size ε</span><input id="vx-e" type="range" min="0.5" max="4" step="0.1" value="1.3"><output id="vx-e-out"></output></label>
+    </div>
+    <div class="grid3">
+      <div class="fig"><div class="h">The field <span>crosses over |u|</span></div><div class="box sq"><canvas id="vx-cv" aria-label="A single vortex as a cross field"></canvas></div></div>
+      <div class="fig"><div class="h">Where the energy lives</div><svg id="vx-den" role="img" aria-label="Energy per unit log radius"></svg></div>
+      <div class="fig"><div class="h">Merge or split?</div><svg id="vx-cost" role="img" aria-label="Energy of one 4-fold core versus four simple cores"></svg></div>
+    </div>
+    <div class="chips" id="vx-chips"></div>
+  </section>
+
+  <div class="col">
+    <p class="read"><b>Figure {fig:D5}.</b> Three strategies side by side: Ginzburg–Landau splitting (left), drilled hole blowup (middle), and Burer–Monteiro sphere lift (right).</p>
+  </div>
+  <section class="panel" aria-label="Cross field on a disk">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Hole radius ρ (middle)</span><input id="gl-rho" type="range" min="0.05" max="0.6" step="0.05" value="0.55"><output id="gl-rho-out"></output></label>
+      <button type="button" class="btn go" id="gl-run">Restart</button>
+    </div>
+    <div class="grid3">
+      <div class="fig"><div class="h">Ginzburg–Landau</div><div class="box sq"><canvas id="gl-a" aria-label="Ginzburg–Landau cross field"></canvas><span class="tag" id="gl-a-tag"></span></div></div>
+      <div class="fig"><div class="h">Blowup at the center <span>drilled hole</span></div><div class="box sq"><canvas id="gl-b" aria-label="Cross field around a drilled hole"></canvas><span class="tag" id="gl-b-tag"></span></div></div>
+      <div class="fig"><div class="h">Lift to a sphere <span>Burer–Monteiro, k = 3</span></div><div class="box sq"><canvas id="gl-c" aria-label="Burer–Monteiro lifted field"></canvas><span class="tag" id="gl-c-tag"></span></div></div>
+    </div>
+    <div class="chips" id="gl-chips"></div>
+  </section>
+
+  <div class="col">
+    <h3 id="physics">The three demos side by side, and the usual physics tools</h3>
+    <p>Each demo confronts a breakdown of classical formulas, handled via three universal paradigms:</p>
+  </div>
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>Demo</th><th>The Singular Point</th><th>Penalty Method</th><th>Pick One Chart</th><th>Blow Up</th></tr></thead>
+      <tbody>
+        <tr><td><b>Three balls</b> (Figure {fig:D1})</td><td>Simultaneous 3-ball impact</td><td>Stiff contact springs</td><td>Constraint impulse solver (visits order)</td><td>Gap-ratio bar: keeps all incoming directions</td></tr>
+        <tr><td><b>Tensor fit</b> (Figure {fig:tzfit})</td><td>Limit at infinity (border rank)</td><td>Ridge penalty on factor norms</td><td>Condition number constraint</td><td>Step $h$ as coordinate: converges at $h = 0$</td></tr>
+        <tr><td><b>Cross field</b> (Figure {fig:D3})</td><td>Topological winding singularity</td><td>Ginzburg–Landau core penalty</td><td>Hand-placed singular vertices</td><td>Drill a hole, or lift to sphere (Burer–Monteiro)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col">
+    <p>Applied mathematics frequently uses weighted blowups under other names: McGehee's blowup of the collision in the Kepler problem, similarity solutions for shocks, and geometric singular perturbation theory. What Hironaka adds is a systematic guarantee across all dimensions, an algorithmic invariant that eliminates guessing, and now a machine-checked proof in Lean.</p>
+  </div>
+
+  <div class="col"><h2 id="learning-extras">Appendix E. Further learning-theory experiments</h2><p>The main text follows three measurements. These supporting examples explore the local geometry and its qualifications in more detail.</p></div>
+
+
+  <div class="col">
+    <div class="terms"><b>Key terms:</b> equipartition, Hessian, harmonic approximation, free energy, learning coefficient.</div>
+    <p><b>From physics to Bayesian learning:</b> At temperature $T = 1/n$, a particle in an empirical potential $K(w)$ visits parameter states according to the Gibbs posterior $p(w) \propto e^{-n K(w)} \varphi(w)$. In a regular quadratic well, the harmonic approximation $K(w) \approx \frac{1}{2} w^\top H w$, with positive-definite $H$, gives the sublevel volume $V(\varepsilon)=\operatorname{Vol}\{K&lt;\varepsilon\}$:</p>
+    <div class="eq tex">V(\varepsilon) \approx \frac{\pi^{d/2}}{\Gamma(d/2 + 1)\sqrt{\det H}}\,(2\varepsilon)^{d/2}</div>
+    <p><b>Where classical statistics fails:</b> Non-identifiability, dead units, and continuous factorization symmetries can produce minima with zero Hessian eigenvalues ($\det H=0$). Discrete permutation symmetries alone do not force a zero eigenvalue. The regular Laplace approximation then fails: dividing by $\sqrt{\det H}$ is not a valid way to estimate the volume. The usual AIC and BIC formulas can still be evaluated, but their regular-model justifications need not apply.</p>
+    <p class="read"><b>Figure {fig:E1}.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
+  </div>
+  <section class="panel" aria-label="Flat-bottomed well">
+    <div class="pair">
+      <div class="fig"><div class="h">The well, from above <span>V = (y² − x³)²</span></div><div class="box sq"><canvas id="f4-top" aria-label="Top view of the well with its floor"></canvas></div></div>
+      <div class="fig"><div class="h">Cross-sections and Hessian</div><svg id="f4-sec" role="img" aria-label="Cross-sections of the well"></svg><svg id="f4-eig" role="img" aria-label="Hessian eigenvalues along the floor"></svg></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <p>Sumio Watanabe resolved this impasse by applying Hironaka's resolution of singularities. Pulling back the loss $K(w)$ along an embedded resolution map $w = g(u)$ monomializes both the loss and the volume element into normal-crossing divisors:</p>
+    <div class="eq tex">K(g(u)) = u_1^{2k_1} u_2^{2k_2} \cdots u_d^{2k_d}, \qquad |J(u)| = |u_1^{h_1} u_2^{h_2} \cdots u_d^{h_d}|</div>
+    <p>Under the analytic and prior regularity assumptions of singular learning theory, these local forms determine the leading asymptotic terms through the <b>Real Log Canonical Threshold (RLCT) $\lambda$</b>. With nonvanishing analytic factors suppressed, take the minimum below over contributing resolution charts and indices with $k_i&gt;0$:</p>
+    <div class="eq tex">\lambda = \min_{i} \left( \frac{h_i + 1}{2k_i} \right), \qquad F_n \approx n S_n + \lambda\log n - (m-1)\log\log n, \qquad \mathbb{E}[G_n^{\mathrm{excess}}] \approx \frac{\lambda}{n}</div>
+    <p>Here $m$ is the multiplicity of the leading pole, $S_n$ is the empirical negative log likelihood of the true distribution, and the last relation concerns expected <em>Bayesian excess generalization loss</em> in the realizable, unit-temperature setting. These are asymptotic statements under the relevant SLT hypotheses, not a general finite-sample guarantee for a trained neural network.</p>
+    <ul class="qs">
+      <li><b>Volume Scaling:</b> Near a singular minimum, parameter volume shrinks as $V(\varepsilon) \asymp \varepsilon^{\lambda} (\log \frac{1}{\varepsilon})^{m-1}$. A network with $d = 100{,}000$ parameters and $\lambda = 42$ contracts under noise as if it had only $2\lambda = 84$ parameters!</li>
+      <li><b>Bayesian Occam's Razor:</b> In model selection, the posterior evidence scales as $n^{-\lambda}(\log n)^{m-1}$. For equally good fits and comparable prior weights, smaller $\lambda$ gives a smaller leading complexity penalty. Differences in fit and prior weight also matter.</li>
+      <li><b>Generalized Equipartition:</b> While a quadratic bowl stores an average thermal energy of $\frac{d}{2}T$, a singular potential stores an average excess energy of $\mathbf{\lambda \cdot T}$.</li>
+    </ul>
+    <p class="read"><b>Figure {fig:E2}.</b> Two wells: a sharp regular bowl of depth 0 ($\lambda = 1$) and a degenerate ring of depth $\delta$ ($\lambda = 1/2$). At small $n$, the ring wins on volume; at large $n$, the deeper bowl wins on energy.</p>
+  </div>
+  <section class="panel" aria-label="Energy versus volume">
+    <div class="controls">
+      <label class="sl"><span class="lbl">n, or 1/T</span><input id="f15-n" type="range" min="0" max="5" step="0.05" value="1.6"><output id="f15-n-out"></output></label>
+      <label class="sl"><span class="lbl">Ring depth δ</span><input id="f15-d" type="range" min="0.001" max="0.05" step="0.001" value="0.01"><output id="f15-d-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Boltzmann weight <span>e<sup>−n·V</sup></span></div><div class="box wide"><canvas id="f15-cv" aria-label="Two wells and their Boltzmann weight"></canvas></div></div>
+      <div class="fig"><div class="h">Probability of the ring</div><svg id="f15-p" role="img" aria-label="Probability of the ring valley against n"></svg></div>
+    </div>
+    <div class="chips" id="f15-chips"></div>
+  </section>
+
+  <div class="col">
+    <p class="read"><b>Figure {fig:E3}.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates parameter volume asymptotically.</p>
+  </div>
+  <section class="panel" aria-label="Winner take all versus frozen shares">
+    <div class="controls"><label class="sl"><span class="lbl">n, or 1/ε</span><input id="r-n" type="range" min="1" max="12" step="0.1" value="4"><output id="r-n-out"></output></label></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Where the weight sits</div><div class="box sq"><canvas id="r-cv" aria-label="Weight concentrating near the cusp"></canvas></div></div>
+      <div class="fig"><div class="h">Shares as ε shrinks</div><svg id="r-plot" role="img" aria-label="Share near the cusp rising while cradle shares stay flat"></svg></div>
+    </div>
+    <div class="chips" id="r-chips"></div>
+  </section>
+
+  <div class="col">
+    <h3 id="dl">Where singularities come from in networks: one function, many weights</h3>
+    <p>Neural networks are inherently singular because the parameter-to-function map $w \mapsto f_w$ is non-injective:</p>
+    <ul class="qs">
+      <li><b>Rescaling Symmetry:</b> A ReLU unit satisfies $a \cdot \operatorname{relu}(wx) = (a/c)\cdot\operatorname{relu}(cwx)$ for any $c &gt; 0$, creating 1D curves of identical functions.</li>
+      <li><b>Dead Units:</b> If an outgoing weight vanishes ($a = 0$), all incoming weights can vary freely without changing the network's output.</li>
+      <li><b>Unit Merging:</b> When two hidden units share identical incoming weight vectors, they collapse into a single effective unit.</li>
+      <li><b>Matrix Factorization Bottlenecks:</b> Any product $W = BA$ exhibits a continuous $\operatorname{GL}(r)$ gauge symmetry $A \to GA, B \to BG^{-1}$.</li>
+    </ul>
+    <p class="read"><b>Figure {fig:E4}.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
+  </div>
+  <section class="panel" aria-label="One ReLU unit">
+    <div class="controls"><label class="sl"><span class="lbl">Target strength c</span><input id="nn-c" type="range" min="0" max="1" step="0.01" value="0.6"><output id="nn-c-out"></output></label></div>
+    <div class="grid3">
+      <div class="fig"><div class="h">Posterior weight over (w, a)</div><div class="box sq"><canvas id="nn-cv" aria-label="Posterior weight of a single ReLU unit over its two parameters"></canvas></div></div>
+      <div class="fig"><div class="h">What those weights compute <span>one function</span></div><svg id="nn-fn" role="img" aria-label="Functions computed by posterior samples, over the target"></svg></div>
+      <div class="fig"><div class="h">The loss across the valley <span>along the line a = w</span></div><svg id="nn-cut" role="img" aria-label="Loss along the diagonal"></svg><p class="cap" id="nn-cap"></p></div>
+    </div>
+    <div class="chips" id="nn-chips"></div>
+  <div class="plot-legend"><span><i class="line-hot"></i>Posterior function samples</span><span><i class="line-ink dashed"></i>Target function</span><span><i class="line-blow"></i>Loss along a = w</span><span><i class="line-steel dashed"></i>Quadratic approximation when c > 0</span></div>
+  </section>
+
+  <div class="col">
+    <h3 id="models">Model problems</h3>
+    <p><b>Linear networks are matrix factorizations:</b> A two-layer network $y = BAx$ with hidden width $H$ factors $W = BA$. Adding hidden units increases parameter count $d = H(M+N)$ linearly. The Aoyagi–Watanabe formula depends on $M,N,H$ and the true matrix rank $r$. In the plotted family, it reaches $MN/2$ at sufficiently large width. This is half the dimension of the full matrix space; the rank-$r$ matrix stratum instead has dimension $r(M+N-r)$.</p>
+    <p class="read"><b>Figure {fig:E5}.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
+  </div>
+  <section class="panel" aria-label="Learning coefficient of factorized models">
+    <div class="pair">
+      <div class="fig"><div class="h">Linear network y = BAx <span>3 → H → 3</span></div><svg id="lw-plot" role="img" aria-label="Learning coefficient against hidden width"></svg><p class="cap">Purple: rank-zero target; orange: rank-one target. Dotted reference: λ = 4.5.</p></div>
+      <div class="fig"><div class="h">Bilinear layer <span>2 × 2 × 2 tensor, width H</span></div><svg id="lw-cp" role="img" aria-label="Sampled learning coefficients for a bilinear layer"></svg><p class="cap">Purple: zero tensor; orange: a generic rank-two target. Dotted reference: half the tensor-space dimension, 4.</p></div>
+    </div>
+    <div class="chips" id="lw-chips"></div>
+  <div class="plot-legend"><span><i class="line-steel dashed"></i>Parameter count d/2 (continues above the scale)</span><span><i class="line-ink"></i>Hollow rings: sampled checks</span></div>
+  </section>
+
+  <div class="col">
+    <p><b>ReLU crossings:</b> Two ReLU neurons learning a single target have loss $K = a_2^2 \cdot D(b_2)$. Its zero set forms two crossing lines ($a_2 = 0$ and $b_2 = 0$), giving $\lambda = 1/2$ with multiplicity $m = 2$.</p>
+    <p class="read"><b>Figure {fig:E6}.</b> Left: loss landscape of a two-neuron ReLU crossing. Right: posterior average $n\langle K \rangle$ converging to $\lambda = 1/2$ at the slow rate $1/\log n$.</p>
+  </div>
+  <section class="panel" aria-label="ReLU crossing singularity">
+    <div class="pair">
+      <div class="fig"><div class="h">Loss over (a₂, b₂) <span>click to probe</span></div><div class="box sq"><canvas id="rl-cv" aria-label="Loss landscape slice of a two-neuron ReLU network; click to probe"></canvas></div></div>
+      <div class="fig"><div class="h">The network at that point</div><svg id="rl-f" role="img" aria-label="Network function against target"></svg><svg id="rl-t" role="img" aria-label="Posterior average approaching one half"></svg></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <h3 id="tensors-slt">Tensor collisions, free weights, and the log N multiplicity</h3>
+    <div class="terms"><b>Key terms:</b> component collision, component emptying, normal-crossing divisors, double pole.</div>
+    <p>What happens when components have free mixture weights and can collide? Consider the symmetric rank-2 cubic tensor model in $\mathbb{R}^3$:</p>
+    <div class="eq tex">T(a, b, \theta) = \theta\,v(a)^{\otimes 3} + (1-\theta)\,v(b)^{\otimes 3}, \qquad 0 \le \theta \le 1</div>
+    <p>learning the rank-one target $T_* = e_1^{\otimes 3}$. The true tensor can be achieved in two distinct geometric ways: <b>component collision</b> ($a = b = 0$) or <b>component emptying</b> ($\theta = 0$ or $\theta = 1$).</p>
+    <p>In center and separation coordinates $s = \theta a + (1-\theta)b$ and $u = \|a - b\|^2$, the boundary where a component empties ($\theta \to 0$) becomes an exact <b>normal-crossing product</b>:</p>
+    <div class="eq tex">K_{\mathrm{sing}}(\theta, u) \sim (\theta\cdot u)^2</div>
+    <p>Integrating the evidence $Z_N = \int e^{-N K} dw$ across the intersecting divisors $\theta = 0$ and $u = 0$ yields:</p>
+    <div class="eq tex">Z_N \asymp N^{-1} \cdot N^{-1/2}\log N = \mathbf{N^{-3/2}\log N}</div>
+    <p>The RLCT is $\lambda = 3/2$, and the multiplicity jumps to $\mathbf{m = 2}$: the double pole of Watanabe's zeta function is the geometric intersection of component collision and component emptying!</p>
+    <p class="read"><b>Figure {fig:E7}.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
+  </div>
+  <section class="panel" aria-label="Normal crossing and evidence scaling in tensor collisions">
+    <div class="controls">
+      <label class="sl long"><span class="lbl">sample size N</span><input id="slt-n" type="range" min="1" max="4.2" step="0.05" value="2.5"><output id="slt-n-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig">
+        <div class="h">Posterior density <span>e<sup>−N(θu)²</sup> along the two divisors</span></div>
+        <div class="box sq"><canvas id="slt-cv" aria-label="Heatmap of the normal crossing loss e^-N(theta u)^2"></canvas></div>
+      </div>
+      <div class="fig">
+        <div class="h">Bayesian evidence scaling <span>log Z_N against log N</span></div>
+        <svg id="slt-plot" role="img" aria-label="Evidence scaling plot showing N^-3/2 log N curvature"></svg>
+      </div>
+    </div>
+    <div class="chips" id="slt-chips"></div>
+  <div class="plot-legend"><span><i class="line-steel dashed"></i>Regular reference: N⁻²</span><span><i class="line-cold"></i>Fixed weights: N⁻³ᐟ²</span><span><i class="line-hot"></i>Critical free weights: N⁻³ᐟ² log N</span></div>
+  </section>
+
+  <div class="col">
+    <h3 id="collision-theorem">The Rousseau–Mengersen boundary</h3>
+    <p>For $a, b \in \mathbb{R}^q$ with a Dirichlet prior $\theta^{\alpha-1}(1-\theta)^{\alpha-1}$, the RLCT is:</p>
+    <div class="eq tex">\lambda_{\mathrm{RLCT}} = \frac{q}{2} + \min\left(\frac{q}{4}, \; \frac{\alpha}{2}\right), \qquad m = \begin{cases} 2, & \alpha = q/2 \\ 1, & \alpha \neq q/2 \end{cases}</div>
+    <p>At the critical boundary $\mathbf{\alpha = q/2}$ (Rousseau &amp; Mengersen 2011), component merging and emptying balance, creating the logarithmic evidence factor $N^{-\lambda}\log N$.</p>
+
+  </div>
   <div class="col">
     <div class="foot">
       <p><b>Resolution and formalization.</b> H. Hironaka, Resolution of singularities of an algebraic variety over a field of characteristic zero, Annals of Math. 79 (1964). M. F. Atiyah, Resolution of singularities and division of distributions, Comm. Pure Appl. Math. 23 (1970). J. Kollár, Lectures on Resolution of Singularities, Princeton (2007). O. Villamayor, Constructiveness of Hironaka's resolution, Ann. Sci. ENS 22 (1989). E. Bierstone and P. Milman, Canonical desingularization in characteristic zero by blowing up the maximum strata of a local invariant, Invent. Math. 128 (1997). J. Włodarczyk, Simple Hironaka resolution in characteristic zero, JAMS 18 (2005). D. Abramovich, M. Temkin and J. Włodarczyk, Functorial embedded resolution via weighted blowings up (2019). F. Castillo, D. Duarte, M. Leyton-Álvarez and A. Liendo, <a href="https://arxiv.org/abs/2409.19767">Nash blowup fails to resolve singularities in dimensions four and higher</a>, Annals of Math. (2026), and <a href="https://arxiv.org/abs/2511.01772">Non-normalized Nash blowup fails to resolve singularities in dimension three</a> (2025). M. Spivakovsky, Sandwiched singularities and desingularization of surfaces by normalized Nash transformations, Annals of Math. 131 (1990). B. Snikkers, A. Newgas, J. Hoogland and C. Elliott, <a href="https://resolution.org/post/formalizing-resolution-of-singularities">Formalizing Hironaka's resolution of singularities</a>, Resolution (2026), and <a href="https://github.com/resolutionorg/hironaka">the Lean library</a>.</p>
       <p><b>Graphics and geometry.</b> A. Petrov, M. S. Nabizadeh, A. Dodik and J. Solomon, <a href="https://arxiv.org/abs/2605.18215">Tangent blow-ups for processing non-manifold geometry</a> (2026). E. Vouga, B. Smith, D. M. Kaufman, R. Tamstorf and E. Grinspun, All's Well That Ends Well, ACM TOG 36 (2017). S. McNamara and W. R. Young, Inelastic collapse and clumping in a one-dimensional granular medium, Phys. Fluids A 4 (1992). G. Galperin, Playing pool with π, Regular and Chaotic Dynamics 8 (2003). R. McGehee, Triple collision in the collinear three-body problem, Invent. Math. 27 (1974). F. Dumortier and R. Roussarie, Canard cycles and center manifolds, Memoirs AMS 577 (1996). M. Krupa and P. Szmolyan, Extending geometric singular perturbation theory to nonhyperbolic points, SIAM J. Math. Anal. 33 (2001). G. H. Brown, J. Kileel and T. G. Kolda, <a href="https://arxiv.org/abs/2504.03937">The fascinating world of 2×2×2 tensors: its geometry and optimization challenges</a> (2025). V. de Silva and L.-H. Lim, <a href="https://arxiv.org/abs/math/0607647">Tensor rank and the ill-posedness of the best low-rank approximation problem</a>, SIMAX 30 (2008). A. Stegeman and L. De Lathauwer, A method to avoid diverging components in the Candecomp/Parafac model for generic I×J×2 arrays, SIMAX 30 (2009). R. Viertel and B. Osting, <a href="https://arxiv.org/abs/1708.02316">An approach to quad meshing based on harmonic cross-valued maps and the Ginzburg–Landau theory</a> (2017). A. Macq et al., <a href="https://arxiv.org/abs/2010.16381">Ginzburg–Landau energy and placement of singularities in generated cross fields</a> (2020). V. L. Ginzburg and L. D. Landau, On the theory of superconductivity, Zh. Eksp. Teor. Fiz. 20 (1950). F. Bethuel, H. Brezis and F. Hélein, Ginzburg–Landau Vortices (1994). S. Burer and R. D. C. Monteiro, <a href="https://doi.org/10.1007/s10107-002-0352-8">A nonlinear programming algorithm for solving semidefinite programs via low-rank factorization</a>, Math. Programming 95 (2003). N. Boumal, V. Voroninski and A. Bandeira, <a href="https://arxiv.org/abs/1606.04970">The non-convex Burer–Monteiro approach works on smooth semidefinite programs</a>, NeurIPS (2016). N. Pacheco-Tallaj, M. Couplet, E. Chien and D. Palmer, <a href="https://doi.org/10.1145/3799902.3811225">Synchronizing fields with singularities</a>, SIGGRAPH (2026). D. Palmer, A. Chern and J. Solomon, <a href="https://arxiv.org/abs/2405.03853">Lifting directional fields to minimal sections</a>, ACM TOG (2024). Y. Soliman, D. Slepčev and K. Crane, <a href="https://dl.acm.org/doi/10.1145/3197517.3201367">Optimal cone singularities for conformal flattening</a>, ACM TOG 37 (2018). K. Crane, M. Desbrun and P. Schröder, <a href="https://www.cs.cmu.edu/~kmcrane/Projects/TrivialConnections/">Trivial connections on discrete surfaces</a>, Computer Graphics Forum 29 (2010). F. Knöppel, K. Crane, U. Pinkall and P. Schröder, <a href="https://www.cs.cmu.edu/~kmcrane/Projects/GloballyOptimalDirectionFields/">Globally optimal direction fields</a>, ACM TOG 32 (2013). F. Kälberer, M. Nieser and K. Polthier, QuadCover: surface parameterization using branched coverings, Computer Graphics Forum 26 (2007). M. Nieser, U. Reitebuch and K. Polthier, CubeCover: parameterization of 3D volumes, Computer Graphics Forum 30 (2011). D. Palmer, D. Bommes and J. Solomon, Algebraic representations for volumetric frame fields, ACM TOG 39 (2020).</p>
       <p><b>Learning.</b> S. Watanabe, Algebraic Geometry and Statistical Learning Theory, Cambridge (2009). S. Watanabe, <a href="https://jmlr.org/papers/v14/watanabe13a.html">A widely applicable Bayesian information criterion</a>, JMLR 14 (2013). M. Aoyagi and S. Watanabe, Stochastic complexities of reduced rank regression in Bayesian estimation, Neural Networks 18 (2005). J. Rousseau and K. Mengersen, Asymptotic behaviour of the posterior distribution in overfitted mixture models, J. R. Stat. Soc. B 73 (2011). E. Lau, Z. Furman, G. Wang, D. Murfet and S. Wei, <a href="https://proceedings.mlr.press/v258/lau25a.html">The local learning coefficient</a>, AISTATS (2025). J. Hoogland, G. Wang, M. Farrugia-Roberts, L. Carroll, S. Wei and D. Murfet, <a href="https://arxiv.org/abs/2402.02364">Loss landscape degeneracy and stagewise development in transformers</a>, TMLR (2025). D. Murfet, S. Wei, M. Gong, H. Li, J. Gell-Redman and T. Quella, <a href="https://arxiv.org/abs/2010.11560">Deep learning is singular, and that's good</a> (2020).</p>
-      <p><b>How the figures are computed.</b> Everything runs in your browser. Collisions are exact event-driven simulations; springs use small time steps. Cross fields solve the Ginzburg–Landau gradient flow on an 81 × 81 grid with ε = 0.06; the lifted field minimizes the same grid's smoothness energy over unit vectors in ℝ³ by block-coordinate updates. Tensor fits are plain gradient descent. The cross field you drag (Figure {fig:crossdrag}) and its energy are closed forms; a single vortex (Figure {fig:vortex}) is a radial Newton solve. Figures {fig:twofits}, {fig:twowells}, {fig:winner}, {fig:relu2} and {fig:C1} integrate exactly on grids; Figures {fig:thermo} and {fig:llcnet} run Langevin chains live. The sampled points in Figure {fig:linnet} come from offline Langevin sampling of the full posterior (500 to 1000 chains at n = 1000, Gaussian prior).</p>
+      <p><b>How the figures are computed.</b> Everything runs in your browser. Collisions are exact event-driven simulations; springs use small time steps. Cross fields solve the Ginzburg–Landau gradient flow on an 81 × 81 grid with ε = 0.06; the lifted field minimizes the same grid's smoothness energy over unit vectors in ℝ³ by block-coordinate updates. Tensor fits are plain gradient descent. The cross field you drag (Figure {fig:D3}) and its energy are closed forms; a single vortex (Figure {fig:D4}) is a radial Newton solve. Figures {fig:twofits}, {fig:E2}, {fig:E3}, {fig:E6} and {fig:C1} integrate exactly on grids; Figures {fig:thermo} and {fig:llcnet} run Langevin chains live. The sampled points in Figure {fig:E5} come from offline Langevin sampling of the full posterior (500 to 1000 chains at n = 1000, Gaussian prior).</p>
       <p><b>Go deeper.</b> Companion pages with more figures: <a href="./extras/two-ways.html">Two ways to blow up</a> (Nash versus Hironaka, the zeta function), <a href="./extras/cradle.html">Resolving Newton's cradle</a> (up to seven balls), and <a href="./extras/physics.html">Blowups in physics</a>.</p>
     </div>
   </div>

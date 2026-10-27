@@ -175,3 +175,30 @@ ol.read { padding-left: 36px; } ol.read li { margin-bottom: .35em; }
 .nash3-dot { background: var(--cold); }
 .nash3-hole { border: 2px solid var(--hot); }
 .nash3-selected { background: var(--blow); }
+
+/* Plot labels keep their CSS-pixel size; explanatory legends reflow outside. */
+.plot-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 13px/1.5 var(--f-display); color: var(--muted); }
+.plot-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.plot-legend i { display: inline-block; width: 22px; height: 0; border-top: 2px solid var(--steel); flex-shrink: 0; }
+.plot-legend .line-blow { border-color: var(--blow); }
+.plot-legend .line-hot { border-color: var(--hot); }
+.plot-legend .line-cold { border-color: var(--cold); }
+.plot-legend .line-ink { border-color: var(--ink); }
+.plot-legend .dashed { border-top-style: dashed; }
+.plot-legend .dot-hot { width: 10px; height: 10px; border: 0; border-radius: 50%; background: var(--hot); }
+.learning-panel svg text { font-size: 12.5px; }
+.learning-panel .chip { border-radius: 8px; }
+.learning-panel button:disabled { opacity: 0.45; cursor: default; }
+details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color: var(--blow); margin: 8px 0; }
+.derivation { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 10px 0; margin: 28px 0; }
+.derivation .col { margin-top: 14px; }
+/* Keep off-screen SVG/MathML bounds inside the page; long tables/equations
+   retain their own horizontal scrollers. */
+.essay { overflow-x: clip; }
+#llcn-results { margin: 12px 0 6px; }
+#llcn-results table { width: 100%; border-collapse: collapse; min-width: 0; font-family: var(--f-display); font-size: 14px; }
+#llcn-results th, #llcn-results td { padding: 8px 12px; border-bottom: 1px solid var(--rule); }
+#llcn-results thead th { color: var(--muted); font-size: 13px; font-weight: 600; }
+#llcn-results th:not(:first-child), #llcn-results td:not(:first-child) { text-align: right; }
+#llcn-results td:not(:first-child) { font-family: var(--f-mono); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+#llcn-results tr:hover td { background: color-mix(in srgb, var(--blow) 8%, transparent); }

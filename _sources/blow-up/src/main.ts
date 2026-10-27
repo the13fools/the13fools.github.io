@@ -45,3 +45,5 @@ import "./figures/physics.js";
 import "./figures/manifolds.js";
 
 import "./figures/nash-three.js";
+
+import "./figures/toric-slice.js";

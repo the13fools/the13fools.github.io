@@ -46,7 +46,7 @@
   const watch = (el, onShow) => { if (!el) return; if (!("IntersectionObserver" in window)) { vis.set(el, true); if (onShow) setTimeout(onShow, 0); return; } new IntersectionObserver((es) => es.forEach((e) => { vis.set(el, e.isIntersecting); if (e.isIntersecting && onShow) onShow(); })).observe(el); };
 
   // ============================================================ Figure 1: singular points as a field picture
-  const F1 = { t: 0.55 };
+  const F1 = { t: 0.55, field: false };
   const F1D = {
     a: { f: (x, y) => y * y - x * x, g: (x, y) => [-2 * x, 2 * y], xr: [-1.1, 1.1], yr: [-1.1, 1.1], lv: [-0.6, -0.3, -0.1, 0.1, 0.3, 0.6], fmax: 1,
       zero: () => [[[-2, -2], [2, 2]], [[-2, 2], [2, -2]]], probe: (t) => [t, t], tan: () => [1, 1], name: "f = y² − x²" },
@@ -61,17 +61,17 @@
     const F = new Float64Array(n * n); for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) F[j * n + i] = D.f(PX(i), PY(j));
     const lvIdx = (v) => { let k = 0; for (const L of D.lv) if (v > L) k++; return k; };
     for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
-      const v = F[j * n + i], tt = clamp(Math.abs(v) / D.fmax, 0, 1), c0 = mix(paper, v > 0 ? hot : cold, 0.12 + 0.45 * Math.sqrt(tt));
+      const v = F[j * n + i], tt = clamp(Math.abs(v) / D.fmax, 0, 1), c0 = mix(paper, v > 0 ? hot : cold, 0.04 + 0.20 * Math.sqrt(tt));
       const kk = lvIdx(v), edge = (i < n - 1 && lvIdx(F[j * n + i + 1]) !== kk) || (j < n - 1 && lvIdx(F[(j + 1) * n + i]) !== kk);
-      const c = edge ? mix(c0, rgb(C.muted), 0.55) : c0, o = 4 * (j * n + i); img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
+      const c = F1.field && edge ? mix(c0, rgb(C.muted), 0.3) : c0, o = 4 * (j * n + i); img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
     }
     const off = document.createElement("canvas"); off.width = n; off.height = n; off.getContext("2d").putImageData(img, 0, 0);
     ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, W, H);
     const MX = (x) => (x - x0) / (x1 - x0) * W, MY = (y) => (y1 - y) / (y1 - y0) * H;
     // normal field ∇f/|∇f|
-    const G = 13, ar = 0.38 * W / G;
+    const G = 9, ar = 0.38 * W / G;
     ctx.strokeStyle = isDark() ? "rgba(230,233,239,0.55)" : "rgba(28,32,40,0.45)"; ctx.fillStyle = ctx.strokeStyle; ctx.lineWidth = 1.2 * d;
-    for (let j = 0; j < G; j++) for (let i = 0; i < G; i++) {
+    if (F1.field) for (let j = 0; j < G; j++) for (let i = 0; i < G; i++) {
       const x = x0 + (x1 - x0) * (i + 0.5) / G, y = y1 - (y1 - y0) * (j + 0.5) / G, g = D.g(x, y), gl = Math.hypot(g[0], g[1]); if (gl < 1e-9) continue;
       const ux = g[0] / gl, uy = -g[1] / gl, cx = MX(x), cy = MY(y);
       ctx.beginPath(); ctx.moveTo(cx - ux * ar * 0.5, cy - uy * ar * 0.5); ctx.lineTo(cx + ux * ar * 0.5, cy + uy * ar * 0.5); ctx.stroke();
@@ -89,14 +89,13 @@
       const g = D.g(P[0], P[1]), gl = Math.hypot(g[0], g[1]), gx = MX(P[0] + 0.28 * g[0] / gl), gy = MY(P[1] + 0.28 * g[1] / gl);
       ctx.strokeStyle = C.hot; ctx.lineWidth = 3 * d; ctx.beginPath(); ctx.moveTo(MX(P[0]), MY(P[1])); ctx.lineTo(gx, gy); ctx.stroke();
       ctx.fillStyle = C.blow; ctx.strokeStyle = C.surface; ctx.lineWidth = 2 * d; ctx.beginPath(); ctx.arc(MX(P[0]), MY(P[1]), 6 * d, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-      lab(`∇f = (${fmt(g[0])}, ${fmt(g[1])})`, 8 * d, 20 * d, C.hot);
-      lab("dashed: tangent line", 8 * d, 38 * d, C.blow);
+
     } else {
       ctx.fillStyle = C.bad; ctx.beginPath(); ctx.arc(MX(0), MY(0), 5 * d, 0, Math.PI * 2); ctx.fill();
-      lab("∇f = (0, 0): singular point", 8 * d, 20 * d, C.bad);
-      lab("no tangent line here", 8 * d, 38 * d, C.ink);
+      lab("∇f = 0", 8 * d, 20 * d, C.bad);
     }
   }
+  $("#f1-field")?.addEventListener("change", e => { F1.field = e.target.checked; fig1(); });
   function fig1() { if (!$("#f1a")) return;
     fig1panel($("#f1a"), F1D.a, F1.t); fig1panel($("#f1t"), F1D.t, F1.t); fig1panel($("#f1b"), F1D.b, F1.t);
     $("#f1-t-out").textContent = Math.abs(F1.t) < 0.015 ? "at the origin" : (F1.t > 0 ? "+" : "−") + Math.abs(F1.t).toFixed(2);
