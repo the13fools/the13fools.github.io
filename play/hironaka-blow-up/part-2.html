@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-BEQOngst.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-BzREZgK5.css">
+  <script type="module" crossorigin src="./assets/main--jcyYV-P.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-TdWDIpBl.css">
 </head>
 <body>
   <header class="site-header">
@@ -47,33 +47,97 @@
     <p>Both constructions retain extra geometric information; neither averages neighboring points as Laplacian smoothing does. On $y=x^2$, for example, the two recorded slopes are $x$ and $2x$. They are different rules even when their limiting slopes agree.</p>
     <h3>First see a case where both succeed</h3>
     <p>For the cone $X^2+Y^2=Z^2$, put $(X,Y,Z)=(u\cos\theta,u\sin\theta,u)$. The ordinary blowup records its ray direction $[\cos\theta:\sin\theta:1]$. The tangent plane away from the apex has normal $[\cos\theta:\sin\theta:-1]$, so Nash retains the same angular information in a different form. Here both give a smooth cylinder. Watch how the new circle sits over the one old apex.</p>
-    <p class="read"><b>Figure 10.</b> The cone and its strict transform in the $Z$-direction chart. Both viewports sample the exact defining equations. The blue point on the cylinder maps to the blue point on the cone under $(v,w,u) \mapsto (uv,uw,u)$. Set $u=0$, then sweep the direction $\theta$: the entire purple circle collapses to the single singular apex $(0,0,0)$. The cylinder lives in local chart coordinates, revealing how directions disentangle the pinch.</p>
+    <p class="read"><b>Figure 10.</b> <b>Exact cone blowup vs. Nash tangent resolution.</b> Track two points, A and B, whose directions differ by 90°. Press <b>Approach the apex</b>: as $u \to 0$, their positions on the cone coalesce ($\|A - B\| = \sqrt{2}|u| \to 0$), $\nabla F \to \mathbf{0}$, and the area element $dA$ collapses. Upstairs on the cylinder $v^2+w^2=1$, their resolved positions remain distinct ($\|A - B\| = \sqrt{2} \approx 1.414$), $\|\nabla g\| = 2 \ne 0$ everywhere, and $dA = du\,d\theta$ is non-degenerate. Then press <b>Sweep the exceptional circle</b>: the points rotate along $E$ while both old positions remain fixed at the singular apex. Meanwhile, the tangent plane normals $[\cos\theta : \sin\theta : -1]$ limit to the family of planes $\cos\theta X + \sin\theta Y - Z = 0$, resolving the cone in a single Nash step.</p>
   </div>
 
-  <section class="panel" aria-label="Exact cone blowup explorer">
+  <section class="panel" id="cone-blowup-demo" aria-label="Exact cone blowup explorer">
+    <div class="controls cone-guided"><button type="button" class="btn go" id="cone-approach">1. Approach the apex</button><button type="button" class="btn" id="cone-sweep">2. Sweep the exceptional circle</button><button type="button" class="btn" id="cone-leave">3. Move off the circle</button><button type="button" class="btn" id="cone-stop" disabled>Pause animation</button></div>
     <div class="controls">
-      <label class="sl"><span class="lbl">Chart coordinate u</span><input id="cone-u" type="range" min="-1.2" max="1.2" step="0.02" value="0.6"><output id="cone-u-out" for="cone-u"></output></label>
-      <label class="sl"><span class="lbl">Direction θ</span><input id="cone-theta" type="range" min="0" max="360" step="1" value="45"><output id="cone-theta-out" for="cone-theta"></output></label>
+      <label class="sl"><span class="lbl">Scale u = original height Z</span><input id="cone-u" type="range" min="-1.2" max="1.2" step="0.01" value="0.6"><output id="cone-u-out" for="cone-u"></output></label>
+      <label class="sl"><span class="lbl">Retained direction θ</span><input id="cone-theta" type="range" min="0" max="360" step="1" value="45"><output id="cone-theta-out" for="cone-theta"></output></label>
+      <button type="button" class="btn" id="cone-exceptional">Jump to u = 0</button>
     </div>
-    <div class="controls">
-      <button type="button" class="btn go" id="cone-exceptional">At the exceptional circle (u = 0)</button>
-      <label class="sl"><span class="lbl">Viewing angle</span><input id="cone-view" type="range" min="-180" max="180" step="1" value="28"><output id="cone-view-out" for="cone-view"></output></label>
-      <button type="button" class="btn" id="cone-reset">Reset view</button>
-    </div>
+    <p class="story-result" id="cone-state" aria-live="polite"></p>
+    <div class="cone-map-formula">$\pi(v,w,u)=(uv,uw,u)$ <span>· forget the retained direction at u = 0</span></div>
     <div class="pair">
       <div class="fig">
-        <div class="h">Original cone <span>(X, Y, Z)</span></div>
-        <div class="box sq drag"><canvas id="cone-original" aria-label="The cone X squared plus Y squared equals Z squared, with the image of the selected point"></canvas></div>
-        <p class="cap">X² + Y² = Z². The singular apex collapses all directions to a point.</p>
+        <div class="h">Original cone <span>position (X, Y, Z)</span></div>
+        <div class="box sq drag"><canvas id="cone-original" tabindex="0" aria-label="Cone X squared plus Y squared equals Z squared; two colored points approach the same singular apex; drag or use arrow keys to rotate"></canvas></div>
+        <div class="cone-record" id="cone-original-record"></div>
       </div>
       <div class="fig">
-        <div class="h">Strict transform <span>(v, w, u)</span></div>
-        <div class="box sq drag"><canvas id="cone-resolved" aria-label="The smooth cylinder v squared plus w squared equals one, with the exceptional circle at u equals zero"></canvas></div>
-        <p class="cap">v² + w² = 1. Purple: the exceptional circle u = 0 (resolved directions).</p>
+        <div class="h">Resolved surface <span>coordinates (v, w, u)</span></div>
+        <div class="box sq drag"><canvas id="cone-resolved" tabindex="0" aria-label="Smooth cylinder v squared plus w squared equals one; two points remain distinct on the exceptional circle; drag or use arrow keys to rotate"></canvas></div>
+        <div class="cone-record" id="cone-resolved-record"></div>
       </div>
     </div>
-    <div class="algebra" id="cone-point" aria-live="polite" aria-atomic="true"></div>
-    <p class="cap">Drag either viewport to rotate both synchronously, or use the viewing-angle slider. The blue markers correspond under the blowdown map $(uv, uw, u) \mapsto (X, Y, Z)$.</p>
+    <div class="plot-legend"><span><i class="line-cold"></i>A · direction θ</span><span><i class="line-hot"></i>B · direction θ + 90°</span><span><i class="line-blow"></i>E · exceptional circle, u = 0</span></div>
+    <div class="cone-section"><h4>The same cross-section, viewed from above</h4><svg id="cone-rings" role="img" aria-label="The old ring has radius absolute u and collapses to a point, while the resolved ring has radius one even at u equals zero"></svg></div>
+    <div class="pair cone-checks">
+      <div id="cone-original-test" class="cone-test"></div><div id="cone-resolved-test" class="cone-test"></div>
+    </div>
+    <div class="map-table-wrap" style="margin-top: 1.2rem;">
+      <table class="map-level-table" id="cone-comparison-table" aria-label="Side-by-side metric and geometric invariant comparison between original cone and resolved cylinder">
+        <thead>
+          <tr>
+            <th style="text-align: left;">Geometric Invariant</th>
+            <th style="text-align: left;">Original Cone $X^2 + Y^2 - Z^2 = 0$</th>
+            <th style="text-align: left;">Resolved Surface $v^2 + w^2 - 1 = 0$</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: left;"><b>Space &amp; Coordinates</b></td>
+            <td style="text-align: left;">Ambient $\mathbb{R}^3$, coordinates $(X, Y, Z)$</td>
+            <td style="text-align: left;">Blowup chart $\mathbb{R}^3$, $(v, w, u)$ with $\pi(v,w,u)=(uv, uw, u)$</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Defining Equation &amp; Degree</b></td>
+            <td style="text-align: left;">$F(X,Y,Z) = X^2 + Y^2 - Z^2 = 0$ (degree 2)</td>
+            <td style="text-align: left;">Strict transform $g(v,w,u) = v^2 + w^2 - 1 = 0$ (degree 2 in $v,w$)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Gradient Vector $\nabla$ &amp; Norm</b></td>
+            <td style="text-align: left;" id="cone-row-grad-orig">$\nabla F = (2X, 2Y, -2Z)$, $\|\nabla F\| = 2\sqrt{2}|u|$</td>
+            <td style="text-align: left;" id="cone-row-grad-res">$\nabla g = (2v, 2w, 0)$, $\|\nabla g\| = 2$ (constant $\ne 0$ everywhere!)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Regularity / Smoothness</b></td>
+            <td style="text-align: left;" id="cone-row-reg-orig">Singular at apex $(0,0,0)$ where $\nabla F = \mathbf{0}$</td>
+            <td style="text-align: left;"><b>Smooth 2-manifold everywhere</b> (rank 1 gradient on $g=0$)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Fiber Over Apex ($u = 0$)</b></td>
+            <td style="text-align: left;">All rays collapse to a single point: apex $(0,0,0)$</td>
+            <td style="text-align: left;">Exceptional circle $E$: $v^2+w^2=1, u=0$ (circumference $2\pi$)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Point Separation ($\Delta\theta = 90^\circ$)</b></td>
+            <td style="text-align: left;" id="cone-row-dist-orig">$\|A_{\text{orig}} - B_{\text{orig}}\| = \sqrt{2}|u|$</td>
+            <td style="text-align: left;" id="cone-row-dist-res">$\|A_{\text{res}} - B_{\text{res}}\| = \sqrt{2} \approx 1.414$ (separated along $E$)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Riemannian Area Element $dA$</b></td>
+            <td style="text-align: left;" id="cone-row-area-orig">$dA = \sqrt{2}|u|\,du\,d\theta \to 0$ (metric degenerates at apex)</td>
+            <td style="text-align: left;">$dA = 1\,du\,d\theta$ (standard non-degenerate cylinder metric)</td>
+          </tr>
+          <tr>
+            <td style="text-align: left;"><b>Nash Tangent Plane Normal</b></td>
+            <td style="text-align: left;">$[\cos\theta : \sin\theta : -1]$ off apex; limits form circle of planes</td>
+            <td style="text-align: left;">Limiting normal family $\cos\theta\,X + \sin\theta\,Y - Z = 0$ resolves apex in 1 step</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap" id="cone-point" aria-live="polite"></p>
+    <p class="cap">The controls select points and sections in these two fixed spaces. The cylinder is the new space throughout. On it, u and θ remain independent coordinates at u = 0; the projection identifies that whole circle with one old point. Distances above are distances in the displayed coordinate systems.</p>
+    <details class="derivation"><summary>Read the substitution and the Nash tangent-plane records</summary>
+      <div class="eq tex">F(uv,uw,u)=u^2\underbrace{(v^2+w^2-1)}_{g(v,w,u)}.</div>
+      <p>Off u = 0, dividing by u² gives g = 0. Take the closure of that equation to get the strict transform, which also includes its circle at u = 0. In this ambient chart u = 0 is a plane; the resolved cone meets it only along v² + w² = 1.</p>
+      <p>Nash records the cone’s own tangent plane. Off the apex its normal direction is [v : w : −1]. The limiting planes remain different for different θ, even though their old base point is the same. On this cone, that information also gives a smooth resolution.</p>
+      <div class="algebra" id="cone-nash-record"></div>
+    </details>
+    <details class="derivation"><summary>Rotate or reset the view</summary><div class="controls"><label class="sl"><span class="lbl">Viewing angle</span><input id="cone-view" type="range" min="-180" max="180" step="1" value="28"><output id="cone-view-out" for="cone-view"></output></label><button type="button" class="btn" id="cone-reset">Reset view and points</button></div><p class="cap">Drag either viewport to rotate both synchronously, or use its arrow keys. The camera changes the view; it does not perform a blowup.</p></details>
   </section>
 
   <div class="col">
@@ -277,22 +341,26 @@
     <div class="eq tex">(x_1,x_2,x_3)=(rst,\ s^2t,\ rs^2t^2),</div>
     <div class="eq tex">(x_4,x_5,x_6)=(t,\ r^2st^2,\ r^3t^2).</div>
     <p>The new ray $n_5$ gives the scaling exponents $(1,1,2,1,2,2)$ of the six coordinates as $t\to0$. At $t=0$, the entire smooth coordinate plane $(r,s,0)$ maps to the old singular origin. <b>Here the exceptional divisor is a surface</b>, because the resolved space is three-dimensional. In a surface blowup, the analogous divisor is a curve.</p>
-    <p class="read"><b>Figure 15.</b> Animate the explicit map toward the origin. On the left the selected point approaches the exceptional plane while retaining $r$ and $s$; on the right its image collapses to one point. At $t=0$, move $r$ or $s$ to see distinct resolved points above the same old origin. This is the blowdown map in chart D, not another Nash iteration. At $t=1$, its real mesh recovers the parametrized sheets of the earlier section.</p>
+    <p class="read"><b>Figure 15.</b> Where did the singular point go? Compare several level sets of $t=x_4$ at once. Each colored plane on the left maps to a matching colored patch on the right. The violet plane $t=0$ is different: <b>every one of its points maps to the old origin</b>. The black path holds $r,s$ fixed while $t$ varies; the white dot marks your selected point. Animate the approach, then change $r$ or $s$ at $t=0$: the resolved point moves while its image stays put.</p>
     <p class="cap">The four charts describe a complex algebraic resolution. The earlier section's extra negative B-axis has no real lift to the normalization: V² = x₂x₄ = B &lt; 0 there. Those points lift over ℂ, through non-real values of V. This is another reason a real surface picture cannot display the whole complex resolution.</p>
   </div>
-  <section class="panel" aria-label="Explicit resolution map and exceptional surface">
+  <section class="panel" id="resolution-map-demo" aria-label="Explicit resolution map and exceptional surface">
     <div class="controls">
       <label class="sl"><span class="lbl">r</span><input id="nash3-map-r" type="range" min="-1" max="1" step="0.02" value="0.6"><output id="nash3-map-r-out">0.60</output></label>
       <label class="sl"><span class="lbl">s</span><input id="nash3-map-s" type="range" min="-1" max="1" step="0.02" value="0.7"><output id="nash3-map-s-out">0.70</output></label>
-      <label class="sl"><span class="lbl">t</span><input id="nash3-map-t" type="range" min="0" max="1" step="0.002" value="1"><output id="nash3-map-t-out">1.00</output></label>
+      <label class="sl"><span class="lbl">Selected t = x₄</span><input id="nash3-map-t" type="range" min="0" max="1" step="0.002" value="1"><output id="nash3-map-t-out">1.00</output></label>
     </div>
     <div class="controls"><button type="button" class="btn go" id="nash3-map-animate">Animate approach to the origin</button><button type="button" class="btn" id="nash3-map-zero">On the exceptional surface (t = 0)</button></div>
+    <div class="controls map-options"><label><input type="checkbox" id="nash3-map-levels" checked> Overlay t = 0, ¼, ½, ¾, 1</label><button type="button" class="btn" id="nash3-map-one">Return to t = 1</button></div>
+    <div id="nash3-map-legend" class="map-level-legend" aria-label="Matching colors identify the same t level in both views"></div>
     <div class="pair">
       <div class="fig"><div class="h">Smooth source chart D <span>independent coordinates (r, s, t)</span></div><div class="box sq drag"><canvas id="nash3-resolution-source" tabindex="0" aria-label="Smooth three-dimensional chart and the exceptional coordinate plane t equals zero; drag or use arrow keys to rotate"></canvas></div></div>
       <div class="fig"><div class="h">Image in the original variety <span>projected to (x₁, x₂, x₆)</span></div><div class="box sq drag"><canvas id="nash3-resolution-target" tabindex="0" aria-label="The explicit monomial image approaching the old singular origin; drag or use arrow keys to rotate"></canvas></div></div>
     </div>
+    <div class="map-rate-note"><b>Read the contraction:</b> $x_1=rst$ and $x_2=s^2t$ shrink linearly in $t$; $x_6=r^3t^2$ shrinks quadratically. Halving $t$ halves the first two coordinates and quarters the third. The source coordinates $r,s$ remain free at $t=0$.</div>
     <div class="algebra" id="nash3-map-coordinates" aria-live="polite"></div><p class="cap" id="nash3-map-status" aria-live="polite"></p>
-    <p class="cap">The colored target mesh is the image of a patch with t held fixed. This one chart is part of the resolution; all four charts are needed globally.</p>
+    <details class="derivation"><summary>Compare the level sets numerically along the black path</summary><p class="cap">Hold the current r and s fixed. Each row is a point on the corresponding colored slice; the right-hand coordinates are its exact image, before the three-coordinate projection.</p><div class="map-table-wrap"><table class="map-level-table"><thead><tr><th scope="col">t = x₄</th><th scope="col">x₁</th><th scope="col">x₂</th><th scope="col">x₃</th><th scope="col">x₅</th><th scope="col">x₆</th></tr></thead><tbody id="nash3-map-table"></tbody></table></div></details>
+    <p class="cap">These are coordinate level sets of t = x₄. All colored images satisfy the same five defining equations of X; they are not different error levels. The right view projects six coordinates to three, so apparent overlaps need not mean the full points coincide. Only a bounded real patch is drawn. This is chart D of the computed toric resolution; all four charts are needed globally. Drag either view or use its arrow keys to rotate both.</p>
   </section>
   <details class="experiment"><summary>Verify all four charts: normalization and the fan calculation</summary><div class="col">
     <p>Now work in the <b>dual lattice $N$</b>, where a vector $n$ records the vanishing order $\langle h_i,n\rangle$ of the coordinate monomial $x_i$. Solving the six inequalities $\langle h_i,n\rangle\ge0$ gives the four primitive rays:</p>

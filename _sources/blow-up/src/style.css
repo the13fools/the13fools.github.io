@@ -290,8 +290,27 @@ body{position:relative;overflow-x:hidden}
 .tensor-cell{display:block;width:100%;border:1px solid var(--rule);border-radius:4px;padding:.4rem 0;background:var(--surface);background:color-mix(in srgb,var(--cell-color) calc(var(--cell-strength)*100%),var(--surface));color:var(--ink);font:500 .78rem var(--f-mono);cursor:pointer}
 .tensor-cell.picked{outline:2px solid var(--blow);outline-offset:0}.tensor-cell:focus-visible{outline:3px solid var(--ink)}
 .tensor-entry-trace{background:var(--soft);border-radius:8px;padding:.8rem 1rem;font:.9rem/1.5 var(--f-display);margin:1rem 0}.tensor-entry-trace p{margin:0 0 .6rem}
+.tensor-note{margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--rule);font:500 .84rem/1.5 var(--f-display);color:var(--ink)}
 .tensor-trace-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1rem;font:.8rem/1.6 var(--f-mono);overflow-wrap:anywhere}
 .tensor-analysis{margin:1.4rem 0}.tensor-loss-budget h4{font:650 .85rem var(--f-display);margin:1rem 0 .5rem}.loss-budget-rows>div{display:flex;justify-content:space-between;font:.78rem/1.6 var(--f-mono);border-bottom:1px solid var(--rule);padding:.2rem 0}
 @media(max-width:700px){.nash-lesson-columns,.tensor-trace-grid{grid-template-columns:1fr}.tensor-pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}.tensor-card{padding:.55rem}.tensor-cell{font-size:.7rem}.tensor-card h4{font-size:.76rem}.tensor-card-factors{font-size:.7rem}.tensor-vector-list>div{font-size:.72rem}.lab-badge{margin-left:0}.tensor-slices th:first-child{width:1.5rem}}
 
 #nash3-route{display:block;width:100%;height:auto;margin-top:1rem}
+
+/* Read the blowdown through linked records, sections, and coordinate levels. */
+.cone-map-formula { padding: 14px; margin: 14px 0; text-align: center; background: var(--soft); border-radius: 8px; }
+.cone-map-formula span { font: 13px var(--f-display); color: var(--muted); }
+.cone-record { font: 12px/1.65 var(--f-mono); padding: 12px; overflow-wrap: anywhere; }
+.cone-section { margin: 20px 0; }
+.cone-section h4 { font: 15px var(--f-display); margin-bottom: 0; }
+#cone-rings { width: 100%; height: 180px; display: block; }
+.cone-checks > div { padding: 14px; font: 14px/1.6 var(--f-display); background: var(--soft); border-radius: 8px; }
+.map-level-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 14px 0 20px; font: 13px var(--f-display); }
+.map-level-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.map-level-legend i { width: 18px; height: 5px; border-radius: 2px; display: inline-block; }
+.map-options label { font: 14px var(--f-display); }
+.map-rate-note { margin: 18px 0; padding: 14px; background: var(--soft); border-radius: 8px; font: 15px/1.7 var(--f-display); }
+.map-table-wrap { overflow-x: auto; }
+.map-level-table { border-collapse: collapse; width: 100%; font: 12px var(--f-mono); text-align: right; }
+.map-level-table th,.map-level-table td { padding: 10px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+#cone-blowup-demo .story-result { font: 15px/1.65 var(--f-display); padding: 14px; background: var(--soft); border-radius: 8px; }

@@ -18,3 +18,13 @@ const a = coneChartPoint(0, 0), b = coneChartPoint(0, Math.PI / 2);
 assert.notDeepEqual(a.resolved, b.resolved);
 for (const p of [a.original, b.original]) p.forEach(x => near(x, 0));
 console.log("check-cone: equations, inverse map, and exceptional fiber OK");
+// Linked A/B records: old positions coalesce, but direction records and
+// the nonzero gradient upstairs persist even at u=0.
+const { coneComparison } = await import('../src/figures/cone-geometry.js');
+for(const u of [-1.2,-.3,0,.3,1.2])for(const theta of [0,.7,Math.PI]){
+  const q=coneComparison(u,theta);
+  near(q.originalDistance,Math.SQRT2*Math.abs(u));
+  near(q.resolvedDistance,Math.SQRT2);
+  near(q.originalGradient,2*Math.SQRT2*Math.abs(u));near(q.resolvedGradient,2);
+  for(const p of [q.A,q.B])near(p.resolved[0]*p.original[0]+p.resolved[1]*p.original[1]-p.original[2],0);
+}

@@ -23,14 +23,48 @@ function init() {
     const av=term(a),bv=term(b),chosen=indices(probe),label=bits(probe);
     $('#tc-delta-out').textContent=String(+delta.toPrecision(4));
     $('#tc-delta').disabled=mode==='fit';$('#tc-halve').disabled=delta===0;
-    $('#tc-result').textContent=`a = ${num(a)}, b = ${num(b)} · mean s = ${num(s)}, separation d = ${num(d)} · scaled squared error K = ${num(tensorLoss(s,d))} · tensor rank ${d===0?1:2} (two allowed terms). `+(mode==='fit'||delta===0?'Each weighted term is half the target; adding them gives an exact fit.':mode==='together'?'Both components change in the same direction, so their linear prediction changes add.':`The components separate in opposite directions. Their linear changes cancel; entries 011, 101, and 110 are ${num(d*d)} instead of zero.`);
+    const ones=chosen.reduce((sum,x)=>sum+x,0);
+    const lossVal=tensorLoss(s,d);
+    let explanation='';
+    if(mode==='fit'||delta===0){
+      explanation='<b>Problem:</b> Fitting rank-1 target tensor T* (entry 000 is 1; others 0) with a 2-component symmetric model. At a = b = 0, both components collide into identical rank-1 terms (A = B = T*/2). Their sum matches T* with zero loss K = 0.';
+    }else if(mode==='together'){
+      explanation=`<b>Move Together (s = ${num(delta)}, d = 0):</b> Both components shift in the same direction (a = b = +${num(delta)}). Linear errors reinforce (+${num(delta/2)} + ${num(delta/2)} = ${num(delta)}). Prediction error is order δ, so squared loss grows <b>quadratically</b>: K ≈ δ² = ${num(lossVal)} (steep curvature, Hessian H_ss = 2).`;
+    }else{
+      explanation=`<b>Pull Apart (s = 0, d = ${num(delta)}):</b> Components shift in opposite directions (a = +${num(delta)}, b = -${num(delta)}). In their sum T = A + B, linear first-order errors <b>cancel identically to zero</b> (+${num(delta/2)} - ${num(delta/2)} = 0!). Single-1 entries stay strictly zero. Error appears only at order δ² (${num(d*d)}), so squared loss grows <b>quartically</b>: K = δ⁴ = ${num(lossVal)} (Hessian H_dd = 0, degenerate flat valley!).`;
+    }
+    $('#tc-result').innerHTML=`<b>Status:</b> a = ${num(a)}, b = ${num(b)} (mean s = ${num(s)}, separation d = ${num(d)}) · <b>Loss K = ${num(lossVal)}</b> · rank ${d===0?1:2} (two allowed terms).<br>${explanation}`;
     const active=document.activeElement,focus=active?.matches('[data-tensor-entry]')?{card:active.dataset.card}:null;
     const cards=[{key:'a',name:'Term A · weight ½',values:av,factor:a,color:'cold'},{key:'b',name:'Term B · weight ½',values:bv,factor:b,color:'hot'},{key:'sum',name:'Prediction T = A + B',values,color:'blow'},{key:'target',name:'Fixed data T*',values:target,factor:0,color:'ink'}];
     const factorRows=value=>`<div class="tensor-vector-list">${chosen.map((pick,axis)=>`<div><span>${['i','j','k'][axis]}</span><span class="tensor-bracket">[</span>${[1,value].map((v,j)=>`<span class="factor-entry ${pick===j?'picked':''}">${num(v)}</span>`).join('')}<span class="tensor-bracket">]</span></div>`).join('')}</div>`;
     $('#tensor-components').innerHTML=cards.map(card=>`<div class="tensor-card tensor-${card.color}"><h4>${card.name}</h4><div class="tensor-card-factors">${card.factor!==undefined?factorRows(card.factor):`<p>For each entry, add the two numbers at the same position.</p><p class="tensor-sum-entry">${num(av[probe])} + (${num(bv[probe])}) = <b>${num(values[probe])}</b></p>`}</div><div class="tensor-slices">${[0,1].map(k=>`<table><caption>k = ${k}</caption><thead><tr><th>i ∖ j</th><th>0</th><th>1</th></tr></thead><tbody>${[0,1].map(i=>`<tr><th>${i}</th>${[0,1].map(j=>{const index=4*i+2*j+k,v=card.values[index];return `<td><button type="button" class="tensor-cell ${index===probe?'picked':''}" style="--cell-strength:${v===0?0:Math.min(.55,.08+.42*Math.abs(v))};--cell-color:var(--${v<0?'cold':'hot'})" data-card="${card.key}" data-tensor-entry="${index}" tabindex="${index===probe?0:-1}" aria-pressed="${index===probe}" aria-label="${card.name}, entry ${bits(index)}: ${num(v)}">${num(v)}</button></td>`;}).join('')}</tr>`).join('')}</tbody></table>`).join('')}</div></div>`).join('');
     if(focus)$(`[data-card="${focus.card}"][data-tensor-entry="${probe}"]`)?.focus({preventScroll:true});
     const product=value=>chosen.map(i=>num(i?value:1)).join(' × '),error=values[probe]-target[probe];
-    $('#tc-arithmetic').innerHTML=`<p><b>Trace entry ${label}</b> · i = ${chosen[0]}, j = ${chosen[1]}, k = ${chosen[2]}. Highlighted vector entries supply the factors.</p><div class="tensor-trace-grid"><div><b>A:</b> ½ × ${product(a)} = ${num(av[probe])}</div><div><b>B:</b> ½ × ${product(b)} = ${num(bv[probe])}</div><div><b>Sum:</b> ${num(av[probe])} + (${num(bv[probe])}) = ${num(values[probe])}</div><div><b>Error:</b> ${num(values[probe])} − ${num(target[probe])} = ${num(error)}; error²/3 = ${num(error**2/3)}</div></div>`;
+    let note='';
+    if(mode==='apart'){
+      if(ones===1){
+        note=`<div class="tensor-note"><b>Linear cancellation:</b> Opposite linear terms cancel in the sum: ${num(av[probe])} + (${num(bv[probe])}) = <b>0.000</b>. Prediction error is strictly zero at order δ!</div>`;
+      }else if(ones===2){
+        note=`<div class="tensor-note"><b>Second-order error:</b> Both components square to positive values: ${num(av[probe])} + ${num(bv[probe])} = <b>${num(values[probe])} = d²</b>. Prediction error is d², so squared loss error² = (d²)² = <b>d⁴</b>.</div>`;
+      }else if(ones===3){
+        note=`<div class="tensor-note"><b>Cubic cancellation:</b> (+d)³ + (-d)³ = +d³ - d³ = <b>0</b>. Terms cancel out, zero error.</div>`;
+      }else{
+        note=`<div class="tensor-note"><b>Target match:</b> Both terms evaluate to ½ × 1 = ½. Sum is 1.000, exactly matching target entry 000.</div>`;
+      }
+    }else if(mode==='together'){
+      if(ones===1){
+        note=`<div class="tensor-note"><b>Constructive addition:</b> Both linear terms add: ${num(av[probe])} + ${num(bv[probe])} = <b>${num(values[probe])} = s</b>. Error is order δ, so loss scales quadratically as s² = δ².</div>`;
+      }else if(ones===2){
+        note=`<div class="tensor-note"><b>Quadratic term:</b> Both components add: ${num(av[probe])} + ${num(bv[probe])} = <b>${num(values[probe])} = s²</b>.</div>`;
+      }else if(ones===3){
+        note=`<div class="tensor-note"><b>Cubic term:</b> Both components add: ${num(av[probe])} + ${num(bv[probe])} = <b>${num(values[probe])} = s³</b>.</div>`;
+      }else{
+        note=`<div class="tensor-note"><b>Target match:</b> Both terms evaluate to ½ × 1 = ½. Sum is 1.000, matching target entry 000.</div>`;
+      }
+    }else{
+      note=`<div class="tensor-note"><b>Exact fit:</b> At a = b = 0, entry ${label} evaluates to ${num(values[probe])}, matching target ${num(target[probe])} with zero error.</div>`;
+    }
+    $('#tc-arithmetic').innerHTML=`<p><b>Trace entry ${label}</b> · i = ${chosen[0]}, j = ${chosen[1]}, k = ${chosen[2]}. Highlighted vector entries supply the factors.</p><div class="tensor-trace-grid"><div><b>Term A:</b> ½ × ${product(a)} = ${num(av[probe])}</div><div><b>Term B:</b> ½ × ${product(b)} = ${num(bv[probe])}</div><div><b>Sum T:</b> ${num(av[probe])} + (${num(bv[probe])}) = ${num(values[probe])}</div><div><b>Error:</b> ${num(values[probe])} − ${num(target[probe])} = ${num(error)}; error²/3 = ${num(error**2/3)}</div></div>${note}`;
     document.querySelectorAll('[data-entry]').forEach(button=>button.setAttribute('aria-pressed',String(+button.dataset.entry===probe)));
     $('#tc-entries').innerHTML=`<table><thead><tr><th>Entry</th><th>Term A</th><th>Term B</th><th>Sum</th><th>Target</th></tr></thead><tbody>${values.map((v,i)=>`<tr class="${Math.abs(v-target[i])>1e-9?'changed':''}"><th>${bits(i)}</th><td>${num(av[i])}</td><td>${num(bv[i])}</td><td>${num(v)}</td><td>${target[i]}</td></tr>`).join('')}</tbody></table>`;
     const together=x=>tensorLoss(x,0),apart=x=>tensorLoss(0,x);

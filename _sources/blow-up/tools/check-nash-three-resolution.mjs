@@ -53,3 +53,11 @@ const last=RESOLVED_CONES[3];
 evaluateChart(last,[0.3,0.7,1]).forEach((v,i)=>assert.ok(Math.abs(v-sectionPoint(0.7,0.3)[i])<1e-12));
 assert.deepEqual(evaluateChart(last,[0.3,0.7,0]),[0,0,0,0,0,0]);
 console.log("check-nash-three-resolution: exact normalization, dual cone, full fan refinement, four unimodular charts, polynomial identities, torus inverses, and exceptional-plane map OK");
+// Figure 15 colors coordinate level sets of t=x4. Along each tracked path,
+// halving t halves x1,x2,x4 and quarters x3,x5,x6, including negative r,s.
+for(const r of [-.8,0,.6])for(const s of [-.7,0,.7])for(const t of [.25,.5,.75,1]){
+  const full=evaluateChart(last,[r,s,t]),half=evaluateChart(last,[r,s,t/2]);
+  assert.equal(full[3],t);
+  full.forEach((v,i)=>assert.ok(Math.abs(half[i]-v/([0,1,3].includes(i)?2:4))<1e-12));
+  threefoldResiduals(full).forEach(v=>assert.ok(Math.abs(v)<1e-12));
+}
