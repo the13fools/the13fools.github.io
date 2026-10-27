@@ -31,11 +31,11 @@
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part IV of IV</p>
     <h1>Singular learning theory</h1>
-    <p class="dek">Why Bayesian posteriors prefer degenerate valleys, how a statistical thermometer extracts the learning coefficient, and why overparameterization plateaus.</p>
+    <p class="dek">Three experiments: compare equally good fits, measure their nearby parameter volume, and estimate a learning coefficient in a trained linear network.</p>
   </div>
   <div class="col">
-    <p>In classical statistics, parameters are isolated points, and every local minimum is approximated by a quadratic Taylor bowl. That picture underpins familiar criteria like AIC and BIC, where every parameter claims an equal half-unit of complexity ($d/2$).</p>
-    <p>Modern neural networks shatter this assumption. Overparameterization and internal symmetries fold the zero-loss set into continuous singular subvarieties—entire valleys and intersecting branches where training loss is identical. When multiple parameter configurations achieve zero training loss, how does a Bayesian posterior choose between them? It integrates over parameter volume: <b>the flatter, more degenerate minimum possesses vastly more nearby room</b>.</p>
+    <p>Regular statistical theory assumes identifiable parameters and a nondegenerate quadratic loss near the optimum. The resulting Gaussian approximation gives a complexity coefficient $d/2$, where $d$ is the number of parameters.</p>
+    <p>Neural networks can violate these assumptions. Continuous symmetries and redundant units create valleys of equivalent functions; intersecting valleys can introduce further degeneracy. A Bayesian posterior integrates over nearby parameter volume. For equally good fits with comparable positive prior weight, <b>a flatter minimum can retain more posterior mass</b>.</p>
     <h2 id="learning">10. Same fit, different room</h2>
     <p>In the simulation below, two candidate parameter settings both achieve zero training loss ($K = 0$). Near the blue point, the loss rises steeply as a quadratic bowl ($K \propto r^2$). Near the orange point, the loss stays flat, growing only quartically ($K \propto r^4$).</p>
     <p>As dataset size $n$ increases, the Gibbs posterior $p(w) \propto e^{-n K(w)}$ contracts around both solutions. But because a quartic well has broader shoulders, its volume contracts far more slowly ($n^{-1/2}$ vs. $n^{-1}$). Rather than splitting mass fifty-fifty, the posterior overwhelmingly concentrates around the degenerate fit.</p>
@@ -51,19 +51,19 @@
   </section>
   <div class="col">
     <h2 id="thermometer">11. Measure that room with a thermometer</h2>
-    <p>Singular Learning Theory (SLT) turns this intuitive notion of “room” into an exact algebraic invariant. Near a minimum, let $V(\varepsilon) = \int_{K(w) \le \varepsilon} dw$ be the volume of parameter space with loss below $\varepsilon$. Its leading asymptotic power is:</p>
+    <p>Singular Learning Theory (SLT) makes this notion of “room” precise. In a fixed compact neighborhood $B$ of a minimum, let $V(\varepsilon) = \int_{B \cap \{K(w) \le \varepsilon\}} dw$. For the analytic losses and positive smooth local weights considered here, its leading asymptotic scale is:</p>
     <div class="eq tex">V(\varepsilon) \asymp \varepsilon^\lambda \big(\log(1/\varepsilon)\big)^{m-1} \qquad (\varepsilon \to 0).</div>
     <p>The exponent $\lambda$ is the <b>local learning coefficient</b> (or real log canonical threshold). Smaller $\lambda$ means more volume: parameter space shrinks more slowly as we demand a tighter fit.</p>
     <p>Contrast four characteristic geometries:</p>
     <ul>
       <li><b>Quadratic bowl ($a^2 + b^2$):</b> The sublevel set is a 2D disk of radius $\sqrt{\varepsilon}$, area $\pi\varepsilon$, giving $\lambda = 1 = d/2$.</li>
-      <li><b>Product loss ($(ab)^2$):</b> A normal-crossing singularity along both coordinate axes ($a=0$ or $b=0$). Low loss branches infinitely in both directions, giving $\lambda = 1/2 &lt; d/2$, while the crossing adds a logarithmic factor ($m=2$).</li>
+      <li><b>Product loss ($(ab)^2$):</b> The zero set is the pair of coordinate axes ($a=0$ or $b=0$). Within the bounded square below, thin low-loss strips follow both axes, giving $\lambda = 1/2 &lt; d/2$; their crossing adds a logarithmic factor ($m=2$).</li>
       <li><b>Quartic valley ($a^4 + b^2$):</b> Quadratic in $b$ ($\lambda_b = 1/2$) and quartic in $a$ ($\lambda_a = 1/4$), yielding $\lambda = 1/2 + 1/4 = 3/4$.</li>
       <li><b>Cusp singularity ($(b^2 - a^3)^2$):</b> The classical $A_2$ cusp, whose resolution by blowup reveals the fractional exponent $\lambda = 5/12 \approx 0.417$.</li>
     </ul>
     <p>To measure $\lambda$ without computing algebraic blowups by hand, we use a <b>statistical thermometer</b>. In physics, the equipartition theorem equates thermal energy to degrees of freedom: $\langle E \rangle = \frac{d}{2} k_B T$. In SLT, Sumio Watanabe proved that this principle extends to singular potentials: when Langevin chains sample $p(w) \propto e^{-n K(w)}$, their scaled empirical loss $n\langle K\rangle$ approaches $\lambda$ as $n \to \infty$.</p>
-    <p>At finite $n$, logarithmic corrections shift the finite-sample expectation away from $\lambda$. In the live plot below, the orange running mean tracks the <b>dashed finite-n reference</b> (the exact numerical grid integral at that sample size), while increasing $n$ draws that target toward the asymptotic purple line $\lambda$.</p>
-    <p class="read"><b>Figure 15.</b> Three hundred Langevin chains diffuse across the loss landscape. Compare the orange running mean to the <b>dashed finite-n reference</b>: the sampler rapidly tracks the exact finite-volume expectation. Increasing $n$ draws the dashed reference toward the asymptotic learning coefficient $\lambda$ (purple line). Switch between potentials to see how crossing axes, flat directions, and cusps alter the thermal reading.</p>
+    <p>At finite $n$, boundary effects and logarithmic corrections can shift the expectation away from $\lambda$. The dashed line is a numerical grid approximation to that finite-$n$ expectation on the same square. The purple line is the asymptotic coefficient. A difference between those lines is distinct from sampling error.</p>
+    <p class="read"><b>Figure 15.</b> Start with the bowl, then select the product loss. Compare the orange running mean with the dashed grid reference after warm-up. Increase $n$ to explore the approach to the purple asymptotic line. Finite step size and incomplete mixing can leave a gap between the sampler and the grid reference.</p>
   </div>
   <section class="panel learning-panel" aria-label="Local learning coefficient estimator">
     <div class="controls">
@@ -86,9 +86,9 @@
   <div class="col">
     <h2 id="llc">12. From a toy loss to a trained model</h2>
     <p>Can this geometric thermometer measure real neural networks? Consider a factorized linear network $y = B A x$ mapping $\mathbb{R}^3 \to \mathbb{R}^H \to \mathbb{R}^3$, trained on noisy data generated by a true rank-one linear map. As hidden width $H$ grows from 1 to 5, the total number of weights scales from 6 to 30: $d = 6H$. If parameters were regular and identifiable, classical theory would assert that effective capacity grows linearly: $d/2 = 3H \in \{3, 6, 9, 12, 15\}$.</p>
-    <p>Instead, matrix multiplication possesses an internal continuous symmetry: for any invertible $G \in \operatorname{GL}(H)$, the pair $(B G, G^{-1} A)$ computes the identical linear map. Because the true target is rank 1, adding hidden units does not increase predictive complexity—it merely enlarges the gauge orbit of redundant configurations. Watanabe's exact formula (via resolution of determinantal singularities) proves that the true learning coefficient $\lambda$ plateaus sharply at $\lambda = 4.5 = MN/2$, completely decoupled from the growing parameter count $d$.</p>
+    <p>Matrix multiplication has a continuous symmetry: for any invertible $G \in \operatorname{GL}(H)$, the pair $(B G, G^{-1} A)$ computes the same map. Parameter count therefore overstates the number of independent directions. For this rank-one target, the Aoyagi–Watanabe formula gives $\lambda = 2.5, 3.5, 4, 4.5, 4.5$ at widths 1 through 5. The coefficient increases before saturating at $MN/2 = 4.5$; adding width changes more than just the symmetry orbit.</p>
     <p>To measure $\lambda$ locally around trained weights $w^*$, we localize the posterior with a quadratic centering spring $\frac{\gamma}{2}\|w - w^*\|^2$ and run Stochastic Gradient Langevin Dynamics (SGLD) at inverse temperature $\beta^* = 1/\log n$.</p>
-    <p class="read"><b>Figure 16.</b> Live SGLD estimation across five network widths ($H=1$ to $5$) running in a dedicated background worker. The purple curve traces Watanabe's exact algebraic formula; orange points show empirical estimates $n\beta \langle L_n(w) - L_n(w^*)\rangle$. Notice how measured capacity plateaus at $4.5$, defying raw parameter count $d/2 = 3H$. Toggle the spring $\gamma$ to inspect how neighborhood localization affects finite-sample bias.</p>
+    <p class="read"><b>Figure 16.</b> Press Run again to train and sample five widths. Purple shows the theoretical coefficient for the rank-one population target; orange shows the finite-chain estimate $n\beta \langle L_n(w) - L_n(w^*)\rangle$ on noisy training data. These are related quantities, not identical finite-sample measurements. Change the spring $\gamma$ to see how localization affects the comparison.</p>
   </div>
   <section class="panel learning-panel" aria-label="LLC on a trained network">
     <div class="controls">
@@ -107,7 +107,7 @@
     <details class="derivation"><summary>Why the thermometer works: centered loss and the partition function</summary>
   <div class="col">
     <h3>The centered partition function</h3>
-    <p>Explicit resolution charts are impossible to construct by hand for modern deep networks. Lau and colleagues propose estimating the <a href="https://proceedings.mlr.press/v258/lau25a.html"><b>local learning coefficient (LLC)</b></a> using a localized tempered posterior and Stochastic Gradient Langevin Dynamics (SGLD).</p>
+    <p>Explicit resolution charts are usually impractical for modern deep networks. Lau and colleagues propose estimating the <a href="https://proceedings.mlr.press/v258/lau25a.html"><b>local learning coefficient (LLC)</b></a> using a localized tempered posterior and Stochastic Gradient Langevin Dynamics (SGLD).</p>
     <p>For an ideal local calculation around a local empirical minimizer $w^*$, center the excess loss: $K_n(w) = L_n(w) - L_n(w^*) \ge 0$. On a compact neighborhood $B$ with quadratic spring localization $\gamma > 0$, define the centered partition function and tempered posterior:</p>
     <div class="eq tex">Z_c(\beta) = \int_B \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right) dw</div>
     <div class="eq tex">p_\beta(w) = \frac{\mathbf{1}_B(w)}{Z_c(\beta)} \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right)</div>
@@ -115,14 +115,14 @@
     <div class="eq tex">\frac{\partial}{\partial\beta}\big[-\log Z_c(\beta)\big] = n\mathbb{E}_\beta\big[K_n(w)\big] \approx \frac{\lambda}{\beta} - \frac{m-1}{\beta\log(n\beta)}</div>
     <p>Centering against $L_n(w^*)$ is essential: an uncentered partition function retains a factor $e^{-n\beta L_n(w^*)}$, whose derivative contains $n\mathbb{E}_\beta[L_n(w)]$ and blows up with sample size. Subtracting the baseline yields the practical empirical estimator:</p>
     <div class="eq tex">\hat{\lambda}(w^*) = n\beta \left(\frac{1}{S}\sum_{s=1}^S L_n(w_s) - L_n(w^*)\right)</div>
-    <p>At Watanabe’s optimal inverse temperature $\beta^* = 1/\log n$, this computes a generalized equipartition measurement of local complexity. In practice, finite Langevin chains introduce discretization error, mixing latency, and finite-sample corrections from $m > 1$. The quadratic spring $\gamma$ enforces soft localization, determining the scale of the explored neighborhood. A finite SGLD estimate is an empirical diagnostic rather than an exact symbolic invariant, and applying analytic SLT to piecewise-linear architectures such as ReLU networks requires additional geometric care.</p>
+    <p>The demo uses inverse temperature $\beta^* = 1/\log n$, the WBIC temperature. Finite Langevin chains introduce discretization and mixing error, while finite-$n$ corrections can remain substantial. The spring $\gamma$ changes the explored neighborhood. A finite SGLD estimate is a diagnostic rather than an exact invariant; applying analytic SLT to piecewise-analytic ReLU networks requires additional care.</p>
   </div>
 
     </details>
     <h3 id="next">What blowups contribute</h3>
     <p>Resolution of singularities provides the coordinate chart where tangled nonlinear couplings decouple into independent monomials. In those coordinates, multi-dimensional parameter integrals factor into elementary one-dimensional Gamma functions—revealing the real log canonical threshold $\lambda$ even when the Hessian matrix is completely degenerate.</p>
-    <p>The statistical thermometer does not explicitly calculate the blowup algebra; it measures its thermodynamic footprint in parameter space. By reading how parameter volume expands into singular crevices, it provides an empirical window into the true inductive bias of neural networks.</p>
-    <p>For the complete mathematical proof and thermodynamic integration, see <a href="./appendix.html#appendix-c">Appendix C</a>. For deep-dive analyses of redundant ReLU units, matrix factorizations, and tensor singularities, see <a href="./appendix.html#learning-extras">Appendix E</a>.</p>
+    <p>The thermometer estimates this geometric footprint without constructing the resolution. These Bayesian asymptotics do not by themselves prove that gradient descent selects low-LLC minima or explain all neural-network generalization.</p>
+    <p>For the integral calculation, see <a href="./appendix.html#appendix-c">Appendix C</a>. Further examples involving ReLU units, matrix factorizations, and tensor singularities are in <a href="./appendix.html#learning-extras">Appendix E</a>.</p>
     <p class="cap" id="dl"><span id="models"></span><span id="tensors-slt"></span>Additional model examples have moved to <a href="./appendix.html#learning-extras">Appendix E</a>.</p>
   </div>
 </main>
