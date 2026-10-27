@@ -28,33 +28,77 @@
     <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · Tensor singularities</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
-  <div class="col page-head"><p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p><h1>When two components become one</h1><p class="dek">A tensor fit with two parameters, one perfect prediction, and a direction that ordinary curvature cannot see.</p></div>
+  <div class="col page-head">
+    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p>
+    <h1>When two components become one</h1>
+    <p class="dek">Crossing from physical space into parameter space: how model redundancy cancels first-order derivatives and blinds ordinary curvature.</p>
+  </div>
+
   <div class="col">
     <h2 id="tensors">9. Why redundant components change learning</h2>
-    <p>Suppose we fit data by adding two simple components. What happens when those components become identical? Counting the two adjustable parameters still gives two. But the prediction may stop responding to one combination of them. This is a small, explicit example of the degeneracy that motivates singular learning theory.</p>
-    <p>Our “data” are just eight numbers: a $2\times2\times2$ tensor. The target has entry $T_{000}=1$ and every other entry zero. A component is built from the two-number vector $v(t)=(1,t)$: multiply three entries to get $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$. Our prediction is the average of two such components:</p>
+    <p>In computer graphics, physics simulation, and classical geometry, singularities live in physical space: pencil strokes crossing on paper, billiard balls colliding in a corner, or the sharp tip of a cone. In each case, blowing up replaced the singular geometric point with incoming directions.</p>
+    <p>In machine learning and optimization, however, the geometry lives in <b>parameter space</b>. What produces a singularity in parameter space? Not an external physical boundary, but <b>internal model redundancy</b>.</p>
+    <p>Whenever an overparameterized model has more internal capacity than the data strictly requires, different parameter configurations compute the exact same function. In neural networks, neurons in a hidden layer can swap roles or merge together. In low-rank matrix and tensor factorizations, factors can collapse into identical modes. When two components in a model collide, something extraordinary happens to the loss landscape: <b>ordinary curvature goes blind</b>.</p>
+    <p>Here is the simplest, most explicit setting where this occurs. Our “data” consist of eight numbers: a $2\times2\times2$ symmetric tensor. The target tensor has entry $T^*_{000}=1$ and every other entry zero. We approximate it by summing two rank-one components, each defined by the vector $v(t)=(1,t)$ with tensor product $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$:</p>
     <div class="eq tex">T(a,b)=\tfrac12 v(a)^{\otimes3}+\tfrac12 v(b)^{\otimes3}.</div>
-    <p>The adjustable parameters are $a$ and $b$. At $a=b=0$, both components equal the target, so the fit is exact. The loss $K$ is the sum of the eight squared prediction errors, divided by 3 for convenience.</p>
-    <p class="read"><b>Figure 17.</b> First select <b>Move together</b>: both components change in the same direction. Then select <b>Pull apart</b> at the same displacement. Their first-order changes cancel. Read the actual entries below; the second fit changes much less.</p>
+    <p>The adjustable parameters are $a$ and $b$. At $(a,b)=(0,0)$, both components equal the target: the fit is exact ($K=0$). The loss $K$ is the sum of eight squared prediction errors, scaled by $1/3$ for convenience.</p>
+    <p class="read"><b>Figure 17.</b> First select <b>Move together</b>: both components shift in the same direction. Then select <b>Pull apart</b> at the same displacement: the components move in opposite directions. Notice that pulling apart changes the actual prediction entries—and the loss—dramatically less than moving together.</p>
   </div>
+
   <section class="panel learning-panel story-panel" aria-label="Tensor component collision">
-    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components"><button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button><button class="btn" data-mode="together" aria-pressed="false">2. Move together</button><button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button></div>
+    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components">
+      <button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button>
+      <button class="btn" data-mode="together" aria-pressed="false">2. Move together</button>
+      <button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button>
+    </div>
     <label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="0.01" value="0.3" disabled><output id="tc-delta-out">0.30</output></label>
     <p class="story-result" id="tc-result" aria-live="polite"></p>
     <p class="cap" id="tc-arithmetic"></p>
-    <div class="pair"><div class="fig"><div class="h">The eight predictions <span>indices i j k</span></div><div class="story-table" id="tc-entries"></div></div><div class="fig"><div class="h">Loss at the same displacement</div><svg id="tc-loss" role="img" aria-label="Loss rises quadratically when components move together and quartically when they pull apart"></svg><div class="plot-legend"><span><i class="line-cold"></i>Move together</span><span><i class="line-hot"></i>Pull apart</span></div></div></div>
+    <div class="pair">
+      <div class="fig">
+        <div class="h">The eight predictions <span>indices i j k</span></div>
+        <div class="story-table" id="tc-entries"></div>
+      </div>
+      <div class="fig">
+        <div class="h">Loss at the same displacement</div>
+        <svg id="tc-loss" role="img" aria-label="Loss rises quadratically when components move together and quartically when they pull apart"></svg>
+        <div class="plot-legend"><span><i class="line-cold"></i>Move together</span><span><i class="line-hot"></i>Pull apart</span></div>
+      </div>
+    </div>
   </section>
+
   <div class="col">
     <h3>One direction adds; the other cancels</h3>
-    <p>Use the mean $s=(a+b)/2$ and separation $d=(a-b)/2$ as coordinates. Moving together changes $s$; pulling apart changes $d$. The three entries with exactly one index equal to 1 are all $s$. The three with two indices equal to 1 are all $s^2+d^2$. The last entry is $s^3+3sd^2$.</p>
-    <p>Along the separation direction $s=0$, the prediction changes only by $d^2$, so its <em>squared</em> error is $K=d^4$. Halving the separation reduces loss by a factor of 16. Along the mean direction, loss starts with $s^2$, so halving a small mean shift reduces loss by roughly a factor of 4. The Hessian detects the second direction as flat even though the prediction does eventually change.</p>
-    <details class="derivation"><summary>The exact loss, and what this example does and does not represent</summary><div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2.</div><p>Near the origin this is bounded above and below by positive constants times $s^2+d^4$. Consequently it has the same local volume exponent as that simpler loss. Swapping the two components sends $d$ to $-d$; the flat direction comes from first-order cancellation, not merely from having two names for a component.</p><p>We fixed both component amplitudes and tied their three factor vectors together. This is a deliberately restricted two-parameter tensor family. Its coefficient is not the coefficient of the unrestricted rank-two tensor model.</p></details>
-    <h3>Why this matters for learning</h3>
-    <p>A parameter count sees two directions. A Gaussian approximation expects loss to rise quadratically in both. Here it rises quartically in one. That means more nearby parameter settings remain almost correct. <a href="./part-4.html">Next we measure how much more room there is</a>, then see why a Bayesian calculation notices it.</p>
+    <p>To see why pulling apart produces so little error, change coordinates to the mean $s=(a+b)/2$ and separation $d=(a-b)/2$. Moving together varies $s$; pulling apart varies $d$. Expanding the tensor entries reveals a fundamental asymmetry:</p>
+    <ul>
+      <li>Entries with one index equal to 1: $\tfrac{1}{2}(a+b) = s$.</li>
+      <li>Entries with two indices equal to 1: $\tfrac{1}{2}(a^2+b^2) = s^2+d^2$.</li>
+      <li>The entry with three indices equal to 1: $\tfrac{1}{2}(a^3+b^3) = s^3+3sd^2$.</li>
+    </ul>
+    <p>Look at what happens along the separation direction ($s=0$): the linear terms $+d$ and $-d$ <b>cancel out to first order identically</b>! The prediction shifts only at second order ($d^2$). And because loss is squared prediction error, the resulting loss grows only as $(d^2)^2 = d^4$!</p>
+    <p>Along the mean direction ($d=0$), error grows as $s^2$, so halving a displacement reduces loss by $2^2 = 4$. Along the separation direction, error grows as $d^4$, so halving a displacement reduces loss by $2^4 = 16$.</p>
+
+    <details class="derivation">
+      <summary>The exact loss and local scaling</summary>
+      <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2.</div>
+      <p>Near the origin, this loss is tightly bounded above and below by positive constants times the simpler polynomial:</p>
+      <div class="eq tex">K_{\mathrm{local}}(s, d) \asymp s^2 + d^4.</div>
+      <p>Swapping the two components reflects $d \mapsto -d$. The flat direction is not an artifact of labeling; it arises because symmetric component summation annihilates odd-order derivatives at the collision point.</p>
+    </details>
+
+    <h3>Why ordinary curvature goes blind</h3>
+    <p>In classical statistics and machine learning, almost every standard tool—the Laplace approximation, Fisher information matrices, AIC, and BIC—approximates local minima by a quadratic Taylor bowl:</p>
+    <div class="eq tex">K(w) \approx K(w^*) + \tfrac{1}{2}(w - w^*)^T H (w - w^*), \qquad H = \nabla^2 K(w^*).</div>
+    <p>At our tensor collision, the gradient is zero. But look at the Hessian matrix evaluated at $(s, d) = (0, 0)$:</p>
+    <div class="eq tex">H = \begin{pmatrix} \frac{\partial^2 K}{\partial s^2} & \frac{\partial^2 K}{\partial s \partial d} \\ \frac{\partial^2 K}{\partial d \partial s} & \frac{\partial^2 K}{\partial d^2} \end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}.</div>
+    <p><b>The second derivative along the separation axis is zero.</b> The Hessian is degenerate. To quadratic order, classical calculus sees a flat valley and asserts that $d$ is an unidentifiable parameter with zero curvature. It is completely blind to the fact that loss grows as $d^4$.</p>
+    <p>This fourth-order valley is a <b>cusp-like singularity in the loss landscape</b>. It occurs whenever neural network units, mixture components, or tensor factors collide. And it raises a pivotal question: if a minimum is surrounded by a quartic valley rather than a quadratic bowl, how much extra parameter volume does it have—and how does a learning algorithm respond? <a href="./part-4.html">In Part IV, we measure this room directly</a>.</p>
+
     <p class="cap">The earlier example with diverging tensor factors is preserved in <a href="./appendix.html#border-rank-fit">Appendix B</a>. It concerns a different problem: a fit reached only at infinity. Here the perfect fit is finite.</p>
     <p class="cap" id="collisions"><span id="frames"></span><span id="physics"></span>The physics experiments are in <a href="./appendix.html#physics-notes">Appendix D</a>.</p>
   </div>
 </main>
+
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-2.html"><span class="dir">← Previous</span><span class="t">Directions &amp; Nash blowups</span></a><a class="next" href="./part-4.html"><span class="dir">Next →</span><span class="t">Singular learning theory</span></a></nav>
   <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
 </body>
