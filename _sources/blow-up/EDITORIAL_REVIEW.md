@@ -90,3 +90,9 @@ Primary references checked include the 2012 effective-resolution paper, ATW, bot
 The build now checks unique element IDs, structural tag nesting, internal links/anchors, figure keys, and TeX. Numerical checks cover the original exact cone, Nash charts, toric resolution and section identities; tensor entries and cancellation; independent evidence quadrature; both corrected Jacobians; cusp chart volume exponents; the ReLU loss against input integration; the explicit crossing toy; and convergence of the cusp-neighborhood mass under mesh refinement. Desktop/phone review covers the revised reading structure and representative controls.
 
 The threefold's terminating construction remains explicitly a toric resolution, not an execution of the ATW ambient-center algorithm. Stored offline sampling points are retained as labeled numerical illustrations; this pass does not recreate their original sampling runs or certify neural-network safety claims.
+
+## Safari opening-demo sizing — October 27
+
+Josh supplied a Safari screenshot showing the overview collision canvas extending into the adjacent caption. Canvas frames now have an explicit width and minimum-width reset; canvas bitmaps are absolutely positioned inside those independently sized frames. This prevents aspect-ratio/min-height sizing or the canvas's backing resolution from widening a grid column.
+
+The full build and geometry/static checks pass. Available-browser review at 1280×720 and 390×844 confirms the opening canvas matches its frame and column, with no page overflow on phone; its gap-ratio control remains interactive. Representative square cone canvases and the optional wide collision frame retain their dimensions. Direct native Safari verification remains unavailable because Computer Use permissions are not granted.

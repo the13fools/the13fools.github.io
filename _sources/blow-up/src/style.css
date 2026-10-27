@@ -68,16 +68,17 @@ input[type="range"] { accent-color: var(--blow); }
 .fig { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .fig .h { font-family: var(--f-display); font-weight: 700; font-size: 14.5px; }
 .fig .h span { font-weight: 500; color: var(--muted); }
-.box { background: var(--soft); border-radius: 10px; overflow: hidden; position: relative; }
-.box canvas { display: block; width: 100%; height: auto; }
+/* The frame owns layout; a high-resolution canvas bitmap must not enlarge it.
+   Explicit width also prevents aspect-ratio/min-height from widening a Safari
+   flex item beyond the grid column. All .box canvases have sized frames. */
+.box { background: var(--soft); border-radius: 10px; overflow: hidden; position: relative; width: 100%; max-width: 100%; min-width: 0; }
+.box > canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .sq { aspect-ratio: 1 / 1; }
 .wide { aspect-ratio: 16 / 7; min-height: 200px; }
 .rodbox { aspect-ratio: 4 / 3; }
-.rodbox canvas { height: 100%; }
 .dict table { min-width: 520px; }
 .dict { margin: 0 0 1.1em; }
 .dict td { font-size: 14px; }
-.wide canvas, .sq canvas { height: 100%; }
 .box .tag { position: absolute; left: 8px; top: 6px; max-width: calc(100% - 16px); font-family: var(--f-display); font-size: 13px; color: var(--muted); pointer-events: none; background: color-mix(in srgb, var(--soft) 88%, transparent); border-radius: 6px; padding: 1px 7px; }
 .box .tag b { color: var(--ink); }
 svg { display: block; width: 100%; height: auto; }
