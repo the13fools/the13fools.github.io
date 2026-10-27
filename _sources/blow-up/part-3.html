@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tensor singularities · What is… a blowup?</title>
-  <meta name="description" content="How colliding tensor components cancel first-order changes, producing a quartic loss and motivating singular learning theory.">
+  <title>Collisions, Tensors, and Fields · What is… a blowup?</title>
+  <meta name="description" content="Taking blowups back to simulation and graphics: rigid-body collisions in configuration space, diverging border-rank tensor fitting, and symmetric frame fields.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Tensor singularities · What is… a blowup?">
-  <meta property="og:description" content="How colliding tensor components cancel first-order changes, producing a quartic loss and motivating singular learning theory.">
+  <meta property="og:title" content="Collisions, Tensors, and Fields · What is… a blowup?">
+  <meta property="og:description" content="Taking blowups back to simulation and graphics: rigid-body collisions in configuration space, diverging border-rank tensor fitting, and symmetric frame fields.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-3.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -24,20 +24,63 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · Tensor singularities</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · Collisions &amp; Tensors</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p>
-    <h1>When two components become one</h1>
-    <p class="dek">Crossing from physical space into parameter space: how model redundancy cancels first-order derivatives and blinds ordinary curvature.</p>
+    <h1>Blowups in problems I know: Collisions, Tensors, and Fields</h1>
+    <p class="dek">Rigid-body collisions in configuration space, diverging border-rank tensor fitting, and symmetric frame fields—taking blowups back to simulation and graphics.</p>
   </div>
 
   <div class="col">
-    <h2 id="tensors">9. Why redundant components change learning</h2>
-    <p>In computer graphics, physics simulation, and classical geometry, singularities live in physical space: pencil strokes crossing on paper, billiard balls colliding in a corner, or the sharp tip of a cone. In each case, blowing up replaced the singular geometric point with incoming directions.</p>
-    <p>In machine learning and optimization, however, the geometry lives in <b>parameter space</b>. What produces a singularity in parameter space? Not an external physical boundary, but <b>internal model redundancy</b>.</p>
-    <p>Whenever an overparameterized model has more internal capacity than the data strictly requires, different parameter configurations compute the exact same function. In neural networks, neurons in a hidden layer can swap roles or merge together. In low-rank matrix and tensor factorizations, factors can collapse into identical modes. When two components in a model collide, something extraordinary happens to the loss landscape: <b>ordinary curvature goes blind</b>.</p>
+    <p>Part I built the tools on curves in the plane, and Part II showed how replacing points with directions unpinches cones into smooth cylinders (and where Nash blowups fall short). Now I want to bring these tools back to problems I actually worked on in physics simulation and computer graphics.</p>
+    <p>In each domain, a classical formula breaks down: three rigid bodies collide at the same millisecond, low-rank tensor factors blow up to infinity trying to fit a target, or a smooth vector field on a disk is topologically forced to vanish. Standard engineering practice smooths over these breakdowns with penalty forces or arbitrary solver heuristics. But blowing up does something much cleaner: it excavates the singular point and tracks incoming directions.</p>
+
+    <h2 id="collisions">9. Rigid-body collisions: the opening demo, unpacked</h2>
+    <p>The three balls from the <a href="./index.html">opening page</a> provide our first mechanical blowup. In an elastic collision between two balls of masses $m_1, m_2$, conservation of momentum and kinetic energy uniquely determines the outgoing velocities:</p>
+    <div class="eq tex">m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2', \qquad m_1 v_1^2 + m_2 v_2^2 = m_1 v_1'^2 + m_2 v_2'^2.</div>
+    <p>When three balls touch simultaneously, however, there are three unknown velocities and only two conservation laws: rigid-body mechanics alone cannot pick an outcome!</p>
+    <p><b>Configuration space in a wedge:</b> Write the gaps between neighbors as $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates $q_i = \sqrt{m_i} x_i$, kinetic energy is standard Euclidean $\frac{1}{2}|\dot{q}|^2$. Removing uniform translation reduces the three-ball system to a single point bouncing inside a planar <b>wedge</b> between the constraint walls $g_1 = 0$ and $g_2 = 0$, with wedge angle:</p>
+    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1 m_3}{(m_1 + m_2)(m_2 + m_3)}}.</div>
+    <p>A sequence of pairwise collisions is a billiard path bouncing between the walls. Simultaneous impact is the path striking the sharp corner $g_1 \cdot g_2 = 0$.</p>
+    <p><b>The blown-up bar:</b> The color bar replaces the singular corner with all possible incoming directions—the microscopic gap ratio $g_2 / g_1$ immediately before impact. Every direction yields a deterministic sequence of bounces. The bar decomposes into <em>chambers</em> of shared outcomes. When masses are equal ($\beta = 60^\circ$), all incoming directions yield the exact same outcome, explaining why real cradles are predictable. With a light middle ball, different directions produce completely different orders of departure.</p>
+    <p class="read"><b>Figure {fig:cradle}.</b> Left: three balls colliding simultaneously, with the gap-ratio bar colored by outcome. Right: the same motion mapped to a single point in a wedge. Drag the marker or click an outcome below to test incoming directions.</p>
+  </div>
+
+  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
+      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
+    </div>
+    <div class="chips" id="f2-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>Inelastic collapse:</b> When collisions have restitution $e &lt; 1$, energy is dissipated. Below the critical threshold $e = 7 - 4\sqrt{3} \approx 0.072$ (McNamara &amp; Young), three balls bounce infinitely many times in a finite time window! A standard pairwise impulse simulator traps itself in an infinite loop. Vouga, Smith, Kaufman, Tamstorf, and Grinspun's <a href="https://media.disneyanimation.com/uploads/production/publication_asset/159/asset/All_s_Well_That_Ends_Well_Guaranteed_Resolution_of_Simultaneous_Rigid_Body_Impact.pdf">All's Well That Ends Well</a> guarantees termination by detecting implied velocity equalities and blending elastic and inelastic limits.</p>
+    <p class="read"><b>Figure {fig:inelastic}.</b> Inelastic collapse. Below $e \approx 0.072$, bounces accumulate infinitely before the balls separate, illustrating how numerical solvers get trapped at unresolved physical singularities.</p>
+  </div>
+
+  <section class="panel" aria-label="Inelastic collapse">
+    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
+    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of three bouncing balls"></canvas></div></div>
+      <div class="fig"><div class="h">Energy over bounces <span>falls toward zero</span></div><svg id="ic-e-plot" role="img" aria-label="Kinetic energy against bounce count"></svg></div>
+    </div>
+    <div class="chips" id="ic-chips"></div>
+  </section>
+
+  <div class="col">
+    <h2 id="tensors">10. Low-rank tensor factorization: collisions and border rank</h2>
+    <p>In physical simulation, singularities live in configuration space: pencil strokes crossing on paper, billiard balls colliding in a corner, or the sharp tip of a cone. In each case, blowing up replaced the singular geometric point with incoming directions.</p>
+    <p>In machine learning and numerical optimization, however, the geometry lives in <b>parameter space</b>. What produces a singularity in parameter space? Not an external physical boundary, but <b>internal model redundancy</b>.</p>
+    <p>Whenever an overparameterized model has more internal capacity than the data strictly requires, different parameter configurations compute the exact same function. In low-rank matrix and tensor factorizations, factors can collapse into identical modes. When two components in a model collide, something extraordinary happens to the loss landscape: <b>ordinary curvature goes blind</b>.</p>
+
+    <h3>10.1 The finite two-component collision</h3>
     <p>Here is the simplest, most explicit setting where this occurs. Our “data” consist of eight numbers: a $2\times2\times2$ symmetric tensor. The target tensor has entry $T^*_{000}=1$ and every other entry zero. We approximate it by summing two rank-one components, each defined by the vector $v(t)=(1,t)$ with tensor product $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$:</p>
     <div class="eq tex">T(a,b)=\tfrac12 v(a)^{\otimes3}+\tfrac12 v(b)^{\otimes3}.</div>
     <p>The adjustable parameters are $a$ and $b$. At $(a,b)=(0,0)$, both components equal the target: the fit is exact ($K=0$). The loss $K$ is the sum of eight squared prediction errors, scaled by $1/3$ for convenience.</p>
@@ -47,12 +90,10 @@
   <section class="panel learning-panel story-panel" aria-label="Tensor component collision">
     <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components">
       <button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button>
-      <button class="btn" data-mode="together" aria-pressed="false">2. Move together</button>
-      <button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button>
+      <button class="btn" data-mode="together" aria-pressed="false">2. Move together (+0.35)</button>
+      <button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart (±0.35)</button>
     </div>
-    <label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="0.01" value="0.3" disabled><output id="tc-delta-out">0.30</output></label>
-    <p class="story-result" id="tc-result" aria-live="polite"></p>
-    <p class="cap" id="tc-arithmetic"></p>
+    <p class="story-lead" id="tc-lead"></p>
     <div class="pair">
       <div class="fig">
         <div class="h">The eight predictions <span>indices i j k</span></div>
@@ -67,34 +108,185 @@
   </section>
 
   <div class="col">
-    <h3>One direction adds; the other cancels</h3>
-    <p>To see why pulling apart produces so little error, change coordinates to the mean $s=(a+b)/2$ and separation $d=(a-b)/2$. Moving together varies $s$; pulling apart varies $d$. Expanding the tensor entries reveals a fundamental asymmetry:</p>
+    <p>To see why pulling apart produces so little error, change coordinates to the mean $s=(a+b)/2$ and separation $d=(a-b)/2$. Moving together varies $s$; pulling apart varies $d$. Expanding the tensor entries reveals a fundamental cancellation:</p>
     <ul>
       <li>Entries with one index equal to 1: $\tfrac{1}{2}(a+b) = s$.</li>
       <li>Entries with two indices equal to 1: $\tfrac{1}{2}(a^2+b^2) = s^2+d^2$.</li>
       <li>The entry with three indices equal to 1: $\tfrac{1}{2}(a^3+b^3) = s^3+3sd^2$.</li>
     </ul>
-    <p>Look at what happens along the separation direction ($s=0$): the linear terms $+d$ and $-d$ <b>cancel out to first order identically</b>! The prediction shifts only at second order ($d^2$). And because loss is squared prediction error, the resulting loss grows only as $(d^2)^2 = d^4$!</p>
-    <p>Along the mean direction ($d=0$), error grows as $s^2$, so halving a displacement reduces loss by $2^2 = 4$. Along the separation direction, error grows as $d^4$, so halving a displacement reduces loss by $2^4 = 16$.</p>
-
-    <details class="derivation">
-      <summary>The exact loss and local scaling</summary>
-      <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2.</div>
-      <p>Near the origin, this loss is tightly bounded above and below by positive constants times the simpler polynomial:</p>
-      <div class="eq tex">K_{\mathrm{local}}(s, d) \asymp s^2 + d^4.</div>
-      <p>Swapping the two components reflects $d \mapsto -d$. The flat direction is not an artifact of labeling; it arises because symmetric component summation annihilates odd-order derivatives at the collision point.</p>
-    </details>
-
-    <h3>Why ordinary curvature goes blind</h3>
-    <p>In classical statistics and machine learning, almost every standard tool—the Laplace approximation, Fisher information matrices, AIC, and BIC—approximates local minima by a quadratic Taylor bowl:</p>
-    <div class="eq tex">K(w) \approx K(w^*) + \tfrac{1}{2}(w - w^*)^T H (w - w^*), \qquad H = \nabla^2 K(w^*).</div>
-    <p>At our tensor collision, the gradient is zero. But look at the Hessian matrix evaluated at $(s, d) = (0, 0)$:</p>
+    <p>Look at what happens along the separation direction ($s=0$): the linear terms $+d$ and $-d$ <b>cancel out identically to first order</b>! The prediction shifts only at second order ($d^2$). And because loss is squared prediction error, the resulting loss grows only as $(d^2)^2 = d^4$!</p>
+    <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2 \asymp s^2 + d^4.</div>
+    <p>Now evaluate the Hessian matrix at $(s, d) = (0, 0)$:</p>
     <div class="eq tex">H = \begin{pmatrix} \frac{\partial^2 K}{\partial s^2} & \frac{\partial^2 K}{\partial s \partial d} \\ \frac{\partial^2 K}{\partial d \partial s} & \frac{\partial^2 K}{\partial d^2} \end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}.</div>
-    <p><b>The second derivative along the separation axis is zero.</b> The Hessian is degenerate. To quadratic order, classical calculus sees a flat valley and asserts that $d$ is an unidentifiable parameter with zero curvature. It is completely blind to the fact that loss grows as $d^4$.</p>
-    <p>This fourth-order valley is a <b>cusp-like singularity in the loss landscape</b>. It occurs whenever neural network units, mixture components, or tensor factors collide. And it raises a pivotal question: if a minimum is surrounded by a quartic valley rather than a quadratic bowl, how much extra parameter volume does it have—and how does a learning algorithm respond? <a href="./part-4.html">In Part IV, we measure this room directly</a>.</p>
+    <p><b>The second derivative along the separation axis is zero.</b> The Hessian is degenerate. To quadratic order, classical calculus sees a flat valley and asserts that $d$ has zero curvature. It is completely blind to the fact that loss grows as $d^4$.</p>
 
-    <p class="cap">The earlier example with diverging tensor factors is preserved in <a href="./appendix.html#border-rank-fit">Appendix B</a>. It concerns a different problem: a fit reached only at infinity. Here the perfect fit is finite.</p>
-    <p class="cap" id="collisions"><span id="frames"></span><span id="physics"></span>The physics experiments are in <a href="./appendix.html#physics-notes">Appendix D</a>.</p>
+    <h3 id="border-rank-fit">10.2 A different pathology: border rank and the fit that never finishes</h3>
+    <div class="terms"><b>Key terms:</b> rank-one tensor, border rank, Veronese variety, tangent limit.</div>
+    <p>The collision above occurred at a finite point in parameter space. A completely different pathology occurs when a target tensor is approachable only by factors that diverge to infinity. Fitting a target $W$ with two rank-one components minimizes:</p>
+    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2.</div>
+    <p>Consider the target $W$ with $W_{001} = W_{010} = W_{100} = 1$ and all other entries 0. In the gradient-descent trajectory below, the two rank-one pieces diverge to $\pm \infty$ while nearly canceling, and the error creeps asymptotically toward zero without ever arriving!</p>
+    <p class="read"><b>Figure {fig:B1}.</b> Gradient descent fitting $W$ with two rank-one components. The recorded pieces grow while their sum approaches $W$; the border-rank construction explains the limiting behavior. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-2 variety.</p>
+  </div>
+
+  <section class="panel" aria-label="Rank-2 fit of W">
+    <div class="controls">
+      <button type="button" class="btn go" id="tz3-play">Play</button>
+      <label class="sl long"><span class="lbl">gradient step</span><input id="tz3-s" type="range" min="0" max="64" step="1" value="0"><output id="tz3-s-out"></output></label>
+    </div>
+    <div class="cubes">
+      <div class="fig"><div class="h">Piece 1 <span>rank one</span></div><svg id="tz3-a" role="img" aria-label="First rank-one piece"></svg></div>
+      <div class="op">+</div>
+      <div class="fig"><div class="h">Piece 2 <span>rank one</span></div><svg id="tz3-b" role="img" aria-label="Second rank-one piece"></svg></div>
+      <div class="op">=</div>
+      <div class="fig"><div class="h">Their sum</div><svg id="tz3-c" role="img" aria-label="Sum of the two pieces"></svg></div>
+      <div class="op">≈</div>
+      <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
+      <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <p><b>Two charts, one target:</b> In the trajectory above, standard rank-2 gradient descent grew to infinity trying to fit $W$. In the blown-up chart $[(a + h a')\otimes(b + h b')\otimes(c + h c') - a\otimes b\otimes c]/h$, parameters remain strictly bounded while the step size $h$ drifts smoothly to 0.</p>
+    <p class="read"><b>Figure {fig:B2}.</b> Gradient descent in standard parameters (orange) vs. blown-up coordinates (violet). The blown-up chart reaches the exact target with bounded parameter norms.</p>
+  </div>
+
+  <section class="panel" aria-label="Border rank">
+    <div class="controls"><button type="button" class="btn go" id="br-run">Run again</button><span class="lbl" id="br-status"></span></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Loss <span>log–log</span></div><svg id="br-loss" role="img" aria-label="Loss against iterations for two parameterizations"></svg></div>
+      <div class="fig"><div class="h">Size of the parameters</div><svg id="br-norm" role="img" aria-label="Parameter norm against iterations"></svg></div>
+    </div>
+    <div class="chips" id="br-chips"></div>
+  </section>
+
+  <div class="col">
+    <h3 id="tens-slow">10.3 Symmetric tensors as binary cubics: Hironaka vs. Nash</h3>
+    <div class="terms"><b>Key terms:</b> binary cubic, twisted cubic, tangent developable, cuspidal edge.</div>
+    <p>A symmetric $2 \times 2 \times 2$ tensor corresponds to a homogeneous binary cubic with four coefficients. On the chart where the leading coefficient is nonzero, normalize it to one and write $t^3 + a t^2 + b t + c$. For distinct roots, its real symmetric rank is determined by the cubic discriminant $\Delta$:</p>
+    <ul class="qs">
+      <li>$\Delta &gt; 0$: three distinct real roots, real symmetric rank 3;</li>
+      <li>$\Delta &lt; 0$: one real root, real symmetric rank 2;</li>
+      <li>$\Delta = 0$: repeated root (tangent developable boundary);</li>
+      <li>Triple root $(t - r)^3$: rank one (the <b>twisted cubic</b> curve $(a, b, c) = (-3r, 3r^2, -r^3)$).</li>
+    </ul>
+    <p>The boundary $\Delta = 0$ is swept out by tangent lines to the twisted cubic—a <b>tangent developable</b> creased along the rank-one curve into a sharp cuspidal edge $(e^2, 2e^3)$. Hironaka's algorithm blows up the twisted cubic curve in three steps. Nash's lift records the root $r$, smoothing the crease into a flat sheet in a single step!</p>
+    <p class="read"><b>Figure {fig:B3}.</b> Monic cubics $(a, b, c)$. The creased boundary $\Delta = 0$ unfolds into a smooth sheet under Nash's lift by $r$. The slice panel on the right shows Hironaka resolving the cuspidal crease step-by-step.</p>
+  </div>
+
+  <section class="panel" aria-label="Symmetric tensors as cubics">
+    <div class="controls">
+      <span class="seg" role="group" aria-label="View" id="tc-m">
+        <button type="button" data-v="t" aria-pressed="true">Tensor space</button>
+        <button type="button" data-v="n" aria-pressed="false">Nash lift</button>
+      </span>
+      <label class="sl"><span class="lbl">slice at r₀</span><input id="tc-r" type="range" min="-0.35" max="0.35" step="0.05" value="0.15"><output id="tc-r-out"></output></label>
+      <span class="seg" role="group" aria-label="Hironaka step" id="tc-h">
+        <button type="button" data-v="0" aria-pressed="true">Slice</button>
+        <button type="button" data-v="1" aria-pressed="false">Blowup 1</button>
+        <button type="button" data-v="2" aria-pressed="false">2</button>
+        <button type="button" data-v="3" aria-pressed="false">3</button>
+      </span>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h" id="tc-h1">The boundary Δ = 0 <span>drag to rotate</span></div><div class="box sq drag"><canvas id="tc-cv" tabindex="0" aria-label="Surface of cubics with a repeated root; drag to rotate"></canvas><span class="tag" id="tc-tag"></span></div></div>
+      <div class="fig"><div class="h" id="tc-h2"></div><svg id="tc-sec" role="img" aria-label="Cross-section through the crease"></svg><div class="algebra" id="tc-alg"></div></div>
+    </div>
+  </section>
+
+  <div class="col">
+    <h2 id="frames">11. Symmetric frame fields on a disk: placing singularities</h2>
+    <div class="terms"><b>Key terms:</b> cross field, 4-RoSy field, Poincaré–Hopf, Ginzburg–Landau vortex, Burer–Monteiro.</div>
+    <p>In computer graphics and geometry processing, quad meshing requires designing a <b>cross field</b> (a 4-RoSy field): at each point on a surface, we align a cross of four orthogonal directions to guide grid lines. But topology imposes strict constraints. By the Poincaré–Hopf index theorem, a disk with tangent boundary forces a total winding of $+1$. Because a simple vortex in a cross field carries winding $+1/4$, <b>at least four singular points must exist inside the disk</b>!</p>
+    <p class="read"><b>Figure {fig:crossdrag}.</b> Drag singular points on a disk. The bars display Ginzburg–Landau energy. "Merge" forces points together, causing energy to spike quadratically.</p>
+  </div>
+
+  <section class="panel" aria-label="Place the singularities of a cross field">
+    <div class="controls">
+      <span class="lbl">Singularities</span>
+      <span class="seg" role="group" aria-label="Number" id="cd-n">
+        <button type="button" data-v="4" aria-pressed="true">4 × (+¼)</button>
+        <button type="button" data-v="2" aria-pressed="false">2 × (+½)</button>
+        <button type="button" data-v="1" aria-pressed="false">1 × (+1)</button>
+      </span>
+      <button type="button" class="btn" id="cd-deg">Merge</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Cross field on a disk <span>drag singularities</span></div><div class="box sq drag"><canvas id="cd-cv" tabindex="0" aria-label="Cross field on a disk; drag the singularities"></canvas></div></div>
+      <div class="fig"><div class="h">Energy breakdown</div><svg id="cd-bars" role="img" aria-label="Bars showing Dirichlet and core energy"></svg></div>
+    </div>
+    <div class="chips" id="cd-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>Core structure and energy:</b> Standard numerical optimizers minimize the Ginzburg–Landau energy:</p>
+    <div class="eq tex">E_\varepsilon(u) = \int_D \left( \frac{1}{2}|\nabla u|^2 + \frac{1}{4\varepsilon^2}(1 - |u|^2)^2 \right) dA.</div>
+    <p>Outside the core, $|u| \approx 1$ and the field is smooth. Near the center, $|u| \to 0$ to prevent infinite Dirichlet energy $|\nabla u|^2 \sim 1/r^2$. The core cost scales as $d^2 \log(1/\varepsilon)$. Because a degree-4 vortex costs $4^2 = 16$ while four simple degree-1 vortices cost only $4 \times 1^2 = 4$, the energy violently repels merged cores, forcing them to split into four isolated $+1/4$ singularities!</p>
+    <p class="read"><b>Figure {fig:vortexcore}.</b> A Ginzburg–Landau vortex. Left: cross field over $|u|$. Middle: energy density showing flat plateau outside core. Right: four simple cores cost substantially less than one 4-fold core, driving core splitting.</p>
+  </div>
+
+  <section class="panel" aria-label="One Ginzburg–Landau vortex">
+    <div class="controls">
+      <span class="lbl">Winding d</span>
+      <span class="seg" role="group" aria-label="Winding" id="vx-d">
+        <button type="button" data-v="1" aria-pressed="true">1</button>
+        <button type="button" data-v="2" aria-pressed="false">2</button>
+        <button type="button" data-v="4" aria-pressed="false">4</button>
+      </span>
+      <label class="sl"><span class="lbl">core size ε</span><input id="vx-e" type="range" min="0.5" max="4" step="0.1" value="1.3"><output id="vx-e-out"></output></label>
+    </div>
+    <div class="grid3">
+      <div class="fig"><div class="h">The field <span>crosses over |u|</span></div><div class="box sq"><canvas id="vx-cv" aria-label="A single vortex as a cross field"></canvas></div></div>
+      <div class="fig"><div class="h">Where the energy lives</div><svg id="vx-den" role="img" aria-label="Energy per unit log radius"></svg></div>
+      <div class="fig"><div class="h">Merge or split?</div><svg id="vx-cost" role="img" aria-label="Energy of one 4-fold core versus four simple cores"></svg></div>
+    </div>
+    <div class="chips" id="vx-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>Three strategies for frame fields:</b></p>
+    <ul class="qs">
+      <li><b>Ginzburg–Landau Penalty:</b> Allows the field amplitude $|u|$ to soften to zero at the core. The penalty parameter $\varepsilon$ controls the core size.</li>
+      <li><b>Drill a hole (Blowup):</b> Punctures the disk at the core, replacing the singular point with a circular boundary $S^1$ where directions can freely rotate.</li>
+      <li><b>Lift to a sphere (Burer–Monteiro):</b> Represents the 2D frame by a 3D unit vector $v \in S^2$. The singularity at the origin of $\mathbb{R}^2$ lifts to smooth trajectories across the equator!</li>
+    </ul>
+    <p class="read"><b>Figure {fig:glthree}.</b> Three strategies side by side: Ginzburg–Landau splitting (left), drilled hole blowup (middle), and Burer–Monteiro sphere lift (right).</p>
+  </div>
+
+  <section class="panel" aria-label="Cross field on a disk">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Hole radius ρ (middle)</span><input id="gl-rho" type="range" min="0.05" max="0.6" step="0.05" value="0.55"><output id="gl-rho-out"></output></label>
+      <button type="button" class="btn go" id="gl-run">Restart</button>
+    </div>
+    <div class="grid3">
+      <div class="fig"><div class="h">Ginzburg–Landau</div><div class="box sq"><canvas id="gl-a" aria-label="Ginzburg–Landau cross field"></canvas><span class="tag" id="gl-a-tag"></span></div></div>
+      <div class="fig"><div class="h">Blowup at the center <span>drilled hole</span></div><div class="box sq"><canvas id="gl-b" aria-label="Cross field around a drilled hole"></canvas><span class="tag" id="gl-b-tag"></span></div></div>
+      <div class="fig"><div class="h">Lift to a sphere <span>Burer–Monteiro, k = 3</span></div><div class="box sq"><canvas id="gl-c" aria-label="Burer–Monteiro lifted field"></canvas><span class="tag" id="gl-c-tag"></span></div></div>
+    </div>
+    <div class="chips" id="gl-chips"></div>
+  </section>
+
+  <div class="col">
+    <h2 id="physics">12. Three ways to handle a singularity: Penalty, Chart, Blow up</h2>
+    <p>Looking across all three problems, notice how numerical computing consistently faces the same architectural choice when classical calculus breaks down:</p>
+  </div>
+
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>Problem</th><th>The Singular Event</th><th>Penalty Method</th><th>Pick One Chart</th><th>Blow Up</th></tr></thead>
+      <tbody>
+        <tr><td><b>Three balls</b> (Figure {fig:cradle})</td><td>Simultaneous 3-ball impact</td><td>Stiff contact springs</td><td>Constraint impulse solver (visits order)</td><td>Gap-ratio bar: keeps all incoming directions</td></tr>
+        <tr><td><b>Tensor fit</b> (Figure {fig:B1})</td><td>Limit at infinity (border rank)</td><td>Ridge penalty on factor norms</td><td>Condition number constraint</td><td>Step $h$ as coordinate: converges at $h = 0$</td></tr>
+        <tr><td><b>Cross field</b> (Figure {fig:glthree})</td><td>Topological winding singularity</td><td>Ginzburg–Landau core penalty</td><td>Hand-placed singular vertices</td><td>Drill a hole, or lift to sphere (Burer–Monteiro)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <p>In simulation and graphics, singularities arise from hard physical boundaries, topological obstacles, or rank boundaries. In each case, blowing up replaced an indeterminate point with incoming directions.</p>
+    <p>Now consider machine learning: here the geometry lives entirely inside <b>parameter space</b>. When models are overparameterized, identical functions form continuous singular valleys. What does a higher-order flat valley do to Bayesian volume, learning dynamics, and generalization? That brings us to <a href="./part-4.html">Part IV: Singular Learning Theory</a>.</p>
   </div>
 </main>
 
