@@ -22,6 +22,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+html { overflow-x: hidden; }
 body {
   background: var(--paper); color: var(--ink);
   font-family: var(--f-body); font-size: 18px; line-height: 1.68;
