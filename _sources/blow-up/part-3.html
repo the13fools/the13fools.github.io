@@ -69,7 +69,7 @@
     <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
     <div class="pair">
       <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of three bouncing balls"></canvas></div></div>
-      <div class="fig"><div class="h">Energy over bounces <span>falls toward zero</span></div><svg id="ic-e-plot" role="img" aria-label="Kinetic energy against bounce count"></svg></div>
+      <div class="fig"><div class="h">Collisions <span>infinite below threshold</span></div><svg id="ic-n" role="img" aria-label="Collisions against restitution"></svg></div>
     </div>
     <div class="chips" id="ic-chips"></div>
   </section>
@@ -88,12 +88,10 @@
   </div>
 
   <section class="panel learning-panel story-panel" aria-label="Tensor component collision">
-    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components">
-      <button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button>
-      <button class="btn" data-mode="together" aria-pressed="false">2. Move together (+0.35)</button>
-      <button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart (±0.35)</button>
-    </div>
-    <p class="story-lead" id="tc-lead"></p>
+    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components"><button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button><button class="btn" data-mode="together" aria-pressed="false">2. Move together</button><button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button></div>
+    <label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="0.01" value="0.3" disabled><output id="tc-delta-out">0.30</output></label>
+    <p class="story-result" id="tc-result" aria-live="polite"></p>
+    <p class="cap" id="tc-arithmetic"></p>
     <div class="pair">
       <div class="fig">
         <div class="h">The eight predictions <span>indices i j k</span></div>
