@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-CFi_J4SK.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-C5kJgESl.css">
+  <script type="module" crossorigin src="./assets/main-BL6ZNU5L.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-DMz-ZJQJ.css">
 </head>
 <body>
   <header class="site-header">
@@ -36,7 +36,7 @@
     <p>A $2 \times 2 \times 2$ tensor $T$ consists of 8 entries $T_{ijk}$. A rank-one tensor is a product of three 2-vectors: $(a \otimes b \otimes c)_{ijk} = a_i b_j c_k$. Fitting a target $W$ with two rank-one components minimizes:</p>
     <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2</div>
     <p>Consider the target $W$ with $W_{001} = W_{010} = W_{100} = 1$ and all other entries 0. When gradient descent attempts to fit $W$, the two rank-one pieces diverge to $\pm \infty$ while nearly canceling, and the error creeps asymptotically toward zero without ever arriving!</p>
-    <p class="read"><b>Figure 13.</b> Gradient descent fitting $W$ with two rank-one components. The pieces grow without bound while their sum approaches $W$. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-2 variety.</p>
+    <p class="read"><b>Figure 17.</b> Gradient descent fitting $W$ with two rank-one components. The pieces grow without bound while their sum approaches $W$. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-2 variety.</p>
   </div>
   <section class="panel" aria-label="Rank-2 fit of W">
     <div class="controls">

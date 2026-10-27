@@ -196,6 +196,15 @@ details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color:
 /* Keep off-screen SVG/MathML bounds inside the page; long tables/equations
    retain their own horizontal scrollers. */
 .essay { overflow-x: clip; }
+.plot-legend i.line-bad { border-color: var(--bad); }
+.resolution-ledger { font-family: var(--f-display); font-size: 15px; line-height: 1.6; }
+.resolution-ledger p { padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.resolution-steps li { margin-bottom: 16px; }
+.resolution-equations { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 20px; padding: 14px; background: var(--soft); border-radius: 8px; }
+.resolution-equations div { display: flex; flex-wrap: wrap; gap: 8px; font: 15px var(--f-display); }
+.resolution-equations code { font: 14px var(--f-mono); }
+.resolution-equations div span::after { content: " ="; }
+.resolution-stage { min-height: 180px; font: 15px/1.6 var(--f-display); }
 #llcn-results { margin: 12px 0 6px; }
 #llcn-results table { width: 100%; border-collapse: collapse; min-width: 0; font-family: var(--f-display); font-size: 14px; }
 #llcn-results th, #llcn-results td { padding: 8px 12px; border-bottom: 1px solid var(--rule); }

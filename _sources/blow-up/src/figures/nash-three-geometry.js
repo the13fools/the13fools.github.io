@@ -6,6 +6,7 @@ export const H1 = [[-1,1,0], [0,-1,1], [3,0,-1], [1,0,0], [-2,3,-1], [-2,-1,2], 
 export const H2 = [[1,-2,1], [4,-1,-1], [2,-1,0], [-2,3,-1], [-1,-2,2], [-4,-3,4]];
 export const U = [[1,4,2], [-2,-1,-1], [1,-1,0]];
 export const HOLE = [0,-1,1];
+export const FIRST_HOLE = [1,1,-1]; // absent from S_A, but 2·FIRST_HOLE = g₇
 export const FIRST_BASIS = [0,3,5];
 export const SECOND_BASIS = [0,4,6];
 // Each pair [end, start] represents a generator difference; null means

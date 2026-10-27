@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-CFi_J4SK.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-C5kJgESl.css">
+  <script type="module" crossorigin src="./assets/main-BL6ZNU5L.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-DMz-ZJQJ.css">
 </head>
 <body>
   <header class="site-header">
@@ -93,13 +93,31 @@
     <h2 id="lift">3. Blowing up, and how it resolves each kind</h2>
     <h3 id="lift-idea">3.1 The idea: record the direction</h3>
     <div class="terms"><b>Definition:</b> blowup of the plane, exceptional divisor, strict transform, total transform.</div>
+    <p><b>What is an exceptional curve?</b> Blow up a point of a smooth surface. Above that one point, keep a whole projective line of directions. This new curve is called <em>exceptional</em> because the projection collapses all of it back to the old point. It belongs to the blown-up ambient surface; it is not another branch of the curve we are trying to resolve.</p>
+    <p>In the chart $y=xt$, the new coordinates are $(x,t)$ and the projection is $\pi(x,t)=(x,xt)$. For $x\ne0$, the old point determines its slope $t=y/x$. For $x=0$, every value of $t$ projects to $(0,0)$. Thus $E=\{x=0\}$ is a line of different directions above the same old point.</p>
+    <p class="read"><b>Figure 4.</b> Leave $x=0$ and move $t$: the point moves along the violet exceptional line at right, while its projection stays at the origin at left. Then increase $x$ to leave $E$. The orange lines are the transformed crossing $y=\pm x$; they meet $E$ at only two points, $t=\pm1$.</p>
+  </div>
+  <section class="panel" aria-label="What the exceptional curve projects to">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Position x</span><input id="exceptional-x" type="range" min="-0.8" max="0.8" step="0.02" value="0"><output id="exceptional-x-out">0.00</output></label>
+      <label class="sl"><span class="lbl">Direction t</span><input id="exceptional-t" type="range" min="-1.6" max="1.6" step="0.02" value="0.6"><output id="exceptional-t-out">0.60</output></label>
+      <button type="button" class="btn" id="exceptional-zero">Return to E (x = 0)</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Old plane <span>projection (x, xt)</span></div><svg id="exceptional-plane" role="img" aria-label="Projection to the old plane; the whole exceptional curve maps to the origin"></svg></div>
+      <div class="fig"><div class="h">Blown-up surface, one chart <span>coordinates (x, t)</span></div><svg id="exceptional-chart" role="img" aria-label="Exceptional line x equals zero and transformed branches t equals plus or minus one"></svg></div>
+    </div>
+    <p class="cap" id="exceptional-status" aria-live="polite"></p>
+    <p class="cap">The dot explores the ambient surface, so it need not lie on the orange curve. The missing vertical direction is in the second chart, s = x/y. Together the two exceptional lines form ℝP¹ (a circle); over ℂ they form ℂP¹ (a sphere).</p>
+  </section>
+  <div class="col">
     <p>At a singular point, spatial coordinates lose information: crossing branches share $(0, 0)$. But a particle entering the origin remembers its slope $t = y/x$. The <b>blowup of $\mathbb{R}^2$ at the origin</b> replaces $(0, 0)$ with the circle of all directions passing through it:</p>
     <div class="eq tex">\operatorname{Bl}_0(\mathbb{R}^2) = \{(p, [\ell]) \in \mathbb{R}^2 \times \mathbb{RP}^1 : p \in \ell\}</div>
     <p>with canonical projection $\pi(p, [\ell]) = p$. Away from the origin, $\pi$ is a diffeomorphism. Over the origin, the fiber $\pi^{-1}(0) = \{0\} \times \mathbb{RP}^1$ is the <b>exceptional divisor</b> $E \cong \mathbb{RP}^1$.</p>
     <p>When a curve $C = \{f = 0\}$ is pulled back under $\pi$, the <em>total transform</em> $\pi^* C$ contains the entire exceptional curve $E$. Factoring out the maximal power of $E$ ($x^m$, where $m$ is the multiplicity) leaves the <b>strict transform</b>:</p>
     <div class="eq tex">\widetilde{C} = \overline{\pi^{-1}(C \setminus \{(0, 0)\})}</div>
     <p>which separates the branches according to their limiting slopes on $E$.</p>
-    <p class="read"><b>Figure 4.</b> 3D visualization of the lift. Grey is the original curve; the colored curve is lifted by recorded direction. Crossing lines separate immediately. Touching curves cross at an angle on step 1. The cusp becomes smooth, but hugs the exceptional divisor $E$ (the vertical violet line).</p>
+    <p class="read"><b>Figure 5.</b> 3D visualization of the lift. Grey is the original curve; the colored curve is lifted by recorded direction. Crossing lines separate immediately. Touching curves cross at an angle on step 1. The cusp becomes smooth, but hugs the exceptional divisor $E$ (the vertical violet line).</p>
   </div>
   <section class="panel" aria-label="Lift a curve">
     <div class="controls">
@@ -131,7 +149,7 @@
       <li><b>Touching ($y^2 - x^4 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - x^2) = 0$. On $E$ ($x = 0$) both branches meet at $t = 0$, but their order of contact drops from 2 to 1: $t^2 - x^2 = (t - x)(t + x) = 0$ is now a transverse crossing. A second blowup $t = xw$ gives $w^2 - 1 = 0$, fully separating them. <em>Resolved in 2 steps.</em></li>
       <li><b>Cusp ($y^2 - x^3 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - x) = 0 \implies x = t^2$. The curve is smooth in 1 step! But its tangent $x = 0$ is $E$ itself (a tangency). Two further blowups separate the curve from $E$ to achieve <b>simple normal crossings (SNC)</b>, where all components cross transversely with no tangencies. <em>Resolved in 3 steps.</em></li>
     </ul>
-    <p class="read"><b>Figure 5.</b> The ladder step-by-step. Each panel is an affine chart with slope $t$ vertically. Orange and blue trace the branches; violet lines are exceptional divisors $E$. Green dots mark transverse crossings; red rings mark points requiring further resolution.</p>
+    <p class="read"><b>Figure 6.</b> The ladder step-by-step. Each panel is an affine chart with slope $t$ vertically. Orange and blue trace the branches; violet lines are exceptional divisors $E$. Green dots mark transverse crossings; red rings mark points requiring further resolution.</p>
   </div>
   <section class="panel" aria-label="The ladder of blowups">
     <div class="controls">
@@ -156,17 +174,12 @@
   </section>
 
   <div class="col">
-    <h3 id="done">3.3 The algorithm: guarantees via invariants</h3>
+    <h3 id="done">3.3 Run the resolution procedure, with the boundary kept in view</h3>
     <div class="terms"><b>Key terms:</b> multiplicity, maximal contact, lexicographic invariant.</div>
-    <p>To turn resolution into a terminating algorithm, modern proofs (Bierstone–Milman, Kollár–Włodarczyk) define a local invariant $\operatorname{inv}(p) = (m, s/m)$ taking values in a well-ordered set:</p>
-    <ol>
-      <li><b>Order $m$:</b> The lowest total degree in the Taylor expansion of $f$ around $p$ ($m = 1$ is smooth).</li>
-      <li><b>Maximal contact $s/m$:</b> The contact order $s$ of $f$ with the smoothest hypersurface hugging the singularity, normalized by $m$.</li>
-    </ol>
-    <p>For our ladder rungs, $\operatorname{inv}(p)$ evaluates to: crossing $(2, 1)$, touching $(2, 2)$, and cusp $(2, 1.5)$. Blowing up the maximal locus strictly decreases $\operatorname{inv}(p)$ in dictionary (lexicographic) order. On the higher cusp $y^2 = x^5$, one blowup produces another cusp $t^2 = x^3$, but the invariant drops from $(2, 2.5)$ to $(2, 1.5)$: mathematical proof of strictly descending progress.</p>
-    <p class="read"><b>Figure 6.</b> The Kollár–Włodarczyk algorithm. Left: the current chart with worst point circled in red. Right: invariant height strictly decreasing toward smoothness. "Blow up a smooth point instead" demonstrates that choosing any center other than the maximum stalls progress.</p>
+    <p>For the cusp, the operational question is concrete: <b>where does the curve, together with the exceptional boundary, still fail the required normal-crossings condition?</b> Blow up that point, substitute in both charts, factor the total transform, and inspect again. A smooth strict transform is not enough: tangencies and three components through one surface point still need work.</p>
+    <p class="read"><b>Figure 7.</b> Follow the cusp through three point blowups. The right-hand ledger records the actual equation, the current defect, and the next center. Try the harder cusp to see multiplicity stay at 2 for a step. This is a worked plane-curve trace, not a general-purpose implementation or a graph of the full canonical invariant.</p>
   </div>
-  <section class="panel" aria-label="Kollár–Włodarczyk loop">
+  <section class="panel" aria-label="Worked embedded resolution of plane curves">
     <div class="controls">
       <span class="seg" role="group" aria-label="Example" id="f10-c">
         <button type="button" data-v="cusp" aria-pressed="true">Cusp</button>
@@ -174,24 +187,40 @@
         <button type="button" data-v="c5" aria-pressed="false">Harder: y² = x⁵</button>
       </span>
       <button type="button" class="btn go" id="f10-next">Next step</button>
-      <button type="button" class="btn" id="f10-bad">Blow up a smooth point instead</button>
+      <button type="button" class="btn" id="f10-bad">Try an unrelated smooth point</button>
       <button type="button" class="btn" id="f10-reset">Start over</button>
     </div>
     <div class="pair">
       <div class="fig"><div class="h" id="f10-h"></div><svg id="f10-ch" role="img" aria-label="The current chart"></svg></div>
-      <div class="fig"><div class="h">The invariant <span>may only go down</span></div><svg id="f10" role="img" aria-label="Invariant at each step"></svg></div>
+      <div class="fig"><div class="h">Equation and stopping test</div><div class="algebra" id="f10-algebra"></div><div class="resolution-ledger" id="f10-checks" aria-live="polite"></div></div>
     </div>
     <div class="key"><span><i style="background:var(--hot)"></i>one branch</span><span><i style="background:var(--cold)"></i>the other</span><span><i style="background:var(--blow)"></i>exceptional curves</span><span><i style="background:transparent;border:2px solid var(--bad);border-radius:50%"></i>worst point</span><span><i style="background:var(--good);border-radius:50%"></i>clean crossing</span></div>
     <div class="rows" id="f10-log"></div>
   </section>
 
   <div class="col">
+    <h4 id="resolution-algorithm">Where the general algorithm enters</h4>
+    <p>The <a href="https://arxiv.org/html/1206.3090v1">Bierstone–Grigoriev–Milman–Włodarczyk paper</a> organizes resolution through marked ideals $(X,I,E,\mu)$: a smooth ambient space, equations, an exceptional boundary, and an order threshold. Its support is $\{p:\operatorname{ord}_p I\ge\mu\}$. A permissible center is smooth, lies in this support, and meets the boundary normally. After blowing up, the controlled ideal is $I'=I(E_{\rm new})^{-\mu}\pi^*I$. It may differ from the strict-transform ideal.</p>
+    <p>For our cusp we can calculate the first recursive reduction by hand:</p>
+    <ol class="resolution-steps">
+      <li><b>Find the highest order.</b> For $f=y^2-x^3$, it is 2 at the origin. Use the companion marked ideal $(f,2)$ for this order-reduction task.</li>
+      <li><b>Reduce the dimension.</b> Since $\partial f/\partial y=2y$, the line $H=\{y=0\}$ is a hypersurface of maximal contact here. Expanding $f$ in $y$ leaves the coefficient $-x^3$ with threshold 2, represented on $H$ by $(x^3,2)$. Its support is $x=0$, so the center in the plane is $(0,0)$.</li>
+      <li><b>Transform the marked ideal.</b> Substitute $y=xt$: $f=x^2(t^2-x)$. Divide by $x^2$ because the mark is 2. The transformed marked ideal $(t^2-x,2)$ has empty support: its generator has order 1 everywhere. That recursive order-reduction task is finished.</li>
+      <li><b>Return to the embedded problem.</b> The strict curve $x=t^2$ is tangent to $E_1=\{x=0\}$. Blow up their common point with $x=ts$. The total transform becomes $t^3s^2(t-s)$. Three smooth components meet there, so blow up once more, $s=tw$, giving $t^6w^2(1-w)$. Now $w=1$ meets $E_3=\{t=0\}$ transversely, away from $E_1=\{w=0\}$.</li>
+    </ol>
+    <p>In the last complementary chart $t=sv$, the total transform is $s^6v^3(v-1)$: the older divisor $v=0$ and the curve $v=1$ meet the new divisor $s=0$ at different points too. Both charts must be checked. The general procedure also separates exceptional monomial factors from the residual ideal, forms companion ideals, recurses on coefficient ideals, and handles boundary intersections. The scalar $3/2$ above is coefficient data in this example, not the complete invariant for all these tasks. See §3 of the <a href="https://arxiv.org/html/1206.3090v1">2012 paper</a>.</p>
+    <details class="derivation"><summary>What Bravo, Villamayor, Bierstone, Milman, and Włodarczyk improved</summary>
+      <p><a href="https://arxiv.org/abs/math/0206244">Bravo, Encinas, and Villamayor</a> give a constructive route through principalization of ideals. <a href="https://doi.org/10.1112/S0024611502013801">Bravo and Villamayor's strengthening</a> additionally controls the factorization of the total ideal into an exceptional factor and the strict-transform ideal.</p>
+      <p><a href="https://arxiv.org/abs/math/0702375">Bierstone and Milman</a> formulate resolution functorially for equivalent marked ideals. <a href="https://arxiv.org/abs/math/0401401">Jarosław Włodarczyk</a> uses homogenized ideals to make the reduction independent of the chosen maximal-contact hypersurface. These are ways to choose compatible centers globally, beyond the substitutions in our small example.</p>
+      <p>The <a href="https://www.ias.edu/video/new-methods-resolution-singularities">IAS lecture by Michael Temkin (December 8, 2025)</a> also discusses a later approach: stack-theoretic weighted blowups. This changes the permitted operation. The <a href="https://arxiv.org/abs/1906.07106">Abramovich–Temkin–Włodarczyk algorithm</a> avoids the classical exceptional-boundary history as input; it does not claim that its blowups have no exceptional fibers. The simple weighted substitution below illustrates scaling, not the full stack construction.</p>
+    </details>
     <h3 id="weighted">3.4 A shortcut: weighted blowups and Newton polygons</h3>
     <div class="terms"><b>Key terms:</b> quasihomogeneous weights, Newton polygon.</div>
     <p>Standard blowups assign equal weight $(1, 1)$ to $x$ and $y$. But the cusp $y^2 = x^3$ has anisotropic scaling $y \sim x^{3/2}$. A <b>weighted blowup</b> assigns integer weights $(a, b)$ via $x = u^a, y = u^b v$. For $(a, b) = (2, 3)$, both terms match at $u^6$:</p>
     <div class="eq tex">y^2 - x^3 = u^6 (v^2 - 1) = 0</div>
-    <p>Factoring out $u^6$ yields $v^2 - 1 = 0 \implies v = \pm 1$: the cusp is resolved to transverse crossings in a <b>single step</b>. The optimal weights are read off the <b>Newton polygon</b> (the convex hull of exponent vectors $(i, j)$ of $f$): aligning the weight line flush with a compact edge preserves all boundary monomials at $u = 0$.</p>
-    <p class="read"><b>Figure 7.</b> Interactive weighted blowup. Left: Newton polygon of $y^2 - x^3$. The orange weight line $(a, b)$ tilts as you slide weights. When $(a, b) = (2, 3)$, the line lies flush along the edge, factoring out $u^6$ and separating branches at $v = \pm 1$.</p>
+    <p>For $(2,3)$, the strict equation on this <em>chart cover</em> is $v^2-1=0$, transverse to $u=0$. The map $x=u^2$, $y=u^3v$ has the identification $(u,v)\sim(-u,-v)$: the two displayed lifts do not mean that the cusp has two algebraic branches. A weighted blowup includes these quotient identifications and its other charts. This substitution alone is not an ordinary birational chart of a smooth surface.</p>
+    <p>The balancing weights come from the compact edge joining $(3,0)$ and $(0,2)$ of the Newton polygon: $3a=2b$. This explains the shortcut in this example; general resolution requires more than choosing weights from one picture.</p>
+    <p class="read"><b>Figure 8.</b> A weighted chart cover. For $(a,b)=(2,3)$, both monomials have weight 6, and the strict equation becomes $v=\pm1$. Read these as two lifts on the cover, with the identification described above.</p>
   </div>
   <section class="panel" aria-label="Weighted blowup">
     <div class="controls">
@@ -213,9 +242,9 @@
     <h3 id="formalized">3.5 What was formalized in Lean, and why</h3>
     <p>In 1964, Heisuke Hironaka proved that any algebraic or analytic variety in characteristic zero can be resolved into a smooth manifold with simple normal crossings via finitely many blowups. In Michael Atiyah's formulation required by <b>Singular Learning Theory</b>, any real-analytic loss $K(w) \ge 0$ can be pulled back via $\pi: M \to W$ so that loss and Jacobian determinant are simultaneously monomialized:</p>
     <div class="eq tex">K(\pi(u)) = u^{2\mathbf{k}} \cdot g(u), \qquad |\det D\pi(u)| = u^{\mathbf{h}} \cdot b(u)</div>
-    <p>This monomialization completely decouples the Bayesian marginal likelihood integral into 1D Mellin transforms:</p>
-    <div class="eq tex">Z_N = \int e^{-N K(w)} \varphi(w) dw \approx \prod_{j=1}^d \int_0^\varepsilon e^{-N u_j^{2k_j}} u_j^{h_j} du_j \asymp N^{-\lambda} (\log N)^{m-1}</div>
-    <p>where $\lambda = \min_j \frac{h_j + 1}{2k_j}$ is the <b>real log canonical threshold (RLCT)</b>, or learning coefficient, which governs model complexity and generalization error (<a href="./part-4.html">Part IV</a>). In October 2026, the Resolution team (Snikkers, Newgas, Hoogland, and Elliott) <a href="https://resolution.org/post/formalizing-resolution-of-singularities">formalized this theorem in Lean 4</a> without a single <span class="m">sorry</span> (~500,000 lines), providing a verified bedrock for learning theory.</p>
+    <p>The exponential of a product of monomials is still coupled. Resolution makes its asymptotics tractable; it does not turn it into a product of independent Gaussian integrals:</p>
+    <div class="eq tex">Z_N=\int e^{-NK(w)}\varphi(w)\,dw\asymp N^{-\lambda}(\log N)^{m-1}.</div>
+    <p>With the analytic and prior assumptions in <a href="./part-4.html">Part IV</a>, $\lambda$ is the minimum of $(h_j+1)/(2k_j)$ over contributing charts and indices with $k_j&gt;0$; multiplicity $m$ records the leading logarithmic factor. In October 2026, the Resolution team (Snikkers, Newgas, Hoogland, and Elliott) <a href="https://resolution.org/post/formalizing-resolution-of-singularities">formalized a resolution theorem in Lean 4</a> without a single <span class="m">sorry</span> (~500,000 lines).</p>
 
     <h2 id="nash">4. How Nash's works, and how it fails</h2>
     <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, toric counterexample, recurring affine chart.</div>
@@ -224,7 +253,7 @@
     <p><b>Where Nash fails:</b> In characteristic zero, iterated Nash blowups resolve curves; normalized Nash blowups resolve surfaces. These statements do not give a general termination theorem for ordinary Nash blowups on surfaces. Castillo, Duarte, Leyton-Álvarez, and Liendo construct a <a href="https://arxiv.org/html/2409.19767v3">normal four-dimensional affine toric variety</a> for which a chart of its Nash blowup is isomorphic to the original singular variety. The same obstruction occurs for the normalized Nash blowup:</p>
     <div class="eq tex">U\subset\operatorname{Nash}(X),\qquad U\cong X.</div>
     <p>A singular chart can therefore recur after every iteration; this is not an isomorphism between the entire Nash blowup and $X$. Their <a href="https://arxiv.org/abs/2511.01772">three-dimensional counterexample</a> concerns non-normalized Nash blowups. In <a href="./part-2.html">Part II</a>, an exact cone blowup makes the direction coordinates concrete, before we return to these higher-dimensional obstructions.</p>
-    <p class="read"><b>Figure 8.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
+    <p class="read"><b>Figure 9.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
   </div>
   <section class="panel" aria-label="Nash's blowup of X contains X">
     <div class="controls"><button type="button" class="btn go" id="n4-go">Pick a random point of X</button><span class="lbl" id="n4-t"></span></div>
@@ -251,11 +280,11 @@
   </div>
 
   <div class="col">
-    <p class="read"><b>Figure 9.</b> Left: successive point blowups resolve the cusp and its exceptional crossings. Right: Nash resolves the cusp in one step; the lower diagram schematically illustrates a singular affine chart recurring in the four-dimensional example.</p>
+    <p class="read"><b>Figure 10.</b> Left: successive point blowups resolve the cusp and its exceptional crossings. Right: Nash resolves the cusp in one step; the lower diagram schematically illustrates a singular affine chart recurring in the four-dimensional example.</p>
   </div>
   <section class="panel" aria-label="Nash loop">
     <div class="pair">
-      <div class="fig"><div class="h">Hironaka, as Kollár and Włodarczyk run it</div><svg id="f11a" role="img" aria-label="Filmstrip of the cusp's charts with a decreasing invariant"></svg></div>
+      <div class="fig"><div class="h">Embedded resolution by ordinary point blowups</div><svg id="f11a" role="img" aria-label="Filmstrip of the cusp's charts through singularity, tangency, triple point, and normal crossings"></svg></div>
       <div class="fig"><div class="h">Nash</div><svg id="f11b" role="img" aria-label="Nash's blowup of the cusp, and a schematic of the four-dimensional loop"></svg></div>
     </div>
   </section>

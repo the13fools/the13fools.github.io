@@ -1,3 +1,4 @@
+import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
 (() => {
   "use strict";
   const { isOn } = window.__E;
@@ -240,25 +241,25 @@
   $("#f9-a")?.addEventListener("input", (e) => { F9.a = +e.target.value; fig9(); });
   $("#f9-b")?.addEventListener("input", (e) => { F9.b = +e.target.value; fig9(); });
 
-  // ============================================================ Figure 10: the Kollár–Włodarczyk loop
+  // ============================================================ Figure 10: checked plane-curve trace, not a full canonical invariant
   const KW = {
     cusp: [
-      { inv: "(2, 3/2)", h: 4, ph: "phase 1: make the curve smooth", why: "order 2 (from y²); maximal contact y = 0; f there is −x³, order 3; 3/2", act: "blow up the origin", bad: [1, 1] },
-      { sh: "tangency", inv: "(1; tangent to E₁)", h: 2.6, ph: "phase 2: make crossings clean", why: "the curve is smooth (order 1) but touches E₁", act: "blow up the origin", bad: [0.81, 0.9] },
-      { sh: "triple point", inv: "(1; three curves meet)", h: 1.4, ph: "phase 2: make crossings clean", why: "each pair crosses, but E₁, E₂ and the curve share a point", act: "blow up the origin", bad: [0.7, 0.7] },
-      { inv: "done", h: 0, ph: "normal crossings", why: "at most two curves through any point, crossing cleanly", act: "", bad: [0.6, 1] },
+      { inv: "order 2", ph: "singular strict curve", why: "The cusp is singular. On y = 0 the coefficient ideal is (x³, 2), supported at the origin.", act: "blow up the origin", bad: [1, 1] },
+      { inv: "smooth; tangent", ph: "boundary tangency", why: "The derivative of t² − x with respect to x is −1: the curve is smooth. But x = t² is tangent to E₁: x = 0.", act: "blow up the tangency (0, 0)", bad: [0.81, 0.9] },
+      { inv: "three components", ph: "boundary triple point", why: "The strict curve t = s and E₁: s = 0 and E₂: t = 0 meet at one point. Three components cannot be coordinate hyperplanes in a surface.", act: "blow up the triple point (0, 0)", bad: [0.7, 0.7] },
+      { inv: "done", ph: "normal crossings", why: "The curve w = 1 meets E₃: t = 0 transversely and away from E₁: w = 0. In the complementary chart, E₂ and the curve also meet E₃ at different points.", act: "", bad: [0.6, 1] },
     ],
     c5: [
-      { inv: "(2, 5/2)", h: 4.6, ph: "phase 1: make the curve smooth", why: "order 2 (from y²); maximal contact y = 0; f there is −x⁵, order 5; 5/2", act: "blow up the origin", bad: [1, 1] },
-      { sh: "a cusp again", inv: "(2, 3/2)", h: 3.7, ph: "phase 1: make the curve smooth", why: "the strict transform t² = x³ is a cusp again: the order is still 2, and only the second number dropped, from 5/2 to 3/2", act: "blow up the origin", bad: [1, 1] },
-      { sh: "tangency", inv: "(1; tangent to E₂)", h: 2.6, ph: "phase 2: make crossings clean", why: "the curve x = u² is smooth (order 1) but touches E₂", act: "blow up the origin", bad: [0.81, 0.9] },
-      { sh: "triple point", inv: "(1; three curves meet)", h: 1.4, ph: "phase 2: make crossings clean", why: "the curve, E₂ and E₃ share a point", act: "blow up the origin", bad: [0.7, 0.7] },
-      { inv: "done", h: 0, ph: "normal crossings", why: "at most two curves through any point, crossing cleanly", act: "", bad: [0.6, 1] },
+      { inv: "order 2", ph: "singular strict curve", why: "The coefficient (x⁵, 2) on y = 0 has support x = 0.", act: "blow up the origin", bad: [1, 1] },
+      { inv: "still order 2", ph: "a cusp again", why: "The strict transform t² − x³ is still singular of order 2. The transformed coefficient is (x³, 2), so the order-reduction task continues.", act: "blow up the origin", bad: [1, 1] },
+      { inv: "smooth; tangent", ph: "boundary tangency", why: "The curve x = u² is smooth, but tangent to E₂: x = 0.", act: "blow up the tangency", bad: [0.81, 0.9] },
+      { inv: "three components", ph: "boundary triple point", why: "The curve and two exceptional components share the origin; three is too many for normal crossings in a surface.", act: "blow up the triple point", bad: [0.7, 0.7] },
+      { inv: "done", ph: "normal crossings", why: "The strict curve w = 1 crosses the new exceptional divisor transversely at a separate point.", act: "", bad: [0.6, 1] },
     ],
     tan: [
-      { inv: "(2, 2)", h: 4, ph: "phase 1: make the curve smooth", why: "order 2 (from y²); maximal contact y = 0; f there is −x⁴, order 4; 4/2 = 2", act: "blow up the origin", bad: [0.9, 0.81] },
-      { inv: "(2, 1)", h: 2.5, ph: "phase 1: make the curve smooth", why: "strict transform t² − x² has order 2; maximal contact t = 0; f there is −x², order 2; 2/2 = 1", act: "blow up the origin", bad: [0.7, 0.7] },
-      { inv: "done", h: 0, ph: "normal crossings", why: "the curves w = ±1 are smooth and cross E₂ cleanly at different points", act: "", bad: [0.6, 1] },
+      { inv: "order 2", ph: "two tangent branches", why: "Both branches have tangent y = 0; the coefficient is (x⁴, 2).", act: "blow up the origin", bad: [0.9, 0.81] },
+      { inv: "order 2; three components", ph: "boundary triple point", why: "The branches t = ±x now cross, but they and E₁ share the origin. The strict curve remains singular.", act: "blow up the triple point", bad: [0.7, 0.7] },
+      { inv: "done", ph: "normal crossings", why: "The disjoint strict curves w = ±1 each cross E₂ at a different point.", act: "", bad: [0.6, 1] },
     ],
   };
   const F10 = { c: "cusp", hist: [] };
@@ -266,31 +267,19 @@
   function fig10() { if (!$("#f10-ch")) return;
     const st = f10stage(), K = KW[F10.c], cur = K[st], S = CH[F10.c][st];
     let nb = 0; for (let i = F10.hist.length - 1; i >= 0 && F10.hist[i].bad; i--) nb++;
-    const badHere = nb ? [[cur.bad, nb === 1 ? "useless extra E" : `${nb} useless extra E's`]] : [];
+    const badHere = nb ? [[cur.bad, "unrelated center"]] : [];
     $("#f10-h").innerHTML = `${S.h} <span>· f = ${S.fn} · ${cur.ph}</span>`;
     drawChart($("#f10-ch"), S, badHere);
-    // staircase
-    const svg = $("#f10"), n = F10.hist.length, maxX = Math.max(4, n + 1);
-    const F = frame(svg, { W: 340, H: 300, l: 16, r: 16, t: 20, b: 40, xr: [-0.5, maxX - 0.5], yr: [-0.6, 5], xt: [...Array(maxX).keys()].map((i) => [i, i === 0 ? "start" : String(i)]), xlab: "blowups so far" });
-    let st2 = 0; const pts = [[0, K[0].h]];
-    F10.hist.forEach((h, i) => { if (!h.bad) st2++; pts.push([i + 1, K[st2].h]); });
-    const step = []; pts.forEach((p, i) => { if (i) step.push([p[0] - 0.5, pts[i - 1][1]], [p[0] - 0.5, p[1]]); step.push([p[0] - 0.4, p[1]], [p[0] + 0.4, p[1]]); });
-    E("path", { d: pathD(step, F.X, F.Y), fill: "none", stroke: C.steel, "stroke-width": 1.5, "stroke-dasharray": "4 3" }, F.g);
-    let s3 = 0;
-    pts.forEach((p, i) => {
-      const bad = i > 0 && F10.hist[i - 1].bad; if (i > 0 && !bad) s3++;
-      const k = K[s3], col = bad ? C.bad : k.inv === "done" ? C.good : C.blow;
-      E("rect", { x: F.X(p[0] - 0.35), y: F.Y(Math.max(p[1], 0.12)), width: F.X(0.35) - F.X(-0.35), height: F.Y(0) - F.Y(Math.max(p[1], 0.12)) + 1, fill: col, opacity: i === pts.length - 1 ? 1 : 0.45, rx: 3 }, F.g);
-      T(svg, F.X(p[0]), F.Y(Math.max(p[1], 0.12)) - 6 - (pts.length > 5 ? (i % 2) * 14 : 0), bad ? "no change" : (k.sh || k.inv), col, { at: { "text-anchor": "middle" }, st: ";font-weight:700;font-size:11.5px" });
-    });
-    E("line", { x1: F.x0, x2: F.x1, y1: F.Y(0), y2: F.Y(0), stroke: C.muted }, F.g);
+    $("#f10-algebra").innerHTML = S.alg || `Total transform: <b>${S.fn}</b>`;
+    const map=F10.c==="cusp"?CUSP_CHARTS[st]:F10.c==="c5"?HARD_CUSP_CHARTS[st]:null;
+    $("#f10-checks").innerHTML = `${map?`<p><b>Projection to the original plane:</b> ${map.text}.</p>`:""}<p><b>Current check:</b> ${cur.why}</p><p><b>Next center:</b> ${cur.act || "none — embedded normal crossings achieved"}</p><p>Violet is the ambient exceptional boundary. Orange/blue is the strict curve. The displayed factors retain exceptional multiplicities.</p>`;
     // log
     let s4 = 0, rows = `<tr><td>start</td><td>${K[0].inv}</td><td>${K[0].why}</td><td>${K[0].act}</td></tr>`;
     F10.hist.forEach((h, i) => {
-      if (h.bad) rows += `<tr><td>${i + 1}</td><td style="color:var(--bad)">${K[s4].inv}, unchanged</td><td>blew up a smooth point of the curve instead: a new exceptional curve appears there, and the worst point is untouched</td><td>${K[s4].act}</td></tr>`;
+      if (h.bad) rows += `<tr><td>${i + 1}</td><td style="color:var(--bad)">${K[s4].inv}, unchanged</td><td>hypothetical unrelated blowup: the displayed bad point is untouched; this is outside the prescribed center selection</td><td>${K[s4].act}</td></tr>`;
       else { s4++; rows += `<tr class="${i === F10.hist.length - 1 ? "on" : ""}"><td>${i + 1}</td><td>${K[s4].inv}</td><td>${K[s4].why}</td><td>${K[s4].act || "stop"}</td></tr>`; }
     });
-    $("#f10-log").innerHTML = `<table><thead><tr><th>Step</th><th>Invariant at the worst point</th><th>Why</th><th>Next center</th></tr></thead><tbody>${rows}</tbody></table>`;
+    $("#f10-log").innerHTML = `<table><thead><tr><th>Step</th><th>Geometric state</th><th>Why</th><th>Next center</th></tr></thead><tbody>${rows}</tbody></table>`;
     const done = cur.inv === "done";
     $("#f10-next").disabled = done; $("#f10-bad").disabled = done;
     $("#f10-next").style.opacity = done ? 0.45 : 1; $("#f10-bad").style.opacity = done ? 0.45 : 1;
@@ -317,7 +306,7 @@
   }
   function fig11() { if (!$("#f11a")) return;
     let svg = $("#f11a"); svg.innerHTML = ""; svg.setAttribute("viewBox", "0 0 360 300");
-    const st = CH.cusp, inv = ["(2, 3/2)", "(1; tangent)", "(1; triple point)", "done"], sub = ["singular", "touches E₁", "three meet", "normal crossings"];
+    const st = CH.cusp, inv = ["order 2", "tangency", "triple point", "done"], sub = ["singular", "touches E₁", "three meet", "normal crossings"];
     const pos = [[20, 18], [200, 18], [20, 160], [200, 160]], w = 140, h = 92;
     st.forEach((S, i) => miniChart(svg, pos[i][0], pos[i][1], w, h, S, { label: inv[i], sub: sub[i], labCol: i === 3 ? C.good : C.blow, border: i === 3 ? C.good : null }));
     arrow(svg, 166, 64, 194, 64, C.blow, 2); arrow(svg, 200, 135, 166, 160, C.blow, 2); arrow(svg, 166, 206, 194, 206, C.blow, 2);

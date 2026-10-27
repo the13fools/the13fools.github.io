@@ -47,3 +47,6 @@ import "./figures/manifolds.js";
 import "./figures/nash-three.js";
 
 import "./figures/toric-slice.js";
+import "./figures/nash-three-section.js";
+import "./figures/exceptional.js";
+import "./figures/nash-three-resolution.js";
