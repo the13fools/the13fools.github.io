@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Singular Learning Theory · What is… a blowup?</title>
-  <meta name="description" content="Three guided experiments on parameter volume, a toy learning-coefficient thermometer, and local estimates for trained linear networks.">
+  <meta name="description" content="Two guided experiments explain the learning coefficient through nearly correct parameter volume and Bayesian evidence.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Singular Learning Theory · What is… a blowup?">
-  <meta property="og:description" content="Three guided experiments on parameter volume, a toy learning-coefficient thermometer, and local estimates for trained linear networks.">
+  <meta property="og:description" content="Two guided experiments explain the learning coefficient through nearly correct parameter volume and Bayesian evidence.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-4.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -27,102 +27,47 @@
     <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Tensor singularities</a><a href="./part-4.html" aria-current="page">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
-  <div class="col page-head">
-    <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part IV of IV</p>
-    <h1>Singular learning theory</h1>
-    <p class="dek">Three experiments: compare equally good fits, measure their nearby parameter volume, and estimate a learning coefficient in a trained linear network.</p>
-  </div>
+  <div class="col page-head"><p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part IV of IV</p><h1>How much room does a good fit have?</h1><p class="dek">Two experiments with the same two losses: count nearly correct parameters, then add up their Bayesian weight.</p></div>
   <div class="col">
-    <p>Regular statistical theory assumes identifiable parameters and a nondegenerate quadratic loss near the optimum. The resulting Gaussian approximation gives a complexity coefficient $d/2$, where $d$ is the number of parameters.</p>
-    <p>Neural networks can violate these assumptions. Continuous symmetries and redundant units create valleys of equivalent functions; intersecting valleys can introduce further degeneracy. A Bayesian posterior integrates over nearby parameter volume. For equally good fits with comparable positive prior weight, <b>a flatter minimum can retain more posterior mass</b>.</p>
-    <h2 id="learning">10. Same fit, different room</h2>
-    <p>In the simulation below, two candidate parameter settings both achieve zero training loss ($K = 0$). Near the blue point, the loss rises steeply as a quadratic bowl ($K \propto r^2$). Near the orange point, the loss stays flat, growing only quartically ($K \propto r^4$).</p>
-    <p>As dataset size $n$ increases, the Gibbs posterior $p(w) \propto e^{-n K(w)}$ contracts around both solutions. But because a quartic well has broader shoulders, its volume contracts far more slowly ($n^{-1/2}$ vs. $n^{-1}$). Rather than splitting mass fifty-fifty, the posterior overwhelmingly concentrates around the degenerate fit.</p>
-    <p class="read"><b>Figure {fig:twofits}.</b> Drag the concentration slider $n$ to the right. Nine hundred live posterior samples redistribute between the two basins. Notice the orange curve climb from near parity toward overwhelming dominance. Equal minimum loss never implies equal posterior weight.</p>
+    <p><a href="./part-3.html">The tensor collision</a> gave us a loss that is quadratic in the mean $s$ and quartic in the separation $d$. We now use its simpler local model $K_{\rm collision}=s^2+d^4$, alongside an ordinary quadratic loss $K_{\rm regular}=s^2+d^2$. Both have two parameters and the same perfect fit at $(0,0)$.</p>
+    <p>The simpler loss preserves the collision’s local scaling, but is not its exact tensor loss. All the pictures use the same parameter square $-1\le s,d\le1$. Nothing is being trained here: the losses are given explicitly so we can see what a statistical calculation counts.</p>
+    <h2 id="learning">10. Count the nearly correct parameters</h2>
+    <p>Allow a little error: $K\le\varepsilon$. Every shaded point below is a parameter setting meeting that requirement. The regular fit gives a disk. The collision fit leaves a longer band in the separation direction, because fourth powers stay small longer than squares.</p>
+    <p class="read"><b>Figure {fig:learningroom}.</b> Press <b>Demand 10× less error</b>. Both regions shrink, but the collision region shrinks less. Read the fraction of the same parameter square that remains acceptable. The axes and shading scales are identical.</p>
   </div>
-  <section class="panel learning-panel" aria-label="Two perfect fits">
-    <div class="controls"><label class="sl long"><span class="lbl">data points n</span><input id="tw-n" type="range" min="0" max="4" step="0.05" value="0.6"><output id="tw-n-out"></output></label></div>
-    <div class="pair">
-      <div class="fig"><div class="h">The posterior <span>900 samples</span></div><div class="box sq"><canvas id="tw-cv" aria-label="Posterior samples near two perfect fits"></canvas></div></div>
-      <div class="fig"><div class="h">Share of the posterior near each fit</div><svg id="tw-plot" role="img" aria-label="Posterior share of each fit against n"></svg></div>
-    </div>
-    <div class="plot-legend"><span><i class="line-cold"></i>Near the quadratic fit</span><span><i class="line-hot"></i>Near the quartic fit</span></div><div class="chips" id="tw-chips"></div>
+  <section class="panel learning-panel story-panel" aria-label="Volume of nearly correct parameters">
+    <div class="controls"><label class="sl long"><span class="lbl">Allowed loss ε</span><input id="room-eps" type="range" min="-3" max="-0.6" step="0.05" value="-1"><output id="room-eps-out"></output></label><button class="btn" id="room-tighten">Demand 10× less error</button><button class="btn" id="room-reset">Reset</button></div>
+    <div class="pair"><div class="fig"><div class="h">Regular: s² + d²</div><svg id="room-regular" role="img" aria-label="Disk of acceptable parameters for a quadratic loss"></svg><p class="cap" id="room-regular-out"></p></div><div class="fig"><div class="h">Collision: s² + d⁴</div><svg id="room-collision" role="img" aria-label="Larger region of acceptable parameters for the collision loss"></svg><p class="cap" id="room-collision-out"></p></div></div>
+    <p class="story-result" id="room-result" aria-live="polite"></p>
   </section>
   <div class="col">
-    <h2 id="thermometer">11. Measure that room with a thermometer</h2>
-    <p>Singular Learning Theory (SLT) makes this notion of “room” precise. In a fixed compact neighborhood $B$ of a minimum, let $V(\varepsilon) = \int_{B \cap \{K(w) \le \varepsilon\}} dw$. For the analytic losses and positive smooth local weights considered here, its leading asymptotic scale is:</p>
-    <div class="eq tex">V(\varepsilon) \asymp \varepsilon^\lambda \big(\log(1/\varepsilon)\big)^{m-1} \qquad (\varepsilon \to 0).</div>
-    <p>The exponent $\lambda$ is the <b>local learning coefficient</b> (or real log canonical threshold). Smaller $\lambda$ means more volume: parameter space shrinks more slowly as we demand a tighter fit.</p>
-    <p>Contrast four characteristic geometries:</p>
-    <ul>
-      <li><b>Quadratic bowl ($a^2 + b^2$):</b> The sublevel set is a 2D disk of radius $\sqrt{\varepsilon}$, area $\pi\varepsilon$, giving $\lambda = 1 = d/2$.</li>
-      <li><b>Product loss ($(ab)^2$):</b> The zero set is the pair of coordinate axes ($a=0$ or $b=0$). Within the bounded square below, thin low-loss strips follow both axes, giving $\lambda = 1/2 &lt; d/2$; their crossing adds a logarithmic factor ($m=2$).</li>
-      <li><b>Quartic valley ($a^4 + b^2$):</b> Quadratic in $b$ ($\lambda_b = 1/2$) and quartic in $a$ ($\lambda_a = 1/4$), yielding $\lambda = 1/2 + 1/4 = 3/4$.</li>
-      <li><b>Cusp singularity ($(b^2 - a^3)^2$):</b> The classical $A_2$ cusp, whose resolution by blowup reveals the fractional exponent $\lambda = 5/12 \approx 0.417$.</li>
-    </ul>
-    <p>To measure $\lambda$ without computing algebraic blowups by hand, we use a <b>statistical thermometer</b>. In physics, the equipartition theorem equates thermal energy to degrees of freedom: $\langle E \rangle = \frac{d}{2} k_B T$. In SLT, Sumio Watanabe proved that this principle extends to singular potentials: when Langevin chains sample $p(w) \propto e^{-n K(w)}$, their scaled empirical loss $n\langle K\rangle$ approaches $\lambda$ as $n \to \infty$.</p>
-    <p>At finite $n$, boundary effects and logarithmic corrections can shift the expectation away from $\lambda$. The dashed line is a numerical grid approximation to that finite-$n$ expectation on the same square. The purple line is the asymptotic coefficient. A difference between those lines is distinct from sampling error.</p>
-    <p class="read"><b>Figure {fig:thermo}.</b> Start with the bowl, then select the product loss. Compare the orange running mean with the dashed grid reference after warm-up. Increase $n$ to explore the approach to the purple asymptotic line. Finite step size and incomplete mixing can leave a gap between the sampler and the grid reference.</p>
+    <h3>The learning coefficient is a shrinking rate</h3>
+    <p>For the disk, each direction has width proportional to $\varepsilon^{1/2}$. Multiply the widths: area is proportional to $\varepsilon^1$. For the collision, the mean still has width $\varepsilon^{1/2}$, but separation has width $\varepsilon^{1/4}$. Its area is proportional to $\varepsilon^{3/4}$.</p>
+    <div class="eq tex">\lambda_{\rm regular}=\tfrac12+\tfrac12=1,\qquad \lambda_{\rm collision}=\tfrac12+\tfrac14=\tfrac34.</div>
+    <p>This exponent is the <b>local learning coefficient</b>, also called the real log canonical threshold of the loss. Smaller $\lambda$ means that demanding a tighter fit removes parameter volume more slowly. In more general analytic models there can also be a logarithmic factor; neither of these two examples needs one.</p>
+    <h2 id="evidence">11. Add up the weight, not just the best fit</h2>
+    <p>For independent Gaussian measurements, multiplying likelihoods gives an exponential of a summed squared error. We isolate that concentration effect in a simple model: a parameter setting gets relative weight $e^{-nK}$. Here $n$ controls how severely errors are penalized, standing in for the amount of data. We compare two candidate models with equal prior probabilities, each with a uniform parameter prior on the same square. Their minimum losses agree, so the distinction comes entirely from the surrounding parameters.</p>
+    <p>The <b>evidence</b> $Z$ is the average of $e^{-nK}$ over that prior square. The posterior probability of each candidate is its evidence divided by the sum of both evidences. This is a controlled comparison of the two specified losses, rather than a simulation of a training dataset.</p>
+    <p class="read"><b>Figure {fig:learningevidence}.</b> Select <b>n = 100</b>, then <b>n = 10,000</b>. Bright means high relative likelihood, with the same 0–1 color scale in both panels. Both fits concentrate, but the collision keeps a wider bright region. The bar adds up that brightness.</p>
   </div>
-  <section class="panel learning-panel" aria-label="Local learning coefficient estimator">
-    <div class="controls">
-      <span class="seg" role="group" aria-label="Loss" id="llc-k">
-        <button type="button" data-v="bowl" aria-pressed="true">Bowl a² + b²</button>
-        <button type="button" data-v="prod" aria-pressed="false">Product (ab)²</button>
-        <button type="button" data-v="quart" aria-pressed="false">Flat direction a⁴ + b²</button>
-        <button type="button" data-v="cusp" aria-pressed="false">Cusp (b² − a³)²</button>
-      </span>
-      <label class="sl"><span class="lbl">Concentration n</span><input id="llc-n" type="range" min="2" max="4" step="1" value="3"><output id="llc-n-out"></output></label>
-      <button type="button" class="btn" id="llc-pause">Pause chains</button><button type="button" class="btn" id="llc-run">Restart chains</button>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Samples on the loss</div><div class="box sq"><canvas id="llc-cv" aria-label="Langevin samples over the loss landscape"></canvas></div></div>
-      <div class="fig"><div class="h">Running estimate <span>n·⟨K⟩</span></div><svg id="llc-plot" role="img" aria-label="Running estimate of the learning coefficient"></svg></div>
-    </div>
-    <div class="plot-legend"><span><i class="line-hot"></i>Sampled running mean</span><span><i class="line-ink dashed"></i>Finite-n grid reference</span><span><i class="line-blow"></i>Asymptotic coefficient λ</span></div>
-    <div class="chips" id="llc-chips"></div><p class="cap" id="llc-explain" aria-live="polite"></p><p class="cap">Uniform prior on the square −1 ≤ a, b ≤ 1. Points show 300 chains; the first 8,000 steps per chain are warm-up.</p>
+  <section class="panel learning-panel story-panel" aria-label="Bayesian weight of the two losses">
+    <div class="controls"><label class="sl long"><span class="lbl">Evidence strength n</span><input id="evidence-n" type="range" min="0" max="4" step="0.05" value="0"><output id="evidence-n-out"></output></label><button class="btn" data-evidence="0">n = 1</button><button class="btn" data-evidence="2">n = 100</button><button class="btn" data-evidence="4">n = 10,000</button></div>
+    <div class="pair"><div class="fig"><div class="h">Regular: s² + d²</div><svg id="evidence-regular" role="img" aria-label="Relative likelihood for the regular loss"></svg><p class="cap" id="evidence-regular-out"></p></div><div class="fig"><div class="h">Collision: s² + d⁴</div><svg id="evidence-collision" role="img" aria-label="Relative likelihood for the collision loss"></svg><p class="cap" id="evidence-collision-out"></p></div></div>
+    <div class="story-scale"><span>0 · negligible weight</span><i></i><span>1 · perfect fit</span></div>
+    <p class="cap">Posterior probability of each candidate · equal model priors</p><div class="story-share" role="img" id="evidence-share"><span id="evidence-share-regular"></span><span id="evidence-share-collision"></span></div><p class="story-result" id="evidence-result" aria-live="polite"></p>
+    <p class="cap">Deterministic numerical integration, with a uniform prior on each square. There are no random chains or warm-up steps.</p>
   </section>
   <div class="col">
-    <h2 id="llc">12. From a toy loss to a trained model</h2>
-    <p>Can this geometric thermometer measure real neural networks? Consider a factorized linear network $y = B A x$ mapping $\mathbb{R}^3 \to \mathbb{R}^H \to \mathbb{R}^3$, trained on noisy data generated by a true rank-one linear map. As hidden width $H$ grows from 1 to 5, the total number of weights scales from 6 to 30: $d = 6H$. If parameters were regular and identifiable, classical theory would assert that effective capacity grows linearly: $d/2 = 3H \in \{3, 6, 9, 12, 15\}$.</p>
-    <p>Matrix multiplication has a continuous symmetry: for any invertible $G \in \operatorname{GL}(H)$, the pair $(B G, G^{-1} A)$ computes the same map. Parameter count therefore overstates the number of independent directions. For this rank-one target, the Aoyagi–Watanabe formula gives $\lambda = 2.5, 3.5, 4, 4.5, 4.5$ at widths 1 through 5. The coefficient increases before saturating at $MN/2 = 4.5$; adding width changes more than just the symmetry orbit.</p>
-    <p>To measure $\lambda$ locally around trained weights $w^*$, we localize the posterior with a quadratic centering spring $\frac{\gamma}{2}\|w - w^*\|^2$ and run Stochastic Gradient Langevin Dynamics (SGLD) at inverse temperature $\beta^* = 1/\log n$.</p>
-    <p class="read"><b>Figure {fig:llcnet}.</b> Press Run again to train and sample five widths. Purple shows the theoretical coefficient for the rank-one population target; orange shows the finite-chain estimate $n\beta \langle L_n(w) - L_n(w^*)\rangle$ on noisy training data. These are related quantities, not identical finite-sample measurements. Change the spring $\gamma$ to see how localization affects the comparison.</p>
-  </div>
-  <section class="panel learning-panel" aria-label="LLC on a trained network">
-    <div class="controls">
-      <span class="lbl">Localization γ</span>
-      <span class="seg" role="group" aria-label="Localization" id="llcn-g">
-        <button type="button" data-v="1" aria-pressed="false">1</button>
-        <button type="button" data-v="10" aria-pressed="true">10</button>
-        <button type="button" data-v="100" aria-pressed="false">100</button>
-      </span>
-      <button type="button" class="btn go" id="llcn-run">Run again</button><button type="button" class="btn" id="llcn-stop" disabled>Stop sampling</button><span class="lbl" id="llcn-status" role="status" aria-live="polite">Ready</span>
-    </div>
-    <svg id="llcn-plot" role="img" aria-label="LLC estimates against the exact learning coefficient for linear networks of growing width"></svg>
-    <div class="plot-legend"><span><i class="line-blow"></i>Theoretical coefficient λ</span><span><i class="dot-hot"></i>Finite-chain estimate nβ·mean excess loss</span></div><div class="chips" id="llcn-chips"></div><details><summary>Numerical results</summary><div class="rows" id="llcn-results"></div></details><p class="cap">3 → H → 3 linear network · rank-one target · four chains per width · 20,000 Langevin steps per chain. A vertical orange segment shows the difference from the theoretical coefficient.</p>
-  </section>
-  <div class="col">
-    <details class="derivation"><summary>Why the thermometer works: centered loss and the partition function</summary>
-  <div class="col">
-    <h3>The centered partition function</h3>
-    <p>Explicit resolution charts are usually impractical for modern deep networks. Lau and colleagues propose estimating the <a href="https://proceedings.mlr.press/v258/lau25a.html"><b>local learning coefficient (LLC)</b></a> using a localized tempered posterior and Stochastic Gradient Langevin Dynamics (SGLD).</p>
-    <p>For an ideal local calculation around a local empirical minimizer $w^*$, center the excess loss: $K_n(w) = L_n(w) - L_n(w^*) \ge 0$. On a compact neighborhood $B$ with quadratic spring localization $\gamma > 0$, define the centered partition function and tempered posterior:</p>
-    <div class="eq tex">Z_c(\beta) = \int_B \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right) dw</div>
-    <div class="eq tex">p_\beta(w) = \frac{\mathbf{1}_B(w)}{Z_c(\beta)} \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right)</div>
-    <p>By Hironaka's theorem, an analytic resolution of singularities monomializes the loss $K_n(w)$ and volume form $dw$, so the centered partition function has the asymptotic expansion $Z_c(\beta) \asymp (n\beta)^{-\lambda} (\log(n\beta))^{m-1}$ as $n\beta \to \infty$. Differentiating the free energy $-\log Z_c(\beta)$ with respect to inverse temperature $\beta$ yields an exact thermal identity:</p>
-    <div class="eq tex">\frac{\partial}{\partial\beta}\big[-\log Z_c(\beta)\big] = n\mathbb{E}_\beta\big[K_n(w)\big] \approx \frac{\lambda}{\beta} - \frac{m-1}{\beta\log(n\beta)}</div>
-    <p>Centering against $L_n(w^*)$ is essential: an uncentered partition function retains a factor $e^{-n\beta L_n(w^*)}$, whose derivative contains $n\mathbb{E}_\beta[L_n(w)]$ and blows up with sample size. Subtracting the baseline yields the practical empirical estimator:</p>
-    <div class="eq tex">\hat{\lambda}(w^*) = n\beta \left(\frac{1}{S}\sum_{s=1}^S L_n(w_s) - L_n(w^*)\right)</div>
-    <p>The demo uses inverse temperature $\beta^* = 1/\log n$, the WBIC temperature. Finite Langevin chains introduce discretization and mixing error, while finite-$n$ corrections can remain substantial. The spring $\gamma$ changes the explored neighborhood. A finite SGLD estimate is a diagnostic rather than an exact invariant; applying analytic SLT to piecewise-analytic ReLU networks requires additional care.</p>
-  </div>
-
-    </details>
-    <h3 id="next">What blowups contribute</h3>
-    <p>Resolution of singularities provides the coordinate chart where tangled nonlinear couplings decouple into independent monomials. In those coordinates, multi-dimensional parameter integrals factor into elementary one-dimensional Gamma functions—revealing the real log canonical threshold $\lambda$ even when the Hessian matrix is completely degenerate.</p>
-    <p>The thermometer estimates this geometric footprint without constructing the resolution. These Bayesian asymptotics do not by themselves prove that gradient descent selects low-LLC minima or explain all neural-network generalization.</p>
-    <p>For the integral calculation, see <a href="./appendix.html#appendix-c">Appendix C</a>. Further examples involving ReLU units, matrix factorizations, and tensor singularities are in <a href="./appendix.html#learning-extras">Appendix E</a>.</p>
-    <p class="cap" id="dl"><span id="models"></span><span id="tensors-slt"></span>Additional model examples have moved to <a href="./appendix.html#learning-extras">Appendix E</a>.</p>
+    <p>At large $n$, the regular evidence scales as $n^{-1}$ and the collision evidence as $n^{-3/4}$. Their ratio grows like $n^{1/4}$. This is why replacing both fits by Gaussian bowls gives the wrong answer. In regular models the coefficient is half the parameter count; singular learning theory replaces that count with a geometric exponent. See <a href="https://www.jmlr.org/papers/v14/watanabe13a.html">Watanabe’s account of the Bayesian information criterion</a>.</p>
+    <p>These conclusions depend on the loss and the prior. They do not establish that gradient descent prefers this fit, or that a lower coefficient always means better predictions on new data.</p>
+    <h2 id="next">12. Where the blowup enters</h2>
+    <p>We could compute the exponent here because the two terms already separate. A blowup provides a systematic way to expose scaling when they do not. In the separation-dominated sector, use the weighted chart $s=r^2v$, $d=r$: mean is given weight 2 and separation weight 1.</p>
+    <div class="eq tex">s^2+d^4=r^4(v^2+1),\qquad |ds\,dd|=|r|^2\,|dr\,dv|.</div>
+    <p>The Jacobian matters as much as the transformed loss. On a bounded $v$-sector, substitute $r=n^{-1/4}\rho$: the volume factor $|r|^2dr$ contributes $n^{-3/4}$. The exceptional set $r=0$ records approach directions that all map to the original minimum. Other charts cover the remaining directions; this one chart is not a complete global resolution.</p>
+    <details class="derivation"><summary>Check the full evidence without choosing charts</summary><p>For these separable toy losses, define $I_p(n)=\int_{-1}^1 e^{-nx^p}\,dx$. Then $Z_{\rm regular}=I_2^2/4$ and $Z_{\rm collision}=I_2I_4/4$. The factor $1/4$ is the uniform prior density. Rescaling each one-dimensional integral gives $I_2\sim\sqrt\pi\,n^{-1/2}$ and $I_4\sim\tfrac12\Gamma(1/4)n^{-1/4}$. This independently checks both exponents. General resolved integrals need not factor into independent one-dimensional integrals.</p></details>
+    <h3 id="thermometer">What about the sampling demos?</h3>
+    <p>Now that the coefficient has a geometric meaning, you can try <a href="./appendix.html#sampling-thermometer">estimating it with random samples</a>. The estimator measures how much loss remains in a concentrated distribution; finite sampling introduces extra error. The <a id="llc" href="./appendix.html#sampling-network">trained linear-network experiment</a> adds localization and noisy data. Both are in Appendix F, with the original two-well experiment.</p>
+    <p class="cap" id="dl"><span id="models"></span><span id="tensors-slt"></span>Further model examples are in <a href="./appendix.html#learning-extras">Appendix E</a>; temperature and WBIC are in <a href="./appendix.html#appendix-c">Appendix C</a>.</p>
   </div>
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-3.html"><span class="dir">← Previous</span><span class="t">Tensor singularities</span></a><a class="next" href="./appendix.html"><span class="dir">Next →</span><span class="t">Appendices and references</span></a></nav>

@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+import { tensorEntries, tensorLoss, localLoss, goodFitArea, evidence, simpson } from '../src/figures/learning-geometry.js';
+const near = (a,b,tol=1e-10) => assert.ok(Math.abs(a-b) < tol, `${a} ≠ ${b}`);
+for (const [s,d] of [[0,0],[.3,0],[0,.3],[.21,-.37],[-.4,.1]]) {
+  const a=s+d,b=s-d, entries=tensorEntries(s,d);
+  entries.forEach((v,i) => { const p=(i&1)+((i>>1)&1)+((i>>2)&1); near(v,(a**p+b**p)/2); });
+  near(entries.reduce((sum,v,i)=>sum+(v-(i===0?1:0))**2,0)/3,tensorLoss(s,d));
+  near(tensorLoss(0,d),d**4);
+}
+near(tensorLoss(0,.3)/tensorLoss(0,.15),16);
+near(goodFitArea(.01,false)/goodFitArea(.1,false),.1);
+near(goodFitArea(.01,true)/goodFitArea(.1,true),10**(-.75));
+// Independent midpoint area quadrature checks the closed area used by the display.
+const eps=.1, N=100000;
+const directArea=4*Array.from({length:N},(_,i)=>{const d=eps**.25*(i+.5)/N; return Math.sqrt(eps-d**4)*eps**.25/N;}).reduce((a,b)=>a+b,0);
+near(goodFitArea(eps,true),directArea,1e-7);
+// Independent two-dimensional quadrature checks normalization and candidate posterior shares.
+for (const collision of [false,true]) {
+  const n=3, M=600;
+  let z=0;
+  for(let j=0;j<M;j++)for(let i=0;i<M;i++) z+=Math.exp(-n*localLoss(-1+2*(i+.5)/M,-1+2*(j+.5)/M,collision))/(M*M);
+  near(z,evidence(n)[collision?'collision':'regular'],2e-6);
+}
+for(const n of [1,100,10000]) {
+  const z=evidence(n); assert.ok(z.share>.5&&z.share<1); assert.ok(z.collision>z.regular);
+  // Doubling the quadrature resolution should not change any displayed digit.
+  const i2=2*simpson(x=>Math.exp(-n*x*x),0,1,8192),i4=2*simpson(x=>Math.exp(-n*x**4),0,1,8192);
+  near(z.regular,i2*i2/4,1e-11); near(z.collision,i2*i4/4,1e-11);
+}
+near(evidence(10000).regular/evidence(1000).regular,.1,1e-10);
+near(evidence(10000).collision/evidence(1000).collision,10**(-.75),1e-10);
+console.log('Learning story: tensor identities, cancellation, area scaling, and evidence integrals verified.');

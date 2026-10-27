@@ -30,7 +30,7 @@
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Appendices</p>
     <h1>Appendices and references</h1>
-    <p class="dek">Supporting experiments and references.</p><p class="toc"><a href="#appendix">A · Collisions</a> · <a href="#appendix-b">B · Tensors</a> · <a href="#appendix-c">C · Temperature</a> · <a href="#physics-notes">D · Physics</a> · <a href="#learning-extras">E · Learning models</a></p>
+    <p class="dek">Supporting experiments and references.</p><p class="toc"><a href="#appendix">A · Collisions</a> · <a href="#appendix-b">B · Tensors</a> · <a href="#appendix-c">C · Temperature</a> · <a href="#physics-notes">D · Physics</a> · <a href="#learning-extras">E · Learning models</a> · <a href="#sampling-notes">F · Sampling laboratory</a></p>
   </div>
   <div class="col">
     <h2 id="appendix">Appendix A. More on collisions</h2>
@@ -75,8 +75,37 @@
 
   <div class="col">
     <h2 id="appendix-b">Appendix B. More on tensors</h2>
-    <p><b>Two charts, one target:</b> In <a href="./part-3.html#tensors">Part III</a>, standard rank-2 gradient descent diverged to infinity trying to fit $W$. In the blown-up chart $[(a + s a')\otimes(b + s b')\otimes(c + s c') - a\otimes b\otimes c]/s$, parameters remain strictly bounded while $s$ drifts smoothly to 0.</p>
-    <p class="read"><b>Figure {fig:B1}.</b> Gradient descent in standard parameters (orange) vs. blown-up coordinates (violet). The blown-up chart reaches the exact target with bounded parameter norms.</p>
+    <p>Part III studies a finite collision of components. Another phenomenon is a target approached only by diverging factors. The following stored trajectory illustrates this border-rank problem; it is not the source of the learning coefficient computed in Part IV.</p></div>
+  <div class="col">
+    <h2 id="border-rank-fit">A different pathology: a fit that never finishes</h2>
+    <div class="terms"><b>Key terms:</b> rank-one tensor, border rank, Veronese variety, tangent limit.</div>
+    <p>A $2 \times 2 \times 2$ tensor $T$ consists of 8 entries $T_{ijk}$. A rank-one tensor is a product of three 2-vectors: $(a \otimes b \otimes c)_{ijk} = a_i b_j c_k$. Fitting a target $W$ with two rank-one components minimizes:</p>
+    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2</div>
+    <p>Consider the target $W$ with $W_{001} = W_{010} = W_{100} = 1$ and all other entries 0. In the stored gradient-descent trajectory below, the two rank-one pieces diverge to $\pm \infty$ while nearly canceling, and the error creeps asymptotically toward zero without ever arriving!</p>
+    <p class="read"><b>Figure {fig:B1}.</b> Gradient descent fitting $W$ with two rank-one components. The recorded pieces grow while their sum approaches $W$; the border-rank construction explains the limiting behavior. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-2 variety.</p>
+  </div>
+  <section class="panel" aria-label="Rank-2 fit of W">
+    <div class="controls">
+      <button type="button" class="btn go" id="tz3-play">Play</button>
+      <label class="sl long"><span class="lbl">gradient step</span><input id="tz3-s" type="range" min="0" max="64" step="1" value="0"><output id="tz3-s-out"></output></label>
+    </div>
+    <div class="cubes">
+      <div class="fig"><div class="h">Piece 1 <span>rank one</span></div><svg id="tz3-a" role="img" aria-label="First rank-one piece"></svg></div>
+      <div class="op">+</div>
+      <div class="fig"><div class="h">Piece 2 <span>rank one</span></div><svg id="tz3-b" role="img" aria-label="Second rank-one piece"></svg></div>
+      <div class="op">=</div>
+      <div class="fig"><div class="h">Their sum</div><svg id="tz3-c" role="img" aria-label="Sum of the two pieces"></svg></div>
+      <div class="op">≈</div>
+      <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
+      <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
+    </div>
+  </section>
+<div class="col">
+    <p><b>Two charts, one target:</b> In <a href="#border-rank-fit">the trajectory above</a>, standard rank-2 gradient descent grew to infinity trying to fit $W$. In the blown-up chart $[(a + s a')\otimes(b + s b')\otimes(c + s c') - a\otimes b\otimes c]/s$, parameters remain strictly bounded while $s$ drifts smoothly to 0.</p>
+    <p class="read"><b>Figure {fig:B2}.</b> Gradient descent in standard parameters (orange) vs. blown-up coordinates (violet). The blown-up chart reaches the exact target with bounded parameter norms.</p>
   </div>
   <section class="panel" aria-label="Border rank">
     <div class="controls"><button type="button" class="btn go" id="br-run">Run again</button><span class="lbl" id="br-status"></span></div>
@@ -98,7 +127,7 @@
       <li>Triple root $(t - r)^3$: rank one (the <b>twisted cubic</b> curve $(a, b, c) = (-3r, 3r^2, -r^3)$).</li>
     </ul>
     <p>For a sign check, $t^3-t$ has three real roots and $\Delta=4$, while $t^3+t$ has one real root and $\Delta=-4$. The boundary $\Delta = 0$ is swept out by tangent lines to the twisted cubic—a <b>tangent developable</b> creased along the rank-one curve into a sharp cuspidal edge $(e^2, 2e^3)$. Hironaka's algorithm blows up the twisted cubic curve in three steps. Nash's lift records the root $r$, smoothing the crease into a flat sheet in a single step!</p>
-    <p class="read"><b>Figure {fig:B2}.</b> Monic cubics $(a, b, c)$. The creased boundary $\Delta = 0$ unfolds into a smooth sheet under Nash's lift by $r$. The slice panel on the right shows Hironaka resolving the cuspidal crease step-by-step.</p>
+    <p class="read"><b>Figure {fig:B3}.</b> Monic cubics $(a, b, c)$. The creased boundary $\Delta = 0$ unfolds into a smooth sheet under Nash's lift by $r$. The slice panel on the right shows Hironaka resolving the cuspidal crease step-by-step.</p>
   </div>
   <section class="panel" aria-label="Symmetric tensors as cubics">
     <div class="controls">
@@ -126,7 +155,7 @@
     <p>On the parameter side, fitting the zero tensor with a single rank-one term $K = |a|^2 |b|^2 |c|^2$ has three intersecting hyperplanes ($a = 0, b = 0, c = 0$). Polar coordinates $a = u_a \hat{a}, b = u_b \hat{b}, c = u_c \hat{c}$ yield the monomial loss $K = u_a^2 u_b^2 u_c^2$ and Jacobian $dw = u_a u_b u_c du d\theta$. Each factor gives $(1+1)/2 = 1$, producing $\lambda = 1$ with multiplicity $m = 3$.</p>
 
     <h3 id="tens-slice">B.4 Hyperdeterminant slices</h3>
-    <p class="read"><b>Figure {fig:B3}.</b> 2D slices through 8D tensor space colored by rank (blue = rank 2, orange = rank 3, black = boundary $\Delta = 0$). Click any pixel to inspect its entries.</p>
+    <p class="read"><b>Figure {fig:B4}.</b> 2D slices through 8D tensor space colored by rank (blue = rank 2, orange = rank 3, black = boundary $\Delta = 0$). Click any pixel to inspect its entries.</p>
   </div>
   <section class="panel" aria-label="Hyperdeterminant slices">
     <div class="controls">
@@ -284,7 +313,7 @@
       <thead><tr><th>Demo</th><th>The Singular Point</th><th>Penalty Method</th><th>Pick One Chart</th><th>Blow Up</th></tr></thead>
       <tbody>
         <tr><td><b>Three balls</b> (Figure {fig:D1})</td><td>Simultaneous 3-ball impact</td><td>Stiff contact springs</td><td>Constraint impulse solver (visits order)</td><td>Gap-ratio bar: keeps all incoming directions</td></tr>
-        <tr><td><b>Tensor fit</b> (Figure {fig:tzfit})</td><td>Limit at infinity (border rank)</td><td>Ridge penalty on factor norms</td><td>Condition number constraint</td><td>Step $h$ as coordinate: converges at $h = 0$</td></tr>
+        <tr><td><b>Tensor fit</b> (Figure {fig:B1})</td><td>Limit at infinity (border rank)</td><td>Ridge penalty on factor norms</td><td>Condition number constraint</td><td>Step $h$ as coordinate: converges at $h = 0$</td></tr>
         <tr><td><b>Cross field</b> (Figure {fig:D3})</td><td>Topological winding singularity</td><td>Ginzburg–Landau core penalty</td><td>Hand-placed singular vertices</td><td>Drill a hole, or lift to sphere (Burer–Monteiro)</td></tr>
       </tbody>
     </table>
@@ -293,7 +322,7 @@
     <p>Applied mathematics frequently uses weighted blowups under other names: McGehee's blowup of the collision in the Kepler problem, similarity solutions for shocks, and geometric singular perturbation theory. What Hironaka adds is a systematic guarantee across all dimensions, an algorithmic invariant that eliminates guessing, and now a machine-checked proof in Lean.</p>
   </div>
 
-  <div class="col"><h2 id="learning-extras">Appendix E. Further learning-theory experiments</h2><p>The main text follows three measurements. These supporting examples explore the local geometry and its qualifications in more detail.</p></div>
+  <div class="col"><h2 id="learning-extras">Appendix E. Further learning-theory experiments</h2><p>The main text follows one tensor collision through two geometric experiments. These supporting examples explore the local geometry and its qualifications in more detail.</p></div>
 
 
   <div class="col">
@@ -432,12 +461,100 @@
     <p>At the critical boundary $\mathbf{\alpha = q/2}$ (Rousseau &amp; Mengersen 2011), component merging and emptying balance, creating the logarithmic evidence factor $N^{-\lambda}\log N$.</p>
 
   </div>
+  <div class="col"><h2 id="sampling-notes">Appendix F. Optional sampling laboratory</h2><p>The main text computes two integrals directly. Here are more advanced experiments: a different two-well loss, random sampling as a measurement method, and a trained network. The radial quartic well in F.1 is quartic in both directions (coefficient 1/2), unlike Part IV’s loss, which is quartic in only one direction (coefficient 3/4).</p></div>
+  <div class="col">
+    <p>Regular statistical theory assumes identifiable parameters and a nondegenerate quadratic loss near the optimum. The resulting Gaussian approximation gives a complexity coefficient $d/2$, where $d$ is the number of parameters.</p>
+    <p>Neural networks can violate these assumptions. Continuous symmetries and redundant units create valleys of equivalent functions; intersecting valleys can introduce further degeneracy. A Bayesian posterior integrates over nearby parameter volume. For equally good fits with comparable positive prior weight, <b>a flatter minimum can retain more posterior mass</b>.</p>
+    <h2 id="sampling-twofits">F.1 A second example: two separate wells</h2>
+    <p>In the simulation below, two candidate parameter settings both achieve zero training loss ($K = 0$). Near the blue point, the loss rises steeply as a quadratic bowl ($K \propto r^2$). Near the orange point, the loss stays flat, growing only quartically ($K \propto r^4$).</p>
+    <p>As dataset size $n$ increases, the Gibbs posterior $p(w) \propto e^{-n K(w)}$ contracts around both solutions. But because a quartic well has broader shoulders, its volume contracts far more slowly ($n^{-1/2}$ vs. $n^{-1}$). Rather than splitting mass fifty-fifty, the posterior overwhelmingly concentrates around the degenerate fit.</p>
+    <p class="read"><b>Figure {fig:F1}.</b> Drag the concentration slider $n$ to the right. Nine hundred live posterior samples redistribute between the two basins. Notice the orange curve climb from near parity toward overwhelming dominance. Equal minimum loss never implies equal posterior weight.</p>
+  </div>
+  <section class="panel learning-panel" aria-label="Two perfect fits">
+    <div class="controls"><label class="sl long"><span class="lbl">data points n</span><input id="tw-n" type="range" min="0" max="4" step="0.05" value="0.6"><output id="tw-n-out"></output></label></div>
+    <div class="pair">
+      <div class="fig"><div class="h">The posterior <span>900 samples</span></div><div class="box sq"><canvas id="tw-cv" aria-label="Posterior samples near two perfect fits"></canvas></div></div>
+      <div class="fig"><div class="h">Share of the posterior near each fit</div><svg id="tw-plot" role="img" aria-label="Posterior share of each fit against n"></svg></div>
+    </div>
+    <div class="plot-legend"><span><i class="line-cold"></i>Near the quadratic fit</span><span><i class="line-hot"></i>Near the quartic fit</span></div><div class="chips" id="tw-chips"></div>
+  </section>
+  <div class="col">
+    <h2 id="sampling-thermometer">F.2 Estimating the coefficient by sampling</h2>
+    <p>Singular Learning Theory (SLT) makes this notion of “room” precise. In a fixed compact neighborhood $B$ of a minimum, let $V(\varepsilon) = \int_{B \cap \{K(w) \le \varepsilon\}} dw$. For the analytic losses and positive smooth local weights considered here, its leading asymptotic scale is:</p>
+    <div class="eq tex">V(\varepsilon) \asymp \varepsilon^\lambda \big(\log(1/\varepsilon)\big)^{m-1} \qquad (\varepsilon \to 0).</div>
+    <p>The exponent $\lambda$ is the <b>local learning coefficient</b> (or real log canonical threshold). Smaller $\lambda$ means more volume: parameter space shrinks more slowly as we demand a tighter fit.</p>
+    <p>Contrast four characteristic geometries:</p>
+    <ul>
+      <li><b>Quadratic bowl ($a^2 + b^2$):</b> The sublevel set is a 2D disk of radius $\sqrt{\varepsilon}$, area $\pi\varepsilon$, giving $\lambda = 1 = d/2$.</li>
+      <li><b>Product loss ($(ab)^2$):</b> The zero set is the pair of coordinate axes ($a=0$ or $b=0$). Within the bounded square below, thin low-loss strips follow both axes, giving $\lambda = 1/2 &lt; d/2$; their crossing adds a logarithmic factor ($m=2$).</li>
+      <li><b>Quartic valley ($a^4 + b^2$):</b> Quadratic in $b$ ($\lambda_b = 1/2$) and quartic in $a$ ($\lambda_a = 1/4$), yielding $\lambda = 1/2 + 1/4 = 3/4$.</li>
+      <li><b>Cusp singularity ($(b^2 - a^3)^2$):</b> The classical $A_2$ cusp, whose resolution by blowup reveals the fractional exponent $\lambda = 5/12 \approx 0.417$.</li>
+    </ul>
+    <p>To measure $\lambda$ without computing algebraic blowups by hand, we use a <b>statistical thermometer</b>. In physics, the equipartition theorem equates thermal energy to degrees of freedom: $\langle E \rangle = \frac{d}{2} k_B T$. In SLT, Sumio Watanabe proved that this principle extends to singular potentials: when Langevin chains sample $p(w) \propto e^{-n K(w)}$, their scaled empirical loss $n\langle K\rangle$ approaches $\lambda$ as $n \to \infty$.</p>
+    <p>At finite $n$, boundary effects and logarithmic corrections can shift the expectation away from $\lambda$. The dashed line is a numerical grid approximation to that finite-$n$ expectation on the same square. The purple line is the asymptotic coefficient. A difference between those lines is distinct from sampling error.</p>
+    <p class="read"><b>Figure {fig:F2}.</b> Start with the bowl, then select the product loss. Compare the orange running mean with the dashed grid reference after warm-up. Increase $n$ to explore the approach to the purple asymptotic line. Finite step size and incomplete mixing can leave a gap between the sampler and the grid reference.</p>
+  </div>
+  <section class="panel learning-panel" aria-label="Local learning coefficient estimator">
+    <div class="controls">
+      <span class="seg" role="group" aria-label="Loss" id="llc-k">
+        <button type="button" data-v="bowl" aria-pressed="true">Bowl a² + b²</button>
+        <button type="button" data-v="prod" aria-pressed="false">Product (ab)²</button>
+        <button type="button" data-v="quart" aria-pressed="false">Flat direction a⁴ + b²</button>
+        <button type="button" data-v="cusp" aria-pressed="false">Cusp (b² − a³)²</button>
+      </span>
+      <label class="sl"><span class="lbl">Concentration n</span><input id="llc-n" type="range" min="2" max="4" step="1" value="3"><output id="llc-n-out"></output></label>
+      <button type="button" class="btn" id="llc-pause">Pause chains</button><button type="button" class="btn" id="llc-run">Restart chains</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Samples on the loss</div><div class="box sq"><canvas id="llc-cv" aria-label="Langevin samples over the loss landscape"></canvas></div></div>
+      <div class="fig"><div class="h">Running estimate <span>n·⟨K⟩</span></div><svg id="llc-plot" role="img" aria-label="Running estimate of the learning coefficient"></svg></div>
+    </div>
+    <div class="plot-legend"><span><i class="line-hot"></i>Sampled running mean</span><span><i class="line-ink dashed"></i>Finite-n grid reference</span><span><i class="line-blow"></i>Asymptotic coefficient λ</span></div>
+    <div class="chips" id="llc-chips"></div><p class="cap" id="llc-explain" aria-live="polite"></p><p class="cap">Uniform prior on the square −1 ≤ a, b ≤ 1. Points show 300 chains; the first 8,000 steps per chain are warm-up.</p>
+  </section>
+  <div class="col">
+    <h2 id="sampling-network">F.3 A trained linear network</h2>
+    <p>Can this geometric thermometer measure real neural networks? Consider a factorized linear network $y = B A x$ mapping $\mathbb{R}^3 \to \mathbb{R}^H \to \mathbb{R}^3$, trained on noisy data generated by a true rank-one linear map. As hidden width $H$ grows from 1 to 5, the total number of weights scales from 6 to 30: $d = 6H$. If parameters were regular and identifiable, classical theory would assert that effective capacity grows linearly: $d/2 = 3H \in \{3, 6, 9, 12, 15\}$.</p>
+    <p>Matrix multiplication has a continuous symmetry: for any invertible $G \in \operatorname{GL}(H)$, the pair $(B G, G^{-1} A)$ computes the same map. Parameter count therefore overstates the number of independent directions. For this rank-one target, the Aoyagi–Watanabe formula gives $\lambda = 2.5, 3.5, 4, 4.5, 4.5$ at widths 1 through 5. The coefficient increases before saturating at $MN/2 = 4.5$; adding width changes more than just the symmetry orbit.</p>
+    <p>To measure $\lambda$ locally around trained weights $w^*$, we localize the posterior with a quadratic centering spring $\frac{\gamma}{2}\|w - w^*\|^2$ and run Stochastic Gradient Langevin Dynamics (SGLD) at inverse temperature $\beta^* = 1/\log n$.</p>
+    <p class="read"><b>Figure {fig:F3}.</b> Press Run again to train and sample five widths. Purple shows the theoretical coefficient for the rank-one population target; orange shows the finite-chain estimate $n\beta \langle L_n(w) - L_n(w^*)\rangle$ on noisy training data. These are related quantities, not identical finite-sample measurements. Change the spring $\gamma$ to see how localization affects the comparison.</p>
+  </div>
+  <section class="panel learning-panel" aria-label="LLC on a trained network">
+    <div class="controls">
+      <span class="lbl">Localization γ</span>
+      <span class="seg" role="group" aria-label="Localization" id="llcn-g">
+        <button type="button" data-v="1" aria-pressed="false">1</button>
+        <button type="button" data-v="10" aria-pressed="true">10</button>
+        <button type="button" data-v="100" aria-pressed="false">100</button>
+      </span>
+      <button type="button" class="btn go" id="llcn-run">Run again</button><button type="button" class="btn" id="llcn-stop" disabled>Stop sampling</button><span class="lbl" id="llcn-status" role="status" aria-live="polite">Ready</span>
+    </div>
+    <svg id="llcn-plot" role="img" aria-label="LLC estimates against the exact learning coefficient for linear networks of growing width"></svg>
+    <div class="plot-legend"><span><i class="line-blow"></i>Theoretical coefficient λ</span><span><i class="dot-hot"></i>Finite-chain estimate nβ·mean excess loss</span></div><div class="chips" id="llcn-chips"></div><details><summary>Numerical results</summary><div class="rows" id="llcn-results"></div></details><p class="cap">3 → H → 3 linear network · rank-one target · four chains per width · 20,000 Langevin steps per chain. A vertical orange segment shows the difference from the theoretical coefficient.</p>
+  </section>
+  <div class="col">
+    <details class="derivation"><summary>Why the thermometer works: centered loss and the partition function</summary>
+  <div class="col">
+    <h3>The centered partition function</h3>
+    <p>Explicit resolution charts are usually impractical for modern deep networks. Lau and colleagues propose estimating the <a href="https://proceedings.mlr.press/v258/lau25a.html"><b>local learning coefficient (LLC)</b></a> using a localized tempered posterior and Stochastic Gradient Langevin Dynamics (SGLD).</p>
+    <p>For an ideal local calculation around a local empirical minimizer $w^*$, center the excess loss: $K_n(w) = L_n(w) - L_n(w^*) \ge 0$. On a compact neighborhood $B$ with quadratic spring localization $\gamma > 0$, define the centered partition function and tempered posterior:</p>
+    <div class="eq tex">Z_c(\beta) = \int_B \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right) dw</div>
+    <div class="eq tex">p_\beta(w) = \frac{\mathbf{1}_B(w)}{Z_c(\beta)} \exp\!\left(-n\beta K_n(w) - \frac{\gamma}{2}\|w - w^*\|^2\right)</div>
+    <p>By Hironaka's theorem, an analytic resolution of singularities monomializes the loss $K_n(w)$ and volume form $dw$, so the centered partition function has the asymptotic expansion $Z_c(\beta) \asymp (n\beta)^{-\lambda} (\log(n\beta))^{m-1}$ as $n\beta \to \infty$. Differentiating the free energy $-\log Z_c(\beta)$ with respect to inverse temperature $\beta$ yields an exact thermal identity:</p>
+    <div class="eq tex">\frac{\partial}{\partial\beta}\big[-\log Z_c(\beta)\big] = n\mathbb{E}_\beta\big[K_n(w)\big] \approx \frac{\lambda}{\beta} - \frac{m-1}{\beta\log(n\beta)}</div>
+    <p>Centering against $L_n(w^*)$ is essential: an uncentered partition function retains a factor $e^{-n\beta L_n(w^*)}$, whose derivative contains $n\mathbb{E}_\beta[L_n(w)]$ and blows up with sample size. Subtracting the baseline yields the practical empirical estimator:</p>
+    <div class="eq tex">\hat{\lambda}(w^*) = n\beta \left(\frac{1}{S}\sum_{s=1}^S L_n(w_s) - L_n(w^*)\right)</div>
+    <p>The demo uses inverse temperature $\beta^* = 1/\log n$, the WBIC temperature. Finite Langevin chains introduce discretization and mixing error, while finite-$n$ corrections can remain substantial. The spring $\gamma$ changes the explored neighborhood. A finite SGLD estimate is a diagnostic rather than an exact invariant; applying analytic SLT to piecewise-analytic ReLU networks requires additional care.</p>
+  </div>
+
+    </details>
+  </div>
   <div class="col">
     <div class="foot">
       <p><b>Resolution and formalization.</b> H. Hironaka, Resolution of singularities of an algebraic variety over a field of characteristic zero, Annals of Math. 79 (1964). M. F. Atiyah, Resolution of singularities and division of distributions, Comm. Pure Appl. Math. 23 (1970). J. Kollár, Lectures on Resolution of Singularities, Princeton (2007). O. Villamayor, Constructiveness of Hironaka's resolution, Ann. Sci. ENS 22 (1989). E. Bierstone and P. Milman, Canonical desingularization in characteristic zero by blowing up the maximum strata of a local invariant, Invent. Math. 128 (1997). J. Włodarczyk, Simple Hironaka resolution in characteristic zero, JAMS 18 (2005). D. Abramovich, M. Temkin and J. Włodarczyk, Functorial embedded resolution via weighted blowings up (2019). F. Castillo, D. Duarte, M. Leyton-Álvarez and A. Liendo, <a href="https://arxiv.org/abs/2409.19767">Nash blowup fails to resolve singularities in dimensions four and higher</a>, Annals of Math. (2026), and <a href="https://arxiv.org/abs/2511.01772">Non-normalized Nash blowup fails to resolve singularities in dimension three</a> (2025). M. Spivakovsky, Sandwiched singularities and desingularization of surfaces by normalized Nash transformations, Annals of Math. 131 (1990). B. Snikkers, A. Newgas, J. Hoogland and C. Elliott, <a href="https://resolution.org/post/formalizing-resolution-of-singularities">Formalizing Hironaka's resolution of singularities</a>, Resolution (2026), and <a href="https://github.com/resolutionorg/hironaka">the Lean library</a>.</p>
       <p><b>Graphics and geometry.</b> A. Petrov, M. S. Nabizadeh, A. Dodik and J. Solomon, <a href="https://arxiv.org/abs/2605.18215">Tangent blow-ups for processing non-manifold geometry</a> (2026). E. Vouga, B. Smith, D. M. Kaufman, R. Tamstorf and E. Grinspun, All's Well That Ends Well, ACM TOG 36 (2017). S. McNamara and W. R. Young, Inelastic collapse and clumping in a one-dimensional granular medium, Phys. Fluids A 4 (1992). G. Galperin, Playing pool with π, Regular and Chaotic Dynamics 8 (2003). R. McGehee, Triple collision in the collinear three-body problem, Invent. Math. 27 (1974). F. Dumortier and R. Roussarie, Canard cycles and center manifolds, Memoirs AMS 577 (1996). M. Krupa and P. Szmolyan, Extending geometric singular perturbation theory to nonhyperbolic points, SIAM J. Math. Anal. 33 (2001). G. H. Brown, J. Kileel and T. G. Kolda, <a href="https://arxiv.org/abs/2504.03937">The fascinating world of 2×2×2 tensors: its geometry and optimization challenges</a> (2025). V. de Silva and L.-H. Lim, <a href="https://arxiv.org/abs/math/0607647">Tensor rank and the ill-posedness of the best low-rank approximation problem</a>, SIMAX 30 (2008). A. Stegeman and L. De Lathauwer, A method to avoid diverging components in the Candecomp/Parafac model for generic I×J×2 arrays, SIMAX 30 (2009). R. Viertel and B. Osting, <a href="https://arxiv.org/abs/1708.02316">An approach to quad meshing based on harmonic cross-valued maps and the Ginzburg–Landau theory</a> (2017). A. Macq et al., <a href="https://arxiv.org/abs/2010.16381">Ginzburg–Landau energy and placement of singularities in generated cross fields</a> (2020). V. L. Ginzburg and L. D. Landau, On the theory of superconductivity, Zh. Eksp. Teor. Fiz. 20 (1950). F. Bethuel, H. Brezis and F. Hélein, Ginzburg–Landau Vortices (1994). S. Burer and R. D. C. Monteiro, <a href="https://doi.org/10.1007/s10107-002-0352-8">A nonlinear programming algorithm for solving semidefinite programs via low-rank factorization</a>, Math. Programming 95 (2003). N. Boumal, V. Voroninski and A. Bandeira, <a href="https://arxiv.org/abs/1606.04970">The non-convex Burer–Monteiro approach works on smooth semidefinite programs</a>, NeurIPS (2016). N. Pacheco-Tallaj, M. Couplet, E. Chien and D. Palmer, <a href="https://doi.org/10.1145/3799902.3811225">Synchronizing fields with singularities</a>, SIGGRAPH (2026). D. Palmer, A. Chern and J. Solomon, <a href="https://arxiv.org/abs/2405.03853">Lifting directional fields to minimal sections</a>, ACM TOG (2024). Y. Soliman, D. Slepčev and K. Crane, <a href="https://dl.acm.org/doi/10.1145/3197517.3201367">Optimal cone singularities for conformal flattening</a>, ACM TOG 37 (2018). K. Crane, M. Desbrun and P. Schröder, <a href="https://www.cs.cmu.edu/~kmcrane/Projects/TrivialConnections/">Trivial connections on discrete surfaces</a>, Computer Graphics Forum 29 (2010). F. Knöppel, K. Crane, U. Pinkall and P. Schröder, <a href="https://www.cs.cmu.edu/~kmcrane/Projects/GloballyOptimalDirectionFields/">Globally optimal direction fields</a>, ACM TOG 32 (2013). F. Kälberer, M. Nieser and K. Polthier, QuadCover: surface parameterization using branched coverings, Computer Graphics Forum 26 (2007). M. Nieser, U. Reitebuch and K. Polthier, CubeCover: parameterization of 3D volumes, Computer Graphics Forum 30 (2011). D. Palmer, D. Bommes and J. Solomon, Algebraic representations for volumetric frame fields, ACM TOG 39 (2020).</p>
       <p><b>Learning.</b> S. Watanabe, Algebraic Geometry and Statistical Learning Theory, Cambridge (2009). S. Watanabe, <a href="https://jmlr.org/papers/v14/watanabe13a.html">A widely applicable Bayesian information criterion</a>, JMLR 14 (2013). M. Aoyagi and S. Watanabe, Stochastic complexities of reduced rank regression in Bayesian estimation, Neural Networks 18 (2005). J. Rousseau and K. Mengersen, Asymptotic behaviour of the posterior distribution in overfitted mixture models, J. R. Stat. Soc. B 73 (2011). E. Lau, Z. Furman, G. Wang, D. Murfet and S. Wei, <a href="https://proceedings.mlr.press/v258/lau25a.html">The local learning coefficient</a>, AISTATS (2025). J. Hoogland, G. Wang, M. Farrugia-Roberts, L. Carroll, S. Wei and D. Murfet, <a href="https://arxiv.org/abs/2402.02364">Loss landscape degeneracy and stagewise development in transformers</a>, TMLR (2025). D. Murfet, S. Wei, M. Gong, H. Li, J. Gell-Redman and T. Quella, <a href="https://arxiv.org/abs/2010.11560">Deep learning is singular, and that's good</a> (2020).</p>
-      <p><b>How the figures are computed.</b> Everything runs in your browser. Collisions are exact event-driven simulations; springs use small time steps. Cross fields solve the Ginzburg–Landau gradient flow on an 81 × 81 grid with ε = 0.06; the lifted field minimizes the same grid's smoothness energy over unit vectors in ℝ³ by block-coordinate updates. Tensor fits are plain gradient descent. The cross field you drag (Figure {fig:D3}) and its energy are closed forms; a single vortex (Figure {fig:D4}) is a radial Newton solve. Figures {fig:twofits}, {fig:E2}, {fig:E3}, {fig:E6} and {fig:C1} integrate exactly on grids; Figures {fig:thermo} and {fig:llcnet} run Langevin chains live. The sampled points in Figure {fig:E5} come from offline Langevin sampling of the full posterior (500 to 1000 chains at n = 1000, Gaussian prior).</p>
+      <p><b>How the figures are computed.</b> Everything runs in your browser. Collisions are exact event-driven simulations; springs use small time steps. Cross fields solve the Ginzburg–Landau gradient flow on an 81 × 81 grid with ε = 0.06; the lifted field minimizes the same grid's smoothness energy over unit vectors in ℝ³ by block-coordinate updates. Tensor fits are plain gradient descent. The cross field you drag (Figure {fig:D3}) and its energy are closed forms; a single vortex (Figure {fig:D4}) is a radial Newton solve. The main learning figures use explicit tensor entries, exact sublevel-area formulas, and numerical one-dimensional evidence integrals. Figures {fig:F1}, {fig:E2}, {fig:E3}, {fig:E6} and {fig:C1} use numerical grid integration; Figures {fig:F2} and {fig:F3} run Langevin chains live. The sampled points in Figure {fig:E5} come from offline Langevin sampling of the full posterior (500 to 1000 chains at n = 1000, Gaussian prior).</p>
       <p><b>Go deeper.</b> Companion pages with more figures: <a href="./extras/two-ways.html">Two ways to blow up</a> (Nash versus Hironaka, the zeta function), <a href="./extras/cradle.html">Resolving Newton's cradle</a> (up to seven balls), and <a href="./extras/physics.html">Blowups in physics</a>.</p>
     </div>
   </div>

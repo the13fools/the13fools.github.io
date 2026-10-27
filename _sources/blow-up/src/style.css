@@ -212,3 +212,22 @@ details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color:
 #llcn-results th:not(:first-child), #llcn-results td:not(:first-child) { text-align: right; }
 #llcn-results td:not(:first-child) { font-family: var(--f-mono); font-size: 13.5px; font-variant-numeric: tabular-nums; }
 #llcn-results tr:hover td { background: color-mix(in srgb, var(--blow) 8%, transparent); }
+
+/* The learning story keeps controls, measured quantities, and their meaning together. */
+.story-panel .story-result { font: 16px/1.65 var(--f-display); background: var(--soft); padding: 14px 16px; border-radius: 8px; margin: 18px 0 0; }
+.story-panel > .story-result:first-of-type { margin: 12px 0 22px; }
+.story-table table { width: 100%; min-width: 0; border-collapse: collapse; font: 13px/1.5 var(--f-mono); }
+.story-table th, .story-table td { padding: 7px 6px; border-bottom: 1px solid var(--rule); text-align: right; }
+.story-table th:first-child { text-align: left; }
+.story-table thead th { font: 600 12px var(--f-display); color: var(--muted); }
+.story-table .changed { background: color-mix(in srgb, var(--hot) 9%, transparent); }
+.story-table .changed td:last-child { color: var(--hot); font-weight: 600; }
+.story-panel .fig svg { width: 100%; height: auto; display: block; }
+.story-share { display: flex; width: 100%; height: 38px; overflow: hidden; border-radius: 6px; font: 600 13px/38px var(--f-display); text-align: center; color: white; }
+.story-share span:first-child { background: var(--cold); }
+.story-share span:last-child { background: var(--hot); }
+.story-scale { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 12px 0 20px; font: 12px var(--f-display); color: var(--muted); }
+.story-scale i { display: block; flex: 0 1 100px; height: 12px; background: linear-gradient(to right,rgb(24,28,46),rgb(242,202,111)); border-radius: 3px; }
+.story-panel .sl output { min-width: 54px; }
+
+.story-panel button[aria-pressed="true"] { color: var(--blow); background: color-mix(in srgb, var(--blow) 10%, var(--surface)); border-color: var(--blow); }

@@ -50,3 +50,4 @@ import "./figures/toric-slice.js";
 import "./figures/nash-three-section.js";
 import "./figures/exceptional.js";
 import "./figures/nash-three-resolution.js";
+import "./figures/learning-story.js";

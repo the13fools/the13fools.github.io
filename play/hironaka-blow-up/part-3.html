@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tensor singularities · What is… a blowup?</title>
-  <meta name="description" content="A low-rank tensor fit that approaches a finite target while its factors diverge, and the limiting coordinates that explain it.">
+  <meta name="description" content="How colliding tensor components cancel first-order changes, producing a quartic loss and motivating singular learning theory.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Tensor singularities · What is… a blowup?">
-  <meta property="og:description" content="A low-rank tensor fit that approaches a finite target while its factors diverge, and the limiting coordinates that explain it.">
+  <meta property="og:description" content="How colliding tensor components cancel first-order changes, producing a quartic loss and motivating singular learning theory.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-3.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-BL6ZNU5L.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-DMz-ZJQJ.css">
+  <script type="module" crossorigin src="./assets/main-TW-lTjxS.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-BvWhWewO.css">
 </head>
 <body>
   <header class="site-header">
@@ -28,37 +28,32 @@
     <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · Tensor singularities</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
-  <div class="col page-head"><p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p><h1>Tensor singularities: a fit that never finishes</h1><p class="dek">A concrete bridge from resolving geometry to learning in redundant coordinates.</p></div>
-  <div class="col"><p>A model can approach a target while its parameters run away. This example makes that failure visible before Part IV asks how much parameter room lies around a good fit. The longer collision and cross-field experiments are now collected in <a href="./appendix.html#physics-notes">Appendix D</a>.</p><p class="cap" id="collisions"><span id="frames"></span><span id="physics"></span>Looking for the physics examples? <a href="./appendix.html#physics-notes">Continue to Appendix D.</a></p></div>
+  <div class="col page-head"><p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p><h1>When two components become one</h1><p class="dek">A tensor fit with two parameters, one perfect prediction, and a direction that ordinary curvature cannot see.</p></div>
   <div class="col">
-    <h2 id="tensors">9. Tensor factorization: a fit that never finishes</h2>
-    <div class="terms"><b>Key terms:</b> rank-one tensor, border rank, Veronese variety, tangent limit.</div>
-    <p>A $2 \times 2 \times 2$ tensor $T$ consists of 8 entries $T_{ijk}$. A rank-one tensor is a product of three 2-vectors: $(a \otimes b \otimes c)_{ijk} = a_i b_j c_k$. Fitting a target $W$ with two rank-one components minimizes:</p>
-    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2</div>
-    <p>Consider the target $W$ with $W_{001} = W_{010} = W_{100} = 1$ and all other entries 0. When gradient descent attempts to fit $W$, the two rank-one pieces diverge to $\pm \infty$ while nearly canceling, and the error creeps asymptotically toward zero without ever arriving!</p>
-    <p class="read"><b>Figure 17.</b> Gradient descent fitting $W$ with two rank-one components. The pieces grow without bound while their sum approaches $W$. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-2 variety.</p>
+    <h2 id="tensors">9. Why redundant components change learning</h2>
+    <p>Suppose we fit data by adding two simple components. What happens when those components become identical? Counting the two adjustable parameters still gives two. But the prediction may stop responding to one combination of them. This is a small, explicit example of the degeneracy that motivates singular learning theory.</p>
+    <p>Our “data” are just eight numbers: a $2\times2\times2$ tensor. The target has entry $T_{000}=1$ and every other entry zero. A component is built from the two-number vector $v(t)=(1,t)$: multiply three entries to get $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$. Our prediction is the average of two such components:</p>
+    <div class="eq tex">T(a,b)=\tfrac12 v(a)^{\otimes3}+\tfrac12 v(b)^{\otimes3}.</div>
+    <p>The adjustable parameters are $a$ and $b$. At $a=b=0$, both components equal the target, so the fit is exact. The loss $K$ is the sum of the eight squared prediction errors, divided by 3 for convenience.</p>
+    <p class="read"><b>Figure 17.</b> First select <b>Move together</b>: both components change in the same direction. Then select <b>Pull apart</b> at the same displacement. Their first-order changes cancel. Read the actual entries below; the second fit changes much less.</p>
   </div>
-  <section class="panel" aria-label="Rank-2 fit of W">
-    <div class="controls">
-      <button type="button" class="btn go" id="tz3-play">Pause</button>
-      <label class="sl long"><span class="lbl">gradient step</span><input id="tz3-s" type="range" min="0" max="64" step="1" value="0"><output id="tz3-s-out"></output></label>
-    </div>
-    <div class="cubes">
-      <div class="fig"><div class="h">Piece 1 <span>rank one</span></div><svg id="tz3-a" role="img" aria-label="First rank-one piece"></svg></div>
-      <div class="op">+</div>
-      <div class="fig"><div class="h">Piece 2 <span>rank one</span></div><svg id="tz3-b" role="img" aria-label="Second rank-one piece"></svg></div>
-      <div class="op">=</div>
-      <div class="fig"><div class="h">Their sum</div><svg id="tz3-c" role="img" aria-label="Sum of the two pieces"></svg></div>
-      <div class="op">≈</div>
-      <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
-      <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
-    </div>
+  <section class="panel learning-panel story-panel" aria-label="Tensor component collision">
+    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components"><button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button><button class="btn" data-mode="together" aria-pressed="false">2. Move together</button><button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button></div>
+    <label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="0.01" value="0.3" disabled><output id="tc-delta-out">0.30</output></label>
+    <p class="story-result" id="tc-result" aria-live="polite"></p>
+    <p class="cap" id="tc-arithmetic"></p>
+    <div class="pair"><div class="fig"><div class="h">The eight predictions <span>indices i j k</span></div><div class="story-table" id="tc-entries"></div></div><div class="fig"><div class="h">Loss at the same displacement</div><svg id="tc-loss" role="img" aria-label="Loss rises quadratically when components move together and quartically when they pull apart"></svg><div class="plot-legend"><span><i class="line-cold"></i>Move together</span><span><i class="line-hot"></i>Pull apart</span></div></div></div>
   </section>
-
-  <div class="col"><p>Here the singularity belongs to a parameterization: a finite tensor sits at a limit that ordinary factors reach only at infinity. Next we turn to finite minima, where several parameter directions can represent the same fitted function.</p></div>
+  <div class="col">
+    <h3>One direction adds; the other cancels</h3>
+    <p>Use the mean $s=(a+b)/2$ and separation $d=(a-b)/2$ as coordinates. Moving together changes $s$; pulling apart changes $d$. The three entries with exactly one index equal to 1 are all $s$. The three with two indices equal to 1 are all $s^2+d^2$. The last entry is $s^3+3sd^2$.</p>
+    <p>Along the separation direction $s=0$, the prediction changes only by $d^2$, so its <em>squared</em> error is $K=d^4$. Halving the separation reduces loss by a factor of 16. Along the mean direction, loss starts with $s^2$, so halving a small mean shift reduces loss by roughly a factor of 4. The Hessian detects the second direction as flat even though the prediction does eventually change.</p>
+    <details class="derivation"><summary>The exact loss, and what this example does and does not represent</summary><div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2.</div><p>Near the origin this is bounded above and below by positive constants times $s^2+d^4$. Consequently it has the same local volume exponent as that simpler loss. Swapping the two components sends $d$ to $-d$; the flat direction comes from first-order cancellation, not merely from having two names for a component.</p><p>We fixed both component amplitudes and tied their three factor vectors together. This is a deliberately restricted two-parameter tensor family. Its coefficient is not the coefficient of the unrestricted rank-two tensor model.</p></details>
+    <h3>Why this matters for learning</h3>
+    <p>A parameter count sees two directions. A Gaussian approximation expects loss to rise quadratically in both. Here it rises quartically in one. That means more nearby parameter settings remain almost correct. <a href="./part-4.html">Next we measure how much more room there is</a>, then see why a Bayesian calculation notices it.</p>
+    <p class="cap">The earlier example with diverging tensor factors is preserved in <a href="./appendix.html#border-rank-fit">Appendix B</a>. It concerns a different problem: a fit reached only at infinity. Here the perfect fit is finite.</p>
+    <p class="cap" id="collisions"><span id="frames"></span><span id="physics"></span>The physics experiments are in <a href="./appendix.html#physics-notes">Appendix D</a>.</p>
+  </div>
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-2.html"><span class="dir">← Previous</span><span class="t">Directions &amp; Nash blowups</span></a><a class="next" href="./part-4.html"><span class="dir">Next →</span><span class="t">Singular learning theory</span></a></nav>
   <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
