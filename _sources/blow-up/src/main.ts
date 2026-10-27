@@ -51,3 +51,28 @@ import "./figures/nash-three-section.js";
 import "./figures/exceptional.js";
 import "./figures/nash-three-resolution.js";
 import "./figures/learning-story.js";
+
+// A bookmarked calculation remains reachable when it sits inside a closed details.
+function revealHashTarget() {
+  let id: string;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+  if (!id) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  let opened = false;
+  for (let parent: HTMLElement | null = target; parent; parent = parent.parentElement) {
+    if (parent instanceof HTMLDetailsElement && !parent.open) { parent.open = true; opened = true; }
+  }
+  if (opened) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+}
+window.addEventListener("hashchange", revealHashTarget);
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", revealHashTarget); else revealHashTarget();
+
+// SVG layouts need their visible width after a calculation is expanded.
+document.addEventListener("toggle", (event) => {
+  if (!(event.target instanceof HTMLDetailsElement) || !event.target.open) return;
+  requestAnimationFrame(() => {
+    const figures = window as Window & { __draw1?: () => void; __draw2?: () => void; __draw4?: () => void };
+    figures.__draw1?.(); figures.__draw2?.(); figures.__draw4?.();
+  });
+}, true);

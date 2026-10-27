@@ -1,3 +1,4 @@
+import { crossingEvidence, reluLoss } from "./learning-geometry.js";
 import { lnExact } from "./llc-network.js";
 
 (() => {
@@ -170,7 +171,7 @@ import { lnExact } from "./llc-network.js";
     E("line", { x1: G.x0, x2: G.x1, y1: G.Y(4), y2: G.Y(4), stroke: C.muted, "stroke-dasharray": "2 3" }, G.g);
     const cols = { zero: C.blow, G2: C.hot };
     ["zero", "G2"].forEach((tg) => { const pts = CP_SAMPLES.filter((p) => p[1] === tg).map((p) => [p[0], p[2]]); if (!pts.length) return; E("path", { d: pathD(pts, G.X, G.Y), fill: "none", stroke: cols[tg], "stroke-width": 2.2 }, G.g); pts.forEach((p) => E("circle", { cx: G.X(p[0]), cy: G.Y(p[1]), r: 5, fill: cols[tg] }, G.g)); });
-    $("#lw-chips").innerHTML = `<span class="chip v">linear network, H = 8: <b>96</b> parameters, λ = <b>4.5</b></span><span class="chip">the regular count would be d/2 = <b>48</b></span>`;
+    $("#lw-chips").innerHTML = `<span class="chip v">linear network, H = 8: <b>48</b> parameters, λ = <b>4.5</b></span><span class="chip">the regular count would be d/2 = <b>24</b></span>`;
   }
 
   // ============================================================ Figure 21: the LLC thermometer
@@ -239,7 +240,7 @@ import { lnExact } from "./llc-network.js";
 
   // ============================================================ Figure 16: one ReLU unit
   const NN = { c: 0.6, n: 200 };
-  const nnK = (a, w, c) => (w > 0 ? (a * w - c) ** 2 / 12 : (a * a * w * w + c * c) / 12);
+  const nnK = reluLoss;
   function fig15nn() { if (!$("#nn-cv")) return;
     const c = NN.c, n = NN.n, R = 2;
     const { ctx, W, H, d } = cvs($("#nn-cv")), g = 200, img = new ImageData(g, g), lut = LUT();
@@ -271,9 +272,9 @@ import { lnExact } from "./llc-network.js";
     if (c > 0.005) { const s0 = Math.sqrt(c), k2 = 4 * c / 12; for (let i = -100; i <= 100; i++) { const s = 2 * i / 100; pq.push([s, k2 * (s - s0) ** 2]); } E("path", { d: pathD(pq, F.X, F.Y), fill: "none", stroke: C.steel, "stroke-width": 1.6, "stroke-dasharray": "5 4" }, F.g); }
     E("path", { d: pathD(pts, F.X, F.Y), fill: "none", stroke: C.blow, "stroke-width": 2.8 }, F.g);
     $("#nn-c-out").textContent = "c = " + c.toFixed(2);
-    $("#nn-cap").textContent = c > 0.005 ? "Crossing the valley the loss is a parabola: the Hessian sees it." : "At the crossing the loss grows like s⁴ along the diagonal: the Hessian is zero there and misses the shape entirely.";
+    $("#nn-cap").textContent = c > 0.005 ? "Near the positive perfect fit, transverse curvature is nonzero. Dashed: the local quadratic approximation." : "At the crossing the loss grows like s⁴ along the diagonal: the Hessian is zero there and misses the shape entirely.";
     $("#nn-chips").innerHTML = c > 0.005
-      ? `<span class="chip v">perfect fits: one curve a·w = c (a rescaling orbit)</span><span class="chip">one flat direction, one curved: λ = <b>1/2</b> (regular count: 1)</span>`
+      ? `<span class="chip v">perfect fits: a·w = c on w > 0 (a rescaling orbit)</span><span class="chip">one flat direction, one curved: λ = <b>1/2</b> (regular count: 1)</span>`
       : `<span class="chip v">perfect fits: a = 0 or w = 0, crossing at the origin</span><span class="chip">λ = <b>1/2</b> with multiplicity m = <b>2</b>: the crossing adds a log log n term</span>`;
   }
   $("#nn-c")?.addEventListener("input", (e) => { NN.c = +e.target.value; if (NN.c < 0.02) NN.c = 0; fig15nn(); });
@@ -406,7 +407,7 @@ import { lnExact } from "./llc-network.js";
     E("circle", { cx: F.X(xs), cy: F.Y(hs), r: 5, fill: C.hot }, F.g);
     T(svg, F.X(xs) + (narrow ? -8 : 8), F.Y(hs) - 10, "β* = 1/log n", C.hot, { st: ";font-weight:700", at: narrow ? { "text-anchor": "end" } : {} });
     T(svg, F.X(R.lo) + 8, F.Y(lam) - 6, `λ = ${WBK[WB.k][2]}`, C.ink, { st: ";font-weight:600" });
-    T(svg, F.X(-WB.n) + 6, F.y1 - 8, "← width log n →", C.hot);
+    T(svg, F.X(-WB.n) + 6, F.y1 - 8, "width log₁₀ n", C.hot);
     $("#wb-n-out").textContent = "10" + sup(WB.n);
     $("#wb-chips").innerHTML = `<span class="chip v">F = −log Z = <b>${R.F.toFixed(2)}</b></span><span class="chip">WBIC = <b>${R.wbic.toFixed(2)}</b></span><span class="chip">λ log n${WB.k === "prod" ? " − log log n" : ""} = <b>${(lam * ln - (WB.k === "prod" ? Math.log(ln) : 0)).toFixed(2)}</b></span><span class="chip">plateau height at β*, the thermometer's reading: <b>${hs.toFixed(2)}</b></span>`;
   }
@@ -494,31 +495,24 @@ import { lnExact } from "./llc-network.js";
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, H); ctx.stroke(); // θ = 0
 
     ctx.font = `700 ${11 * d}px "JetBrains Mono", monospace`;
-    ctx.fillStyle = C.bad; ctx.fillText("θ = 0 (emptying)", 8 * d, 18 * d);
-    ctx.fillStyle = C.blow; ctx.fillText("u = 0 (merging)", W - 110 * d, H - 8 * d);
+    ctx.fillStyle = C.bad; ctx.fillText("θ = 0", 8 * d, 18 * d);
+    ctx.fillStyle = C.blow; ctx.fillText("u = 0", W - 110 * d, H - 8 * d);
 
-    // SVG Evidence Scaling Plot
     const svg = $("#slt-plot");
     if (svg) {
-      const F = learningFrame(svg, { W: 360, H: 280, l: 48, r: 14, t: 14, b: 42, xr: [1, 4.2], yr: [-7, 0], xt: [1, 2, 3, 4].map(v => [v, "10" + sup(v)]), yt: [[0, "1"], [-2, "10⁻²"], [-4, "10⁻⁴"], [-6, "10⁻⁶"]], xlab: "sample size N", ylab: "evidence Z_N" });
-      const ptsReg = [], ptsFixed = [], ptsCrit = [];
-      for (let l = 1; l <= 4.2; l += 0.05) {
-        const nVal = Math.pow(10, l);
-        ptsReg.push([l, -2.0 * l]);
-        ptsFixed.push([l, -1.5 * l + 0.3]);
-        ptsCrit.push([l, -1.5 * l + Math.log10(Math.max(1, 0.4 * Math.log(nVal))) + 0.3]);
+      const F = learningFrame(svg, { W: 360, H: 280, l: 48, r: 14, t: 14, b: 42, xr: [1, 4.2], yr: [-9.5, 0], xt: [1, 2, 3, 4].map(v => [v, "10" + sup(v)]), yt: [[0, "1"], [-3, "10⁻³"], [-6, "10⁻⁶"], [-9, "10⁻⁹"]], xlab: "concentration N", ylab: "evidence Z(N)" });
+      if (!SLT.curves) SLT.curves = Array.from({length:65}, (_,i) => { const l=1+i*.05; return [l,crossingEvidence(10**l)]; });
+      for (const [key, color, dash] of [["regular4", C.steel, "5 4"], ["regular3", C.cold, ""], ["crossing4", C.hot, ""]]) {
+        const pts = SLT.curves.map(([l,z]) => [l,Math.log10(z[key])]);
+        E("path", { d:pathD(pts,F.X,F.Y), fill:"none",stroke:color,"stroke-width":key==="crossing4"?3:2,"stroke-dasharray":dash },F.g);
       }
-      E("path", { d: pathD(ptsReg, F.X, F.Y), fill: "none", stroke: C.steel, "stroke-width": 2, "stroke-dasharray": "5 4" }, F.g);
-      E("path", { d: pathD(ptsFixed, F.X, F.Y), fill: "none", stroke: C.cold, "stroke-width": 2.4 }, F.g);
-      E("path", { d: pathD(ptsCrit, F.X, F.Y), fill: "none", stroke: C.hot, "stroke-width": 3 }, F.g);
-
-      E("line", { x1: F.X(SLT.ln), x2: F.X(SLT.ln), y1: F.y0, y2: F.y1, stroke: C.muted, "stroke-dasharray": "2 3" }, F.g);
-
+      E("line", { x1:F.X(SLT.ln),x2:F.X(SLT.ln),y1:F.y0,y2:F.y1,stroke:C.muted,"stroke-dasharray":"2 3" }, F.g);
     }
-
+    const current = crossingEvidence(n);
     $("#slt-n-out").textContent = "N = " + Math.round(n).toLocaleString();
-    $("#slt-chips").innerHTML = `<span class="chip v">RLCT <b>λ = 3/2</b></span><span class="chip v">multiplicity <b>m = 2</b></span><span class="chip">evidence: <b>Z_N ≍ N⁻³ᐟ² log N</b></span>`;
+    $("#slt-chips").innerHTML = `<span class="chip v">Full toy: <b>λ = 3/2, m = 2</b></span><span class="chip">Crossing factor alone: <b>λ = 1/2, m = 2</b></span><span class="chip">Computed evidence <b>${current.crossing4.toExponential(3)}</b></span>`;
   }
+
   $("#slt-n")?.addEventListener("input", (e) => { SLT.ln = +e.target.value; figSltTensor(); });
   watch($("#slt-cv"), () => figSltTensor());
 

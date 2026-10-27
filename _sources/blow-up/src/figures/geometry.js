@@ -32,7 +32,11 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
       else { const q = it.q; ctx.globalAlpha = 1; ctx.fillStyle = q.col; ctx.beginPath(); ctx.arc(it.a[0], it.a[1], (q.r || 4) * d, 0, 2 * Math.PI); ctx.fill(); if (q.ring) { ctx.strokeStyle = q.ring; ctx.lineWidth = 2 * d; ctx.stroke(); } }
     }
     ctx.globalAlpha = 1;
-    (sc.labels || []).forEach((L) => { const a = P(L.p); ctx.font = `600 ${12.5 * d}px "Schibsted Grotesk", sans-serif`; ctx.lineWidth = 3 * d; ctx.strokeStyle = C.surface; ctx.strokeText(L.s, a[0] + 8 * d, a[1] - 6 * d); ctx.fillStyle = L.col; ctx.fillText(L.s, a[0] + 8 * d, a[1] - 6 * d); });
+    (sc.labels || []).forEach((L) => {
+      const a=P(L.p);ctx.font=`600 ${12.5*d}px "Schibsted Grotesk", sans-serif`;
+      const width=ctx.measureText(L.s).width,x=clamp(a[0]+8*d,8*d,Math.max(8*d,W-width-8*d)),y=clamp(a[1]-6*d,18*d,H-8*d);
+      ctx.lineWidth=3*d;ctx.strokeStyle=C.surface;ctx.strokeText(L.s,x,y);ctx.fillStyle=L.col;ctx.fillText(L.s,x,y);
+    });
   };
 
   // ============================================================ Figure 7: lift a curve
@@ -184,7 +188,7 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
   const NSH_TXT = {
     cross: [LAD_TXT.cross[0], "record each point's own slope: p = <b>+1</b> and <b>−1</b><br><b>separated</b>, and no center was chosen"],
     tan: [LAD_TXT.tan[0], "own slopes p = <b>±2x</b>: both 0 at the origin, so they still meet,<br>now crossing: <b>touching became crossing</b>", "record the slope again, q = dp/dx = <b>±2</b><br><b>separated</b>"],
-    cusp: [LAD_TXT.cusp[0], "own slope p = 3τ/2 at (τ², τ³), so <b>x = 4p²/9</b><br>a <b>smooth</b> curve in one step, faster than Hironaka's three"],
+    cusp: [LAD_TXT.cusp[0], "own slope p = 3τ/2 at (τ², τ³), so <b>x = 4p²/9</b><br>a <b>smooth</b> curve in one step, the ambient boundary is a separate stopping test"],
   };
   function figLadder() { if (!$("#lad-x")) return;
     for (const [id, k, name] of LAD_COLS) {
@@ -225,7 +229,7 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
     T(svg, F.x1 - 6, F.y0 + 72, "dashed: the polygon's edge", C.blow, { at: { "text-anchor": "end" } });
     // algebra
     let strict, verdict, cls;
-    if (py === px) { strict = "v² − 1"; verdict = "Both monomials survive. At u = 0 the curve is v = ±1, crossing E cleanly at two points: <b>resolved in one step</b>."; cls = "good"; }
+    if (py === px) { strict = "v² − 1"; verdict = "Both monomials survive. At u = 0 the curve is v = ±1, crossing E cleanly on this chart cover. The quotient identification and other charts remain part of the weighted blowup."; cls = "good"; }
     else if (py < px) { strict = `v² − u${supN(px - py)}`; verdict = `Only v² survives at u = 0, so the curve meets E only at v = 0, ${px - py === 1 ? "tangent to E" : "and is still singular there"}: <b>not resolved</b>; the weight of y is too small.`; cls = "bad"; }
     else { strict = `u${supN(py - px)}·v² − 1`; verdict = "At u = 0 the equation reads −1 = 0, so the curve never meets E in this chart: it runs off to v → ∞. <b>Not useful</b>; the weight of y is too large."; cls = "bad"; }
     $("#f9-alg").innerHTML = `f = y² − x${sup(k)}<br>substitute x = u${supN(a)}, y = u${supN(b)}·v:<br>y² → u${sup(py)}·v²,&nbsp;&nbsp; x${sup(k)} → u${sup(px)}<br>f = u${sup(py)}v² − u${sup(px)} = <b>u${sup(m)}</b>·(${strict})<br><span style="font-family:var(--f-display)">${verdict}</span>`;
@@ -356,7 +360,7 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
     const bx = L2.mx - L1.mx, by = L2.my - L1.my, s = (-bx * d2[1] + by * d2[0]) / det;
     return [L1.mx + s * d1[0], L1.my + s * d1[1]];
   }
-  const F12 = { n: 0.025, a: 40, m: "n", seed: 7, rho: 0.12, shape: "cross" };
+  const F12 = { n: 0.026, a: 40, m: "n", seed: 7, rho: 0.12, shape: "cross" };
   const angDist = (a, b) => Math.abs(modPi(a - b));
   function fig12compute() { if (!$("#f12-pts")) return;
     const r = seeded(F12.seed), a = F12.a * Math.PI / 180, N = 140, P = [];
@@ -365,7 +369,14 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
     for (const p of P) { const Q = P.filter((q) => (q.x - p.x) ** 2 + (q.y - p.y) ** 2 < r2); if (Q.length > 2) { const s = pca2(Q); p.phiN = s.phi; p.ratio = s.ratio; } else { p.phiN = 0; p.ratio = 1; } }
     let center = null, cerr = null;
     if (F12.m === "n") P.forEach((p) => { p.phi = p.phiN; });
-    else { const f = findCenter(P); const tx = F12.shape === "corner" ? -0.6 : 0; center = f && Math.hypot(f[0] - tx, f[1]) < 2 ? f : [tx, 0]; cerr = f ? Math.hypot(center[0] - tx, center[1]) : null; P.forEach((p) => { p.phi = modPi(Math.atan2(p.y - center[1], p.x - center[0])); }); }
+    else {
+      const f = findCenter(P), valid = f && f.every(Number.isFinite);
+      center = valid ? f : [P.reduce((s,p)=>s+p.x,0)/P.length,P.reduce((s,p)=>s+p.y,0)/P.length];
+      // The synthetic true center is used only to report error, never to fit or choose a fallback.
+      const trueX = F12.shape === "corner" ? -0.6 : 0;
+      cerr = valid ? Math.hypot(center[0]-trueX,center[1]) : null;
+      P.forEach(p=>{p.phi=modPi(Math.atan2(p.y-center[1],p.x-center[0]));});
+    }
     let flagged = 0;
     P.forEach((p) => { const dOwn = angDist(p.phi, p.own), dOth = angDist(p.phi, p.other); p.flag = dOth < dOwn || dOth < 12 * Math.PI / 180; if (p.flag) flagged++; });
     F12.P = P; F12.center = center; F12.cerr = cerr; F12.flagged = flagged;
@@ -383,7 +394,7 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
       const [cx, cy] = F12.center;
       lines.push({ a: [cx, cy, -LW * Math.PI / 2], b: [cx, cy, LW * Math.PI / 2], col: C.blow, w: 3, alpha: 0.75 });
       points.push({ p: [cx, cy, FL], col: C.blow, r: 5, ring: C.ink, top: true });
-      labels.push({ p: [cx, cy, LW * Math.PI / 2], s: "fitted center: all directions", col: C.blow });
+      labels.push({ p: [cx, cy, LW * Math.PI / 2], s: F12.cerr == null ? "fallback: data centroid" : "fitted center: all directions", col: C.blow });
     } else {
       const ca = 0.75 * Math.cos(F12.a * Math.PI / 360) - (F12.shape === "corner" ? 0.6 : 0), sa = 0.75 * Math.sin(F12.a * Math.PI / 360);
       for (let i = 0; i < 36; i++) { const t0 = 2 * Math.PI * i / 36, t1 = 2 * Math.PI * (i + 1) / 36; lines.push({ a: [ca + F12.rho * Math.cos(t0), sa + F12.rho * Math.sin(t0), FL], b: [ca + F12.rho * Math.cos(t1), sa + F12.rho * Math.sin(t1), FL], col: C.ink, w: 1.3, dash: [3, 3] }); }
@@ -399,15 +410,15 @@ import { CUSP_CHARTS,HARD_CUSP_CHARTS } from "./resolution-geometry.js";
     const svg = $("#f12-hist"), nb = 72, bins = new Array(nb).fill(0), binsF = new Array(nb).fill(0);
     P.forEach((p) => { const k = clamp(Math.floor((modPi(p.phi) + Math.PI / 2) / Math.PI * nb), 0, nb - 1); bins[k]++; if (p.flag) binsF[k]++; });
     const mx = Math.max(10, ...bins);
-    const F = frame(svg, { W: 360, H: 300, l: 34, r: 12, t: 12, b: 42, xr: [-90, 90], yr: [0, mx * 1.12], xt: [-90, -45, 0, 45, 90].map((v) => [v, v + "°"]), yt: [[0, "0"]], xlab: "recorded direction", ylab: "points" });
+    const F = frame(svg, { W: Math.max(260,Math.round(svg.getBoundingClientRect().width) || 360), H: 300, l: 34, r: 12, t: 12, b: 42, xr: [-90, 90], yr: [0, mx * 1.12], xt: [-90, -45, 0, 45, 90].map((v) => [v, v + "°"]), yt: [[0, "0"]], xlab: "recorded direction", ylab: "points" });
     bins.forEach((c, k) => { if (!c) return; const a0 = -90 + 180 * k / nb, a1 = a0 + 180 / nb; E("rect", { x: F.X(a0) + 0.5, y: F.Y(c), width: F.X(a1) - F.X(a0) - 1, height: F.Y(0) - F.Y(c), fill: dirCol((a0 + a1) / 2 * Math.PI / 180) }, F.g); if (binsF[k]) E("rect", { x: F.X(a0) + 0.5, y: F.Y(binsF[k]), width: F.X(a1) - F.X(a0) - 1, height: F.Y(0) - F.Y(binsF[k]), fill: "none", stroke: C.bad, "stroke-width": 1.5 }, F.g); });
     [F12.a / 2, -F12.a / 2].forEach((v) => E("line", { x1: F.X(v), x2: F.X(v), y1: F.y0, y2: F.y1, stroke: C.ink, "stroke-dasharray": "4 3" }, F.g));
-    T(svg, F.X(F12.a / 2) + 4, F.y0 + 16, "true", C.ink); T(svg, F.X(-F12.a / 2) + 4, F.y0 + 16, "true", C.ink);
+    T(svg, F.x1 - 8, F.y0 + 16, "true directions", C.ink, { at: { "text-anchor": "end" } });
     $("#f12-n-out").textContent = "σ = " + F12.n.toFixed(3);
     $("#f12-a-out").textContent = F12.a + "°";
     const pct = (100 * F12.flagged / P.length).toFixed(1);
     $("#f12-chips").innerHTML = `<span class="chip v">ambiguous points: <b>${F12.flagged}</b> of ${P.length} (${pct}%)</span>`
-      + (F12.m === "h" ? `<span class="chip">fitted center: <b>${F12.cerr == null ? "fit failed" : F12.cerr.toFixed(3)}</b>${F12.cerr == null ? "" : (F12.shape === "corner" ? " from the true corner" : " from the true crossing")}</span><span class="chip">trouble spot: points near the center, where a small shift flips the direction</span>`
+      + (F12.m === "h" ? `<span class="chip">fitted center: <b>${F12.cerr == null ? "fit failed; using data centroid" : F12.cerr.toFixed(3)}</b>${F12.cerr == null ? "" : (F12.shape === "corner" ? " from the true corner" : " from the true crossing")}</span><span class="chip">trouble spot: points near the center, where a small shift flips the direction</span>`
         : `<span class="chip">trouble spot: points near the crossing, whose neighborhoods contain both branches</span>`);
   }
   const f12all = () => { fig12compute(); fig12(); };

@@ -1,3 +1,4 @@
+import { cuspNeighborhoodShares } from "./learning-geometry.js";
 (() => {
   "use strict";
   const X_ = window.__E;
@@ -11,7 +12,7 @@
   let icCounts = null;
   function fig13() { if (!$("#ic-st")) return;
     const e = Math.pow(10, IC.le), r = icRun(e), collapse = e < RC;
-    IC.res = r; IC.tEnd = collapse ? 0.75 : Math.min(1.1, Math.max(0.75, r.t * 1.3)); IC.note = collapse ? "the middle ball bounces infinitely often" : `${r.c} collisions`;
+    IC.res = r; IC.tEnd = collapse ? Math.max(0.01, r.t) : Math.min(1.1, Math.max(0.75, r.t * 1.3)); IC.note = collapse ? "collapse regime · finite recorded trace" : `${r.c} collisions`;
     spacetime($("#ic-st"), r, IC.tEnd, [-0.1, 1.1], { note: IC.note, xlab: "position →" });
     if (!icCounts) { icCounts = []; for (let i = 0; i <= 160; i++) { const le = Math.log10(RC) + 1e-4 + (0 - Math.log10(RC)) * Math.pow(i / 160, 1.6); icCounts.push([le, icRun(Math.pow(10, le)).c]); } }
     const svg = $("#ic-n");
@@ -23,7 +24,7 @@
     T(svg, F.X(Math.log10(RC)) + 6, F.y0 + 16, "7 − 4√3", C.bad);
     E("line", { x1: F.X(IC.le), x2: F.X(IC.le), y1: F.y0, y2: F.y1, stroke: C.blow, "stroke-width": 2 }, F.g);
     $("#ic-e-out").textContent = "e = " + e.toFixed(3);
-    $("#ic-chips").innerHTML = `<span class="chip ${collapse ? "v" : ""}">${collapse ? "inelastic collapse: a pairwise solver's loop never ends" : `${r.c} collisions, then the balls separate`}</span><span class="chip">threshold 7 − 4√3 = <b>${RC.toFixed(4)}</b></span>`;
+    $("#ic-chips").innerHTML = `<span class="chip ${collapse ? "v" : ""}">${collapse ? "collapse regime: the trace ends at its numerical cutoff" : `${r.c} collisions, then the balls separate`}</span><span class="chip">threshold 7 − 4√3 = <b>${RC.toFixed(4)}</b></span>`;
   }
   $("#ic-e")?.addEventListener("input", (e) => { IC.le = +e.target.value; fig13(); });
   function icAnim(now) { if (!$("#ic-st")) return;
@@ -166,8 +167,8 @@
     const a = GLD.sims[0], b = GLD.sims[1], B = GLD.bm;
     const free = b.vs.reduce((s, v) => s + v[0], 0), dl = B ? B.uc / 2 : 0;
     $("#gl-chips").innerHTML = `<span class="chip">Ginzburg–Landau: one 4-fold core ≈ 16π·log(1/ε) = <b>${(16 * Math.PI * Math.log(1 / GLD.eps)).toFixed(0)}</b>, four single cores ≈ 4π·log(1/ε) = <b>${(4 * Math.PI * Math.log(1 / GLD.eps)).toFixed(0)}</b></span>`
-      + `<span class="chip">hole: keeps all 4 turns once ρ ≳ ε<b>${sup("1/4")}</b> = <b>${Math.pow(GLD.eps, 0.25).toFixed(2)}</b>; now it holds <b>${4 - free}</b></span>`
-      + (B ? `<span class="chip v">lift: energy <b>${B.E.toFixed(2)}</b> vs 8π = <b>25.13</b>; near the center u ≈ 2(z⁴ − δ) with δ ≈ <b>${dl.toExponential(1)}</b>, so cores at δ<b>${sup("1/4")}</b> = <b>${Math.pow(dl, 0.25).toFixed(2)}</b></span>` : "");
+      + `<span class="chip">hole: scaling heuristic ρ ≳ ε<b>${sup("1/4")}</b> = <b>${Math.pow(GLD.eps, 0.25).toFixed(2)}</b>; measured winding <b>${4 - free}</b></span>`
+      + (B ? `<span class="chip v">lift: energy <b>${B.E.toFixed(2)}</b> vs 8π = <b>25.13</b>; local splitting heuristic: δ ≈ <b>${dl.toExponential(1)}</b>, so cores at δ<b>${sup("1/4")}</b> = <b>${Math.pow(dl, 0.25).toFixed(2)}</b></span>` : "");
   }
   function glDrawAll() { if (!$("#gl-a")) return; if (!GLD.sims.length) return; glRender(GLD.sims[0], $("#gl-a"), $("#gl-a-tag")); glRender(GLD.sims[1], $("#gl-b"), $("#gl-b-tag")); if (GLD.bm) bmRender(GLD.bm, $("#gl-c"), $("#gl-c-tag")); glChips(); }
   function glRestart() { if (!$("#gl-a")) return;
@@ -230,38 +231,41 @@
   $("#f15-d")?.addEventListener("input", (e) => { FV.dl = +e.target.value; fig15(); });
 
   // ============================================================ Figure 16: winner take all vs frozen shares
-  const HE = []; for (let u = -40; u <= 0.7; u += 0.05) HE.push(Math.pow(10, u));
-  const HX = []; for (let i = 0; i < 1200; i++) HX.push(Math.pow(10, -16 + 16 * i / 1199));
   const RHO = 0.25;
-  const cuspLen = (x, e, rho) => { const r = Math.sqrt(e), x3 = x * x * x; let hi = Math.min(1, x3 + r), lo = Math.max(0, x3 - r); if (rho) hi = Math.min(hi, rho * rho - x * x); return hi > lo ? 2 * (Math.sqrt(hi) - Math.sqrt(lo)) : 0; };
-  const areaFn = (rho) => HE.map((e) => { let s = 0; for (const sg of [1, -1]) { let px = 0, pf = cuspLen(0, e, rho); for (const ax of HX) { const f = cuspLen(sg * ax, e, rho); s += (ax - px) * (f + pf) / 2; px = ax; pf = f; } } return s; });
-  const Zof = (A, n) => { let z = 0; for (let i = 1; i < HE.length; i++) { const em = Math.sqrt(HE[i] * HE[i - 1]); z += Math.exp(-n * em) * (A[i] - A[i - 1]); } return z; };
   let SHARE = null;
   const R4 = { ln: 4 };
   function fig16canvas() { if (!$("#r-cv")) return;
-    const { ctx, W, H, d } = cvs($("#r-cv")), n = 170, img = new ImageData(n, n), N = Math.pow(10, R4.ln);
-    for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
-      let acc = 0; for (let a = 0; a < 2; a++) for (let b = 0; b < 2; b++) { const x = -1 + 2 * (i + 0.25 + 0.5 * a) / n, y = 1 - 2 * (j + 0.25 + 0.5 * b) / n, K = (y * y - x * x * x) ** 2; acc += Math.exp(-N * K); }
-      const c = LUT()[Math.round(clamp(Math.pow(acc / 4, 0.6), 0, 1) * 255 * 0.85)], o = 4 * (j * n + i); img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
+    const { ctx, W, H, d } = cvs($("#r-cv")), n = 240, img = new ImageData(n,n), N = 10**R4.ln;
+    // Resolve the concentrating region instead of undersampling it on a fixed spatial grid.
+    const sx=Math.min(1,3*N**(-1/6)), sy=Math.min(1,3*N**(-1/4));
+    for(let j=0;j<n;j++)for(let i=0;i<n;i++){
+      let acc=0;
+      for(let a=0;a<2;a++)for(let b=0;b<2;b++){
+        const x=sx*(-1+2*(i+.25+.5*a)/n),y=sy*(1-2*(j+.25+.5*b)/n);
+        acc+=Math.exp(-N*(y*y-x*x*x)**2);
+      }
+      const c=LUT()[Math.round(clamp((acc/4)**.6,0,1)*255*.85)],o=4*(j*n+i);
+      img.data[o]=c[0];img.data[o+1]=c[1];img.data[o+2]=c[2];img.data[o+3]=255;
     }
-    const off = document.createElement("canvas"); off.width = n; off.height = n; off.getContext("2d").putImageData(img, 0, 0);
-    ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, W, H);
-    const MX = (x) => (x + 1) / 2 * W, MY = (y) => (1 - y) / 2 * H;
-    ctx.strokeStyle = C.hot; ctx.lineWidth = 2 * d; ctx.setLineDash([6 * d, 5 * d]); ctx.beginPath(); ctx.arc(MX(0), MY(0), RHO / 2 * W, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-    ctx.font = `600 ${12 * d}px "Schibsted Grotesk", sans-serif`; ctx.lineWidth = 3 * d; ctx.strokeStyle = C.paper; const s = `n = 10${sup(R4.ln.toFixed(1))}`; ctx.strokeText(s, 8 * d, 18 * d); ctx.fillStyle = C.ink; ctx.fillText(s, 8 * d, 18 * d);
+    const off=document.createElement("canvas");off.width=off.height=n;off.getContext("2d").putImageData(img,0,0);
+    ctx.imageSmoothingEnabled=true;ctx.drawImage(off,0,0,W,H);
+    const MX=x=>(x/sx+1)/2*W,MY=y=>(1-y/sy)/2*H;
+    ctx.strokeStyle=C.hot;ctx.lineWidth=2*d;ctx.setLineDash([6*d,5*d]);ctx.beginPath();
+    ctx.ellipse(MX(0),MY(0),RHO/(2*sx)*W,RHO/(2*sy)*H,0,0,2*Math.PI);ctx.stroke();ctx.setLineDash([]);
+    const label=(s,x,y)=>{ctx.font=`600 ${11.5*d}px "Schibsted Grotesk", sans-serif`;ctx.lineWidth=3*d;ctx.strokeStyle=C.paper;ctx.strokeText(s,x,y);ctx.fillStyle=C.ink;ctx.fillText(s,x,y);};
+    label(`n = 10${sup(R4.ln.toFixed(1))} · automatic zoom`,8*d,18*d);
+    label(`x: ±${sx.toPrecision(2)}; y: ±${sy.toPrecision(2)}`,8*d,H-12*d);
+    if(Math.hypot(sx,sy)<RHO)label("This view lies inside the radius-0.25 disk",8*d,36*d);
   }
-  function fig16plot() { if (!$("#r-plot")) return;
-    if (!SHARE) return;
-    const svg = $("#r-plot");
-    const F = frame(svg, { W: 360, H: 300, l: 44, r: 12, t: 12, b: 42, xr: [1, 12], yr: [0, 1], xt: [1, 4, 8, 12].map((v) => [v, "10" + sup(v)]), yt: [[0, "0"], [0.25, "25%"], [0.5, "50%"], [0.75, "75%"], [1, "100%"]], xlab: "n, or 1/ε", ylab: "share" });
-    const cols = [C.hot, C.cold, C.good, C.blow];
-    (CR.ch ? CR.ch.shares : [1]).forEach((s, i) => { E("line", { x1: F.x0, x2: F.x1, y1: F.Y(s), y2: F.Y(s), stroke: cols[i % 4], "stroke-width": 2.4, "stroke-dasharray": "7 4" }, F.g); T(svg, F.x1 - 6, F.Y(s) - 6, `cradle chamber ${i + 1}: ${Math.round(s * 100)}% at every scale`, cols[i % 4], { at: { "text-anchor": "end" }, st: ";font-weight:600" }); });
-    E("path", { d: pathD(SHARE, F.X, F.Y), fill: "none", stroke: C.blow, "stroke-width": 3 }, F.g);
-    const cur = SHARE.reduce((b, p) => (Math.abs(p[0] - R4.ln) < Math.abs(b[0] - R4.ln) ? p : b));
-    E("circle", { cx: F.X(cur[0]), cy: F.Y(cur[1]), r: 5.5, fill: C.blow, stroke: C.surface, "stroke-width": 2 }, svg);
-    T(svg, F.X(4.6), F.Y(0.53), "violet: near the cusp point", C.blow, { st: ";font-weight:700" }); T(svg, F.X(4.6), F.Y(0.53) + 16, "exponent 5/12 beats 1/2", C.blow);
-    $("#r-n-out").textContent = "n = 10" + sup(R4.ln.toFixed(1));
-    $("#r-chips").innerHTML = `<span class="chip v">share near the cusp point at this n: <b>${Math.round(cur[1] * 100)}%</b></span><span class="chip">grows like n<b>${sup("1/12")}</b> relative to the rest: slowly, but without limit</span>`;
+  function fig16plot() { if (!$("#r-plot") || !SHARE) return;
+    const svg=$("#r-plot"),W=Math.max(270,Math.round(svg.getBoundingClientRect().width));
+    const F=frame(svg,{W,H:300,l:44,r:14,t:28,b:44,xr:[1,12],yr:[0,1],xt:[1,4,8,12].map(v=>[v,"10"+sup(v)]),yt:[[0,"0"],[.5,"50%"],[1,"100%"]],xlab:"concentration n"});
+    T(svg,F.x0,16,"Posterior mass inside radius 0.25",C.ink);
+    E("path",{d:pathD(SHARE,F.X,F.Y),fill:"none",stroke:C.blow,"stroke-width":3},F.g);
+    const cur=SHARE.reduce((b,p)=>Math.abs(p[0]-R4.ln)<Math.abs(b[0]-R4.ln)?p:b);
+    E("circle",{cx:F.X(cur[0]),cy:F.Y(cur[1]),r:5.5,fill:C.blow,stroke:C.surface,"stroke-width":2},svg);
+    $("#r-n-out").textContent="n = 10"+sup(R4.ln.toFixed(1));
+    $("#r-chips").innerHTML=`<span class="chip v">Inside the fixed disk: <b>${(cur[1]*100).toFixed(1)}%</b></span><span class="chip">Tip neighborhood: <b>n⁻⁵ᐟ¹²</b>; outside it: <b>n⁻¹ᐟ²</b></span><span class="chip">The heatmap zooms; the integration square stays fixed.</span>`;
   }
   window.__f16 = fig16plot;
   $("#r-n")?.addEventListener("input", (e) => { R4.ln = +e.target.value; fig16canvas(); fig16plot(); });
@@ -430,7 +434,7 @@
     const Eu = cdEnergy(CD.cores), Eb = cdBest(), Em = cdEnergy([[0, 0, 4]]);
     const svg = $("#cd-bars"); svg.innerHTML = ""; svg.setAttribute("viewBox", "0 0 340 230");
     const mx = Math.max(Eu, Em) * 1.08, X = (v) => 12 + 300 * v / mx;
-    [["your layout", Eu, C.blow], ["best four points", Eb, C.cold], ["one merged point", Em, C.hot]].forEach(([lab, v, col], i) => {
+    [["your layout", Eu, C.blow], ["reference square layout", Eb, C.cold], ["one merged point", Em, C.hot]].forEach(([lab, v, col], i) => {
       const y = 30 + i * 62;
       T(svg, 12, y - 6, lab, C.ink, { st: ";font-weight:600" });
       E("rect", { x: 12, y, width: Math.max(2, X(v) - 12), height: 26, rx: 4, fill: col, opacity: 0.85 }, svg);
@@ -440,7 +444,7 @@
     const tagEl = $("#cd-tag");
     if (tagEl) tagEl.innerHTML = CD.cores.length === 1 ? "one point of winding 4" : `${CD.cores.length} points, windings adding to ${sumd}`;
     const capEl = $("#cd-cap");
-    if (capEl) capEl.innerHTML = CD.cores.length === 1 ? "All four turns in one point. The log(1/ε) term is now 16 units instead of 4 × 1, because winding enters squared." : Eu - Eb < 0.15 ? "This is the best layout: four points on a circle of radius 0.85, the O-grid of a quad-meshed disk." : "Drag the points closer together and the energy rises (they repel); push them toward the edge and it rises too (the boundary pushes back).";
+    if (capEl) capEl.innerHTML = CD.cores.length === 1 ? "All four turns in one point. The log(1/ε) term is now 16 units instead of 4 × 1, because winding enters squared." : Eu - Eb < 0.15 ? "Near the stationary square layout for this point-vortex energy, at radius about 0.85." : "Drag the points closer together and the energy rises (they repel); push them toward the edge and it rises too (the boundary pushes back).";
   }
   function cdGrad(cores, h = 1e-4) {
     return cores.map((c, i) => [0, 1].map((ax) => { const p = cores.map((q) => q.slice()), m = cores.map((q) => q.slice()); p[i][ax] += h; m[i][ax] -= h; return (cdEnergy(p) - cdEnergy(m)) / (2 * h); }));
@@ -481,7 +485,7 @@
     try { if (window.__draw4) window.__draw4(); } catch (e) { console.error("__draw4 error:", e); }
     draw3();
   }
-  { const AC = areaFn(RHO), AT = areaFn(0); SHARE = []; for (let l = 1; l <= 12.001; l += 0.1) { const n = Math.pow(10, l); SHARE.push([l, Zof(AC, n) / Zof(AT, n)]); } }
+  if ($("#r-cv")) SHARE = cuspNeighborhoodShares(Array.from({length:111},(_,i)=>1+i/10),RHO);
   drawAll();
   if ($("#gl-rho-out")) $("#gl-rho-out").textContent = "ρ = " + GLD.rho.toFixed(2);
   watch($("#gl-a"), () => { if (!GLD.sims.length) glRestart(); });

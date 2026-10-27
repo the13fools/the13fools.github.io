@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>What is a blowup? · What is… a blowup?</title>
-  <meta name="description" content="Crossing, touching and cusp singularities, how blowing up resolves each, Hironaka versus Nash, and blowups on noisy data.">
+  <meta name="description" content="What singular points are, how a blowup changes their geometry, and how a worked cusp resolution illustrates Hironaka’s theorem.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
   <meta property="og:title" content="What is a blowup? · What is… a blowup?">
-  <meta property="og:description" content="Crossing, touching and cusp singularities, how blowing up resolves each, Hironaka versus Nash, and blowups on noisy data.">
+  <meta property="og:description" content="What singular points are, how a blowup changes their geometry, and how a worked cusp resolution illustrates Hironaka’s theorem.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-1.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -19,66 +19,33 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-BPXdyHQf.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-BvWhWewO.css">
+  <script type="module" crossorigin src="./assets/main-J6GXpLAK.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-pgAbIWhS.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Collisions &amp; Tensors</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html" aria-current="page">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Applications</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part I of IV</p>
     <h1>What is a blowup?</h1>
-    <p class="dek">A first example from billiards, a ladder of three singular points, the algorithm that resolves them all, and the choice-free alternative that sometimes loops forever.</p>
+    <p class="dek">From three plane curves to Hironaka’s theorem: what a blowup changes, what it preserves, and what a resolution must achieve.</p>
   </div>
+<div class="col"><p>A smooth curve has a regular local coordinate: near each point, one number describes position along it, with a nonzero tangent. A singular point is where this local description fails. Crossing branches share a position; tangent branches also share a direction; a cusp has just one tangent but still has a singular local geometry.</p><p>A <b>blowup</b> changes the space in which we describe the curve. It keeps a direction coordinate that ordinary position forgets. We will calculate one, inspect what it fixes, and then ask why a finite sequence can resolve every variety in characteristic zero.</p><nav class="chapter-toc" aria-label="In this chapter"><a href="#singular">1 · Recognize a singularity</a><a href="#first">2 · A physical analogy</a><a href="#lift">3 · Calculate a blowup</a><a href="#done">When are we done?</a><a href="#resolution-algorithm">Why the algorithm terminates</a><a href="#nash">4 · The Nash alternative</a><a href="#noisy">5 · Noisy data</a></nav></div>
   <div class="col">
-    <p><b>Start with a demo.</b> Two pen strokes cross. At the intersection, spatial position alone cannot tell you which stroke a point belongs to. But if you lift every point into three dimensions by its direction, the strokes separate. There are two natural directions to record: <b>Nash's</b> (each point's intrinsic tangent direction along its stroke, the algorithmic core of Petrov, Nabizadeh, Dodik, and Solomon's <a href="https://arxiv.org/abs/2605.18215">Tangent Blow-Ups for Processing Non-Manifold Geometry</a> [2026]) and <b>Hironaka's</b> (the direction from a chosen center). Lifting a geometric space by directions to disentangle its singular points is a <b>blowup</b>.</p>
-    <p class="read"><b>Figure 1.</b> Noisy samples of crossing strokes or a sharp corner lifted into 3D (<a href="https://arxiv.org/abs/2605.18215">Petrov et al. 2026</a>). Pastel points on the floor are input data; points float at the height of their recorded direction. Drag to rotate and toggle between Nash and Hironaka. The histogram on the right views the lift edge-on: two distinct clusters indicate the branches have separated. Section 5 returns to this experiment.</p>
-  </div>
-  <section class="panel" aria-label="Blowups on noisy data">
-    <div class="controls">
-      <label class="sl"><span class="lbl">Noise</span><input id="f12-n" type="range" min="0" max="0.08" step="0.002" value="0.025"><output id="f12-n-out"></output></label>
-      <label class="sl"><span class="lbl">Crossing angle</span><input id="f12-a" type="range" min="10" max="90" step="1" value="40"><output id="f12-a-out"></output></label>
-      <span class="seg" role="group" aria-label="Shape" id="f12-s">
-        <button type="button" data-v="cross" aria-pressed="true">Two crossing strokes</button>
-        <button type="button" data-v="corner" aria-pressed="false">A sharp corner</button>
-      </span>
-      <span class="seg" role="group" aria-label="Method" id="f12-m">
-        <button type="button" data-v="n" aria-pressed="true">Nash</button>
-        <button type="button" data-v="h" aria-pressed="false">Hironaka</button>
-      </span>
-      <button type="button" class="btn" id="f12-new">New sample</button>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">The lifted point cloud <span>drag to rotate</span></div><div class="box sq drag"><canvas id="f12-pts" tabindex="0" aria-label="Noisy point cloud lifted by recorded direction; drag to rotate"></canvas></div></div>
-      <div class="fig"><div class="h">The lift seen edge on <span>histogram of recorded directions</span></div><svg id="f12-hist" role="img" aria-label="Histogram of recorded directions"></svg></div>
-    </div>
-    <div class="chips" id="f12-chips"></div>
-  </section>
-
-  <div class="col">
-    <h2 id="first">1. A first example: the corner of a billiard table</h2>
-    <p>Consider three balls on a line with gaps $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates, their elastic motion corresponds to a single point bouncing inside a planar wedge bounded by the walls $g_1 = 0$ and $g_2 = 0$. When the point strikes a wall, rigid-body mechanics prescribes a unique specular reflection. But at the corner where $g_1 = g_2 = 0$, all three balls collide simultaneously.</p>
-    <p>Classical collision laws break down at the corner because "which ball hit first" is undefined. The resolution introduced on the <a href="./index.html">opening page</a> is to record the trajectory's <em>direction of approach</em>: the microscopic gap ratio $g_2 / g_1$ immediately preceding impact. Every direction yields a deterministic sequence of bounces. Replacing the singular corner by the space of directions of approach is a <b>blowup</b>. Geometrically, the boundary is the crossing $g_1 \cdot g_2 = 0$, an ordinary nodal singularity algebraically identical to $y^2 - x^2 = 0$.</p>
-    <p class="read"><b>Figure 2.</b> The three-ball system as a point in a planar wedge. Each bounce is a pairwise collision; the corner is all three balls touching. Around the corner, the blowup replaces the singular vertex with an arc of incoming directions, colored by the resulting sequence of bounces.</p>
-  </div>
-  <section class="panel" aria-label="The billiard corner and its blowup">
-    <svg id="f0-w" role="img" aria-label="Billiard path in a wedge, with the corner replaced by a colored arc of directions"></svg>
-  </section>
-
-  <div class="col">
-    <h2 id="singular">2. Singular points: crossing, touching, cusp</h2>
+    <h2 id="singular">1. What makes a point singular?</h2>
     <div class="terms"><b>Key terms:</b> zero set, normal field, smooth point, singular point.</div>
-    <p>For an algebraic curve defined by $f(x, y) = 0$, points where $\nabla f \neq 0$ are <em>smooth</em>: the implicit function theorem guarantees a well-defined tangent line orthogonal to the normal field $n = \nabla f / \|\nabla f\|$. Points where $\nabla f = 0$ are <b>singular points</b>. There the normalized gradient is undefined. A singularity can have several tangent directions, or a unique tangent with a singular parameterization, as at a cusp.</p>
+    <p>A plane algebraic curve is the zero set of a polynomial, such as $y^2-x^3=0$. An algebraic variety generalizes this to simultaneous polynomial equations in any number of coordinates. Smoothness asks whether the resulting space has regular local coordinates of its expected dimension.</p>
+    <p>For a plane curve with a <em>reduced</em> defining equation $f(x,y)=0$, the test is concrete. If $\nabla f\ne0$, the implicit function theorem gives a smooth curve and a tangent line perpendicular to $\nabla f$. At the three singular origins below, $\nabla f=0$. The tangent information no longer gives a regular local coordinate. We use reduced equations because artificially squaring an equation would make its gradient vanish without changing its zero set.</p>
     <p>Three prototypical singularities form a natural ladder of difficulty:</p>
     <ul class="qs">
       <li><b>Crossing:</b> $f = y^2 - x^2 = 0$ (the lines $y = \pm x$). Two smooth branches crossing with distinct tangents.</li>
       <li><b>Touching:</b> $f = y^2 - x^4 = 0$ (the parabolas $y = \pm x^2$). Two smooth branches sharing the same tangent: order of contact 2.</li>
-      <li><b>Cusp:</b> $f = y^2 - x^3 = 0$ (the curve $y = \pm x^{3/2}$). A single branch with non-integer scaling, coming to a sharp point.</li>
+      <li><b>Cusp:</b> $f = y^2 - x^3 = 0$ (the curve $y = \pm x^{3/2}$). One algebraic branch, parametrized by $(x,y)=(\tau^2,\tau^3)$; its velocity vanishes at $\tau=0$. Having a unique tangent does not make the point smooth.</li>
     </ul>
-    <p class="read"><b>Figure 3.</b> The black curves are the zero sets $f=0$. Move the probe toward the red-ringed origin: violet shows the tangent at the probe and orange the gradient. Turn on the normal field for the surrounding level-set geometry. At the singular point the gradient is zero; a single regular tangent description fails.</p>
+    <p class="read"><b>Figure 1.</b> The black curves are the zero sets $f=0$. Move the probe toward the red-ringed origin: violet shows the tangent at the probe and orange the gradient. Turn on the normal field for the surrounding level-set geometry. At the singular point the gradient is zero; a single regular tangent description fails.</p>
   </div>
   <section class="panel" aria-label="Singular points">
     <div class="controls"><label class="sl"><span class="lbl">Probe position</span><input id="f1-t" type="range" min="-1" max="1" step="0.01" value="0.55"><output id="f1-t-out"></output></label><label><input type="checkbox" id="f1-field"> Show normal field and contours</label></div>
@@ -90,12 +57,22 @@
   </section>
 
   <div class="col">
+    <h2 id="first">2. A physical analogy: the billiard corner</h2>
+    <p>Consider three balls on a line with gaps $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates, their elastic motion corresponds to a single point bouncing inside a planar wedge bounded by the walls $g_1 = 0$ and $g_2 = 0$. When the point strikes a wall, rigid-body mechanics prescribes a unique specular reflection. But at the corner where $g_1 = g_2 = 0$, all three balls collide simultaneously.</p>
+    <p>The usual pairwise impact rule does not prescribe which contact to process first at the corner. Perturb the gaps slightly and follow the pairwise elastic collisions: different ratios can select different limiting outcomes. The colored arc records these limiting approaches. This is a <em>real directional blowup</em> of a corner, a physical analogy for the algebraic operation below. The boundary $g_1g_2=0$ consists of two crossing lines; the admissible configuration region is the wedge between them.</p>
+    <p class="read"><b>Figure 2.</b> The three-ball system as a point in a planar wedge. Each bounce is a pairwise collision; the corner is all three balls touching. Around the corner, the blowup replaces the singular vertex with an arc of incoming directions, colored by the resulting sequence of bounces.</p>
+  </div>
+  <section class="panel" aria-label="The billiard corner and its blowup">
+    <svg id="f0-w" role="img" aria-label="Billiard path in a wedge, with the corner replaced by a colored arc of directions"></svg>
+  </section>
+
+  <div class="col">
     <h2 id="lift">3. Blowing up, and how it resolves each kind</h2>
     <h3 id="lift-idea">3.1 The idea: record the direction</h3>
     <div class="terms"><b>Definition:</b> blowup of the plane, exceptional divisor, strict transform, total transform.</div>
     <p><b>What is an exceptional curve?</b> Blow up a point of a smooth surface. Above that one point, keep a whole projective line of directions. This new curve is called <em>exceptional</em> because the projection collapses all of it back to the old point. It belongs to the blown-up ambient surface; it is not another branch of the curve we are trying to resolve.</p>
     <p>In the chart $y=xt$, the new coordinates are $(x,t)$ and the projection is $\pi(x,t)=(x,xt)$. For $x\ne0$, the old point determines its slope $t=y/x$. For $x=0$, every value of $t$ projects to $(0,0)$. Thus $E=\{x=0\}$ is a line of different directions above the same old point.</p>
-    <p class="read"><b>Figure 4.</b> Leave $x=0$ and move $t$: the point moves along the violet exceptional line at right, while its projection stays at the origin at left. Then increase $x$ to leave $E$. The orange lines are the transformed crossing $y=\pm x$; they meet $E$ at only two points, $t=\pm1$.</p>
+    <p class="read"><b>Figure 3.</b> Leave $x=0$ and move $t$: the point moves along the violet exceptional line at right, while its projection stays at the origin at left. Then increase $x$ to leave $E$. The orange lines are the transformed crossing $y=\pm x$; they meet $E$ at only two points, $t=\pm1$.</p>
   </div>
   <section class="panel" aria-label="What the exceptional curve projects to">
     <div class="controls">
@@ -116,8 +93,8 @@
     <p>with canonical projection $\pi(p, [\ell]) = p$. Away from the origin, $\pi$ is a diffeomorphism. Over the origin, the fiber $\pi^{-1}(0) = \{0\} \times \mathbb{RP}^1$ is the <b>exceptional divisor</b> $E \cong \mathbb{RP}^1$.</p>
     <p>When a curve $C = \{f = 0\}$ is pulled back under $\pi$, the <em>total transform</em> $\pi^* C$ contains the entire exceptional curve $E$. Factoring out the maximal power of $E$ ($x^m$, where $m$ is the multiplicity) leaves the <b>strict transform</b>:</p>
     <div class="eq tex">\widetilde{C} = \overline{\pi^{-1}(C \setminus \{(0, 0)\})}</div>
-    <p>which separates the branches according to their limiting slopes on $E$.</p>
-    <p class="read"><b>Figure 5.</b> 3D visualization of the lift. Grey is the original curve; the colored curve is lifted by recorded direction. Crossing lines separate immediately. Touching curves cross at an angle on step 1. The cusp becomes smooth, but hugs the exceptional divisor $E$ (the vertical violet line).</p>
+    <p>The strict transform keeps the curve itself; the total transform also records the exceptional factor and its multiplicity. Distinct slopes separate at this step. Branches sharing a slope can still meet above the origin.</p>
+    <p class="read"><b>Figure 4.</b> 3D visualization of the lift. Grey is the original curve; the colored curve is lifted by recorded direction. Crossing lines separate immediately. Touching curves cross at an angle on step 1. The cusp becomes smooth, but hugs the exceptional divisor $E$ (the vertical violet line).</p>
   </div>
   <section class="panel" aria-label="Lift a curve">
     <div class="controls">
@@ -131,7 +108,7 @@
     <div class="controls">
       <span class="lbl">Record</span>
       <span class="seg" role="group" aria-label="Blowup" id="f7-b">
-        <button type="button" data-v="h" aria-pressed="true">Hironaka: direction from the center</button>
+        <button type="button" data-v="h" aria-pressed="true">Point blowup: direction from the center</button>
         <button type="button" data-v="n" aria-pressed="false">Nash: own tangent direction</button>
       </span>
     </div>
@@ -139,22 +116,23 @@
   </section>
 
   <div class="col">
+    <aside class="teaching-note" id="resolution-goal"><h3>What counts as a resolution?</h3><p><b>Hironaka’s theorem:</b> for an algebraic variety over a field of characteristic zero, a finite sequence of suitably chosen blowups produces a smooth variety mapping properly and birationally to the original one, unchanged over its smooth locus. “Proper” prevents missing limiting points; “birational” means the map is an isomorphism on a dense open part. Characteristic zero includes the rational, real, and complex numbers. Real and complex analytic versions provide related local statements.</p><p>For the <b>embedded resolution</b> illustrated here, we ask for more: the strict transform of the curve must be smooth, and it must meet the accumulated exceptional boundary with <b>simple normal crossings</b>. Locally the boundary looks like coordinate axes. On a smooth surface, at most two distinct divisor components meet at one point. A tangency or a triple intersection fails this test.</p><p>This explains two stopping rules that otherwise look contradictory. Crossing lines already form a normal-crossings <em>divisor</em>, but their union is a singular curve. Separating its branches resolves the curve. A cusp becomes a smooth curve after one blowup, but further steps are needed for the embedded boundary condition.</p></aside>
     <h3 id="hironaka-hand">3.2 By hand: reading off Taylor coefficients</h3>
     <div class="terms"><b>Key terms:</b> affine charts, strict transform, simple normal crossings (SNC).</div>
     <p>We cover $\operatorname{Bl}_0(\mathbb{R}^2)$ with two affine charts: the $x$-chart $U_x$ with map $(x, t) \mapsto (x, xt)$ (slope $t = y/x$, $E = \{x = 0\}$) and the $y$-chart $U_y$ with map $(s, y) \mapsto (ys, y)$ ($s = x/y$, $E = \{y = 0\}$). In the $x$-chart, a branch $y(x) = a_1 x + a_2 x^2 + \cdots$ has slope:</p>
     <div class="eq tex">t(x) = \frac{y(x)}{x} = a_1 + a_2 x + a_3 x^2 + \cdots</div>
-    <p>At $x = 0$, the branch intersects $E$ at $t = a_1$, its initial slope. Each subsequent blowup divides by $x$ again, reading off $a_2, a_3, \dots$. The three rungs resolve as follows:</p>
+    <p>At $x = 0$, the branch intersects $E$ at $t = a_1$, its initial slope. If the branch still passes through $(0,a_1)$, translate $t$ by $a_1$ and blow up there: the next slope reads off $a_2$. This Taylor-series picture is useful for smooth branches; a cusp requires changing charts as well. The three rungs resolve as follows:</p>
     <ul class="qs">
       <li><b>Crossing ($y^2 - x^2 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - 1) = 0$. The strict transform $t^2 - 1 = 0 \implies t = \pm 1$ intersects $E$ transversely at two distinct points. <em>Resolved in 1 step.</em></li>
       <li><b>Touching ($y^2 - x^4 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - x^2) = 0$. On $E$ ($x = 0$) both branches meet at $t = 0$, but their order of contact drops from 2 to 1: $t^2 - x^2 = (t - x)(t + x) = 0$ is now a transverse crossing. A second blowup $t = xw$ gives $w^2 - 1 = 0$, fully separating them. <em>Resolved in 2 steps.</em></li>
-      <li><b>Cusp ($y^2 - x^3 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - x) = 0 \implies x = t^2$. The curve is smooth in 1 step! But its tangent $x = 0$ is $E$ itself (a tangency). Two further blowups separate the curve from $E$ to achieve <b>simple normal crossings (SNC)</b>, where all components cross transversely with no tangencies. <em>Resolved in 3 steps.</em></li>
+      <li><b>Cusp ($y^2 - x^3 = 0$):</b> Setting $y = xt$ gives $x^2(t^2 - x) = 0 \implies x = t^2$. The curve is smooth in 1 step! But its tangent $x = 0$ is $E$ itself (a tangency). Two further blowups make the strict curve and exceptional boundary meet with <b>simple normal crossings (SNC)</b>, where the components are coordinate hyperplanes locally. Pairwise transversality alone does not permit a triple point on a surface. <em>Resolved in 3 steps.</em></li>
     </ul>
-    <p class="read"><b>Figure 6.</b> The ladder step-by-step. Each panel is an affine chart with slope $t$ vertically. Orange and blue trace the branches; violet lines are exceptional divisors $E$. Green dots mark transverse crossings; red rings mark points requiring further resolution.</p>
+    <p class="read"><b>Figure 5.</b> The ladder step-by-step. Each panel is an affine chart with slope $t$ vertically. Orange and blue trace the branches; violet lines are exceptional divisors $E$. Green dots mark transverse crossings; red rings mark points requiring further resolution.</p>
   </div>
   <section class="panel" aria-label="The ladder of blowups">
     <div class="controls">
       <span class="seg" role="group" aria-label="Method" id="lad-m">
-        <button type="button" data-v="h" aria-pressed="true">Hironaka</button>
+        <button type="button" data-v="h" aria-pressed="true">Point blowups</button>
         <button type="button" data-v="n" aria-pressed="false">Nash</button>
       </span>
       <span class="lbl">Step</span>
@@ -177,7 +155,7 @@
     <h3 id="done">3.3 Run the resolution procedure, with the boundary kept in view</h3>
     <div class="terms"><b>Key terms:</b> multiplicity, maximal contact, lexicographic invariant.</div>
     <p>For the cusp, the operational question is concrete: <b>where does the curve, together with the exceptional boundary, still fail the required normal-crossings condition?</b> Blow up that point, substitute in both charts, factor the total transform, and inspect again. A smooth strict transform is not enough: tangencies and three components through one surface point still need work.</p>
-    <p class="read"><b>Figure 7.</b> Follow the cusp through three point blowups. The right-hand ledger records the actual equation, the current defect, and the next center. Try the harder cusp to see multiplicity stay at 2 for a step. This is a worked plane-curve trace, not a general-purpose implementation or a graph of the full canonical invariant.</p>
+    <p class="read"><b>Figure 6.</b> Follow the cusp through three point blowups. The right-hand ledger records the actual equation, the current defect, and the next center. Try the harder cusp to see multiplicity stay at 2 for a step. This is a worked plane-curve trace, not a general-purpose implementation or a graph of the full canonical invariant.</p>
   </div>
   <section class="panel" aria-label="Worked embedded resolution of plane curves">
     <div class="controls">
@@ -199,7 +177,7 @@
   </section>
 
   <div class="col">
-    <h4 id="resolution-algorithm">Where the general algorithm enters</h4>
+    <h3 id="resolution-algorithm">Why this becomes difficult in higher dimensions</h3><p>The obstacle is choosing centers with guaranteed progress. Blowing up an arbitrary point can leave the defect untouched. Even blowing up the worst multiplicity need not lower that multiplicity immediately: try $y^2=x^5$ in the figure above. New exceptional components also create tangencies and intersections that must be tracked.</p><p>In higher dimensions the worst set can itself be singular. A usable algorithm must find smooth centers within it, make the choices agree on overlapping charts, and retain enough information to prove termination. Modern constructive versions use an ordered invariant, lower-dimensional coefficient ideals, and exceptional-boundary data. Their termination proofs control a well-founded complexity; the simplest visible measure need not drop at every blowup.</p><p>The basic cycle is: compute the current defect, choose a permissible smooth center, calculate every blowup chart, update both the residual equations and the boundary, and repeat until the required smoothness and normal-crossings tests pass. The cusp lets us see this cycle without pretending to implement the full general algorithm.</p>
     <p>The <a href="https://arxiv.org/html/1206.3090v1">Bierstone–Grigoriev–Milman–Włodarczyk paper</a> organizes resolution through marked ideals $(X,I,E,\mu)$: a smooth ambient space, equations, an exceptional boundary, and an order threshold. Its support is $\{p:\operatorname{ord}_p I\ge\mu\}$. A permissible center is smooth, lies in this support, and meets the boundary normally. After blowing up, the controlled ideal is $I'=I(E_{\rm new})^{-\mu}\pi^*I$. It may differ from the strict-transform ideal.</p>
     <p>For our cusp we can calculate the first recursive reduction by hand:</p>
     <ol class="resolution-steps">
@@ -220,7 +198,7 @@
     <div class="eq tex">y^2 - x^3 = u^6 (v^2 - 1) = 0</div>
     <p>For $(2,3)$, the strict equation on this <em>chart cover</em> is $v^2-1=0$, transverse to $u=0$. The map $x=u^2$, $y=u^3v$ has the identification $(u,v)\sim(-u,-v)$: the two displayed lifts do not mean that the cusp has two algebraic branches. A weighted blowup includes these quotient identifications and its other charts. This substitution alone is not an ordinary birational chart of a smooth surface.</p>
     <p>The balancing weights come from the compact edge joining $(3,0)$ and $(0,2)$ of the Newton polygon: $3a=2b$. This explains the shortcut in this example; general resolution requires more than choosing weights from one picture.</p>
-    <p class="read"><b>Figure 8.</b> A weighted chart cover. For $(a,b)=(2,3)$, both monomials have weight 6, and the strict equation becomes $v=\pm1$. Read these as two lifts on the cover, with the identification described above.</p>
+    <p class="read"><b>Figure 7.</b> A weighted chart cover. For $(a,b)=(2,3)$, both monomials have weight 6, and the strict equation becomes $v=\pm1$. Read these as two lifts on the cover, with the identification described above. Try a = 1, b = 1, then a = 2, b = 3: each dot is a monomial, and its label is the power of u it acquires. The weight line touches the least-power terms; only those terms survive at u = 0 after factoring.</p>
   </div>
   <section class="panel" aria-label="Weighted blowup">
     <div class="controls">
@@ -239,48 +217,18 @@
   </section>
 
   <div class="col">
-    <h3 id="formalized">3.5 What was formalized in Lean, and why</h3>
-    <p>In 1964, Heisuke Hironaka proved that any algebraic or analytic variety in characteristic zero can be resolved into a smooth manifold with simple normal crossings via finitely many blowups. In Michael Atiyah's formulation required by <b>Singular Learning Theory</b>, any real-analytic loss $K(w) \ge 0$ can be pulled back via $\pi: M \to W$ so that loss and Jacobian determinant are simultaneously monomialized:</p>
-    <div class="eq tex">K(\pi(u)) = u^{2\mathbf{k}} \cdot g(u), \qquad |\det D\pi(u)| = u^{\mathbf{h}} \cdot b(u)</div>
-    <p>The exponential of a product of monomials is still coupled. Resolution makes its asymptotics tractable; it does not turn it into a product of independent Gaussian integrals:</p>
-    <div class="eq tex">Z_N=\int e^{-NK(w)}\varphi(w)\,dw\asymp N^{-\lambda}(\log N)^{m-1}.</div>
-    <p>With the analytic and prior assumptions in <a href="./part-4.html">Part IV</a>, $\lambda$ is the minimum of $(h_j+1)/(2k_j)$ over contributing charts and indices with $k_j&gt;0$; multiplicity $m$ records the leading logarithmic factor. In October 2026, the Resolution team (Snikkers, Newgas, Hoogland, and Elliott) <a href="https://resolution.org/post/formalizing-resolution-of-singularities">formalized a resolution theorem in Lean 4</a> without a single <span class="m">sorry</span> (~500,000 lines).</p>
+    <h3 id="formalized">The theorem, its constructive proofs, and the Lean formalization</h3><p>Hironaka proved the characteristic-zero theorem in 1964. Later proofs made center selection more explicit and compatible across charts. The <a href="https://resolution.org/post/formalizing-resolution-of-singularities">Resolution team’s October 2026 report</a> describes a Lean library for algebraic and analytic resolution, drawing on Hironaka, Kollár, Włodarczyk, Bravo–Villamayor, and Bierstone–Milman. This is machine-checked mathematics, rather than evidence from a collection of successful examples. It does not by itself certify the numerical models in this essay.</p><p>For integration, the useful consequence is <em>monomialization</em>: after resolution, a complicated vanishing function becomes a product of coordinate powers times a nonvanishing factor. The Jacobian has coordinate powers too. <a href="./part-4.html#cusp-well">Part IV uses the very cusp charts above to compute a statistical exponent</a>.</p>
 
-    <h2 id="nash">4. How Nash's works, and how it fails</h2>
+    <h2 id="nash">4. What tangent directions can resolve</h2>
     <div class="terms"><b>Key terms:</b> Nash blowup, Gauss map, toric counterexample, recurring affine chart.</div>
-    <p>Hironaka's algorithm requires choosing a center of maximal invariant. John Nash proposed a radical, choice-free alternative: the <b>Nash blowup</b> $\operatorname{Nash}(X)$, defined as the algebraic closure of the Gauss map graph $\gamma: p \mapsto (p, T_p X)$ inside $X \times \operatorname{Gr}(d, N)$. On a curve $(x(\tau), y(\tau))$, it simply records the tangent slope $dy/dx$.</p>
-    <p>On the cusp $x = \tau^2, y = \tau^3$, the slope is $dy/dx = \frac{3}{2}\tau$. The Nash lift is $(\tau^2, \tau^3, \frac{3}{2}\tau)$, which is completely smooth! Nash resolves the cusp in <b>1 step</b> without choosing a center. On meshes and point clouds, <a href="https://arxiv.org/abs/2605.18215">Petrov et al. (2026)</a> exploit this automatic property to resolve self-intersections without needing feature detection.</p>
-    <p><b>Where Nash fails:</b> In characteristic zero, iterated Nash blowups resolve curves; normalized Nash blowups resolve surfaces. These statements do not give a general termination theorem for ordinary Nash blowups on surfaces. Castillo, Duarte, Leyton-Álvarez, and Liendo construct a <a href="https://arxiv.org/html/2409.19767v3">normal four-dimensional affine toric variety</a> for which a chart of its Nash blowup is isomorphic to the original singular variety. The same obstruction occurs for the normalized Nash blowup:</p>
-    <div class="eq tex">U\subset\operatorname{Nash}(X),\qquad U\cong X.</div>
-    <p>A singular chart can therefore recur after every iteration; this is not an isomorphism between the entire Nash blowup and $X$. Their <a href="https://arxiv.org/abs/2511.01772">three-dimensional counterexample</a> concerns non-normalized Nash blowups. In <a href="./part-2.html">Part II</a>, an exact cone blowup makes the direction coordinates concrete, before we return to these higher-dimensional obstructions.</p>
-    <p class="read"><b>Figure 9.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
-  </div>
-  <section class="panel" aria-label="Nash's blowup of X contains X">
-    <div class="controls"><button type="button" class="btn go" id="n4-go">Pick a random point of X</button><span class="lbl" id="n4-t"></span></div>
-    <div class="pair">
-      <div class="fig"><div class="h">X, in coordinates x₁ … x₇</div><div class="algebra" id="n4-x"></div></div>
-      <div class="fig"><div class="h">One chart of Nash's blowup, in y₁ … y₇</div><div class="algebra" id="n4-y"></div></div>
-    </div>
-    <div class="algebra" id="n4-dict"></div>
-  </section>
+    <p>Can the geometry itself prescribe a modification, without a separate center-selection invariant? The <b>Nash blowup</b> attaches the tangent $d$-plane at each smooth point, then takes the closure of this graph. On a plane curve, an affine chart records the tangent slope $dy/dx$.</p>
+    <p>On the cusp $(x,y)=(\tau^2,\tau^3)$, the slope is $3\tau/2$. The lift $(\tau^2,\tau^3,3\tau/2)$ is smooth: the extra coordinate recovers the missing regular parameter. One Nash step resolves this curve. This does not include the ambient exceptional-boundary condition imposed in the three-step embedded resolution.</p>
+    <p><b>The appealing rule has a limit.</b> In characteristic zero, Nash iteration resolves curves, and <em>normalized</em> Nash iteration resolves surfaces. In higher dimensions, a singular open chart can return isomorphic to the input. The process can then repeat inside that chart indefinitely. <a href="./part-2.html#nash-three">Part II computes the three-dimensional obstruction</a> and exhibits a different resolution that terminates.</p>
 
-  <div class="wide-table">
-    <table>
-      <thead><tr><th>Exponent of X</th><th>Vector</th><th>U sends it to</th><th>Which is the chart exponent</th></tr></thead>
-      <tbody>
-        <tr><td>h₁</td><td>(1, 0, 0, 0)</td><td>(−1, 0, 1, 0)</td><td>h₆ − h₅</td></tr>
-        <tr><td>h₂</td><td>(0, 1, 0, 0)</td><td>(0, −1, 0, 1)</td><td>h₄ − h₂</td></tr>
-        <tr><td>h₃</td><td>(0, 0, 1, 0)</td><td>(−2, −3, 2, 2)</td><td>h₄ − h₅</td></tr>
-        <tr><td>h₄</td><td>(0, 0, 0, 1)</td><td>(1, 0, 0, 0)</td><td>h₁</td></tr>
-        <tr><td>h₅</td><td>(2, 3, −2, −1)</td><td>(1, 3, −2, −1)</td><td>h₆ − h₃</td></tr>
-        <tr><td>h₆</td><td>(1, 3, −1, −1)</td><td>(0, 0, −1, 1)</td><td>h₄ − h₃</td></tr>
-        <tr><td>h₇</td><td>(1, 2, −1, 0)</td><td>(1, 1, −1, 0)</td><td>h₇ − h₂</td></tr>
-      </tbody>
-    </table>
   </div>
 
   <div class="col">
-    <p class="read"><b>Figure 10.</b> Left: successive point blowups resolve the cusp and its exceptional crossings. Right: Nash resolves the cusp in one step; the lower diagram schematically illustrates a singular affine chart recurring in the four-dimensional example.</p>
+    <p class="read"><b>Figure 8.</b> Left: successive point blowups resolve the cusp and its exceptional crossings. Right: Nash resolves the cusp in one step; the lower diagram schematically illustrates a singular affine chart recurring in the four-dimensional example.</p>
   </div>
   <section class="panel" aria-label="Nash loop">
     <div class="pair">
@@ -290,13 +238,30 @@
   </section>
 
   <div class="col">
-    <h2 id="noisy">5. Back to the opening demo: blowups on noisy data</h2>
-    <p>In geometric data processing, scans touch themselves, meshes self-intersect, and point clouds cross. <a href="https://arxiv.org/abs/2605.18215">Petrov, Nabizadeh, Dodik and Solomon (2026)</a> use Nash-style tangent lifts to disentangle non-manifold geometry without needing manual feature selection.</p>
-    <p>Figure 1 tests both methods on noisy point clouds. Nash estimates tangents via local neighborhood PCA; Hironaka fits branches to locate a center. As noise increases or crossing angles narrow, Nash blurs where neighborhoods overlap both branches, while Hironaka breaks if the fitted center is unstable. Yet on clean geometry, both lifts disentangle the singularity into separated manifold sheets.</p>
-  </div>
+    <h2 id="noisy">5. What survives when the data are noisy?</h2><p>A scanned surface or point cloud comes without an exact defining ideal. Directions must be estimated. <a href="https://arxiv.org/abs/2605.18215">Petrov and colleagues</a> use tangent lifts in geometry processing; the experiment below compares estimated tangents with directions from a fitted center.</p><p class="read"><b>Figure 9.</b> Start with low noise and two crossing strokes. Rotate the lift: different directions separate the strokes above their shared position. Increase noise or reduce the crossing angle; the direction clusters become harder to distinguish. “Nash” estimates local tangents by PCA; “Center-based” fits the crossing and records directions from it. If center fitting fails, the demo reports a fallback to the sample centroid. Black dashed histogram lines mark the true synthetic directions; red rings flag its ambiguity test. These are numerical illustrations, not executions of an exact algebraic resolution algorithm.</p></div>
+<section class="panel" aria-label="Blowups on noisy data">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Noise</span><input id="f12-n" type="range" min="0" max="0.08" step="0.002" value="0.026"><output id="f12-n-out"></output></label>
+      <label class="sl"><span class="lbl">Crossing angle</span><input id="f12-a" type="range" min="10" max="90" step="1" value="40"><output id="f12-a-out"></output></label>
+      <span class="seg" role="group" aria-label="Shape" id="f12-s">
+        <button type="button" data-v="cross" aria-pressed="true">Two crossing strokes</button>
+        <button type="button" data-v="corner" aria-pressed="false">A sharp corner</button>
+      </span>
+      <span class="seg" role="group" aria-label="Method" id="f12-m">
+        <button type="button" data-v="n" aria-pressed="true">Nash</button>
+        <button type="button" data-v="h" aria-pressed="false">Center-based</button>
+      </span>
+      <button type="button" class="btn" id="f12-new">New sample</button>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">The lifted point cloud <span>drag to rotate</span></div><div class="box sq drag"><canvas id="f12-pts" tabindex="0" aria-label="Noisy point cloud lifted by recorded direction; drag to rotate"></canvas></div></div>
+      <div class="fig"><div class="h">The lift seen edge on <span>histogram of recorded directions</span></div><svg id="f12-hist" role="img" aria-label="Histogram of recorded directions"></svg></div>
+    </div>
+    <div class="chips" id="f12-chips"></div>
+  </section><div class="col"><p><b>What to carry forward:</b> a blowup keeps the old geometry away from its center and records extra information above it. Resolution requires a smooth final space, compatible charts, and a stopping criterion. <a href="./part-2.html">Next, a cone makes the exceptional fiber visible before we test the Nash rule in higher dimensions.</a></p></div>
 
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./index.html"><span class="dir">← Previous</span><span class="t">What is… a blowup?</span></a><a class="next" href="./part-2.html"><span class="dir">Next →</span><span class="t">Directions &amp; Nash blowups</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

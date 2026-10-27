@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>A cone, its directions, and the limits of Nash blowups · What is… a blowup?</title>
-  <meta name="description" content="An exact cone blowup in direction coordinates, the exceptional circle, and the higher-dimensional limits of Nash blowups.">
+  <meta name="description" content="An exact cone blowup, a recurring Nash chart, and an explicit terminating toric resolution of the same three-dimensional counterexample.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
   <meta property="og:title" content="A cone, its directions, and the limits of Nash blowups · What is… a blowup?">
-  <meta property="og:description" content="An exact cone blowup in direction coordinates, the exceptional circle, and the higher-dimensional limits of Nash blowups.">
+  <meta property="og:description" content="An exact cone blowup, a recurring Nash chart, and an explicit terminating toric resolution of the same three-dimensional counterexample.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-2.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -24,18 +24,18 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Collisions &amp; Tensors</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Applications</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part II of IV</p>
     <h1>A cone, its directions, and the limits of Nash blowups</h1>
-    <p class="dek">Tracking directions above a singular apex, the exceptional circle, and where choice-free tangent blowups encounter higher-dimensional barriers.</p>
+    <p class="dek">A smooth cone chart, a Nash chart that repeats, and an explicit resolution that escapes the loop.</p>
   </div>
 
-  <div class="col">
+  <div class="col"><nav class="chapter-toc" aria-label="In this chapter"><a href="#zero-level-sets">6 · Dimension and pictures</a><a href="#blowup-1">7 · Resolve the cone</a><a href="#nash-4d-failure">8 · The Nash obstruction</a><a href="#nash-three">See the threefold</a><a href="#nash-three-charts">Why its chart returns</a><a href="#nash-three-resolution">A terminating resolution</a></nav>
     <p>At the apex of a cone, infinitely many distinct lines collide into a single pinch point. A blowup does not smooth out the pinch by rounding off corners; it untangles the collision by <b>recording incoming directions</b>. On the real quadric cone $X^2 + Y^2 = Z^2$, this algebraic surgery is completely explicit: its strict transform becomes a smooth cylinder, and an entire circle of directions sits above the old apex.</p>
-    <p>This resolves the local singularity. But it raises a deeper foundational question: can this process be made completely automatic and choice-free? John Nash conjectured that repeatedly attaching tangent spaces would resolve every algebraic variety. Ordinary Nash iteration resolves curves, and normalized Nash iteration resolves surfaces. These are different statements; the ordinary surface case remains open in general.</p>
+    <p>The question is now whether <em>one particular rule</em> can always repeat this success. Nash’s rule records tangent spaces. Modern Hironaka-style algorithms can also be canonical, so the distinction is not “automatic versus manual.” It is whether the chosen modification is backed by a termination argument.</p>
     <p class="read"><b>Figure {fig:manifold3d}.</b> The cone and its strict transform in the $Z$-direction chart. Both viewports sample the exact defining equations. The blue point on the cylinder maps to the blue point on the cone under $(v,w,u) \mapsto (uv,uw,u)$. Set $u=0$, then sweep the direction $\theta$: the entire purple circle collapses to the single singular apex $(0,0,0)$. The cylinder lives in local chart coordinates, revealing how directions disentangle the pinch.</p>
   </div>
 
@@ -69,8 +69,8 @@
     <h2 id="zero-level-sets">6. Hypersurfaces vs. varieties: keeping dimensions straight</h2>
     <div class="terms"><b>Key terms:</b> ambient dimension, hypersurface, intrinsic dimension, regular locus.</div>
     <p>Before exploring higher-dimensional singularities, it is vital to keep two concepts distinct: the <b>ambient dimension</b> (the number of coordinates in the ambient Euclidean space) and the <b>intrinsic dimension</b> of the geometric variety.</p>
-    <p>A single polynomial equation $F(x,y,z,w)=0$ in four ambient coordinates defines a <b>three-dimensional hypersurface</b>. Wherever the gradient $\nabla F \neq 0$, the implicit function theorem guarantees a smooth tangent 3-plane. At the origin of the 4D conifold $x^2+y^2-z^2-w^2=0$, all first derivatives vanish, producing an isolated singular point. Taking a 3D spatial slice at $w=0$ yields the 2-dimensional cone $X^2+Y^2-Z^2=0$ shown in Figure {fig:manifold3d}.</p>
-    <p>When algebraic geometers speak of the recent Nash blowup breakthroughs in dimension 4 and dimension 3, they refer to the <b>intrinsic dimension</b> of the varieties themselves—which are not simple hypersurfaces, but higher-codimension varieties requiring ambient embeddings in $\mathbb{C}^7$ or $\mathbb{C}^6$.</p>
+    <p>One nonzero equation $F(x,y,z,w)=0$ defines a hypersurface of dimension 3 in ambient dimension 4 (over $\mathbb C$, these are complex dimensions). At points where $\nabla F\ne0$, the implicit function theorem gives a tangent 3-plane. The cone shown here has intrinsic real dimension 2 in $\mathbb R^3$. Its apex is singular. The counterexamples below have intrinsic dimensions 4 and 3, with embeddings in seven and six coordinates respectively.</p>
+    <p>A real section or projection is a way to draw part of such a space. It can reveal a pinch, but it cannot prove that a complex variety is smooth or that an iteration terminates. For those claims we need the coordinate algebra.</p>
 
     <h2 id="blowup-1">7. Replacing the apex by directions</h2>
     <div class="terms"><b>Key terms:</b> direction chart, total transform, strict transform, exceptional locus.</div>
@@ -86,22 +86,51 @@
     <p>At $u = 0$, every direction $\theta \in [0, 2\pi)$ maps down to $(0,0,0)$. The singular apex has been excavated and replaced by an entire <b>circle of directions</b>. Away from $u=0$, the blowdown map is a real-analytic diffeomorphism onto the cone.</p>
     <p><b>Which exceptional divisor?</b> In the ambient $\mathbb{R}^3$ blowup, the fiber over the origin is $\mathbb{RP}^2$ (the space of all lines through the origin). Restricting to the cone, the exceptional locus is the projective conic $[X:Y:Z]$ satisfying $X^2+Y^2=Z^2$, whose real points form a circle. Because every real line on this cone has $Z \neq 0$, this single chart covers the entire real exceptional circle.</p>
 
-    <h2 id="nash-4d-failure">8. What the Nash counterexamples prove</h2>
+    <h2 id="nash-4d-failure">8. Why Nash iteration can fail—and how resolution still succeeds</h2>
     <div class="terms"><b>Key terms:</b> Gauss graph, Nash blowup, normalization, recurring affine chart.</div>
-    <p>In 1968, John Nash proposed a canonical, choice-free alternative to Hironaka's algorithm. Instead of manually selecting centers of blowup, the <b>Nash blowup</b> assigns to each smooth point $p \in X_{\mathrm{smooth}}$ its tangent $d$-plane $T_p X$ in the Grassmannian $\operatorname{Gr}(d, N)$, and takes the closure of the resulting graph:</p>
+    <p>Nash’s construction starts on the smooth locus of an embedded $d$-dimensional variety. Attach its tangent $d$-plane, a point of the Grassmannian $\operatorname{Gr}(d,N)$, and take the closure:</p>
     <div class="eq tex">\operatorname{Nash}(X) = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N).</div>
-    <p>The <b>normalized Nash blowup</b> additionally takes the integral closure (normalization) of the coordinate ring at each step. On curves (1D), a single Nash blowup resolves ordinary cusps immediately. On normal algebraic surfaces (2D), Mark Spivakovsky (1990) proved that normalized Nash blowups always terminate in a finite number of steps.</p>
-    <p><b>The Higher-Dimensional Breakthrough:</b> In a milestone paper, Federico Castillo, Daniel Duarte, Maximiliano Leyton-Álvarez, and Alvaro Liendo (<a href="https://arxiv.org/abs/2409.19767">arXiv:2409.19767</a>, <em>Annals of Mathematics</em> 2026) proved that Nash blowups fail in dimension 4 and higher. They construct normal singular affine toric varieties where an affine open chart $U$ of the Nash blowup is algebraically isomorphic to the starting variety:</p>
+    <p>The <b>normalized Nash blowup</b> takes one additional operation at each step: normalization, which adjoins integral algebraic functions missing from the coordinate ring. In characteristic zero, ordinary Nash iteration resolves curves; Spivakovsky proved termination for normalized surface iteration. Neither statement settles ordinary Nash iteration on all surfaces.</p>
+    <p><a href="https://arxiv.org/abs/2409.19767">Castillo, Duarte, Leyton-Álvarez, and Liendo</a> exhibit a singular normal fourfold with an open chart of its Nash blowup isomorphic to the starting variety:</p>
     <div class="eq tex">U \subset \operatorname{Nash}(X), \qquad U \cong X.</div>
-    <p>Because Nash's process is completely canonical and deterministic, it is trapped: it repeats the exact same sequence of modifications indefinitely, never resolving the singularity. In a companion work (<a href="https://arxiv.org/abs/2511.01772">arXiv:2511.01772</a>), the authors also established that <em>non-normalized</em> Nash blowups fail in dimension 3.</p>
+    <p>This is a precise obstruction to termination. Nash blowup commutes with restricting to open subsets and with isomorphisms. The same singular local type therefore survives inside every iterate. Their <a href="https://arxiv.org/abs/2511.01772">threefold example</a> returns after two ordinary Nash steps and starts from a non-normal variety. Normalized Nash iteration in dimension three remains open.</p>
   </div>
 
   <div class="col">
+  </div>
+    <details class="experiment"><summary>Optional calculation: an affine chart of the fourfold’s Nash blowup</summary><div class="col">    <p class="read"><b>Figure {fig:nash4d}.</b> The 4D counterexample. Left: equations of $X$. Right: a chart of its Nash blowup. Click the button: the blown-up coordinates satisfy the exact same equations as $X$, illustrating the recurring affine chart. The numerical samples check these relations; the paper proves the chart isomorphism.</p>
+  </div>
+  <section class="panel" aria-label="Nash's blowup of X contains X">
+    <div class="controls"><button type="button" class="btn go" id="n4-go">Pick a random point of X</button><span class="lbl" id="n4-t"></span></div>
+    <div class="pair">
+      <div class="fig"><div class="h">X, in coordinates x₁ … x₇</div><div class="algebra" id="n4-x"></div></div>
+      <div class="fig"><div class="h">One chart of Nash's blowup, in y₁ … y₇</div><div class="algebra" id="n4-y"></div></div>
+    </div>
+    <div class="algebra" id="n4-dict"></div>
+  </section>
+
+  <div class="wide-table">
+    <table>
+      <thead><tr><th>Exponent of X</th><th>Vector</th><th>U sends it to</th><th>Which is the chart exponent</th></tr></thead>
+      <tbody>
+        <tr><td>h₁</td><td>(1, 0, 0, 0)</td><td>(−1, 0, 1, 0)</td><td>h₆ − h₅</td></tr>
+        <tr><td>h₂</td><td>(0, 1, 0, 0)</td><td>(0, −1, 0, 1)</td><td>h₄ − h₂</td></tr>
+        <tr><td>h₃</td><td>(0, 0, 1, 0)</td><td>(−2, −3, 2, 2)</td><td>h₄ − h₅</td></tr>
+        <tr><td>h₄</td><td>(0, 0, 0, 1)</td><td>(1, 0, 0, 0)</td><td>h₁</td></tr>
+        <tr><td>h₅</td><td>(2, 3, −2, −1)</td><td>(1, 3, −2, −1)</td><td>h₆ − h₃</td></tr>
+        <tr><td>h₆</td><td>(1, 3, −1, −1)</td><td>(0, 0, −1, 1)</td><td>h₄ − h₃</td></tr>
+        <tr><td>h₇</td><td>(1, 2, −1, 0)</td><td>(1, 1, −1, 0)</td><td>h₇ − h₂</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</details>
+<div class="col">
     <h3 id="toric-zero-set">A zero-set view of the actual four-dimensional example</h3>
     <p>The four-dimensional Castillo et al. counterexample lives in seven ambient coordinates $(x_1, \dots, x_7)$, so its Gauss map takes values in $\operatorname{Gr}(4, 7)$. To visualize its geometry, take a real spatial section through its defining toric relations: fix $x_5 = 1$ and $x_2 = q$, using $(p, t, r) = (x_1, x_6, x_4)$ as coordinates. The resulting zero set is:</p>
     <div class="eq tex">r \, t^2 = q^3.</div>
     <p>For $q \neq 0$, the section is a smooth surface. But at $q = 0$, the equation collapses to $r t^2 = 0$, which is the union of two perpendicular planes: $r = 0$ and $t = 0$. Their intersection line lies directly inside the fourfold's singular locus.</p>
-    <p class="read"><b>Figure {fig:toricslice}.</b> Real sections of the actual 4-fold counterexample. Left: the central singular section $q = 0$ (two intersecting planes). Right: adjust $q$ to sweep through nearby smooth sections $r t^2 = q^3$. Scrubbing the slider reveals how the singular locus forms the boundary of smooth geometric sheets.</p>
+    <p class="read"><b>Figure {fig:toricslice}.</b> Real sections of the actual 4-fold counterexample. Left: the central singular section $q = 0$ (two intersecting planes). Right: adjust $q$ to sweep through nearby smooth sections $r t^2 = q^3$. Scrubbing the slider reveals how smooth sections degenerate into intersecting planes. The singularity of a section alone does not identify the full variety’s singular locus.</p>
   </div>
 
   <section class="panel" aria-label="Zero-set sections of the four-dimensional Nash counterexample">
@@ -119,7 +148,7 @@
       <div class="fig">
         <div class="h">Adjustable section · r t² = q³</div>
         <div class="box sq drag"><canvas id="toric-nearby" aria-label="An adjustable zero-set section of the actual four-dimensional counterexample"></canvas></div>
-        <p class="cap">For q ≠ 0, the section forms a smooth hyperbolic sheet.</p>
+        <p class="cap">For q ≠ 0, the section forms a smooth section, with t ≠ 0.</p>
       </div>
     </div>
     <p class="cap" id="toric-state" aria-live="polite"></p>
@@ -158,11 +187,13 @@
     <h3 id="nash-three-charts">Now follow one chart through two Nash blowups</h3>
     <p>The result of <a href="https://arxiv.org/html/2511.01772">Castillo, Duarte, Leyton-Álvarez, and Liendo</a> concerns the <b>ordinary, non-normalized Nash blowup</b>. A selected open chart after two iterations is isomorphic to the starting singular threefold. It does not say that the entire blowup is unchanged, or settle normalized Nash resolution in dimension three.</p>
     <p>At $(x_1,\ldots,x_6)=0$, all five defining equations have zero linear part. The tangent space there has dimension 6, while $X$ has dimension 3: this fixed point is singular. We will see a point of this same local type return after two selected Nash charts.</p>
+<details class="derivation"><summary>How exponent vectors encode the threefold and its tangent planes</summary>
     <p>The <a href="https://arxiv.org/abs/2511.01772">three-dimensional construction</a> begins with an affine semigroup $S \subset \mathbb{Z}^3$ generated by six vectors $h_i$, the columns of the matrix:</p>
     <div class="eq tex">B = \begin{pmatrix} 1 & 0 & 0 & -2 & 1 & 2 \\ 0 & 1 & 0 & -1 & -1 & -2 \\ 0 & 0 & 1 & 2 & 1 & 1 \end{pmatrix}.</div>
     <p>Each column vector represents the exponent of a monomial. The associated 3-fold variety $X(S)$ is the closure of the image of:</p>
     <div class="eq tex">\phi: (\mathbf{k}^*)^3 \longrightarrow \mathbf{k}^6, \qquad (a, b, c) \longmapsto \left( a, b, c, \frac{c^2}{a^2 b}, \frac{ac}{b}, \frac{a^2 c}{b^2} \right).</div>
     <p><b>How tangent planes enter this calculation.</b> On the dense torus, the tangent-plane coordinates are Jacobian minors. Dividing by a chosen nonzero minor gives an affine Nash chart. Ratios of monomials subtract their exponent vectors: for example $x_5/x_1=\chi^{h_5-h_1}$. That is why the new lattice generators are differences, rather than arbitrarily chosen arrows.</p>
+</details>
     <p class="read"><b>Figure {fig:nash3d}.</b> Start with $S$, then follow one open chart at each blowup. The first chart fills the hole $u$ but has a new hole $w$. The second chart has the original semigroup in a new integer basis. The last button changes basis; it is not another blowup. Hollow orange points are missing <em>monomial exponents</em>, not holes cut out of the real surface above.</p>
   </div>
 
@@ -307,13 +338,13 @@
 
   <div class="col">
     <p><b>Why this proves failure.</b> Nash blowup restricts to open subsets and respects isomorphisms. Once an open chart of the starting singular type returns after two steps, the same calculation applies inside that chart again. Thus every even iterate contains a singular open subset. The ordinary Nash iteration cannot become smooth. Hironaka's theorem uses a different, controlled sequence of smooth centers; it is not contradicted.</p>
-    <p><b>The Bridge: From Cones to Simulation and Parameter Space.</b> Up to now, our singularities have lived in idealized geometric spaces: crossing pencil strokes, colliding billiard balls, or the pinched tip of a 3D cone. Hironaka's theorem guarantees that choosing permissible smooth centers resolves these pinches into smooth manifolds, while Nash's intrinsic lift can get stuck.</p>
-    <p>Next, we bring this machinery into problems I know from physics simulation and geometry processing: simultaneous rigid-body collisions, diverging border-rank tensor fitting, and symmetric frame fields. In each domain, classical formulas break down—and blowing up provides the clean, principled resolution.</p>
+    <p><b>Why the other resolution succeeds.</b> The Nash construction above is forced to reproduce the same semigroup. Our toric procedure instead normalizes it and subdivides its cone until each chart has an integer coordinate basis. Determinant $\pm1$ is a verifiable stopping test. General Hironaka-style algorithms use richer invariants to choose centers and prove termination without requiring a toric presentation.</p>
+    <p>A blowup can improve a singularity without finishing it; a canonical modification can even repeat it. Hironaka’s achievement is the existence of a controlled <em>finite sequence</em> that reaches the required endpoint. <a href="./part-3.html">The next chapter asks which parts of this idea help in simulation and graphics</a>, and where the analogy stops.</p>
   </div>
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">Collisions, Tensors, and Fields</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>

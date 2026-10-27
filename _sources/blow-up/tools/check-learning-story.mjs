@@ -30,3 +30,39 @@ for(const n of [1,100,10000]) {
 near(evidence(10000).regular/evidence(1000).regular,.1,1e-10);
 near(evidence(10000).collision/evidence(1000).collision,10**(-.75),1e-10);
 console.log('Learning story: tensor identities, cancellation, area scaling, and evidence integrals verified.');
+
+const { crossingEvidence, gaussianMean, reluLoss, monomialJacobian } = await import('../src/figures/learning-geometry.js');
+near(gaussianMean(0),1);
+for (const n of [.001,.2,1,100,10000]) near(gaussianMean(n),simpson(x=>Math.exp(-n*x*x),0,1,8192),2e-7);
+// Verify the crossing factor by an independent 2D midpoint integral.
+{
+  const n=3,M=700;let z=0;
+  for(let i=0;i<M;i++)for(let j=0;j<M;j++) z+=Math.exp(-n*((i+.5)/M*(j+.5)/M)**2)/(M*M);
+  near(crossingEvidence(n).product,z,1e-6);
+}
+for(const n of [10,1000,10**4.2]) {
+  const a=crossingEvidence(n),b=crossingEvidence(n,8192);
+  near(a.crossing4/b.crossing4,1,2e-6);
+  assert.ok(a.crossing4>a.regular3 && a.regular3>a.regular4);
+}
+// ReLU formula checked against its actual stated input distribution and target, both signs of w.
+for(const [a,w,c] of [[.7,.6,.4],[.7,-.6,.4],[0,1,.5],[1,0,.5],[.8,-.3,0]]) {
+  const relu=x=>Math.max(0,x);
+  near(reluLoss(a,w,c),simpson(x=>(a*relu(w*x)-c*relu(x))**2/4,-1,1),1e-10);
+}
+near(reluLoss(.4,.5,.2),0);
+const {CUSP_CHARTS,CUSP_OTHER_FINAL}=await import('../src/figures/resolution-geometry.js');
+assert.deepEqual(monomialJacobian(...CUSP_CHARTS[3].map),[-1,4,1]);
+assert.deepEqual(monomialJacobian(...CUSP_OTHER_FINAL.map),[1,4,2]);
+assert.deepEqual(monomialJacobian([2,0],[3,1]),[2,4,0]);
+assert.deepEqual(monomialJacobian([2,1],[1,0]),[-1,2,0]);
+near((4+1)/12,5/12); near((1+1)/4,.5);near((2+1)/6,.5);
+console.log('Editorial math audit: both Jacobians, cusp chart volume exponents, ReLU half-MSE, and integrated crossing evidence verified.');
+const { cuspNeighborhoodShares }=await import('../src/figures/learning-geometry.js');
+const levels=[1,4,8,12], shares=cuspNeighborhoodShares(levels), refined=cuspNeighborhoodShares(levels,.25,2);
+for(let i=0;i<levels.length;i++) {
+  assert.ok(shares[i][1]>0&&shares[i][1]<1);
+  if(i)assert.ok(shares[i][1]>shares[i-1][1]);
+  near(shares[i][1],refined[i][1],.002);
+}
+console.log('Cusp probability audit: fixed-neighborhood mass increases, stays below one, and converges under mesh refinement.');
