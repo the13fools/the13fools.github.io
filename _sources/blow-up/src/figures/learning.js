@@ -64,9 +64,9 @@ import { lnExact } from "./llc-network.js";
     const slab = (i) => `[ ${f2(Tp[i * 4])} ${f2(Tp[i * 4 + 1])} ]<br>[ ${f2(Tp[i * 4 + 2])} ${f2(Tp[i * 4 + 3])} ]`;
     $("#hd-alg").innerHTML = `${HD.probe ? "probed tensor" : "center tensor"}, as two 2×2 slices:<br>${slab(0).split("<br>").map((r, k) => r + "&nbsp;&nbsp;&nbsp;" + slab(1).split("<br>")[k]).join("<br>")}<br>Δ = <b>${onB ? "0" : v.toExponential(2).replace("-", "−")}</b> → ${onB ? "on the boundary" : v > 0 ? "<b>rank 2</b>" : "<b>rank 3</b>"}`;
     $("#hd-cap").innerHTML = onB
-      ? (HD.c === "W" && !HD.probe ? "This is W: rank 3, but a limit of rank-2 tensors. A rank-2 fit gets arbitrarily close only by sending its factors to infinity, as in Figures {fig:B1} and {fig:B2}." : "On the boundary Δ = 0 the rank is decided by finer invariants. Tensors here are where rank-2 fits become ill-behaved.")
+      ? (HD.c === "W" && !HD.probe ? "This is W: rank 3, but a limit of rank-2 tensors. A rank-2 fit gets arbitrarily close only by sending its factors to infinity, as in Figures {fig:borderfit} and {fig:bordercompare}." : "On the boundary Δ = 0 the rank is decided by finer invariants. Tensors here are where rank-2 fits become ill-behaved.")
       : v > 0 ? "Blue: two rank-one terms suffice, and a rank-2 fit can reach zero loss."
-      : "Orange: three rank-one terms are needed, and no best rank-2 approximation exists (de Silva and Lim). A rank-2 fit keeps lowering the loss while its factors grow without bound, as in Figure {fig:B1}.";
+      : "Orange: three rank-one terms are needed, and no best rank-2 approximation exists (de Silva and Lim). A rank-2 fit keeps lowering the loss while its factors grow without bound, as in Figure {fig:borderfit}.";
     $("#hd-chips").innerHTML = `<span class="chip v">rank 3 on <b>${Math.round(100 * neg / (n * n))}%</b> of this slice</span><span class="chip">a random Gaussian tensor has rank 3 with probability 1 − π/4 ≈ <b>21%</b></span>`;
   }
   seg("#hd-c", (v) => { HD.c = v; HD.probe = null; fig12(); });

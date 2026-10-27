@@ -104,7 +104,7 @@
 
   <div class="col">
     <p>Along the entire parabolic trough $y^2 = x^3$, the loss is zero. The Hessian matrix has one zero eigenvalue along the entire floor. But at the cusp tip $(0,0)$, <b>both eigenvalues vanish</b>. Classical Taylor expansion fails completely.</p>
-    <p>How do we compute the volume of this well? We cannot separate $x$ and $y$ by independent scalings. But recall Part I, Figure 8: the weighted blowup with weights $(2, 3)$ set $x = r^2, y = r^3 v$. Substituting into the cusp well:</p>
+    <p>How do we compute the volume of this well? We cannot separate $x$ and $y$ by independent scalings. But recall Part I, Figure {fig:weighted}: the weighted blowup with weights $(2, 3)$ set $x = r^2, y = r^3 v$. Substituting into the cusp well:</p>
     <div class="eq tex">V(r, v) = \big((r^3 v)^2 - (r^2)^3\big)^2 = \big(r^6 v^2 - r^6\big)^2 = r^{12} (v^2 - 1)^2.</div>
     <p>The Jacobian determinant is $|J| = 3 r^4$. The evidence integral becomes:</p>
     <div class="eq tex">Z(n) \asymp \int r^4 e^{-n r^{12}} dr \asymp n^{-(4+1)/12} = n^{-5/12}.</div>
@@ -220,7 +220,10 @@
 
   <div class="col">
     <h3>Temperature selection and the WBIC plateau</h3>
-    <p>What temperature should we choose? At high temperatures ($\beta \to 0$), the sampler explores arbitrary high-loss territory. At zero temperature ($\beta \to \infty$), it freezes at the point $w^*$. Watanabe proved that at the <b>Widely Applicable Bayesian Information Criterion (WBIC) temperature $\beta^* = 1/\log n$</b>, the thermal energy enters a wide plateau of height $\lambda$.</p>
+    <p>How do we evaluate the marginal likelihood $Z$ without an intractable high-dimensional volume integral? In physics and statistics, <b>thermodynamic integration</b> writes the free energy $F = -\log Z$ as an integral along an inverse temperature path:</p>
+    <div class="eq tex">F = -\int_0^1 \frac{d}{d\beta}\log Z(\beta)\,d\beta = \int_0^1 \mathbb{E}_\beta[n L_n(w)]\,d\beta.</div>
+    <p>In a regular model with $d$ parameters, the integrand rises to a constant $\frac{d}{2}$ above a tiny boundary layer $1/n$, yielding the familiar $\frac{d}{2}\log n$ BIC penalty. In a singular model, Watanabe proved that the integrand instead plateaus at the learning coefficient $\lambda$ around temperature $\beta^* = 1/\log n$. His <b>Widely Applicable Bayesian Information Criterion (WBIC)</b> replaces the entire temperature integral with a single evaluation at $\beta^*$:</p>
+    <div class="eq tex">\mathrm{WBIC} = \mathbb{E}_{\beta^*}[n L_n(w)] = n L_n(w^*) + \lambda\log n + \mathcal{O}_p(\sqrt{\log n}).</div>
     <p class="read"><b>Figure {fig:wbic}.</b> Thermodynamic integration and the WBIC plateau. The curve $\beta \mathbb{E}_\beta[nK]$ approaches a plateau of height $\lambda$; the orange box illustrates the leading $\lambda\log n$ term in the free energy.</p>
   </div>
 
@@ -272,7 +275,7 @@
     <p><b>The 2026 milestone: formalizing Hironaka in Lean.</b> Hironaka’s original proof was historically one of the most formidable in 20th-century mathematics—spanning over 200 pages of intricate local induction. In October 2026, researchers at Resolution formalized Hironaka’s theorem in Lean, providing the first machine-checked proof of the algebraic foundation underlying SLT.</p>
     <p>For AI safety researchers, $\lambda$ provides an indispensable tool for <b>developmental interpretability</b>. By monitoring $\lambda$ during training, researchers can detect discrete <em>phase transitions</em>—the exact moments when a network drops into a more structured algorithmic valley, forming induction heads or learning modular algorithms.</p>
 
-    <p><b>A graphics researcher’s reflection.</b> When I began this exploration, algebraic geometry felt completely foreign to my background in physics simulation, computer graphics, and numerical optimization. Yet across all these domains, the central lesson is identical. Whether simulating three billiard balls colliding at the same millisecond, unpinching a 3D cone into a smooth cylinder, or explaining why a neural network generalizes from finite data, classical calculus breaks down for the exact same reason: <em>it assumes the world is locally quadratic, and nature produces singularities</em>. And in every case, the solution is not to smooth over the breakdown with arbitrary penalties. The solution is a blowup: <b>excavate the singularity, and keep track of incoming directions.</b></p>
+    <p><b>A graphics researcher’s reflection.</b> I came into this knowing some algebraic geometry from polynomial optimization and curves, but far less about the subtleties of the higher-dimensional setting—where Nash blowups loop indefinitely and Hironaka’s 200-page inductive machine is genuinely required. Yet across all these domains, the central lesson is identical. Whether simulating three billiard balls colliding at the same millisecond, unpinching a 3D cone into a smooth cylinder, or explaining why a neural network generalizes from finite data, classical calculus breaks down for the exact same reason: <em>it assumes the world is locally quadratic, and nature produces singularities</em>. And in every case, the solution is not to smooth over the breakdown with arbitrary penalties. The solution is a blowup: <b>excavate the singularity, and keep track of incoming directions.</b></p>
 
     <h3 id="next">Exploring further</h3>
     <p>For additional collision and solver comparisons, see <a href="./appendix.html#appendix">Appendix A</a>. For 2D slices of 8D tensor space, see <a href="./appendix.html#appendix-b">Appendix B</a>. For temperature selection and proofs, see <a href="./appendix.html#appendix-c">Appendix C</a>. Supporting models (two-well posterior tradeoffs and ReLU crossings) are in <a href="./appendix.html#learning-extras">Appendix D</a>, followed by full references.</p>

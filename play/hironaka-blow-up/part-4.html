@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-TW-lTjxS.js"></script>
+  <script type="module" crossorigin src="./assets/main-BPXdyHQf.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/main-BvWhWewO.css">
 </head>
 <body>
@@ -43,7 +43,7 @@
 
     <h3>13.1 Parameter volume: room around the fit</h3>
     <p>Allow a small error tolerance: $K\le\varepsilon$. The regular fit gives a circular disk. The collision fit leaves a much longer band along the separation direction, because fourth powers stay small longer than squares.</p>
-    <p class="read"><b>Figure 23.</b> Press <b>Demand 10× less error</b>. Both regions shrink, but the collision region shrinks less. Read the fraction of the same parameter square that remains acceptable. The axes and shading scales are identical.</p>
+    <p class="read"><b>Figure 26.</b> Press <b>Demand 10× less error</b>. Both regions shrink, but the collision region shrinks less. Read the fraction of the same parameter square that remains acceptable. The axes and shading scales are identical.</p>
   </div>
 
   <section class="panel learning-panel story-panel" aria-label="Volume of nearly correct parameters">
@@ -62,7 +62,7 @@
 
     <h3 id="evidence">13.2 Bayesian evidence: adding up parameter weight</h3>
     <p>Now weight each parameter configuration by its likelihood on $n$ independent observations: $p(w) \propto e^{-n K(w)}$. The total integrated likelihood is the Bayesian marginal likelihood, or <b>evidence</b> $Z(n) = \int e^{-n K(w)} dw$.</p>
-    <p class="read"><b>Figure 24.</b> Select <b>n = 100</b>, then <b>n = 10,000</b>. Bright means high relative likelihood, with the same 0–1 color scale in both panels. Both fits concentrate, but the collision keeps a wider bright region. The bar adds up that brightness.</p>
+    <p class="read"><b>Figure 27.</b> Select <b>n = 100</b>, then <b>n = 10,000</b>. Bright means high relative likelihood, with the same 0–1 color scale in both panels. Both fits concentrate, but the collision keeps a wider bright region. The bar adds up that brightness.</p>
   </div>
 
   <section class="panel learning-panel story-panel" aria-label="Bayesian evidence of the two fits">
@@ -93,7 +93,7 @@
     <h2 id="cusp-well">14. Where the blowup is genuinely needed: The Cusp Well &amp; Cradle Contest</h2>
     <p>In $s^2 + d^4$, we could read off the scaling because the variables were already separated along coordinate axes. But real singular losses are curved and tangled. What happens when the flat direction is not aligned with any coordinate axis?</p>
     <p>The canonical example is the <b>Cusp Well</b> $V = (y^2 - x^3)^2$. The zero-loss set is the Neil parabola $y^2 = x^3$—the exact cusp curve from Part I!</p>
-    <p class="read"><b>Figure 25.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
+    <p class="read"><b>Figure 28.</b> Flat-bottomed well $V = (y^2 - x^3)^2$. Left: top view. Right: Hessian eigenvalues along the floor; one is identically zero, and both vanish at the cusp.</p>
   </div>
 
   <section class="panel" aria-label="Flat-bottomed well">
@@ -113,7 +113,7 @@
 
     <h3>The Cusp vs. Cradle Contest</h3>
     <p>This reveals a profound contrast between classical physics and singular learning. In Newton's cradle (<a href="./part-3.html#collisions">Part III, Figure 17</a>), the blown-up gap-ratio bar decomposed into distinct chambers whose relative probability shares remained strictly frozen as tolerances shrank. In learning theory, however, a cusp tip dominates everything around it: as dataset size $n \to \infty$ or allowed error $\varepsilon \to 0$, the share of Bayesian posterior mass concentrating at the cusp tip climbs to 100%!</p>
-    <p class="read"><b>Figure 26.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates parameter volume asymptotically, capturing all posterior weight.</p>
+    <p class="read"><b>Figure 29.</b> Weight concentrating near a cusp point. Lower $\lambda$ dominates parameter volume asymptotically, capturing all posterior weight.</p>
   </div>
 
   <section class="panel" aria-label="Winner take all versus frozen shares">
@@ -132,7 +132,7 @@
     <h3>15.1 One ReLU unit: rescaling and dead units</h3>
     <p>Consider a single rectified linear unit $f(x) = a \cdot \operatorname{relu}(wx)$. For any positive constant $c &gt; 0$, scaling $w \mapsto c w$ and $a \mapsto a/c$ produces the identical function $f(x)$. The set of weights computing the same function forms a continuous hyperbola $a \cdot w = \text{const}$.</p>
     <p>When the target function is zero ($c = 0$), the hyperbola pinches into the coordinate axes $a = 0$ (dead unit) and $w = 0$ (zero weight). The zero-loss set is a pair of crossing lines—the exact crossing singularity from Part I!</p>
-    <p class="read"><b>Figure 27.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
+    <p class="read"><b>Figure 30.</b> One ReLU unit $f(x) = a\cdot\operatorname{relu}(wx)$ learning $c\cdot\operatorname{relu}(x)$. Rescaling curves form zero-loss valleys. When target $c = 0$, the valley pinches into crossing lines $a = 0$ and $w = 0$.</p>
   </div>
 
   <section class="panel" aria-label="One ReLU unit">
@@ -150,7 +150,7 @@
     <h3>15.2 Linear networks: why overparameterization plateaus</h3>
     <p>Now consider a deep linear network $y = B A x$ mapping $\mathbb{R}^3 \to \mathbb{R}^H \to \mathbb{R}^3$, trained on data from a true rank-one linear map. As hidden width $H$ grows from 1 to 5, the total number of weights scales from 6 to 30 ($d = 6H$). Classical theory predicts that effective capacity grows linearly: $d/2 = 3H \in \{3, 6, 9, 12, 15\}$.</p>
     <p>Instead, internal matrix multiplication has a continuous gauge symmetry: for any invertible $G \in \operatorname{GL}(H)$, $(B G, G^{-1} A)$ computes the identical map. By resolving determinantal singularities, Aoyagi and Watanabe proved that the true learning coefficient $\lambda$ plateaus sharply at $\lambda = 4.5 = MN/2$, completely decoupled from the growing parameter count $d$!</p>
-    <p class="read"><b>Figure 28.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
+    <p class="read"><b>Figure 31.</b> Learning coefficient of $y = BAx$ against hidden width $H$. As width grows, parameter count $d/2$ diverges (grey), but true $\lambda$ (solid line) plateaus at 4.5.</p>
   </div>
 
   <section class="panel" aria-label="Learning coefficient of factorized models">
@@ -165,7 +165,7 @@
   <div class="col">
     <h3>15.3 Tensor factorizations and normal crossings</h3>
     <p>When multiple rank-one components collide, pulling back along polar coordinates monomializes the loss into intersecting normal-crossing divisors $\theta = 0$ and $u = 0$. The evidence scales with an extra logarithmic factor $N^{-3/2}\log N$, generated by the double pole ($m = 2$) of the zeta function.</p>
-    <p class="read"><b>Figure 29.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
+    <p class="read"><b>Figure 32.</b> Left: posterior density along intersecting divisors $\theta = 0$ and $u = 0$. Right: evidence scaling showing the upward bend of $N^{-3/2}\log N$ compared to regular models ($N^{-2}$).</p>
   </div>
 
   <section class="panel" aria-label="Normal crossing and evidence scaling in tensor collisions">
@@ -197,7 +197,7 @@
     <div class="eq tex">\frac{\partial}{\partial\beta}\big[-\log Z_c(\beta)\big] = n\mathbb{E}_\beta\big[K_n(w)\big] \approx \frac{\lambda}{\beta} - \frac{m-1}{\beta\log(n\beta)}.</div>
     <p>Multiplying by $\beta$ extracts the local learning coefficient directly:</p>
     <div class="eq tex">\hat{\lambda}(w^*) = n\beta \left(\frac{1}{S}\sum_{s=1}^S L_n(w_s) - L_n(w^*)\right).</div>
-    <p class="read"><b>Figure 30.</b> Live Langevin chains diffuse across the loss landscape. Compare the orange running mean to the asymptotic learning coefficient $\lambda$ (purple line). Switch potentials to see how crossing axes, flat directions, and cusps alter the thermal reading.</p>
+    <p class="read"><b>Figure 33.</b> Live Langevin chains diffuse across the loss landscape. Compare the orange running mean to the asymptotic learning coefficient $\lambda$ (purple line). Switch potentials to see how crossing axes, flat directions, and cusps alter the thermal reading.</p>
   </div>
 
   <section class="panel learning-panel" aria-label="Local learning coefficient estimator">
@@ -221,8 +221,11 @@
 
   <div class="col">
     <h3>Temperature selection and the WBIC plateau</h3>
-    <p>What temperature should we choose? At high temperatures ($\beta \to 0$), the sampler explores arbitrary high-loss territory. At zero temperature ($\beta \to \infty$), it freezes at the point $w^*$. Watanabe proved that at the <b>Widely Applicable Bayesian Information Criterion (WBIC) temperature $\beta^* = 1/\log n$</b>, the thermal energy enters a wide plateau of height $\lambda$.</p>
-    <p class="read"><b>Figure 31.</b> Thermodynamic integration and the WBIC plateau. The curve $\beta \mathbb{E}_\beta[nK]$ approaches a plateau of height $\lambda$; the orange box illustrates the leading $\lambda\log n$ term in the free energy.</p>
+    <p>How do we evaluate the marginal likelihood $Z$ without an intractable high-dimensional volume integral? In physics and statistics, <b>thermodynamic integration</b> writes the free energy $F = -\log Z$ as an integral along an inverse temperature path:</p>
+    <div class="eq tex">F = -\int_0^1 \frac{d}{d\beta}\log Z(\beta)\,d\beta = \int_0^1 \mathbb{E}_\beta[n L_n(w)]\,d\beta.</div>
+    <p>In a regular model with $d$ parameters, the integrand rises to a constant $\frac{d}{2}$ above a tiny boundary layer $1/n$, yielding the familiar $\frac{d}{2}\log n$ BIC penalty. In a singular model, Watanabe proved that the integrand instead plateaus at the learning coefficient $\lambda$ around temperature $\beta^* = 1/\log n$. His <b>Widely Applicable Bayesian Information Criterion (WBIC)</b> replaces the entire temperature integral with a single evaluation at $\beta^*$:</p>
+    <div class="eq tex">\mathrm{WBIC} = \mathbb{E}_{\beta^*}[n L_n(w)] = n L_n(w^*) + \lambda\log n + \mathcal{O}_p(\sqrt{\log n}).</div>
+    <p class="read"><b>Figure 34.</b> Thermodynamic integration and the WBIC plateau. The curve $\beta \mathbb{E}_\beta[nK]$ approaches a plateau of height $\lambda$; the orange box illustrates the leading $\lambda\log n$ term in the free energy.</p>
   </div>
 
   <section class="panel" aria-label="Thermodynamic integration and WBIC">
@@ -242,7 +245,7 @@
   <div class="col">
     <h3>Measuring LLC on a trained neural network</h3>
     <p>Now let's run the SGLD thermometer live on real neural networks trained in your browser. Below, we train factorized linear networks $y = BAx$ of widths $H = 1$ to $5$ and sample their weights using an active web worker.</p>
-    <p class="read"><b>Figure 32.</b> Press <b>Run again</b> to train and sample five widths. Purple shows Watanabe's theoretical coefficient $\lambda$ for the rank-one population target; orange points show finite-chain SGLD estimates on noisy training data. Notice how measured capacity saturates at 4.5, defying the diverging parameter count.</p>
+    <p class="read"><b>Figure 35.</b> Press <b>Run again</b> to train and sample five widths. Purple shows Watanabe's theoretical coefficient $\lambda$ for the rank-one population target; orange points show finite-chain SGLD estimates on noisy training data. Notice how measured capacity saturates at 4.5, defying the diverging parameter count.</p>
   </div>
 
   <section class="panel learning-panel" aria-label="LLC on a trained network">
@@ -273,7 +276,7 @@
     <p><b>The 2026 milestone: formalizing Hironaka in Lean.</b> Hironaka’s original proof was historically one of the most formidable in 20th-century mathematics—spanning over 200 pages of intricate local induction. In October 2026, researchers at Resolution formalized Hironaka’s theorem in Lean, providing the first machine-checked proof of the algebraic foundation underlying SLT.</p>
     <p>For AI safety researchers, $\lambda$ provides an indispensable tool for <b>developmental interpretability</b>. By monitoring $\lambda$ during training, researchers can detect discrete <em>phase transitions</em>—the exact moments when a network drops into a more structured algorithmic valley, forming induction heads or learning modular algorithms.</p>
 
-    <p><b>A graphics researcher’s reflection.</b> When I began this exploration, algebraic geometry felt completely foreign to my background in physics simulation, computer graphics, and numerical optimization. Yet across all these domains, the central lesson is identical. Whether simulating three billiard balls colliding at the same millisecond, unpinching a 3D cone into a smooth cylinder, or explaining why a neural network generalizes from finite data, classical calculus breaks down for the exact same reason: <em>it assumes the world is locally quadratic, and nature produces singularities</em>. And in every case, the solution is not to smooth over the breakdown with arbitrary penalties. The solution is a blowup: <b>excavate the singularity, and keep track of incoming directions.</b></p>
+    <p><b>A graphics researcher’s reflection.</b> I came into this knowing some algebraic geometry from polynomial optimization and curves, but far less about the subtleties of the higher-dimensional setting—where Nash blowups loop indefinitely and Hironaka’s 200-page inductive machine is genuinely required. Yet across all these domains, the central lesson is identical. Whether simulating three billiard balls colliding at the same millisecond, unpinching a 3D cone into a smooth cylinder, or explaining why a neural network generalizes from finite data, classical calculus breaks down for the exact same reason: <em>it assumes the world is locally quadratic, and nature produces singularities</em>. And in every case, the solution is not to smooth over the breakdown with arbitrary penalties. The solution is a blowup: <b>excavate the singularity, and keep track of incoming directions.</b></p>
 
     <h3 id="next">Exploring further</h3>
     <p>For additional collision and solver comparisons, see <a href="./appendix.html#appendix">Appendix A</a>. For 2D slices of 8D tensor space, see <a href="./appendix.html#appendix-b">Appendix B</a>. For temperature selection and proofs, see <a href="./appendix.html#appendix-c">Appendix C</a>. Supporting models (two-well posterior tradeoffs and ReLU crossings) are in <a href="./appendix.html#learning-extras">Appendix D</a>, followed by full references.</p>

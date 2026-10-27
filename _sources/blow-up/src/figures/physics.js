@@ -437,8 +437,10 @@
       T(svg, Math.min(X(v) + 6, 300), y + 18, v.toFixed(1), C.ink, { st: ";font-weight:700" });
     });
     const sumd = CD.cores.reduce((s, c) => s + c[2], 0);
-    $("#cd-tag").innerHTML = CD.cores.length === 1 ? "one point of winding 4" : `${CD.cores.length} points, windings adding to ${sumd}`;
-    $("#cd-cap").innerHTML = CD.cores.length === 1 ? "All four turns in one point. The log(1/ε) term is now 16 units instead of 4 × 1, because winding enters squared." : Eu - Eb < 0.15 ? "This is the best layout: four points on a circle of radius 0.85, the O-grid of a quad-meshed disk." : "Drag the points closer together and the energy rises (they repel); push them toward the edge and it rises too (the boundary pushes back).";
+    const tagEl = $("#cd-tag");
+    if (tagEl) tagEl.innerHTML = CD.cores.length === 1 ? "one point of winding 4" : `${CD.cores.length} points, windings adding to ${sumd}`;
+    const capEl = $("#cd-cap");
+    if (capEl) capEl.innerHTML = CD.cores.length === 1 ? "All four turns in one point. The log(1/ε) term is now 16 units instead of 4 × 1, because winding enters squared." : Eu - Eb < 0.15 ? "This is the best layout: four points on a circle of radius 0.85, the O-grid of a quad-meshed disk." : "Drag the points closer together and the energy rises (they repel); push them toward the edge and it rises too (the boundary pushes back).";
   }
   function cdGrad(cores, h = 1e-4) {
     return cores.map((c, i) => [0, 1].map((ax) => { const p = cores.map((q) => q.slice()), m = cores.map((q) => q.slice()); p[i][ax] += h; m[i][ax] -= h; return (cdEnergy(p) - cdEnergy(m)) / (2 * h); }));
@@ -461,13 +463,34 @@
   })();
   watch($("#cd-cv"));
 
-  function draw3() { fig12vx(); cdDraw(); fig13(); glDrawAll(); fig15(); fig16canvas(); fig16plot(); fig17map(); fig17f(); fig17t(); }
-  function drawAll() { window.__draw1(); window.__draw2(); if (window.__draw4) window.__draw4(); draw3(); }
+  function draw3() {
+    try { fig12vx(); } catch (e) { console.error("fig12vx error:", e); }
+    try { cdDraw(); } catch (e) { console.error("cdDraw error:", e); }
+    try { fig13(); } catch (e) { console.error("fig13 error:", e); }
+    try { glDrawAll(); } catch (e) { console.error("glDrawAll error:", e); }
+    try { fig15(); } catch (e) { console.error("fig15 error:", e); }
+    try { fig16canvas(); } catch (e) { console.error("fig16canvas error:", e); }
+    try { fig16plot(); } catch (e) { console.error("fig16plot error:", e); }
+    try { fig17map(); } catch (e) { console.error("fig17map error:", e); }
+    try { fig17f(); } catch (e) { console.error("fig17f error:", e); }
+    try { fig17t(); } catch (e) { console.error("fig17t error:", e); }
+  }
+  function drawAll() {
+    try { window.__draw1(); } catch (e) { console.error("__draw1 error:", e); }
+    try { window.__draw2(); } catch (e) { console.error("__draw2 error:", e); }
+    try { if (window.__draw4) window.__draw4(); } catch (e) { console.error("__draw4 error:", e); }
+    draw3();
+  }
   { const AC = areaFn(RHO), AT = areaFn(0); SHARE = []; for (let l = 1; l <= 12.001; l += 0.1) { const n = Math.pow(10, l); SHARE.push([l, Zof(AC, n) / Zof(AT, n)]); } }
   drawAll();
   if ($("#gl-rho-out")) $("#gl-rho-out").textContent = "ρ = " + GLD.rho.toFixed(2);
   watch($("#gl-a"), () => { if (!GLD.sims.length) glRestart(); });
-  const loop = (now) => { SCHED.forEach((f) => f(now)); requestAnimationFrame(loop); };
+  const loop = (now) => {
+    SCHED.forEach((f) => {
+      try { f(now); } catch (e) { console.error("SCHED loop error:", e); }
+    });
+    requestAnimationFrame(loop);
+  };
   requestAnimationFrame(loop);
   const mq = window.matchMedia("(prefers-color-scheme: dark)"); mq.addEventListener && mq.addEventListener("change", drawAll);
   new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
