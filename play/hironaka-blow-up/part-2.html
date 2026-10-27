@@ -19,13 +19,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-J6GXpLAK.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-pgAbIWhS.css">
+  <script type="module" crossorigin src="./assets/main-DdwJh7Ya.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-M7hgvZKX.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · Applications</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html" aria-current="page">II · Directions &amp; Nash blowups</a><a href="./part-3.html">III · A tensor fit</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
@@ -34,9 +34,19 @@
     <p class="dek">A smooth cone chart, a Nash chart that repeats, and an explicit resolution that escapes the loop.</p>
   </div>
 
-  <div class="col"><nav class="chapter-toc" aria-label="In this chapter"><a href="#zero-level-sets">6 · Dimension and pictures</a><a href="#blowup-1">7 · Resolve the cone</a><a href="#nash-4d-failure">8 · The Nash obstruction</a><a href="#nash-three">See the threefold</a><a href="#nash-three-charts">Why its chart returns</a><a href="#nash-three-resolution">A terminating resolution</a></nav>
-    <p>At the apex of a cone, infinitely many distinct lines collide into a single pinch point. A blowup does not smooth out the pinch by rounding off corners; it untangles the collision by <b>recording incoming directions</b>. On the real quadric cone $X^2 + Y^2 = Z^2$, this algebraic surgery is completely explicit: its strict transform becomes a smooth cylinder, and an entire circle of directions sits above the old apex.</p>
-    <p>The question is now whether <em>one particular rule</em> can always repeat this success. Nash’s rule records tangent spaces. Modern Hironaka-style algorithms can also be canonical, so the distinction is not “automatic versus manual.” It is whether the chosen modification is backed by a termination argument.</p>
+  <div class="col"><nav class="chapter-toc" aria-label="In this chapter"><a href="#same-problem">The goal and the definitions</a><a href="#zero-level-sets">6 · Dimension and pictures</a><a href="#blowup-1">7 · Resolve the cone</a><a href="#nash-4d-failure">8 · The Nash obstruction</a><a href="#nash-three">See the threefold</a><a href="#nash-three-charts">Why its chart returns</a><a href="#nash-three-resolution">A terminating resolution</a></nav>
+    <h2 id="same-problem">What are we trying to change?</h2>
+    <p>A polynomial zero set is a geometric space: all the points satisfying its equations. Many such spaces are smooth, but a crossing has no single local sheet and a cusp has no regular local parameter in its given algebraic coordinates. These are failures of smoothness at exact solutions of exact equations.</p>
+    <p>We want a smooth space $Y$ with a map $\pi:Y\to X$ back to the original zero set. At ordinary points, the map should be invertible. Over a singular point, several new points may map to the same old one. Those extra distinctions let calculus work upstairs while keeping an exact relationship to the original problem.</p>
+    <p>Rounding the picture or moving vertices would change the solutions. A resolution instead changes the space representing them. It is a geometric method for studying equations, but it is a different goal from geometrization theorems about classifying manifolds.</p>
+    <h3 id="two-constructions">Two constructions, and one theorem</h3>
+    <p><b>An ordinary blowup needs a chosen center.</b> At a point center, attach the direction of the line from that point to each nearby point, then include the limiting records above the center. For a smooth higher-dimensional center, record the normal direction of approach. This is the construction from Part I. The exceptional set consists of the records that project into the center.</p>
+    <p><b>The Nash blowup needs the tangent planes of the variety.</b> At each smooth point $p$ of a $d$-dimensional space, attach its tangent $d$-plane $T_pX$. Include all limits of these pairs as $p$ approaches the singular set. A tangent plane here means its linear direction, translated to the origin. A new point is “old position, together with a limiting tangent plane”. Nash also has exceptional fibers: several tangent-plane records can sit above one old point.</p>
+    <p><b>Hironaka’s theorem supplies a terminating strategy.</b> There is no single competing operation called “the Hironaka blowup”. The classical approach chooses smooth centers and performs a sequence of ordinary blowups, checking the remaining singularities and exceptional boundary. Constructive proofs explain how to make those choices and guarantee that the process finishes in characteristic zero. Repeating Nash’s particular rule has no such guarantee in general.</p>
+    <div class="method-comparison"><div><h4>Ordinary point blowup</h4><p>Record the line <b>from the chosen center to p</b>. On a plane curve, its slope is $y/x$.</p></div><div><h4>Nash blowup</h4><p>Record <b>the curve’s own tangent at p</b>. Where it exists, its slope is $dy/dx$.</p></div></div>
+    <p>Both constructions retain extra geometric information; neither averages neighboring points as Laplacian smoothing does. On $y=x^2$, for example, the two recorded slopes are $x$ and $2x$. They are different rules even when their limiting slopes agree.</p>
+    <h3>First see a case where both succeed</h3>
+    <p>For the cone $X^2+Y^2=Z^2$, put $(X,Y,Z)=(u\cos\theta,u\sin\theta,u)$. The ordinary blowup records its ray direction $[\cos\theta:\sin\theta:1]$. The tangent plane away from the apex has normal $[\cos\theta:\sin\theta:-1]$, so Nash retains the same angular information in a different form. Here both give a smooth cylinder. Watch how the new circle sits over the one old apex.</p>
     <p class="read"><b>Figure 10.</b> The cone and its strict transform in the $Z$-direction chart. Both viewports sample the exact defining equations. The blue point on the cylinder maps to the blue point on the cone under $(v,w,u) \mapsto (uv,uw,u)$. Set $u=0$, then sweep the direction $\theta$: the entire purple circle collapses to the single singular apex $(0,0,0)$. The cylinder lives in local chart coordinates, revealing how directions disentangle the pinch.</p>
   </div>
 
@@ -79,22 +89,25 @@
     <div class="eq tex">X = uv, \qquad Y = uw, \qquad Z = u.</div>
     <p>Away from $u = 0$, the new coordinates simply record the slopes: $v = X/Z$ and $w = Y/Z$. The coordinate $u$ acts as a signed scaling factor along each line. Substituting into the cone equation gives the <b>total transform</b>:</p>
     <div class="eq tex">X^2 + Y^2 - Z^2 = u^2(v^2 + w^2 - 1) = 0.</div>
-    <p>The total transform factors into two geometric pieces: the <b>exceptional divisor</b> $u^2 = 0$ (the fiber sitting over the origin) and the <b>strict transform</b>:</p>
+    <p>The total transform factors into two geometric pieces: the <b>exceptional divisor</b> $u = 0$ (the fiber sitting over the origin, with multiplicity 2 in the total transform) and the <b>strict transform</b>:</p>
     <div class="eq tex">v^2 + w^2 = 1, \qquad u \in \mathbb{R}.</div>
     <p>In $(v,w,u)$ space, this is a standard <b>smooth circular cylinder</b>! Its gradient $\nabla(v^2+w^2-1) = (2v, 2w, 0)$ never vanishes on the surface, meaning standard calculus is completely restored.</p>
     <p>A natural parametrization of this cylinder is given by:</p>
     <div class="eq tex">(v, w, u) = (\cos\theta, \sin\theta, u) \quad\longmapsto\quad (X, Y, Z) = (u\cos\theta, u\sin\theta, u).</div>
-    <p>At $u = 0$, every direction $\theta \in [0, 2\pi)$ maps down to $(0,0,0)$. The singular apex has been excavated and replaced by an entire <b>circle of directions</b>. Away from $u=0$, the blowdown map is a real-analytic diffeomorphism onto the cone.</p>
+    <p>At $u = 0$, every direction $\theta \in [0, 2\pi)$ maps down to $(0,0,0)$. These are distinct points of the new cylinder, each labelled by its own angle. Their common image is the old apex. Away from $u=0$, the blowdown map is a real-analytic diffeomorphism onto the cone.</p>
     <p><b>Which exceptional divisor?</b> In the ambient $\mathbb{R}^3$ blowup, the fiber over the origin is $\mathbb{RP}^2$ (the space of all lines through the origin). Restricting to the cone, the exceptional locus is the projective conic $[X:Y:Z]$ satisfying $X^2+Y^2=Z^2$, whose real points form a circle. Because every real line on this cone has $Z \neq 0$, this single chart covers the entire real exceptional circle.</p>
 
     <h2 id="nash-4d-failure">8. Why Nash iteration can fail—and how resolution still succeeds</h2>
     <div class="terms"><b>Key terms:</b> Gauss graph, Nash blowup, normalization, recurring affine chart.</div>
     <p>Nash’s construction starts on the smooth locus of an embedded $d$-dimensional variety. Attach its tangent $d$-plane, a point of the Grassmannian $\operatorname{Gr}(d,N)$, and take the closure:</p>
-    <div class="eq tex">\operatorname{Nash}(X) = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N).</div>
+    <div class="eq tex">\operatorname{Nash}(X) = \overline{\big\{(p, T_p X) : p \in X_{\mathrm{smooth}}\big\}} \subset X \times \operatorname{Gr}(d, N).</div><p class="cap">The construction is the closure of the tangent-space graph.<sup class="citation"><a id="cite-nash-1" href="./appendix.html#ref-nash" aria-label="Reference 2: Arc structure of singularities">[2]</a></sup></p>
     <p>The <b>normalized Nash blowup</b> takes one additional operation at each step: normalization, which adjoins integral algebraic functions missing from the coordinate ring. In characteristic zero, ordinary Nash iteration resolves curves; Spivakovsky proved termination for normalized surface iteration. Neither statement settles ordinary Nash iteration on all surfaces.</p>
-    <p><a href="https://arxiv.org/abs/2409.19767">Castillo, Duarte, Leyton-Álvarez, and Liendo</a> exhibit a singular normal fourfold with an open chart of its Nash blowup isomorphic to the starting variety:</p>
+    <p>For the counterexample, follow one singular neighborhood through successive Nash steps. If the same singular local type returns, the rule can repeat forever. We will compare that failure with an explicit smooth model of the very same variety.</p>
+  </div>
+  <details class="experiment"><summary>Related example: the fourfold and its real zero-level sections</summary><div class="col">
+    <p><a href="https://arxiv.org/abs/2409.19767">Castillo, Duarte, Leyton-Álvarez, and Liendo</a><sup class="citation"><a id="cite-nash4-1" href="./appendix.html#ref-nash4" aria-label="Reference 12: Nash blowup fails to resolve singularities in dimensions four and higher">[12]</a></sup> exhibit a singular normal fourfold with an open chart of its Nash blowup isomorphic to the starting variety:</p>
     <div class="eq tex">U \subset \operatorname{Nash}(X), \qquad U \cong X.</div>
-    <p>This is a precise obstruction to termination. Nash blowup commutes with restricting to open subsets and with isomorphisms. The same singular local type therefore survives inside every iterate. Their <a href="https://arxiv.org/abs/2511.01772">threefold example</a> returns after two ordinary Nash steps and starts from a non-normal variety. Normalized Nash iteration in dimension three remains open.</p>
+    <p>This is a precise obstruction to termination. Nash blowup commutes with restricting to open subsets and with isomorphisms. The same singular local type therefore survives inside every iterate. Their <a href="https://arxiv.org/abs/2511.01772">threefold example</a><sup class="citation"><a id="cite-nash3-1" href="./appendix.html#ref-nash3" aria-label="Reference 11: Non-normalized Nash blowup fails to resolve singularities in dimension three">[11]</a></sup> returns after two ordinary Nash steps and starts from a non-normal variety. Normalized Nash iteration in dimension three remains open.</p>
   </div>
 
   <div class="col">
@@ -156,6 +169,7 @@
     <p class="cap" id="toric-check"></p>
   </section>
 
+  </details>
   <div class="col">
     <h3 id="nash-three">The three-dimensional counterexample: see the singularity first</h3>
     <p><b>Three-dimensional does not mean a surface in ordinary 3D space.</b> Here $X$ has three independent parameters but lives in six ambient coordinates. We can draw a two-dimensional section of its real points. The later lattice diagrams encode its coordinate algebra; they are a different kind of picture.</p>
@@ -185,11 +199,15 @@
       <div class="eq tex">x_1^2x_2x_4=x_3^2,\qquad x_1^3x_4=x_3x_5.</div>
       <p>For $B&gt;0$, take $s=\pm\sqrt B$: the two branches are $C=\pm A^3/B^{3/2}$. For $B&lt;0$, nonnegativity of $A^6$ forces $A=C=0$. This checks the extra negative axis. The real projection is not a replacement for the complex variety.</p>
     </details>
-    <h3 id="nash-three-charts">Now follow one chart through two Nash blowups</h3>
-    <p>The result of <a href="https://arxiv.org/html/2511.01772">Castillo, Duarte, Leyton-Álvarez, and Liendo</a> concerns the <b>ordinary, non-normalized Nash blowup</b>. A selected open chart after two iterations is isomorphic to the starting singular threefold. It does not say that the entire blowup is unchanged, or settle normalized Nash resolution in dimension three.</p>
+    <h3 id="nash-three-charts">Compare the two routes on this same threefold</h3>
+    <p>Recording tangent planes can separate some limiting positions without making the space of records smooth. That new space obeys its own algebraic relations and can have singular points of its own. Iteration asks Nash’s rule to resolve those new singularities as well.</p>
+    <p>Keep the question fixed: <b>can every neighborhood upstairs be made smooth while retaining a map to this same $X$?</b> These two routes have different outcomes:</p>
+    <div class="method-comparison" id="threefold-comparison"><div><h4>Nash’s forced rule</h4><p>Singular X → tangent-plane records → tangent-plane records again.</p><p>After two steps, <b>one open chart is a copy of the original singular X</b>. Its origin still has tangent dimension 6 instead of 3. Repeating the rule inside that chart repeats the obstruction.</p><p><a href="#nash-three-charts">Follow the two Nash steps below ↓</a></p></div><div><h4>A chosen resolution</h4><p>The same X → normalization → a chosen subdivision → four smooth charts.</p><p>Each final chart has <b>three independent coordinates</b>. Their monomial maps satisfy the original equations exactly. The exceptional surfaces retain distinctions above the old singular set.</p><p><a href="#threefold-map">See the smooth space and its map ↓</a></p></div></div>
+    <p>This second route uses the special monomial structure of this example. It demonstrates the endpoint promised by resolution, with every chart calculated. It is not an execution of the general Hironaka or ATW algorithm; the general center-selection procedure was explained in <a href="./part-1.html#resolution-algorithm">Part I</a>.</p>
+    <p>The result of <a href="https://arxiv.org/html/2511.01772">Castillo, Duarte, Leyton-Álvarez, and Liendo</a><sup class="citation"><a id="cite-nash3-2" href="./appendix.html#ref-nash3" aria-label="Reference 11: Non-normalized Nash blowup fails to resolve singularities in dimension three">[11]</a></sup> concerns the <b>ordinary, non-normalized Nash blowup</b>. A selected open chart after two iterations is isomorphic to the starting singular threefold. It does not say that the entire blowup is unchanged, or settle normalized Nash resolution in dimension three.</p>
     <p>At $(x_1,\ldots,x_6)=0$, all five defining equations have zero linear part. The tangent space there has dimension 6, while $X$ has dimension 3: this fixed point is singular. We will see a point of this same local type return after two selected Nash charts.</p>
 <details class="derivation"><summary>How exponent vectors encode the threefold and its tangent planes</summary>
-    <p>The <a href="https://arxiv.org/abs/2511.01772">three-dimensional construction</a> begins with an affine semigroup $S \subset \mathbb{Z}^3$ generated by six vectors $h_i$, the columns of the matrix:</p>
+    <p>The <a href="https://arxiv.org/abs/2511.01772">three-dimensional construction</a><sup class="citation"><a id="cite-nash3-3" href="./appendix.html#ref-nash3" aria-label="Reference 11: Non-normalized Nash blowup fails to resolve singularities in dimension three">[11]</a></sup> begins with an affine semigroup $S \subset \mathbb{Z}^3$ generated by six vectors $h_i$, the columns of the matrix:</p>
     <div class="eq tex">B = \begin{pmatrix} 1 & 0 & 0 & -2 & 1 & 2 \\ 0 & 1 & 0 & -1 & -1 & -2 \\ 0 & 0 & 1 & 2 & 1 & 1 \end{pmatrix}.</div>
     <p>Each column vector represents the exponent of a monomial. The associated 3-fold variety $X(S)$ is the closure of the image of:</p>
     <div class="eq tex">\phi: (\mathbf{k}^*)^3 \longrightarrow \mathbf{k}^6, \qquad (a, b, c) \longmapsto \left( a, b, c, \frac{c^2}{a^2 b}, \frac{ac}{b}, \frac{a^2 c}{b^2} \right).</div>
@@ -242,16 +260,42 @@
   <div class="col">
     <h3 id="nash-three-resolution">An explicit resolution that does terminate</h3>
     <p>The Nash rule fails on this example, but resolution is still possible. Here is a <b>computed toric resolution of this same threefold</b>, using normalization and a regular fan refinement. It gives all four smooth charts and their maps to the original six coordinates. This is a resolution of the variety; it is not presented as the canonical sequence of ambient weighted centers produced by the general Abramovich–Temkin–Włodarczyk algorithm.</p>
+  </div>
+  <div class="col">
+    <h4 id="threefold-map">What does the smooth space look like?</h4>
+    <p>Use ordinary coordinates (r, s, t) upstairs. They can vary independently, so this source chart is smooth. The map below sends each such point to six coordinates satisfying the original equations. Hold r and s fixed and reduce t: the image approaches the old origin, while the source approaches a particular point of the plane t = 0.</p>
+    <p>In chart D, the map is particularly easy to inspect:</p>
+    <div class="eq tex">(x_1,x_2,x_3)=(rst,\ s^2t,\ rs^2t^2),</div>
+    <div class="eq tex">(x_4,x_5,x_6)=(t,\ r^2st^2,\ r^3t^2).</div>
+    <p>The new ray $n_5$ gives the scaling exponents $(1,1,2,1,2,2)$ of the six coordinates as $t\to0$. At $t=0$, the entire smooth coordinate plane $(r,s,0)$ maps to the old singular origin. <b>Here the exceptional divisor is a surface</b>, because the resolved space is three-dimensional. In a surface blowup, the analogous divisor is a curve.</p>
+    <p class="read"><b>Figure 15.</b> Animate the explicit map toward the origin. On the left the selected point approaches the exceptional plane while retaining $r$ and $s$; on the right its image collapses to one point. At $t=0$, move $r$ or $s$ to see distinct resolved points above the same old origin. This is the blowdown map in chart D, not another Nash iteration. At $t=1$, its real mesh recovers the parametrized sheets of the earlier section.</p>
+    <p class="cap">The four charts describe a complex algebraic resolution. The earlier section's extra negative B-axis has no real lift to the normalization: V² = x₂x₄ = B &lt; 0 there. Those points lift over ℂ, through non-real values of V. This is another reason a real surface picture cannot display the whole complex resolution.</p>
+  </div>
+  <section class="panel" aria-label="Explicit resolution map and exceptional surface">
+    <div class="controls">
+      <label class="sl"><span class="lbl">r</span><input id="nash3-map-r" type="range" min="-1" max="1" step="0.02" value="0.6"><output id="nash3-map-r-out">0.60</output></label>
+      <label class="sl"><span class="lbl">s</span><input id="nash3-map-s" type="range" min="-1" max="1" step="0.02" value="0.7"><output id="nash3-map-s-out">0.70</output></label>
+      <label class="sl"><span class="lbl">t</span><input id="nash3-map-t" type="range" min="0" max="1" step="0.002" value="1"><output id="nash3-map-t-out">1.00</output></label>
+    </div>
+    <div class="controls"><button type="button" class="btn go" id="nash3-map-animate">Animate approach to the origin</button><button type="button" class="btn" id="nash3-map-zero">On the exceptional surface (t = 0)</button></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Smooth source chart D <span>independent coordinates (r, s, t)</span></div><div class="box sq drag"><canvas id="nash3-resolution-source" tabindex="0" aria-label="Smooth three-dimensional chart and the exceptional coordinate plane t equals zero; drag or use arrow keys to rotate"></canvas></div></div>
+      <div class="fig"><div class="h">Image in the original variety <span>projected to (x₁, x₂, x₆)</span></div><div class="box sq drag"><canvas id="nash3-resolution-target" tabindex="0" aria-label="The explicit monomial image approaching the old singular origin; drag or use arrow keys to rotate"></canvas></div></div>
+    </div>
+    <div class="algebra" id="nash3-map-coordinates" aria-live="polite"></div><p class="cap" id="nash3-map-status" aria-live="polite"></p>
+    <p class="cap">The colored target mesh is the image of a patch with t held fixed. This one chart is part of the resolution; all four charts are needed globally.</p>
+  </section>
+  <details class="experiment"><summary>Verify all four charts: normalization and the fan calculation</summary><div class="col">
     <p>Now work in the <b>dual lattice $N$</b>, where a vector $n$ records the vanishing order $\langle h_i,n\rangle$ of the coordinate monomial $x_i$. Solving the six inequalities $\langle h_i,n\rangle\ge0$ gives the four primitive rays:</p>
     <div class="eq tex">n_1=(0,0,1),\quad n_2=(0,1,2),\quad n_3=(1,0,1),\quad n_4=(1,2,2).</div>
     <p>The polygon below is a flat cross-section of this cone, not the physical variety. First normalize $S$ to $\operatorname{cone}(S)\cap\mathbb Z^3$. Then triangulate along $\langle n_1,n_4\rangle$. One cone has determinant 1 in absolute value; the other has determinant 2. The latter contains the primitive lattice vector:</p>
     <div class="eq tex">n_5=(1,1,2)=\tfrac12(n_1+n_3+n_4).</div>
-    <p>Subdivide that cone around $n_5$. The final cones are $124$, $135$, $145$, and $345$ (indices of the $n_i$); their determinants are $-1,+1,-1,+1$. Thus every chart is a smooth $\mathbb A^3$. This is the <a href="https://web.ma.utexas.edu/users/ikmartin/pages/additional-pages/toric-page/documents/Toric-Varieties_Cox-Little-Schenck.pdf">regular-fan resolution criterion</a>, applied here with explicit integer arithmetic.</p>
+    <p>Subdivide that cone around $n_5$. The final cones are $124$, $135$, $145$, and $345$ (indices of the $n_i$); their determinants are $-1,+1,-1,+1$. Thus every chart is a smooth $\mathbb A^3$. This is the <a href="https://web.ma.utexas.edu/users/ikmartin/pages/additional-pages/toric-page/documents/Toric-Varieties_Cox-Little-Schenck.pdf">regular-fan resolution criterion</a><sup class="citation"><a id="cite-toric-1" href="./appendix.html#ref-toric" aria-label="Reference 13: Toric Varieties">[13]</a></sup>, applied here with explicit integer arithmetic.</p>
     <details class="derivation"><summary>Compute the normalization, not just its name</summary>
       <p>On the original dense torus, adjoin $U=c/b$ and $V=c/a$, with exponents $u=(0,-1,1)$ and $v=(-1,0,1)$. Both are integral: $U^3=x_4x_6$ and $V^2=x_2x_4$. The saturated semigroup has generators $h_1,h_2,h_4,h_6,u,v$. In particular $x_3=x_2U$ and $x_5=x_1U$, so the original ring sits inside this six-generator normal ring.</p>
       <p>To check completeness, split the exponent cone into $\langle h_1,h_2,h_4\rangle$ and $\langle h_1,h_4,h_6\rangle$. Their determinants are 2 and 3. The only nonzero lattice points in their half-open fundamental parallelepipeds are $v$, $u$, and $2u$. Every lattice point in either cone is one of these representatives plus a nonnegative integer sum of its ray generators. Thus adjoining $U,V$ generates the whole saturation.</p>
     </details>
-    <p class="read"><b>Figure 15.</b> Play the computed steps or advance manually. Normalization changes the semigroup even though the polygon stays fixed. Triangulation alone leaves an index-2 singular chart. Adding $n_5$ removes that defect. At the last step, select any of the four charts to see all six monomial coordinate maps.</p>
+    <p class="read"><b>Figure 16.</b> Play the computed steps or advance manually. Normalization changes the semigroup even though the polygon stays fixed. Triangulation alone leaves an index-2 singular chart. Adding $n_5$ removes that defect. At the last step, select any of the four charts to see all six monomial coordinate maps.</p>
   </div>
   <section class="panel" aria-label="Computed terminating toric resolution">
     <div class="seg" role="group" aria-label="Resolution stage">
@@ -272,33 +316,12 @@
     </div>
     <p class="cap">The animation shows discrete, computed changes of the fan. It does not morph the real surface to suggest an uncomputed geometric transformation.</p>
   </section>
-  <div class="col">
-    <h4>Why these charts give a resolution</h4>
+<div class="col"><h4>Why the chart cover is a resolution</h4>
     <p>For a final cone with basis vectors $(n_i,n_j,n_k)$ and coordinates $(r,s,t)$, set $x_\ell=r^{\langle h_\ell,n_i\rangle}s^{\langle h_\ell,n_j\rangle}t^{\langle h_\ell,n_k\rangle}$. All exponents are nonnegative integers. Substitution satisfies the five original equations identically. Determinant $\pm1$ makes the torus map invertible with integer monomial exponents. The cones cover the original cone, with unchanged boundary faces, so the charts glue to a proper birational morphism from a smooth variety, unchanged over the original smooth locus.</p>
-    <p>In chart D, the map is particularly easy to inspect:</p>
-    <div class="eq tex">(x_1,x_2,x_3)=(rst,\ s^2t,\ rs^2t^2),</div>
-    <div class="eq tex">(x_4,x_5,x_6)=(t,\ r^2st^2,\ r^3t^2).</div>
-    <p>The new ray $n_5$ gives the scaling exponents $(1,1,2,1,2,2)$ of the six coordinates as $t\to0$. At $t=0$, the entire smooth coordinate plane $(r,s,0)$ maps to the old singular origin. <b>Here the exceptional divisor is a surface</b>, because the resolved space is three-dimensional. In a surface blowup, the analogous divisor is a curve.</p>
-    <p class="read"><b>Figure 16.</b> Animate the explicit map toward the origin. On the left the selected point approaches the exceptional plane while retaining $r$ and $s$; on the right its image collapses to one point. At $t=0$, move $r$ or $s$ to see distinct resolved points above the same old origin. This is the blowdown map in chart D, not another Nash iteration. At $t=1$, its real mesh recovers the parametrized sheets of the earlier section.</p>
-    <p class="cap">The four charts describe a complex algebraic resolution. The earlier section's extra negative B-axis has no real lift to the normalization: V² = x₂x₄ = B &lt; 0 there. Those points lift over ℂ, through non-real values of V. This is another reason a real surface picture cannot display the whole complex resolution.</p>
-  </div>
-  <section class="panel" aria-label="Explicit resolution map and exceptional surface">
-    <div class="controls">
-      <label class="sl"><span class="lbl">r</span><input id="nash3-map-r" type="range" min="-1" max="1" step="0.02" value="0.6"><output id="nash3-map-r-out">0.60</output></label>
-      <label class="sl"><span class="lbl">s</span><input id="nash3-map-s" type="range" min="-1" max="1" step="0.02" value="0.7"><output id="nash3-map-s-out">0.70</output></label>
-      <label class="sl"><span class="lbl">t</span><input id="nash3-map-t" type="range" min="0" max="1" step="0.002" value="1"><output id="nash3-map-t-out">1.00</output></label>
-    </div>
-    <div class="controls"><button type="button" class="btn go" id="nash3-map-animate">Animate approach to the origin</button><button type="button" class="btn" id="nash3-map-zero">On the exceptional surface (t = 0)</button></div>
-    <div class="pair">
-      <div class="fig"><div class="h">Smooth source chart D <span>independent coordinates (r, s, t)</span></div><div class="box sq drag"><canvas id="nash3-resolution-source" tabindex="0" aria-label="Smooth three-dimensional chart and the exceptional coordinate plane t equals zero; drag or use arrow keys to rotate"></canvas></div></div>
-      <div class="fig"><div class="h">Image in the original variety <span>projected to (x₁, x₂, x₆)</span></div><div class="box sq drag"><canvas id="nash3-resolution-target" tabindex="0" aria-label="The explicit monomial image approaching the old singular origin; drag or use arrow keys to rotate"></canvas></div></div>
-    </div>
-    <div class="algebra" id="nash3-map-coordinates" aria-live="polite"></div><p class="cap" id="nash3-map-status" aria-live="polite"></p>
-    <p class="cap">The colored target mesh is the image of a patch with t held fixed. This one chart is part of the resolution; all four charts are needed globally.</p>
-  </section>
+</div></details>
   <div class="col">
     <details class="derivation"><summary>How this relates to the ATW weighted algorithm</summary>
-      <p><a href="https://arxiv.org/html/1906.07106v3">Abramovich, Temkin, and Włodarczyk</a> construct a functorial embedded resolution using stack-theoretic weighted blowups. Their centers come from recursively computed coefficient ideals and maximal contact, not just the exponents of one polynomial in arbitrary coordinates. Smooth stack charts can have finite quotient identifications; passing to a smooth scheme requires further work such as destackification.</p>
+      <p><a href="https://arxiv.org/html/1906.07106v3">Abramovich, Temkin, and Włodarczyk</a><sup class="citation"><a id="cite-atw-1" href="./appendix.html#ref-atw" aria-label="Reference 9: Functorial embedded resolution via weighted blowings up">[9]</a></sup> construct a functorial embedded resolution using stack-theoretic weighted blowups. Their centers come from recursively computed coefficient ideals and maximal contact, not just the exponents of one polynomial in arbitrary coordinates. Smooth stack charts can have finite quotient identifications; passing to a smooth scheme requires further work such as destackification.</p>
       <p>The calculation above instead exploits this example's toric presentation. It supplies a complete smooth model and its maps explicitly, but does not compute or assert the ATW center sequence in the six-dimensional ambient space. Nor does it assert termination of normalized Nash iteration: our subdivisions were chosen by the toric resolution procedure.</p>
     </details>
   </div>
@@ -340,11 +363,11 @@
   <div class="col">
     <p><b>Why this proves failure.</b> Nash blowup restricts to open subsets and respects isomorphisms. Once an open chart of the starting singular type returns after two steps, the same calculation applies inside that chart again. Thus every even iterate contains a singular open subset. The ordinary Nash iteration cannot become smooth. Hironaka's theorem uses a different, controlled sequence of smooth centers; it is not contradicted.</p>
     <p><b>Why the other resolution succeeds.</b> The Nash construction above is forced to reproduce the same semigroup. Our toric procedure instead normalizes it and subdivides its cone until each chart has an integer coordinate basis. Determinant $\pm1$ is a verifiable stopping test. General Hironaka-style algorithms use richer invariants to choose centers and prove termination without requiring a toric presentation.</p>
-    <p>A blowup can improve a singularity without finishing it; a canonical modification can even repeat it. Hironaka’s achievement is the existence of a controlled <em>finite sequence</em> that reaches the required endpoint. <a href="./part-3.html">The next chapter asks which parts of this idea help in simulation and graphics</a>, and where the analogy stops.</p>
+    <p>A blowup can improve a singularity without finishing it; a canonical modification can even repeat it. Hironaka’s achievement is the existence of a controlled <em>finite sequence</em> that reaches the required endpoint. <a href="./part-3.html">The next chapter follows one tensor-fitting problem into learning theory</a>, and where the analogy stops.</p>
   </div>
 </main>
 
-  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">Collisions, Tensors, and Fields</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">A tensor fit and its blowups</span></a></nav>
+  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

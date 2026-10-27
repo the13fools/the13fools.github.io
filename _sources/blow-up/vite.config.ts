@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from "vite";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { renderReferences } from "./tools/references";
 
 // The essay's pages, in reading order. Figure numbers run continuously
 // through them in this order.
@@ -43,7 +44,7 @@ function figures(): Plugin {
     },
     transformIndexHtml: {
       order: "pre",
-      handler: (html, ctx) => substitute(html, ctx.filename),
+      handler: (html, ctx) => renderReferences(substitute(html, ctx.filename), ctx.filename, root, PAGES),
     },
     transform(code, id) {
       if (id.includes("/src/figures/") && code.includes("{fig:")) return { code: substitute(code, id), map: null };

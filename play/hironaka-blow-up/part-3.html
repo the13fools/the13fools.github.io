@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Singularities in simulation, tensors, and fields · What is… a blowup?</title>
-  <meta name="description" content="Singular limits in collisions, tensor factorizations, and cross fields: what geometric constructions retain and which guarantees they provide.">
+  <title>From a singular fit to a useful blowup · What is… a blowup?</title>
+  <meta name="description" content="A tensor collision creates a quartic loss. Two ordinary blowups expose its vanishing and volume powers, preparing the singular learning theory calculation.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Singularities in simulation, tensors, and fields · What is… a blowup?">
-  <meta property="og:description" content="Singular limits in collisions, tensor factorizations, and cross fields: what geometric constructions retain and which guarantees they provide.">
+  <meta property="og:title" content="From a singular fit to a useful blowup · What is… a blowup?">
+  <meta property="og:description" content="A tensor collision creates a quartic loss. Two ordinary blowups expose its vanishing and volume powers, preparing the singular learning theory calculation.">
   <meta property="og:url" content="https://foolzone.com/play/hironaka-blow-up/part-3.html">
   <meta property="og:image" content="https://foolzone.com/play/hironaka-blow-up/og.png">
   <meta property="og:image:width" content="1200">
@@ -19,74 +19,37 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-J6GXpLAK.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-pgAbIWhS.css">
+  <script type="module" crossorigin src="./assets/main-DdwJh7Ya.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-M7hgvZKX.css">
 </head>
 <body>
   <header class="site-header">
     <a class="brand" href="./index.html">foolzone <span>/</span> blow-up</a>
-    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · Applications</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
+    <nav aria-label="Pages"><a href="./index.html">Overview</a><a href="./part-1.html">I · What is a blowup?</a><a href="./part-2.html">II · Directions &amp; Nash blowups</a><a href="./part-3.html" aria-current="page">III · A tensor fit</a><a href="./part-4.html">IV · Learning theory</a><a href="./appendix.html">Appendices</a></nav>
   </header>
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p>
-    <h1>Singularities in simulation, tensors, and fields</h1>
-    <p class="dek">Three settings, three different defects: a nonunique impact rule, a degenerate parameter map, and a topological obstruction.</p>
+    <h1>From a singular fit to a useful blowup</h1>
+    <p class="dek">One tensor model, two blowup charts, and a reason to care about parameter volume.</p>
   </div>
 
   <div class="col">
-    <p>Part I built the tools on curves in the plane, and Part II showed how replacing points with directions unpinches cones into smooth cylinders (and where Nash blowups fall short). Now I want to bring these tools back to problems I actually worked on in physics simulation and computer graphics.</p>
-    <p>The word “singularity” covers different problems here. A collision rule can become underdetermined, a tensor parameterization can lose rank, and a field direction can become undefined. Recording limiting data is useful in all three, but Hironaka’s theorem directly concerns algebraic or analytic spaces and ideals. It does not supply a physical contact law or eliminate a topological obstruction.</p>
-
-<nav class="chapter-toc" aria-label="In this chapter"><a href="#collisions">9 · Simultaneous impact</a><a href="#tensors">10 · Redundant tensor parameters</a><a href="#frames">11 · Field defects</a><a href="#physics">12 · What the methods change</a></nav>
-    <h2 id="collisions">9. Rigid-body collisions: the opening demo, unpacked</h2>
-    <p>The three balls from the <a href="./index.html">opening page</a> provide our first mechanical blowup. In an elastic collision between two balls of masses $m_1, m_2$, conservation of momentum and kinetic energy uniquely determines the outgoing velocities:</p>
-    <div class="eq tex">m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2', \qquad m_1 v_1^2 + m_2 v_2^2 = m_1 v_1'^2 + m_2 v_2'^2.</div>
-    <p>For an approaching pair, momentum and energy conservation together with the outgoing-contact condition select the usual elastic impact. With three simultaneous contacts, conservation alone leaves multiple outgoing possibilities. A contact model or a limiting procedure must provide additional information.</p>
-    <p><b>Configuration space in a wedge:</b> Write the gaps between neighbors as $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates $q_i = \sqrt{m_i} x_i$, kinetic energy is standard Euclidean $\frac{1}{2}|\dot{q}|^2$. Removing uniform translation reduces the three-ball system to a single point bouncing inside a planar <b>wedge</b> between the constraint walls $g_1 = 0$ and $g_2 = 0$, with wedge angle:</p>
-    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1 m_3}{(m_1 + m_2)(m_2 + m_3)}}.</div>
-    <p>A sequence of pairwise collisions is a billiard path bouncing between the walls. Simultaneous impact is the corner $g_1=g_2=0$; the equation $g_1g_2=0$ describes the union of both walls.</p>
-    <p><b>What the bar keeps.</b> Fix the incoming velocities and vary the ratio of two small positive gaps. The pairwise impact model gives intervals with common limiting outcomes. Equal masses give the same outgoing velocity pattern for this experiment; a light middle ball can give different patterns. The interval sizes become probabilities only after choosing a distribution of gap ratios. They are not probabilities supplied by a blowup theorem.</p>
-    <p class="read"><b>Figure 17.</b> Left: three balls colliding simultaneously, with the gap-ratio bar colored by outcome. Right: the same motion mapped to a single point in a wedge. Drag the marker or click an outcome below to test incoming directions.</p>
+    <p>Here is a direct use for the geometry: understanding a fit whose error grows quartically in one parameter direction. We will build one small model, locate its degeneracy, and use two blowup charts to expose the loss and volume powers. Part IV explains what those powers mean for statistics.</p>
+    <p>The singularity is in the map from parameters to predictions. The data themselves can be an ordinary array of numbers. This distinction matters: resolving that parameter geometry helps us analyze a fit; it does not change the observations or train the model for us.</p>
+    <nav class="chapter-toc" aria-label="In this chapter"><a href="#tensors">One tensor fit</a><a href="#loss-blowups">Blow up its loss</a><a href="#related-experiments">Optional applications</a></nav>
   </div>
-
-  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
-    <div class="controls">
-      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
-    </div>
-    <div class="pair">
-      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
-      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
-    </div>
-    <div class="chips" id="f2-chips"></div>
-  </section>
-
   <div class="col">
-    <p><b>A second difficulty: inelastic collapse.</b> For equal masses and constant restitution $e$, the three-ball model admits trajectories with infinitely many impacts in finite time below $7-4\sqrt3\approx0.072$. The figure follows one such setup with a finite event cutoff. <a href="https://disneyanimation.com/publications/alls-well-that-ends-well-guaranteed-resolution-of-simultaneous-rigid-body-impact/">All’s Well That Ends Well</a> gives a separate terminating impact algorithm. Its guarantee concerns that collision model; it is not an application of Hironaka’s theorem.</p>
-    <p class="read"><b>Figure 18.</b> Inelastic collapse. Below $e \approx 0.072$, the model can accumulate infinitely many impacts in finite time. The computed trace stops at its event cutoff; separation is not asserted in the collapsing case.</p>
-  </div>
-
-  <section class="panel" aria-label="Inelastic collapse">
-    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
-    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
-    <div class="pair">
-      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of three bouncing balls"></canvas></div></div>
-      <div class="fig"><div class="h">Collisions <span>infinite below threshold</span></div><svg id="ic-n" role="img" aria-label="Collisions against restitution"></svg></div>
-    </div>
-    <div class="chips" id="ic-chips"></div>
-  </section>
-
-  <div class="col">
-    <h2 id="tensors">10. Low-rank tensor factorization: collisions and border rank</h2>
+    <h2 id="tensors">A tensor fit with a hidden flat direction</h2>
     <p>A tensor factorization moves the question into parameter space. The tensor itself can be perfectly regular as an array of numbers while the map from factors to that array loses first-order sensitivity. This is the bridge to learning theory: several parameters need not produce several independent changes in prediction.</p>
     <p>For neural networks and factorized models, a continuous symmetry can produce an entire family of parameters for one function. A collision of components can cause further degeneracy. Discrete relabeling by itself is not enough: the finite example below shows the actual cancellation.</p>
-    <p>Start with the finite collision, which leads directly to Part IV. The border-rank and cubic experiments that follow explore two additional tensor geometries.</p>
 
-    <h3>10.1 The finite two-component collision</h3>
-    <p>Here is the simplest, most explicit setting where this occurs. Our “data” consist of eight numbers: a $2\times2\times2$ symmetric tensor. The target tensor has entry $T^*_{000}=1$ and every other entry zero. We approximate it by summing two rank-one components, each defined by the vector $v(t)=(1,t)$ with tensor product $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$:</p>
+
+    <h3>Build the model</h3>
+    <p>A tensor is an array with several indices. Here our “data” are just eight numbers arranged in a $2\times2\times2$ array. The target tensor has entry $T^*_{000}=1$ and every other entry zero. We approximate it by summing two rank-one components, each defined by the vector $v(t)=(1,t)$ with tensor product $(v(t)^{\otimes3})_{ijk}=v_i(t)v_j(t)v_k(t)$:</p>
     <div class="eq tex">T(a,b)=\tfrac12 v(a)^{\otimes3}+\tfrac12 v(b)^{\otimes3}.</div>
     <p>The adjustable parameters are $a$ and $b$. At $(a,b)=(0,0)$, both components equal the target: the fit is exact ($K=0$). The loss $K$ is the sum of eight squared prediction errors, scaled by $1/3$ for convenience.</p>
-    <p class="read"><b>Figure 19.</b> First select <b>Move together</b>: both components shift in the same direction. Then select <b>Pull apart</b> at the same displacement: the components move in opposite directions. Notice that pulling apart changes the actual prediction entries—and the loss—dramatically less than moving together.</p>
+    <p class="read"><b>Figure 17.</b> First select <b>Move together</b>: both components shift in the same direction. Then select <b>Pull apart</b> at the same displacement: the components move in opposite directions. Notice that pulling apart changes the actual prediction entries—and the loss—dramatically less than moving together.</p>
   </div>
 
   <section class="panel learning-panel story-panel" aria-label="Tensor component collision">
@@ -94,9 +57,14 @@
     <label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="0.01" value="0.3" disabled><output id="tc-delta-out">0.30</output></label>
     <p class="story-result" id="tc-result" aria-live="polite"></p>
     <p class="cap" id="tc-arithmetic"></p>
+    <div class="pair tensor-factors" id="tensor-components" aria-label="The two rank-one components before addition">
+      <div class="fig"><div class="h">Term A · ½ v(a) ⊗ v(a) ⊗ v(a)</div><svg id="tc-factor-a" role="img" aria-label="The vector repeated in all three factors of rank-one term A"></svg><p class="cap" id="tc-factor-a-out"></p></div>
+      <div class="fig"><div class="h">Term B · ½ v(b) ⊗ v(b) ⊗ v(b)</div><svg id="tc-factor-b" role="img" aria-label="The vector repeated in all three factors of rank-one term B"></svg><p class="cap" id="tc-factor-b-out"></p></div>
+    </div>
+    <p class="cap">Each arrow is a two-entry factor vector. Three copies form one rank-one tensor by multiplying their entries; the table shows both weighted tensors separately before adding them.</p>
     <div class="pair">
       <div class="fig">
-        <div class="h">The eight predictions <span>indices i j k</span></div>
+        <div class="h">Add the two rank-one tensors <span>all eight entries i j k</span></div>
         <div class="story-table" id="tc-entries"></div>
       </div>
       <div class="fig">
@@ -118,9 +86,68 @@
     <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2 \asymp s^2 + d^4.</div>
     <p>Now evaluate the Hessian matrix at $(s, d) = (0, 0)$:</p>
     <div class="eq tex">H = \begin{pmatrix} \frac{\partial^2 K}{\partial s^2} & \frac{\partial^2 K}{\partial s \partial d} \\ \frac{\partial^2 K}{\partial d \partial s} & \frac{\partial^2 K}{\partial d^2} \end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}.</div>
-    <p>The Hessian correctly reports zero quadratic curvature in $d$, but it does not describe the quartic rise. Higher-order terms still matter. This is a restricted family: we fixed the amplitudes and tied together each component’s three factor vectors. Its local exponent is not the exponent of every rank-two tensor model.</p><p><a href="./part-4.html#learning">Part IV measures the extra room near this fit</a>. The next two experiments are optional extensions of the tensor discussion.</p>
+    <p>The Hessian correctly reports zero quadratic curvature in $d$, but it does not describe the quartic rise. Higher-order terms still matter. This is a restricted family: we fixed the amplitudes and tied together each component’s three factor vectors. Its local exponent is not the exponent of every rank-two tensor model.</p>
 
-    <h3 id="border-rank-fit">10.2 A different pathology: border rank and the fit that never finishes</h3>
+
+    <h2 id="loss-blowups">Where the blowups enter</h2>
+    <p>The troublesome local loss has the same leading scaling as $K_0=s^2+d^4$. It has an isolated zero, so there is no crossing curve to separate. The problem is that a quadratic approximation loses the $d$ direction. We want coordinates that expose the higher-order vanishing without losing track of the amount of parameter space.</p>
+    <p>Perform two ordinary point blowups, keeping the chart that contains the degenerate direction:</p>
+    <ol class="resolution-steps">
+      <li><b>First record a slope:</b> set $s=dv_1$. The loss becomes $K_0=d^2(v_1^2+d^2)$. The exceptional line is $d=0$. After extracting $d^2$, the remaining factor still vanishes at $(d,v_1)=(0,0)$.</li>
+      <li><b>Blow up that remaining point:</b> set $d=r$, $v_1=rv$. Combining the substitutions gives $s=r^2v$, $d=r$, and $K_0=r^4(v^2+1)$. On a bounded real $v$-chart, the factor $v^2+1$ never vanishes. The difficult vanishing is now a single coordinate power.</li>
+    </ol>
+    <p>The new exceptional line $r=0$ consists of different records $(0,v)$ that all map back to the perfect fit $(s,d)=(0,0)$. There is no new line of perfect fits in the old parameter space. The map is invertible for $r\ne0$ in this chart.</p>
+    <p><b>Area changes too.</b> The Jacobian of $(r,v)\mapsto(s,d)=(r^2v,r)$ has absolute determinant $|r|^2$, so:</p>
+    <div class="eq tex">e^{-n(s^2+d^4)}\,ds\,dd
+      =e^{-nr^4(v^2+1)}|r|^2\,dr\,dv.</div>
+    <p>Near the exceptional line, substantial weight lies at $r$ of order $n^{-1/4}$. A radial width $n^{-1/4}$ times the area factor $r^2$ gives $n^{-3/4}$. The other charts cover the remaining directions; the direct integral in Part IV checks the same exponent over the full square.</p>
+    <details class="derivation"><summary>Does the actual tensor loss have the same behavior?</summary><p>Yes. Under the same two blowups, its exact loss becomes:</p><div class="eq tex">K=r^4\!\left[v^2+(1+r^2v^2)^2+\tfrac13r^4v^2(3+r^2v^2)^2\right].</div><p>The bracket is positive and bounded away from zero near any bounded piece of $r=0$. The Jacobian remains $|r|^2$. Thus the higher-order terms preserve the local exponent. The mean–separation coordinate change from $(a,b)$ has a constant nonzero Jacobian and does not alter it.</p></details>
+    <p><b>This is the connection to Hironaka:</b> blowups can turn complicated vanishing into coordinate powers, with corresponding powers in the volume form. Those powers make a hard integral calculable. The goal here is monomializing a loss, rather than smoothing a visible surface.</p>
+    <p><a href="./part-4.html">Continue to learning theory →</a> Why integrate over fits, and what does the exponent $3/4$ tell us?</p>
+    <h2 id="related-experiments">Optional: other meanings of “singularity”</h2>
+    <p>The experiments below motivated the essay, but they ask different questions. A contact law needs limiting histories; a tensor approximation may lack an attainable optimum; a field can have a topological obstruction. Read these as separate case studies, rather than steps needed for the learning-theory argument.</p>
+  </div>
+  <details class="experiment"><summary>Mechanical side trip: simultaneous impacts and inelastic collapse</summary><div class="col">
+    <h2 id="collisions">Rigid-body collisions: the opening demo, unpacked</h2>
+    <p>The three balls from <a href="./part-1.html#first">Part I</a> provide our first mechanical blowup. In an elastic collision between two balls of masses $m_1, m_2$, conservation of momentum and kinetic energy uniquely determines the outgoing velocities:</p>
+    <div class="eq tex">m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2', \qquad m_1 v_1^2 + m_2 v_2^2 = m_1 v_1'^2 + m_2 v_2'^2.</div>
+    <p>For an approaching pair, momentum and energy conservation together with the outgoing-contact condition select the usual elastic impact. With three simultaneous contacts, conservation alone leaves multiple outgoing possibilities. A contact model or a limiting procedure must provide additional information.</p>
+    <p><b>Configuration space in a wedge:</b> Write the gaps between neighbors as $g_1 = x_2 - x_1 - 2r \ge 0$ and $g_2 = x_3 - x_2 - 2r \ge 0$. In mass-weighted coordinates $q_i = \sqrt{m_i} x_i$, kinetic energy is standard Euclidean $\frac{1}{2}|\dot{q}|^2$. Removing uniform translation reduces the three-ball system to a single point bouncing inside a planar <b>wedge</b> between the constraint walls $g_1 = 0$ and $g_2 = 0$, with wedge angle:</p>
+    <div class="eq tex">\cos\beta = \sqrt{\frac{m_1 m_3}{(m_1 + m_2)(m_2 + m_3)}}.</div>
+    <p>A sequence of pairwise collisions is a billiard path bouncing between the walls. Simultaneous impact is the corner $g_1=g_2=0$; the equation $g_1g_2=0$ describes the union of both walls.</p>
+    <p><b>What the bar keeps.</b> Fix the incoming velocities and vary the ratio of two small positive gaps. The pairwise impact model gives intervals with common limiting outcomes. Equal masses give the same outgoing velocity pattern for this experiment; a light middle ball can give different patterns. The interval sizes become probabilities only after choosing a distribution of gap ratios. They are not probabilities supplied by a blowup theorem.</p>
+    <p class="read"><b>Figure 18.</b> Left: three balls colliding simultaneously, with the gap-ratio bar colored by outcome. Right: the same motion mapped to a single point in a wedge. Drag the marker or click an outcome below to test incoming directions.</p>
+  </div>
+
+  <section class="panel" aria-label="Newton's cradle as a billiard in a wedge">
+    <div class="controls">
+      <label class="sl"><span class="lbl">Middle mass</span><input id="f2-m" type="range" min="0.05" max="3" step="0.01" value="0.25"><output id="f2-m-out"></output></label>
+    </div>
+    <div class="pair">
+      <div class="fig"><div class="h">Three balls <span id="f2-sub"></span></div><div class="box wide"><canvas id="f2-balls" aria-label="Three balls colliding"></canvas></div><svg id="f2-bar" class="bar" role="img" aria-label="Gap ratio bar colored by outcome; drag to choose" tabindex="0"></svg></div>
+      <div class="fig"><div class="h">The same motion in configuration space</div><svg id="f2-wedge" role="img" aria-label="Billiard path in a wedge"></svg></div>
+    </div>
+    <div class="chips" id="f2-chips"></div>
+  </section>
+
+  <div class="col">
+    <p><b>A second difficulty: inelastic collapse.</b> For equal masses and constant restitution $e$, the three-ball model admits trajectories with infinitely many impacts in finite time below $7-4\sqrt3\approx0.072$. The figure follows one such setup with a finite event cutoff. <a href="https://disneyanimation.com/publications/alls-well-that-ends-well-guaranteed-resolution-of-simultaneous-rigid-body-impact/">All’s Well That Ends Well</a><sup class="citation"><a id="cite-impact-1" href="./appendix.html#ref-impact" aria-label="Reference 19: All’s Well That Ends Well: Guaranteed Resolution of Simultaneous Rigid Body Impact">[19]</a></sup> gives a separate terminating impact algorithm. Its guarantee concerns that collision model; it is not an application of Hironaka’s theorem.</p>
+    <p class="read"><b>Figure 19.</b> Inelastic collapse. Below $e \approx 0.072$, the model can accumulate infinitely many impacts in finite time. The computed trace stops at its event cutoff; separation is not asserted in the collapsing case.</p>
+  </div>
+
+  <section class="panel" aria-label="Inelastic collapse">
+    <div class="controls"><label class="sl"><span class="lbl">Restitution e</span><input id="ic-e" type="range" min="-1.7" max="0" step="0.01" value="-1.05"><output id="ic-e-out"></output></label></div>
+    <div class="box wide" style="aspect-ratio: 16 / 3; min-height: 110px"><canvas id="ic-balls" aria-label="Three balls bouncing"></canvas></div>
+    <div class="pair">
+      <div class="fig"><div class="h">Space-time diagram</div><div class="box sq"><canvas id="ic-st" aria-label="Space-time diagram of three bouncing balls"></canvas></div></div>
+      <div class="fig"><div class="h">Collisions <span>infinite below threshold</span></div><svg id="ic-n" role="img" aria-label="Collisions against restitution"></svg></div>
+    </div>
+    <div class="chips" id="ic-chips"></div>
+  </section>
+
+</details>
+  <details class="experiment"><summary>Tensor and field side trips: border rank, cubics, and topological defects</summary><div class="col">
+    <h3 id="border-rank-fit">A different pathology: border rank and the fit that never finishes</h3>
     <div class="terms"><b>Key terms:</b> rank-one tensor, border rank, Veronese variety, tangent limit.</div>
     <p>The collision above occurred at a finite point in parameter space. A completely different pathology occurs when a target tensor is approachable only by factors that diverge to infinity. Fitting a target $W$ with two rank-one components minimizes:</p>
     <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2.</div>
@@ -142,6 +169,8 @@
       <div class="op">≈</div>
       <div class="fig"><div class="h">Target W</div><svg id="tz3-w" role="img" aria-label="Target tensor W"></svg></div>
     </div>
+    <div class="pair tensor-factor-values"><div class="fig"><div class="h">Piece 1 · its three factor vectors</div><div class="algebra" id="tz3-factors-a"></div></div><div class="fig"><div class="h">Piece 2 · its three factor vectors</div><div class="algebra" id="tz3-factors-b"></div></div></div>
+    <p class="cap">Each piece is aₖ ⊗ bₖ ⊗ cₖ: entry i j k is the product of the three corresponding vector entries. The vectors and tensor slices update together at the selected gradient step. Their scaling is the stored optimizer’s choice; redistributing scale between factors can leave their tensor unchanged.</p>
     <div class="pair">
       <div class="fig"><div class="h">Error of the fit <span>keeps falling</span></div><svg id="tz3-err" role="img" aria-label="Fit error against gradient steps"></svg></div>
       <div class="fig"><div class="h">Size of the pieces <span>keeps growing</span></div><svg id="tz3-size" role="img" aria-label="Largest entry of the pieces against gradient steps"></svg></div>
@@ -163,7 +192,7 @@
   </section>
 
   <div class="col">
-    <h3 id="tens-slow">10.3 Symmetric tensors as binary cubics: Hironaka vs. Nash</h3>
+    <h3 id="tens-slow">Symmetric tensors as binary cubics: two direction records</h3>
     <div class="terms"><b>Key terms:</b> binary cubic, twisted cubic, tangent developable, cuspidal edge.</div>
     <p>A symmetric $2 \times 2 \times 2$ tensor corresponds to a homogeneous binary cubic with four coefficients. On the chart where the leading coefficient is nonzero, normalize it to one and write $t^3 + a t^2 + b t + c$. For distinct roots, its real symmetric rank is determined by the cubic discriminant $\Delta$:</p>
     <ul class="qs">
@@ -197,7 +226,7 @@
   </section>
 
   <div class="col">
-    <h2 id="frames">11. Cross fields: topology constrains what can be repaired</h2>
+    <h2 id="frames">Cross fields: topology constrains what can be repaired</h2>
     <div class="terms"><b>Key terms:</b> cross field, 4-RoSy field, Poincaré–Hopf, Ginzburg–Landau vortex, Burer–Monteiro.</div>
     <p>A quad mesh needs a <b>cross field</b>: four directions spaced by quarter turns at each regular point. Tangent boundary alignment on a disk forces total cross-field index $+1$. The representation $u=e^{4i\theta}$ has boundary degree 4. Four simple index-$+1/4$ defects realize that total; they can also merge into a higher-index defect. Topology fixes the total index, not a universal lower bound of four distinct points.</p>
     <p class="read"><b>Figure 23.</b> Drag singular points on a disk. The bars show a point-vortex energy approximation with calibrated core costs. Compare a merged degree-4 defect with four degree-1 defects. The leading core cost is quadratic in degree, while pair interactions depend logarithmically on separation.</p>
@@ -274,20 +303,13 @@
     <div class="chips" id="gl-chips"></div>
   </section>
 
-  <div class="col">
-    <h2 id="physics">12. What changes when we change the representation?</h2>
-    <p>The common question is what information a representation discards. The remedy depends on the task. A new contact law, an enlarged tensor model, and a punctured domain change different parts of the problem:</p>
-  </div>
-
-<div class="wide-table"><table><thead><tr><th>Problem</th><th>What fails?</th><th>What the construction provides</th></tr></thead><tbody><tr><td>Simultaneous impact</td><td>The pairwise law leaves the coincident event underdetermined.</td><td>Gap ratios keep distinct limiting histories. Selecting one physical outcome needs a contact model.</td></tr><tr><td>Finite tensor collision</td><td>The parameter map loses first-order rank.</td><td>Mean and separation expose a quartic loss; its local volume is computable.</td></tr><tr><td>Border rank</td><td>The rank-two image is not closed.</td><td>A tangent-limit parameterization includes the missing boundary tensor.</td></tr><tr><td>Cross field</td><td>Boundary winding forbids a nonvanishing extension.</td><td>Regularization resolves core structure; holes or sphere lifts change the domain or target.</td></tr></tbody></table></div>
-
-  <div class="col">
-    <p>These examples motivate keeping limiting data, but their guarantees are different. Hironaka’s theorem supplies a precise algebraic endpoint: a smooth model with a controlled map to the original space. It does not make all engineering singularities disappear.</p>
-    <p>The finite tensor collision supplies our next question without an analogy: if one parameter direction changes predictions only to second order, how much more parameter volume stays nearly correct? <a href="./part-4.html">Singular learning theory turns that geometry into asymptotic statistical quantities.</a></p>
-  </div>
+</details>
+  <details class="experiment"><summary id="physics">Compare what the optional case studies change</summary>
+  <div class="col"><p>The remedy depends on the task. Retaining a gap ratio, enlarging a tensor model, and changing a field’s domain solve different problems:</p></div>
+<div class="wide-table"><table><thead><tr><th>Problem</th><th>What fails?</th><th>What the construction provides</th></tr></thead><tbody><tr><td>Simultaneous impact</td><td>The pairwise law leaves the coincident event underdetermined.</td><td>Gap ratios keep distinct limiting histories. Selecting one physical outcome needs a contact model.</td></tr><tr><td>Finite tensor collision</td><td>The parameter map loses first-order rank.</td><td>Mean and separation expose a quartic loss; its local volume is computable.</td></tr><tr><td>Border rank</td><td>The rank-two image is not closed.</td><td>A tangent-limit parameterization includes the missing boundary tensor.</td></tr><tr><td>Cross field</td><td>Boundary winding forbids a nonvanishing extension.</td><td>Regularization resolves core structure; holes or sphere lifts change the domain or target.</td></tr></tbody></table></div><div class="col"><p>These examples motivate retaining limiting information. Their guarantees are specific to their models. For the direct link from algebraic blowups to statistical inference, return to <a href="#loss-blowups">the two-chart loss calculation</a> and continue to <a href="./part-4.html">Part IV</a>.</p></div></details>
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-2.html"><span class="dir">← Previous</span><span class="t">Directions &amp; Nash blowups</span></a><a class="next" href="./part-4.html"><span class="dir">Next →</span><span class="t">Singular learning theory</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Atlas, Chart (Claude Opus 5.5), Gemini Argon, and Rowan. Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

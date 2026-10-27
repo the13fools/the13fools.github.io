@@ -195,7 +195,7 @@ details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color:
 .derivation .col { margin-top: 14px; }
 /* Keep off-screen SVG/MathML bounds inside the page; long tables/equations
    retain their own horizontal scrollers. */
-.essay { overflow-x: clip; }
+.essay { overflow-x: hidden; }
 .plot-legend i.line-bad { border-color: var(--bad); }
 .resolution-ledger { font-family: var(--f-display); font-size: 15px; line-height: 1.6; }
 .resolution-ledger p { padding: 10px 0; border-bottom: 1px solid var(--rule); }
@@ -244,3 +244,29 @@ details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color:
 .reading-guide { padding: 4px 18px; background: var(--soft); border-radius: 8px; margin-bottom: 28px; }
 :target { scroll-margin-top: 24px; }
 @media (max-width: 700px) { .experiment > summary { padding: 4px 0; } .teaching-note { padding: 2px 14px 8px; } }
+
+/* Short comparisons keep the definitions next to one another. */
+.method-comparison{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.5rem 0}
+.method-comparison>div{padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--rule);border-radius:8px}
+.method-comparison h4{margin:0 0 .6rem}.method-comparison p{font-size:.95em;margin:.6rem 0}
+.exceptional-records{overflow-x:auto;margin:1rem auto;max-width:760px}
+.exceptional-records table{width:100%;font-size:.88rem;border-collapse:collapse;text-align:left}
+.exceptional-records caption{text-align:left;font-weight:600;margin-bottom:.5rem}
+.exceptional-records th,.exceptional-records td{padding:.5rem .65rem;border-bottom:1px solid var(--rule);white-space:nowrap}
+@media(max-width:620px){.method-comparison{grid-template-columns:1fr}.exceptional-records th,.exceptional-records td{padding:.45rem .35rem;font-size:.78rem}}
+
+#exceptional-demo .sl{display:grid;grid-template-columns:minmax(0,1fr) 4ch;flex:1 1 240px;gap:.35rem .65rem;max-width:none}
+#exceptional-demo .sl .lbl{grid-column:1/-1}#exceptional-demo .sl input{width:100%;min-width:0}
+
+/* Keep long inline mathematics within the text column on phones. */
+.col p > .katex,.col li > .katex{display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:-.2em}
+.tensor-factors{margin:1rem 0}.tensor-factors .h{font-size:.9rem}.tensor-factor-values{margin-top:1rem}
+
+.citation{font:600 .68em var(--f-display);vertical-align:super;line-height:0;margin-left:.15em;white-space:nowrap}
+.citation a{text-decoration:none;padding:.15em}.reference-list{padding-left:2.1rem}.reference-list li{padding:.3rem 0 1rem .3rem;scroll-margin-top:2rem}
+.reference-list li::marker{font:600 .9rem var(--f-display);color:var(--blow)}.reference-list p{margin:.25rem 0;font-size:.95rem;line-height:1.6;overflow-wrap:anywhere}
+.reference-list .reference-note{color:var(--muted);font-size:.88rem}.reference-list .reference-uses{font:500 .8rem/1.5 var(--f-display)}
+
+#tc-entries thead th:nth-child(2){color:var(--cold)}#tc-entries thead th:nth-child(3){color:var(--hot)}
+/* Contain absolutely positioned accessibility layers in long mathematical tables. */
+body{position:relative;overflow-x:hidden}

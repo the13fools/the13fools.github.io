@@ -363,6 +363,10 @@ import { lnExact } from "./llc-network.js";
   function fig10tz() { if (!$("#tz3-a")) return;
     const [it, L, P] = TZ3D[TZ3.i], a = tTerm(P, 0), b = tTerm(P, 6), s = a.map((v, q) => v + b[q]);
     const vmax = Math.max(1, ...a.map(Math.abs), ...b.map(Math.abs));
+    for(const [id,offset] of [['a',0],['b',6]]) {
+      const vector=(start)=>`(${P[start].toFixed(4)}, ${P[start+1].toFixed(4)})`;
+      $(`#tz3-factors-${id}`).innerHTML=['a','b','c'].map((name,i)=>`${name}${id==='a'?'₁':'₂'} = ${vector(offset+2*i)}`).join('<br>');
+    }
     cube($("#tz3-a"), a, vmax); cube($("#tz3-b"), b, vmax); cube($("#tz3-c"), s, 1); cube($("#tz3-w"), Wt, 1);
     $("#tz3-s").value = TZ3.i; $("#tz3-s-out").textContent = it.toLocaleString();
     tzCharts();

@@ -8,6 +8,18 @@ for (const [s,d] of [[0,0],[.3,0],[0,.3],[.21,-.37],[-.4,.1]]) {
   near(tensorLoss(0,d),d**4);
 }
 near(tensorLoss(0,.3)/tensorLoss(0,.15),16);
+// Part III's two ordinary blowups: s=d*v1, then (d,v1)=(r,r*v).
+// Check the exact tensor pullback against the original eight prediction errors.
+for (const r of [-.7,-.2,0,.3,.8]) for (const v of [-1.1,-.4,0,.6,1.2]) {
+  const s=r*r*v,d=r,a=s+d,b=s-d;
+  const direct=Array.from({length:8},(_,i)=>{
+    const power=(i&1)+((i>>1)&1)+((i>>2)&1);
+    return (((a**power+b**power)/2)-(i===0?1:0))**2/3;
+  }).reduce((sum,error)=>sum+error,0);
+  const unit=v*v+(1+r*r*v*v)**2+r**4*v*v*(3+r*r*v*v)**2/3;
+  near(direct,r**4*unit); assert.ok(unit>=1);
+}
+
 near(goodFitArea(.01,false)/goodFitArea(.1,false),.1);
 near(goodFitArea(.01,true)/goodFitArea(.1,true),10**(-.75));
 // Independent midpoint area quadrature checks the closed area used by the display.

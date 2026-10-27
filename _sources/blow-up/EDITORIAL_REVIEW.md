@@ -1,5 +1,17 @@
 # Editorial and mathematical review
 
+## October 27 follow-up: position, direction, and the statistical question
+
+The follow-up begins at `d696f40` and supersedes the earlier teaching structure below. Part I now builds the exceptional line from explicit position–direction records: approaching colored points coincide downstairs and remain distinct upstairs. Part II defines both constructions before asking about their success, explains why a Nash graph can itself remain singular, and compares the two routes on the same threefold. The smooth-source map precedes its optional fan proof; the fourfold remains accessible as a side trip.
+
+Part III now follows one tensor fit into two ordinary blowups of its loss, with the exact pullback and Jacobian checked. Mechanics, border rank, and fields remain available as optional case studies. Part IV introduces the inference problem before volume and evidence; network and estimator experiments follow the core argument as an optional lab. Parameter-space axes and likelihood brightness are explained explicitly, and the cusp exponent is derived by rescaling rather than only quoted as a ratio.
+
+The tensor collision now displays both factor vectors, both weighted rank-one contributions, their sum, and the target. The border-rank fit displays all six underlying factor vectors alongside its existing component tensors. Contributor/model labels are consistent. A shared citation registry supplies numbered links beside claims, individual bibliography entries, preprint/publication distinctions, and backlinks to each chapter. Metadata for the constructive-resolution and LLC papers was checked against primary sources; Bravo–Villamayor’s journal/title were corrected.
+
+Validation includes the full build/math/link/TeX checks, the exact tensor pullback against eight independently computed prediction errors, and desktop/phone checks of the new controls, source map, optional calculations, citations, and tensor contributions. The threefold construction remains a complete toric resolution, not a claimed execution of ATW.
+
+## Earlier broad pass
+
 This pass starts from website commit `8822447`, preserving the author's restored simulation/graphics narrative and all 35 numbered main-text figures. Scope: the overview, Parts I–IV, their shared figure code, and the appendix. It is an editorial/mathematical audit with numerical regression checks, not a formal verification of every solver or of Hironaka's general algorithm.
 
 ## Teaching structure

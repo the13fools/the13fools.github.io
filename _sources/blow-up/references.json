@@ -1,0 +1,336 @@
+[
+  {
+    "id": "hironaka",
+    "group": "Resolution and Nash blowups",
+    "authors": "Heisuke Hironaka",
+    "title": "Resolution of singularities of an algebraic variety over a field of characteristic zero",
+    "date": "Annals of Mathematics 79 (1964)",
+    "url": "https://doi.org/10.2307/1970486",
+    "note": "The characteristic-zero resolution theorem; linked to Part I of the original paper.",
+    "aliases": []
+  },
+  {
+    "id": "nash",
+    "group": "Resolution and Nash blowups",
+    "authors": "John Nash",
+    "title": "Arc structure of singularities",
+    "date": "Duke Mathematical Journal 81 (1995)",
+    "url": "https://doi.org/10.1215/S0012-7094-95-08103-4",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "kollar",
+    "group": "Resolution and Nash blowups",
+    "authors": "János Kollár",
+    "title": "Which are the simplest algebraic varieties?",
+    "date": "2001",
+    "url": "https://web.math.princeton.edu/~kollar/bernoulli.pdf",
+    "note": "An introductory perspective on the geometric goal.",
+    "aliases": []
+  },
+  {
+    "id": "effective",
+    "group": "Resolution and Nash blowups",
+    "authors": "Edward Bierstone, Dima Grigoriev, Pierre Milman, and Jarosław Włodarczyk",
+    "title": "Effective Hironaka resolution and its Complexity (with appendix on applications in positive characteristic)",
+    "date": "2012 preprint",
+    "url": "https://arxiv.org/abs/1206.3090",
+    "note": "See §3 for the marked-ideal algorithm used in Part I.",
+    "aliases": []
+  },
+  {
+    "id": "bravo",
+    "group": "Resolution and Nash blowups",
+    "authors": "Ana Bravo, Santiago Encinas, and Orlando Villamayor",
+    "title": "A Simplified Proof of Desingularization and Applications",
+    "date": "2002 preprint; Revista Matemática Iberoamericana 21 (2005)",
+    "url": "https://arxiv.org/abs/math/0206244",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "bravo-villamayor",
+    "group": "Resolution and Nash blowups",
+    "authors": "Ana Bravo and Orlando Villamayor",
+    "title": "A Strengthening of Resolution of Singularities in Characteristic Zero",
+    "date": "Proceedings of the London Mathematical Society 86 (2003), 327–357",
+    "url": "https://doi.org/10.1112/S0024611502013801",
+    "note": "Additional control of total-transform factorization.",
+    "aliases": []
+  },
+  {
+    "id": "bierstone-milman",
+    "group": "Resolution and Nash blowups",
+    "authors": "Edward Bierstone and Pierre D. Milman",
+    "title": "Functoriality in resolution of singularities",
+    "date": "2007 preprint",
+    "url": "https://arxiv.org/abs/math/0702375",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "wlodarczyk",
+    "group": "Resolution and Nash blowups",
+    "authors": "Jarosław Włodarczyk",
+    "title": "Simple Hironaka resolution in characteristic zero",
+    "date": "2004 preprint",
+    "url": "https://arxiv.org/abs/math/0401401",
+    "note": "Homogenized ideals and canonical choices.",
+    "aliases": []
+  },
+  {
+    "id": "atw",
+    "group": "Resolution and Nash blowups",
+    "authors": "Dan Abramovich, Michael Temkin, and Jarosław Włodarczyk",
+    "title": "Functorial embedded resolution via weighted blowings up",
+    "date": "2019 preprint; Algebra & Number Theory 18 (2024), 1557–1587",
+    "url": "https://arxiv.org/abs/1906.07106",
+    "note": "Stack-theoretic weighted blowups; a different procedure from the displayed toric resolution.",
+    "aliases": []
+  },
+  {
+    "id": "temkin-talk",
+    "group": "Resolution and Nash blowups",
+    "authors": "Michael Temkin",
+    "title": "New methods for resolution of singularities",
+    "date": "IAS lecture, December 8, 2025",
+    "url": "https://www.ias.edu/video/new-methods-resolution-singularities",
+    "note": "A lecture, rather than a research-paper proof.",
+    "aliases": []
+  },
+  {
+    "id": "nash3",
+    "group": "Resolution and Nash blowups",
+    "authors": "Federico Castillo, Daniel Duarte, Maximiliano Leyton-Álvarez, and Alvaro Liendo",
+    "title": "Non-normalized Nash blowup fails to resolve singularities in dimension three",
+    "date": "2025 preprint",
+    "url": "https://arxiv.org/abs/2511.01772",
+    "note": "Ordinary Nash iteration: a singular open chart returns after two steps. Does not settle normalized threefold iteration.",
+    "aliases": []
+  },
+  {
+    "id": "nash4",
+    "group": "Resolution and Nash blowups",
+    "authors": "Federico Castillo, Daniel Duarte, Maximiliano Leyton-Álvarez, and Alvaro Liendo",
+    "title": "Nash blowup fails to resolve singularities in dimensions four and higher",
+    "date": "2024 preprint, revised 2025; accepted in Annals of Mathematics",
+    "url": "https://arxiv.org/abs/2409.19767",
+    "note": "Failure for both ordinary and normalized iteration in the stated dimensions.",
+    "aliases": []
+  },
+  {
+    "id": "toric",
+    "group": "Resolution and Nash blowups",
+    "authors": "David A. Cox, John B. Little, and Henry K. Schenck",
+    "title": "Toric Varieties",
+    "date": "American Mathematical Society (2011)",
+    "url": "https://web.ma.utexas.edu/users/ikmartin/pages/additional-pages/toric-page/documents/Toric-Varieties_Cox-Little-Schenck.pdf",
+    "note": "The regular-fan smoothness and properness criteria used in the explicit resolution.",
+    "aliases": []
+  },
+  {
+    "id": "formalization",
+    "group": "Resolution and Nash blowups",
+    "authors": "Resolution",
+    "title": "Formalizing resolution of singularities",
+    "date": "October 2026 project report",
+    "url": "https://resolution.org/post/formalizing-resolution-of-singularities",
+    "note": "The project’s own account; distinguish this report from the original theorem and from our numerical demos.",
+    "aliases": [
+      "https://github.com/resolutionorg/hironaka"
+    ]
+  },
+  {
+    "id": "tensor-limit",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Vin de Silva and Lek-Heng Lim",
+    "title": "Tensor rank and the ill-posedness of the best low-rank approximation problem",
+    "date": "SIAM Journal on Matrix Analysis and Applications 30 (2008)",
+    "url": "https://doi.org/10.1137/06066518X",
+    "note": "Nonclosed low-rank sets and unattained approximations.",
+    "aliases": []
+  },
+  {
+    "id": "landsberg",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "J. M. Landsberg",
+    "title": "Tensors: Geometry and Applications",
+    "date": "American Mathematical Society (2012)",
+    "url": null,
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "gkz",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "I. M. Gelfand, M. M. Kapranov, and A. V. Zelevinsky",
+    "title": "Discriminants, Resultants, and Multidimensional Determinants",
+    "date": "Birkhäuser (1994)",
+    "url": null,
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "inelastic",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Sean McNamara and W. R. Young",
+    "title": "Inelastic collapse and clumping in a one-dimensional granular medium",
+    "date": "Physics of Fluids A 4 (1992)",
+    "url": "https://doi.org/10.1063/1.858323",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "impact",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Etienne Vouga, Breannan Smith, Danny M. Kaufman, Rasmus Tamstorf, and Eitan Grinspun",
+    "title": "All’s Well That Ends Well: Guaranteed Resolution of Simultaneous Rigid Body Impact",
+    "date": "ACM Transactions on Graphics 36 (2017)",
+    "url": "https://disneyanimation.com/publications/alls-well-that-ends-well-guaranteed-resolution-of-simultaneous-rigid-body-impact/",
+    "note": "A terminating contact algorithm, not an algebraic resolution theorem.",
+    "aliases": [
+      "https://media.disneyanimation.com/uploads/production/publication_asset/159/asset/All_s_Well_That_Ends_Well_Guaranteed_Resolution_of_Simultaneous_Rigid_Body_Impact.pdf"
+    ]
+  },
+  {
+    "id": "galperin",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Gregory Galperin",
+    "title": "Playing pool with π",
+    "date": "Regular and Chaotic Dynamics 8 (2003)",
+    "url": "https://www.maths.tcd.ie/~lebed/Galperin.pdf",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "tangent-processing",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "A. Petrov, M. S. Nabizadeh, A. Dodik, and J. Solomon",
+    "title": "Tangent blow-ups for processing non-manifold geometry",
+    "date": "2026 preprint",
+    "url": "https://arxiv.org/abs/2605.18215",
+    "note": "Tangent lifts for geometry processing; numerical data require estimated tangent information.",
+    "aliases": []
+  },
+  {
+    "id": "cross-fields",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Ryan Viertel and Braxton Osting",
+    "title": "An approach to quad meshing based on harmonic cross-valued maps and the Ginzburg–Landau theory",
+    "date": "2017 preprint",
+    "url": "https://arxiv.org/abs/1708.02316",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "gl-fields",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "A. Macq and colleagues",
+    "title": "Ginzburg–Landau energy and placement of singularities in generated cross fields",
+    "date": "2020 preprint",
+    "url": "https://arxiv.org/abs/2010.16381",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "burer-monteiro",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "Samuel Burer and Renato D. C. Monteiro",
+    "title": "A nonlinear programming algorithm for solving semidefinite programs via low-rank factorization",
+    "date": "Mathematical Programming 95 (2003)",
+    "url": "https://doi.org/10.1007/s10107-002-0352-8",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "minimal-sections",
+    "group": "Tensors, collisions, and geometric fields",
+    "authors": "David Palmer, Albert Chern, and Justin Solomon",
+    "title": "Lifting directional fields to minimal sections",
+    "date": "ACM Transactions on Graphics (2024)",
+    "url": "https://arxiv.org/abs/2405.03853",
+    "note": "",
+    "aliases": []
+  },
+  {
+    "id": "slt-book",
+    "group": "Singular learning theory",
+    "authors": "Sumio Watanabe",
+    "title": "Algebraic Geometry and Statistical Learning Theory",
+    "date": "Cambridge University Press (2009)",
+    "url": null,
+    "note": "The foundational treatment of resolution, learning coefficients, and Bayesian asymptotics.",
+    "aliases": []
+  },
+  {
+    "id": "bayes",
+    "group": "Singular learning theory",
+    "authors": "Sumio Watanabe",
+    "title": "Asymptotic Equivalence of Bayes Cross Validation and Widely Applicable Information Criterion in Singular Learning Theory",
+    "date": "Journal of Machine Learning Research 11 (2010), 3571–3594",
+    "url": "https://www.jmlr.org/papers/volume11/watanabe10a/watanabe10a.pdf",
+    "note": "See the distinctions among Bayesian, Gibbs, training, and generalization errors.",
+    "aliases": []
+  },
+  {
+    "id": "wbic",
+    "group": "Singular learning theory",
+    "authors": "Sumio Watanabe",
+    "title": "A Widely Applicable Bayesian Information Criterion",
+    "date": "Journal of Machine Learning Research 14 (2013)",
+    "url": "https://www.jmlr.org/papers/v14/watanabe13a.html",
+    "note": "Marginal-likelihood asymptotics and the WBIC approximation.",
+    "aliases": []
+  },
+  {
+    "id": "aoyagi",
+    "group": "Singular learning theory",
+    "authors": "M. Aoyagi and S. Watanabe",
+    "title": "Stochastic complexities of reduced rank regression in Bayesian estimation",
+    "date": "Neural Networks 18 (2005)",
+    "url": null,
+    "note": "The population formula used for the factorized linear-network example.",
+    "aliases": []
+  },
+  {
+    "id": "mixtures",
+    "group": "Singular learning theory",
+    "authors": "Judith Rousseau and Kerrie Mengersen",
+    "title": "Asymptotic behaviour of the posterior distribution in overfitted mixture models",
+    "date": "Journal of the Royal Statistical Society, Series B 73 (2011)",
+    "url": "https://doi.org/10.1111/j.1467-9868.2011.00781.x",
+    "note": "Prior-dependent emptying versus merging in the specified mixture setting.",
+    "aliases": []
+  },
+  {
+    "id": "llc",
+    "group": "Singular learning theory",
+    "authors": "Edmund Lau, Zach Furman, George Wang, Daniel Murfet, and Susan Wei",
+    "title": "The Local Learning Coefficient: A Singularity-Aware Complexity Measure",
+    "date": "AISTATS, PMLR 258 (2025), 244–252",
+    "url": "https://proceedings.mlr.press/v258/lau25a.html",
+    "note": "Definition and practical estimation of the LLC; empirical estimates have additional limitations.",
+    "aliases": []
+  },
+  {
+    "id": "development",
+    "group": "Singular learning theory",
+    "authors": "J. Hoogland, G. Wang, M. Farrugia-Roberts, L. Carroll, S. Wei, and D. Murfet",
+    "title": "Loss landscape degeneracy and stagewise development in transformers",
+    "date": "2024 preprint; TMLR (2025)",
+    "url": "https://arxiv.org/abs/2402.02364",
+    "note": "An empirical application of local coefficient measurements.",
+    "aliases": []
+  },
+  {
+    "id": "deep-singular",
+    "group": "Singular learning theory",
+    "authors": "D. Murfet, S. Wei, M. Gong, H. Li, J. Gell-Redman, and T. Quella",
+    "title": "Deep learning is singular, and that’s good",
+    "date": "2020 preprint",
+    "url": "https://arxiv.org/abs/2010.11560",
+    "note": "",
+    "aliases": []
+  }
+]
