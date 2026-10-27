@@ -28,3 +28,16 @@ for(const u of [-1.2,-.3,0,.3,1.2])for(const theta of [0,.7,Math.PI]){
   near(q.originalGradient,2*Math.SQRT2*Math.abs(u));near(q.resolvedGradient,2);
   for(const p of [q.A,q.B])near(p.resolved[0]*p.original[0]+p.resolved[1]*p.original[1]-p.original[2],0);
 }
+// The full ambient exceptional plane maps to the center. Only its unit
+// circle is the limiting direction set of this cone (strict transform).
+const {coneBlowdown,coneDirectionProbe}=await import('../src/figures/cone-geometry.js');
+for(const rho of [0,.55,1,1.35])for(const theta of [0,.7,2.4]){
+ const q=coneDirectionProbe(rho,theta),[v,w]=q.chart;
+ q.original.forEach(x=>near(x,0));near(q.strictResidual,rho*rho-1);
+ for(const u of [-.3,.1]){
+  const [X,Y,Z]=coneBlowdown([v,w,u]);
+  near((X*X+Y*Y-Z*Z)/(u*u),q.strictResidual);
+ }
+ assert.equal(Math.abs(q.strictResidual)<1e-12,rho===1);
+}
+console.log('Ambient exceptional plane and strict-cone intersection verified.');

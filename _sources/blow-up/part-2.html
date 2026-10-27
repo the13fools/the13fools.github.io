@@ -44,20 +44,28 @@
     <p><b>Hironaka’s theorem supplies a terminating strategy.</b> There is no single competing operation called “the Hironaka blowup”. The classical approach chooses smooth centers and performs a sequence of ordinary blowups, checking the remaining singularities and exceptional boundary. Constructive proofs explain how to make those choices and guarantee that the process finishes in characteristic zero. Repeating Nash’s particular rule has no such guarantee in general.</p>
     <div class="method-comparison"><div><h4>Ordinary point blowup</h4><p>Record the line <b>from the chosen center to p</b>. On a plane curve, its slope is $y/x$.</p></div><div><h4>Nash blowup</h4><p>Record <b>the curve’s own tangent at p</b>. Where it exists, its slope is $dy/dx$.</p></div></div>
     <p>Both constructions retain extra geometric information; neither averages neighboring points as Laplacian smoothing does. On $y=x^2$, for example, the two recorded slopes are $x$ and $2x$. They are different rules even when their limiting slopes agree.</p>
+    <aside class="teaching-note" id="exceptional-divisor-meaning">
+      <h3>What is an exceptional divisor?</h3>
+      <p><b>It is the whole set lying over the center we blew up.</b> For a point center, its points are different direction records with the same old position. If $\pi$ is the map back and the center is $O$, this set is $E=\pi^{-1}(O)$: all new points sent to $O$. Away from the center, position determines the record uniquely. Above the center, many records share one image: this is where our point blowup ceases to be one-to-one. The <a href="https://stacks.math.columbia.edu/tag/01OF">formal definition</a> is precisely this inverse image of the center.{cite:exceptional-definition}</p>
+      <p><b>“Divisor” describes its dimension.</b> In a smooth blowup chart, setting one coordinate to zero leaves one fewer independent coordinate. In Part I’s two-dimensional chart $(x,t)$, $x=0$ leaves the slope $t$ free: an <b>exceptional line</b>. In a three-dimensional chart $(v,w,u)$, $u=0$ leaves $v,w$ free: an <b>exceptional plane</b>. “Divisor” does not mean the set must be straight.</p>
+      <p>The blowup keeps the dimension of the surrounding space. It replaces the old point with a space of directions. A curve or surface inside that space uses only the directions along which its own points can approach the center. Figure {fig:manifold3d} makes that distinction visible.</p>
+    </aside>
     <h3>First see a case where both succeed</h3>
-    <p>For the cone $X^2+Y^2=Z^2$, put $(X,Y,Z)=(u\cos\theta,u\sin\theta,u)$. The ordinary blowup records its ray direction $[\cos\theta:\sin\theta:1]$. The tangent plane away from the apex has normal $[\cos\theta:\sin\theta:-1]$, so Nash retains the same angular information in a different form. Here both give a smooth cylinder. Watch how the new circle sits over the one old apex.</p>
-    <p class="read"><b>Figure {fig:manifold3d}.</b> <b>What becomes of the apex?</b> Track A and B, whose directions differ by 90°. <b>Approach the apex</b>: their old positions merge, while their resolved positions stay apart. <b>Sweep the exceptional circle</b>: they move upstairs while both old images remain fixed. The coordinate records and gradient checks explain what has been resolved; expand the comparison below for the distances, area elements, and Nash tangent planes.</p>
+    <p>For the cone $X^2+Y^2=Z^2$, put $(X,Y,Z)=(u\cos\theta,u\sin\theta,u)$. The ordinary blowup records its line direction $[\cos\theta:\sin\theta:1]$. The tangent plane away from the apex has normal $[\cos\theta:\sin\theta:-1]$, so Nash retains the same angular information in a different form. Here both give a smooth cylinder. Watch how the new circle sits over the one old apex.</p>
+    <p><b>Keep three objects separate:</b> the old apex is one point; the ambient exceptional divisor $E_{\rm amb}=\{u=0\}$ is a plane in this chart; and the cylinder meets that plane in $E_C=\{u=0,\ v^2+w^2=1\}$, a circle. The circle is the exceptional divisor <em>on the resolved cone</em>: a one-dimensional curve inside a two-dimensional surface.</p>
+    <p class="read"><b>Figure {fig:manifold3d}.</b> <b>One old point, many new records.</b> Press <b>Inspect the exceptional divisor</b>: the old apex stays a point, while a violet plane appears in the new chart. Its bold circle consists of directions used by the cone. A and B lie on that circle and both map to the apex. In the diagram below, move Q across the plane: it always maps to the same old point, but joins the resolved cone only when it reaches the circle. Then restore the surfaces and approach the apex to see how the records arise as limits.</p>
   </div>
 
   <section class="panel" id="cone-blowup-demo" aria-label="Exact cone blowup explorer">
-    <div class="controls cone-guided"><button type="button" class="btn go" id="cone-approach">1. Approach the apex</button><button type="button" class="btn" id="cone-sweep">2. Sweep the exceptional circle</button><button type="button" class="btn" id="cone-leave">3. Move off the circle</button><button type="button" class="btn" id="cone-stop" disabled>Pause animation</button></div>
+    <div class="controls cone-guided"><button type="button" class="btn go" id="cone-inspect">Inspect the exceptional divisor</button><button type="button" class="btn" id="cone-approach">Approach the apex</button><button type="button" class="btn" id="cone-sweep">Sweep the exceptional circle</button><button type="button" class="btn" id="cone-leave">Move off the circle</button><button type="button" class="btn" id="cone-stop" disabled>Pause animation</button></div>
     <div class="controls">
       <label class="sl"><span class="lbl">Scale u = original height Z</span><input id="cone-u" type="range" min="-1.2" max="1.2" step="0.01" value="0.6"><output id="cone-u-out" for="cone-u"></output></label>
       <label class="sl"><span class="lbl">Retained direction θ</span><input id="cone-theta" type="range" min="0" max="360" step="1" value="45"><output id="cone-theta-out" for="cone-theta"></output></label>
       <button type="button" class="btn" id="cone-exceptional">Jump to u = 0</button>
     </div>
+    <div class="controls cone-layers"><label><input type="checkbox" id="cone-plane" checked> Show ambient plane in 3D</label><label><input type="checkbox" id="cone-surfaces" checked> Show cone and cylinder</label></div>
     <p class="story-result" id="cone-state" aria-live="polite"></p>
-    <div class="cone-map-formula">$\pi(v,w,u)=(uv,uw,u)$ <span>· forget the retained direction at u = 0</span></div>
+    <div class="cone-map-formula">$\pi(v,w,u)=(uv,uw,u)$ <span>· at u = 0, every (v, w, 0) maps to the old apex</span></div>
     <div class="pair">
       <div class="fig">
         <div class="h">Original cone <span>position (X, Y, Z)</span></div>
@@ -66,12 +74,19 @@
       </div>
       <div class="fig">
         <div class="h">Resolved surface <span>coordinates (v, w, u)</span></div>
-        <div class="box sq drag"><canvas id="cone-resolved" tabindex="0" aria-label="Smooth cylinder v squared plus w squared equals one; two points remain distinct on the exceptional circle; drag or use arrow keys to rotate"></canvas></div>
+        <div class="box sq drag"><canvas id="cone-resolved" tabindex="0" aria-label="Smooth cylinder meeting the ambient exceptional plane u equals zero in a circle; the whole plane maps to the old apex; drag or use arrow keys to rotate"></canvas></div>
         <div class="cone-record" id="cone-resolved-record"></div>
       </div>
     </div>
-    <div class="plot-legend"><span><i class="line-cold"></i>A · direction θ</span><span><i class="line-hot"></i>B · direction θ + 90°</span><span><i class="line-blow"></i>E · exceptional circle, u = 0</span></div>
-    <div class="cone-section"><h4>The same cross-section, viewed from above</h4><svg id="cone-rings" role="img" aria-label="The old ring has radius absolute u and collapses to a point, while the resolved ring has radius one even at u equals zero"></svg></div>
+    <div class="plot-legend"><span><i class="line-cold"></i>A · direction θ</span><span><i class="line-hot"></i>B · direction θ + 90°</span><span><i class="line-blow"></i>Exceptional circle on the resolved cone</span><span><i class="line-steel"></i>Q · ambient direction probe</span></div>
+    <section class="cone-section" aria-labelledby="cone-fiber-title">
+      <h4 id="cone-fiber-title">Look directly at the exceptional plane</h4>
+      <p class="cap">This diagram always shows u = 0. The pale square is a bounded patch of the ambient exceptional plane; the bold circle is its intersection with the cylinder. On this plane, (v, w) labels the old line direction [v : w : 1]. The entire plane, including Q, maps to the one old apex.</p>
+      <div class="controls"><label class="sl"><span class="lbl">Probe Q: distance ρ from center</span><input id="cone-probe-radius" type="range" min="0" max="1.35" step="0.01" value="0.55"><output id="cone-probe-out">0.55</output></label><button type="button" class="btn" id="cone-probe-on">Put Q on the cone’s circle</button><button type="button" class="btn" id="cone-probe-off">Move Q off the circle</button></div>
+      <svg id="cone-rings" role="img" aria-label="A plane of exceptional direction records maps to one old point; only its unit circle belongs to the resolved cone"></svg>
+      <p class="cone-probe-result" id="cone-probe-result" aria-live="polite"></p>
+      <p class="cap"><b>Why only the circle?</b> For cone points with u ≠ 0, substituting into X² + Y² = Z² and dividing by u² forces v² + w² = 1. That equation persists in their limits at u = 0. A point off the circle is a valid ambient direction record, but cannot be approached by points of the lifted cone.</p>
+    </section>
     <div class="pair cone-checks">
       <div id="cone-original-test" class="cone-test"></div><div id="cone-resolved-test" class="cone-test"></div>
     </div>
@@ -131,7 +146,7 @@
     </div>
     </details>
     <p class="cap" id="cone-point" aria-live="polite"></p>
-    <p class="cap">The controls select points and sections in these two fixed spaces. The cylinder is the new space throughout. On it, u and θ remain independent coordinates at u = 0; the projection identifies that whole circle with one old point. Distances above are distances in the displayed coordinate systems.</p>
+    <p class="cap">The plane is a slice of the <em>new</em> coordinate space, not the old horizontal plane Z = 0. Every point of it maps to a single old point. The controls select points and sections in these two fixed spaces. The cylinder is the new space throughout. On it, u and θ remain independent coordinates at u = 0; the projection identifies that whole circle with one old point. Distances above are distances in the displayed coordinate systems.</p>
     <details class="derivation"><summary>Read the substitution and the Nash tangent-plane records</summary>
       <div class="eq tex">F(uv,uw,u)=u^2\underbrace{(v^2+w^2-1)}_{g(v,w,u)}.</div>
       <p>Off u = 0, dividing by u² gives g = 0. Take the closure of that equation to get the strict transform, which also includes its circle at u = 0. In this ambient chart u = 0 is a plane; the resolved cone meets it only along v² + w² = 1.</p>
@@ -154,7 +169,7 @@
     <div class="eq tex">X = uv, \qquad Y = uw, \qquad Z = u.</div>
     <p>Away from $u = 0$, the new coordinates simply record the slopes: $v = X/Z$ and $w = Y/Z$. The coordinate $u$ acts as a signed scaling factor along each line. Substituting into the cone equation gives the <b>total transform</b>:</p>
     <div class="eq tex">X^2 + Y^2 - Z^2 = u^2(v^2 + w^2 - 1) = 0.</div>
-    <p>The total transform factors into two geometric pieces: the <b>exceptional divisor</b> $u = 0$ (the fiber sitting over the origin, with multiplicity 2 in the total transform) and the <b>strict transform</b>:</p>
+    <p>The total transform factors into two geometric pieces: the <b>ambient exceptional divisor</b> $u = 0$ (the fiber sitting over the origin, with multiplicity 2 in the total transform) and the <b>strict transform</b>:</p>
     <div class="eq tex">v^2 + w^2 = 1, \qquad u \in \mathbb{R}.</div>
     <p>In $(v,w,u)$ space, this is a standard <b>smooth circular cylinder</b>! Its gradient $\nabla(v^2+w^2-1) = (2v, 2w, 0)$ never vanishes on the surface, meaning standard calculus is completely restored.</p>
     <p>A natural parametrization of this cylinder is given by:</p>
@@ -443,6 +458,7 @@
     <p><b>Why the other resolution succeeds.</b> The Nash construction above is forced to reproduce the same semigroup. Our toric procedure instead normalizes it and subdivides its cone until each chart has an integer coordinate basis. Determinant $\pm1$ is a verifiable stopping test. General Hironaka-style algorithms use richer invariants to choose centers and prove termination without requiring a toric presentation.</p>
     <p>A blowup can improve a singularity without finishing it; a canonical modification can even repeat it. Hironaka’s achievement is the existence of a controlled <em>finite sequence</em> that reaches the required endpoint. <a href="./part-3.html">The next chapter follows one tensor-fitting problem into learning theory</a>, and where the analogy stops.</p>
   </div>
+  <div class="col"><aside class="teaching-note"><h3>Carry the map into the next problem</h3><p>We have replaced a singular space with a smooth one while keeping an exact map back. Next, the polynomial will describe a model’s error as its knobs move. The same substitutions will help us measure something a picture alone cannot show: how much room there is for a good fit.</p><p><a href="./part-3.html">Continue: a fit that hides a change →</a></p></aside></div>
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">A tensor fit and its blowups</span></a></nav>

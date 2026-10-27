@@ -1,5 +1,21 @@
 # Editorial and mathematical review
 
+## October 27: plain-language tensor story and global narrative
+
+Rebuild the tensor chapter around an observable task before terminology: copy eight numbers using two simple patterns, start at a perfect fit, move both parts together, then pull them apart and inspect the changes that cancel and those that remain. Keep the component vectors, exact prediction arithmetic, four-card comparison, halving comparison, and all experiments. Start Figure 17 at the exact fit; moving away selects a changing cell rather than leaving the reader on the constant entry. Simplify dynamic explanations and factor labels. Move the full CP recipe, exact loss/Hessian, loss budget, blowup derivation, and integral calculation into named disclosures. The main text still carries the simplified loss, exceptional-line map, Jacobian, and reason to count nearby fits. Retell the optional border-rank fit as an unreachable two-part limit, distinguish it from the finite collision, and explain how its alternative coordinates include the limiting endpoint.
+
+Give the overview, Part II ending, Part III opening, and Part IV opening an explicit causal route: retain directions at singular points; distinguish a successful blowup from a terminating strategy; uncover changes hidden by cancellation in a fitted model; count the room occupied by nearly right fits. Preserve the distinction between changing a representation, training a model, and computing statistical volume. Correct the former dynamic statement that equated the exact together loss with δ²; the exact formula and finite halving ratios remain available.
+
+Validation: unchanged geometry identities, full build/links/structure/TeX checks; browser walkthrough from exact fit through both moves, matching cells and factor products, the remaining 011 error, halving ratio 16, phone grid readability, and equation/error checks.
+
+## October 27: exceptional divisor and Figure 10
+
+Define the exceptional divisor before the cone example as the inverse image of the blowup center. Explain the name and codimension-one dimension count, distinguishing Part I’s ambient exceptional line, the 3D ambient exceptional plane, and its intersection with the strict cone. Cite the Stacks Project definition without changing existing reference numbers. The complete ambient real fiber is still identified below as RP²; the plane shown is its Z-direction chart.
+
+Figure 10 now exposes the ambient u=0 plane and its exceptional circle, with a dedicated inspect mode, independently visible surfaces/plane, and a linked direction probe Q. A responsive direct view shows a plane of direction records mapping to one old apex. Q always lies on the ambient divisor and maps to the center; it belongs to the strict cone exactly at radius 1. Derive this distinction from the closure of lifted cone points with u≠0, rather than imposing the strict equation by dividing at u=0. At radius zero, explicitly identify Q’s old line direction [0:0:1]. Preserve the distance, gradient, area, and Nash comparisons. Scope the formula-note CSS so it no longer overrides nested KaTeX spans.
+
+Validation includes all geometry/build/structure/link/TeX checks, independent ambient-map and strict-transform identities across probe radii and both signs of u, inspection/layer controls, on/off/zero probe states, and 390px/desktop layouts. No surface deformation or new Nash computation is introduced.
+
 ## October 27: final clarity and presentation pass
 
 Read Stratum’s final audience critique and preserve the author’s latest comparison table and tensor exposition (`555abf6`). Figure 10 now follows two direction records through an actual blowdown; Figure 15 overlays five coordinate level sets t=x4 with matching colors, a tracked path, contraction-rate explanation, and exact six-coordinate table. The cone metric ledger remains available behind a named disclosure so the picture leads.

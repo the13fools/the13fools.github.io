@@ -299,7 +299,7 @@ body{position:relative;overflow-x:hidden}
 
 /* Read the blowdown through linked records, sections, and coordinate levels. */
 .cone-map-formula { padding: 14px; margin: 14px 0; text-align: center; background: var(--soft); border-radius: 8px; }
-.cone-map-formula span { font: 13px var(--f-display); color: var(--muted); }
+.cone-map-formula > span:not(.katex) { font: 13px var(--f-display); color: var(--muted); }
 .cone-record { font: 12px/1.65 var(--f-mono); padding: 12px; overflow-wrap: anywhere; }
 .cone-section { margin: 20px 0; }
 .cone-section h4 { font: 15px var(--f-display); margin-bottom: 0; }
@@ -324,3 +324,15 @@ body{position:relative;overflow-x:hidden}
 @media (prefers-reduced-motion: no-preference) {
   a,button { transition: color .15s, background-color .15s, border-color .15s; }
 }
+
+.cone-layers label { font-size: 13px; }
+#cone-rings { height: auto; min-height: 250px; background: var(--soft); border-radius: 10px; margin: 14px 0; }
+.cone-probe-result { font: 14px/1.65 var(--f-display); padding: 12px 14px; background: var(--soft); border-left: 3px solid var(--blow); }
+#exceptional-divisor-meaning { margin: 28px 0; }
+#exceptional-divisor-meaning h3 { margin-top: 0; }
+
+/* Name the three tensor factors by what they select in the visible grids. */
+.tensor-vector-list > div { grid-template-columns: 2.8rem .3rem minmax(0,1fr) minmax(0,1fr) .3rem; }
+.tensor-vector-list > div > span:first-child { font: 11px var(--f-display); color: var(--muted); }
+.tensor-slices th:first-child { width: 2.3rem; }
+@media(max-width:700px) { .tensor-vector-list > div { grid-template-columns: 2.2rem .3rem minmax(0,1fr) minmax(0,1fr) .3rem; } .tensor-slices th:first-child { width: 2rem; } }

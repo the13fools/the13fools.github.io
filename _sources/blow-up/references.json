@@ -342,5 +342,15 @@
     "url": "https://arxiv.org/abs/1711.10781",
     "note": "See §§3.1.3–3.1.5 for outer products and rank-one terms, and §4.1 for CP decomposition. The collision model here is a restricted worked example.",
     "aliases": []
+  },
+  {
+    "id": "exceptional-definition",
+    "group": "Definitions and further foundations",
+    "authors": "The Stacks Project Authors",
+    "title": "Blowing up, Section 31.33 (Tag 01OF)",
+    "date": "The Stacks Project",
+    "url": "https://stacks.math.columbia.edu/tag/01OF",
+    "note": "Definition 31.33.1 defines the exceptional divisor as the inverse image of the center; Lemma 31.33.4 gives its Cartier-divisor property and the isomorphism away from the center.",
+    "aliases": []
   }
 ]

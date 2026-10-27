@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>From a singular fit to a useful blowup · What is… a blowup?</title>
+  <title>A fit that hides a change · What is… a blowup?</title>
   <meta name="description" content="A tensor collision creates a quartic loss. Two ordinary blowups expose its vanishing and volume powers, preparing the singular learning theory calculation.">
   <meta name="theme-color" content="#f5f6f8">
   <meta property="og:type" content="article">
@@ -29,79 +29,79 @@
 <main class="essay">
   <div class="col page-head">
     <p class="kicker"><a href="./index.html">What is… a blowup?</a> · Part III of IV</p>
-    <h1>From a singular fit to a useful blowup</h1>
-    <p class="dek">One tensor model, two blowup charts, and a reason to care about parameter volume.</p>
-  </div>
-
-  <div class="col">
-    <p>Here is a direct use for the geometry: understanding a fit whose error grows quartically in one parameter direction. We will build one small model, locate its degeneracy, and use two blowup charts to expose the loss and volume powers. Part IV explains what those powers mean for statistics.</p>
-    <p>The singularity is in the map from parameters to predictions. The data themselves can be an ordinary array of numbers. Resolving that parameter geometry gives us a way to analyze the fit and the volume around it.</p>
-    <nav class="chapter-toc" aria-label="In this chapter"><a href="#tensors">One tensor fit</a><a href="#loss-blowups">Blow up its loss</a><a href="#related-experiments">Optional applications</a></nav>
+    <h1>A fit that hides a change</h1>
+    <p class="dek">Two parts move in opposite directions. Most of their changes cancel. That small observation is our bridge from geometry to learning.</p>
   </div>
   <div class="col">
-    <h2 id="tensors">A tensor fit with a hidden flat direction</h2>
-    <p>In machine learning and statistics, we often fit data using models with redundant internal components—such as extra neurons in a neural network, extra clusters in a mixture, or extra components in a tensor decomposition. When the true data can be explained by fewer components than the model possesses, multiple components can collapse into identical states (a <b>component collision</b>).</p>
-    <p>What happens to the loss landscape around such a collision? In a standard, non-singular problem, perturbing parameters in any direction causes loss to rise quadratically: $K \propto \delta^2$. But when redundant components collide, certain perturbations allow the components to push in opposite directions so that their linear changes <b>cancel</b>. The result is a quartic valley ($K \propto \delta^4$) where the Hessian eigenvalue is zero and classical statistical theory breaks down. Figure {fig:tensorcollision} builds the simplest complete example to illustrate this cancellation.</p>
-
-    <h3>Build a tensor from three vectors</h3>
-    <p>A three-way tensor is an array $T_{ijk}$. Each index selects a different slot in a measurement: for example, person, test, and occasion. “Three-way” counts the indices; it does not make the array a surface in physical three-space.</p>
-    <p>A <b>rank-one term</b> predicts each entry by multiplying three vector entries: $A_{ijk}=u_i v_j w_k$. Fixing $k$ gives a matrix $uv^\mathsf T$ scaled by $w_k$. A <b>CP decomposition</b> adds several such terms to approximate the data. This is the outer-product construction in <a href="https://arxiv.org/abs/1711.10781">Rabanser, Shchur, and Günnemann, §§3.1 and 4.1</a>{cite:tensor-intro}.</p>
-    <p>Our toy has eight entries, with $i,j,k\in\{0,1\}$. We deliberately tie the three vectors in each term together, $v(t)=(1,t)$, and fix both weights at $1/2$. Only the two scalars $a,b$ can change:</p>
-    <div class="eq tex">A_{ijk}=\tfrac12v_i(a)v_j(a)v_k(a),\quad B_{ijk}=\tfrac12v_i(b)v_j(b)v_k(b),\quad T=A+B.</div>
-    <p><b>What problem is being solved?</b> Match the fixed data $T^*_{000}=1$, with all seven other entries zero. Because the target only needs one rank-one term, our two-component model is redundant: at $a=b=0$, both terms coincide ($A=B=T^*/2$), giving an exact fit $T=A+B=T^*$ with loss $K=0$. The loss is $K=\frac13\sum_{ijk}(T_{ijk}-T^*_{ijk})^2$ (the factor $1/3$ normalizes the quartic coefficient below to 1; it does not change the vanishing order). This constrained two-parameter family isolates a component collision; it is smaller than a general CP model.</p>
-    <p>Away from $(a,b)=(0,0)$, compare two ways to perturb the fit:</p>
-    <ol>
-      <li><b>Move together ($a = b = \delta$):</b> Both components shift in the same direction. Their linear changes reinforce each other ($+\delta/2 + \delta/2 = \delta$). The prediction error grows as $\delta$, so loss rises <b>quadratically</b>: $K \approx \delta^2$. At the fit, its curvature is nonzero ($H_{ss} = 2$).</li>
-      <li><b>Pull apart ($a = +\delta, b = -\delta$):</b> The two components shift in opposite directions. In their sum $T = A + B$, their linear first-order changes <b>cancel</b>: $+\delta/2 - \delta/2 = 0$. Every single-1 entry ($001, 010, 100$) stays strictly zero. Error only appears at second order ($\delta^2$) on double-1 entries, so loss rises <b>quartically</b>: $K = \delta^4$. The Hessian reports zero curvature ($H_{dd}=0$).</li>
-    </ol>
-    <p class="read"><b>Figure {fig:tensorcollision}.</b> <b>Follow one prediction from factors to loss.</b> The four cards show the weighted terms A and B, their sum T, and the fixed target T*. At the exact fit, A and B each contribute half the target. Select <b>Pull apart</b> and probe <b>001</b> to see $+0.150-0.150=0$: the first-order changes cancel. Probe <b>011</b> to find the error that remains. Compare with <b>Move together</b>, then <b>Halve δ</b>: the loss falls about 4× when the components move together, and exactly 16× when they pull apart.</p>
+    <p>At a crossing, two paths share one position. We kept their directions to tell them apart. Now consider a model made of two parts: the parts can change while their <em>combined prediction</em> hardly changes. The hidden distinction is between what the parts do and what we can observe.</p>
+    <p>We will make that happen with eight numbers. Then we will return to blowups: the error is a polynomial in the model’s knobs, and the geometry of that polynomial tells us how much room there is for a good fit.</p>
+    <nav class="chapter-toc" aria-label="In this chapter"><a href="#tensors">Build one small fit</a><a href="#hidden-change">Watch changes cancel</a><a href="#loss-blowups">Bring back the blowup</a><a href="#related-experiments">Other applications</a></nav>
+    <h2 id="tensors">The job: copy eight numbers</h2>
+    <p>A <b>tensor</b> here is just a little block of numbers. Ours can be drawn as two 2 × 2 grids: eight entries altogether. The data we want to copy contain a single 1 and seven 0s.</p>
+    <p>Our model builds its answer from two simple patterns, <b>A</b> and <b>B</b>. Each has one adjustable knob, called a and b. To make a prediction, add the two patterns entry by entry. To <b>fit</b> the model is to turn the knobs until that sum matches the data.</p>
+    <p>Set both knobs to zero. Each part supplies half the required 1 and nothing elsewhere. Their sum is exactly right. We have used two identical parts to do a job that needs only one. This is the <b>component collision</b>. The demo begins with this known solution and nudges it so we can inspect its neighborhood.</p>
+    <details class="derivation" id="tensor-recipe"><summary>How the two simple patterns are made</summary>
+      <p>Each pattern is built from three two-number lists. For A, every list is [1, a]; for B, every list is [1, b]. To fill a cell, choose one number from each list, multiply the three numbers, then multiply by ½. The row, column, and grid select which entries to use. This is a <b>rank-one tensor</b>; adding such patterns is called a CP decomposition.{cite:tensor-intro}</p>
+      <div class="eq tex">A_{ijk}=\tfrac12v_i(a)v_j(a)v_k(a),\quad B_{ijk}=\tfrac12v_i(b)v_j(b)v_k(b),\quad v(t)=(1,t),\quad T=A+B.</div>
+      <p>The indices i, j, k each take values 0 or 1. The fixed target has $T^*_{000}=1$ and all other entries zero. We measure mismatch by $K=\frac13\sum_{ijk}(T_{ijk}-T^*_{ijk})^2$. The factor ⅓ makes the later quartic coefficient equal to 1. Each part’s three lists are deliberately tied together, and the weights stay fixed: this is a two-knob teaching model. At the fit the sum has rank 1; a nonzero apart move gives rank 2, despite using two allowed terms throughout. The tutorial by <a href="https://arxiv.org/abs/1711.10781">Rabanser, Shchur, and Günnemann, §§3.1 and 4.1</a> explains the general construction.</p>
+    </details>
+    <h3 id="hidden-change">Two ways to spoil a perfect fit</h3>
+    <p><b>Move together:</b> turn both knobs up by the same amount. Their changes add, so the prediction moves noticeably away from the data.</p>
+    <p><b>Pull apart:</b> turn one knob up and the other down by the same amount. Some changes cancel. For example, one part contributes +0.15 to a cell while the other contributes −0.15. The sum stays at the correct value, 0.</p>
+    <p>The cancellation is strong, but incomplete. In another cell both contributions are positive: 0.045 + 0.045 = 0.09. <b>The parts moved by 0.3, yet the remaining prediction error is only 0.3² = 0.09.</b></p>
+    <p><b>Loss</b> is our score for how wrong the prediction is: square the entry errors, add them, then divide by three to set the units. Zero means a perfect fit. When the prediction error is as small as the <em>square</em> of a move, squaring that error makes the loss as small as the move’s <em>fourth power</em>.</p>
+    <p class="read"><b>Figure {fig:tensorcollision}.</b> Start at <b>Exact fit</b>: A and B add up to the fixed data. Press <b>Move together</b>, then <b>Pull apart</b>, watching the outlined cell. In Pull apart, select <b>011 · error that remains</b> to see what did not cancel. Finally press <b>Halve δ</b>. The comparison below shows why for small together moves the loss falls about 4×, and for apart moves exactly 16×. Here δ means the size of the proposed knob movement.</p>
   </div>
 
   <section class="panel learning-panel story-panel" id="tensor-collision-demo" aria-label="Tensor component collision">
-    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components"><button class="btn" data-mode="fit" aria-pressed="false">1. Exact fit</button><button class="btn" data-mode="together" aria-pressed="false">2. Move together</button><button class="btn" data-mode="apart" aria-pressed="true">3. Pull apart</button></div>
-    <div class="controls"><label class="sl long"><span class="lbl">Displacement δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="any" value="0.3"><output id="tc-delta-out">0.300</output></label><button class="btn" id="tc-halve">Halve δ</button><button class="btn" id="tc-reset">Reset δ = 0.3</button></div>
+    <div class="controls" id="tc-modes" role="group" aria-label="Move tensor components"><button class="btn" data-mode="fit" aria-pressed="true">1. Exact fit</button><button class="btn" data-mode="together" aria-pressed="false">2. Move together</button><button class="btn" data-mode="apart" aria-pressed="false">3. Pull apart</button></div>
+    <div class="controls"><label class="sl long"><span class="lbl">Size of the move δ</span><input id="tc-delta" type="range" min="0" max="0.6" step="any" value="0.3"><output id="tc-delta-out">0.300</output></label><button class="btn" id="tc-halve">Halve δ</button><button class="btn" id="tc-reset">Reset δ = 0.3</button></div>
     <p class="story-result" id="tc-result" aria-live="polite"></p>
-    <p class="cap">Each card has two matrix slices, k = 0 and k = 1. Within a slice, rows select i and columns select j. The outlined cell is the same entry in every card. Use arrow keys in a cell to change i or j, and Page Up/Down to change k. Blue marks negative entries and orange positive ones; the numbers give its value.</p>
+    <p class="cap">Read left to right: part A + part B = our prediction; compare it with the data. Each card contains the same eight positions. A cell’s three-digit address means row, column, grid: 001 is row 0, column 0, grid 1. The outlines track the same cell across all four cards. Blue is negative; orange is positive. Click a cell to follow its arithmetic.</p>
     <div class="tensor-pipeline" id="tensor-components" aria-label="Factor vectors, individual rank-one tensors, their sum, and target"></div>
     <div class="tensor-entry-trace" id="tc-arithmetic" aria-live="polite"></div>
-    <div class="controls" id="tc-probes" role="group" aria-label="Inspect a type of tensor entry"><button class="btn" data-entry="0">000 · constant</button><button class="btn" data-entry="1">001 · linear cancellation</button><button class="btn" data-entry="3">011 · quadratic change</button><button class="btn" data-entry="7">111 · cubic cancellation</button></div>
+    <div class="controls" id="tc-probes" role="group" aria-label="Inspect a type of tensor entry"><button class="btn" data-entry="0">000 · the required 1</button><button class="btn" data-entry="1">001 · changes that cancel</button><button class="btn" data-entry="3">011 · error that remains</button><button class="btn" data-entry="7">111 · another cancellation</button></div>
     <div class="pair tensor-analysis">
-      <div class="fig"><div class="h">How loss scales <span>log–log axes · same δ</span></div><svg id="tc-loss" role="img" aria-label="Exact together and apart losses against displacement on logarithmic axes"></svg><div class="plot-legend"><span><i class="line-cold"></i>Move together</span><span><i class="line-hot"></i>Pull apart</span></div></div>
-      <div class="fig"><div class="h">Compare the same two displacements</div><div class="story-table" id="tc-comparison"></div><p class="cap">Both rows propose moves from the exact fit. The cards above show the currently selected move.</p><p class="cap">Pulling apart gives K = δ⁴ exactly. Moving together gives K = δ² + δ⁴ + δ⁶/3, so its small-δ scaling approaches δ².</p><div class="tensor-loss-budget" id="tc-budget"></div></div>
+      <div class="fig"><div class="h">Smaller moves, smaller loss <span>log–log axes</span></div><svg id="tc-loss" role="img" aria-label="Exact together and apart losses against displacement on logarithmic axes"></svg><div class="plot-legend"><span><i class="line-cold"></i>Move together</span><span><i class="line-hot"></i>Pull apart</span></div></div>
+      <div class="fig"><div class="h">What happens when we halve the move?</div><div class="story-table" id="tc-comparison"></div><p class="cap">Both rows propose moves from the exact fit. The cards above show the currently selected move.</p><p class="cap">A half-sized move has ¼ the square and ¹⁄₁₆ the fourth power. The exact formulas and the contribution from each entry are available below.</p></div>
     </div>
-    <details class="derivation"><summary>All eight entries in one table</summary><div class="story-table" id="tc-entries"></div></details>
+    <details class="derivation"><summary>Inspect every entry, the loss breakdown, and keyboard controls</summary><div class="story-table" id="tc-entries"></div><div class="tensor-loss-budget" id="tc-budget"></div><p class="cap">Arrow keys change the row or column of the selected cell; Page Up/Down changes the grid. The highlighted numbers in the three lists are multiplied to make that cell.</p></details>
   </section>
 
   <div class="col">
-    <p>To see why pulling apart produces so little error, change coordinates to the mean $s=(a+b)/2$ and separation $d=(a-b)/2$. Moving together varies $s$; pulling apart varies $d$. Expanding the tensor entries reveals a fundamental cancellation:</p>
-    <ul>
-      <li>Entries with one index equal to 1: $\tfrac{1}{2}(a+b) = s$.</li>
-      <li>Entries with two indices equal to 1: $\tfrac{1}{2}(a^2+b^2) = s^2+d^2$.</li>
-      <li>The entry with three indices equal to 1: $\tfrac{1}{2}(a^3+b^3) = s^3+3sd^2$.</li>
-    </ul>
-    <p>Along $s=0$, the linear changes cancel. The remaining prediction error is $d^2$, so squared error is $d^4$. The exact loss makes both scales visible:</p>
-    <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2 \asymp s^2 + d^4.</div>
-    <p>Now evaluate the Hessian matrix at $(s, d) = (0, 0)$:</p>
-    <div class="eq tex">H = \begin{pmatrix} \frac{\partial^2 K}{\partial s^2} & \frac{\partial^2 K}{\partial s \partial d} \\ \frac{\partial^2 K}{\partial d \partial s} & \frac{\partial^2 K}{\partial d^2} \end{pmatrix} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}.</div>
-    <p>The zero Hessian eigenvalue marks a direction whose leading change is quartic. The coefficient we calculate belongs to this two-parameter family, with its tied vectors and fixed amplitudes.</p>
-
-
-    <h2 id="loss-blowups">Where the blowups enter</h2>
-    <p>The local loss has the same leading scaling as $K_0=s^2+d^4$. Here the variables already separate: the integral scales as $n^{-1/2}n^{-1/4}=n^{-3/4}$. We can use this known answer to see how blowups balance loss powers against area powers. Part IV then applies the method to the curved cusp, where the original coordinates do not separate.
-    </p><p>Over the reals, $K_0$ has only one zero. Over the complex numbers, $s^2+d^4=(s-id^2)(s+id^2)$: <b>the same touching-parabola geometry as Part I</b>, with conjugate branches. The two point blowups below are the ones we have already learned. Their new job is to keep track of volume as well as vanishing.</p>
-    <p>Perform two ordinary point blowups, keeping the chart that contains the degenerate direction:</p>
-    <ol class="resolution-steps">
-      <li><b>First record a slope:</b> set $s=dv_1$. The loss becomes $K_0=d^2(v_1^2+d^2)$. The exceptional line is $d=0$. After extracting $d^2$, the remaining factor still vanishes at $(d,v_1)=(0,0)$.</li>
-      <li><b>Blow up that remaining point:</b> set $d=r$, $v_1=rv$. Combining the substitutions gives $s=r^2v$, $d=r$, and $K_0=r^4(v^2+1)$. On a bounded real $v$-chart, the factor $v^2+1$ never vanishes. The difficult vanishing is now a single coordinate power.</li>
-    </ol>
-    <p>The new exceptional line $r=0$ consists of different records $(0,v)$ that all map back to the perfect fit $(s,d)=(0,0)$. There is no new line of perfect fits in the old parameter space. The map is invertible for $r\ne0$ in this chart.</p>
-    <p><b>Area changes too.</b> The Jacobian of $(r,v)\mapsto(s,d)=(r^2v,r)$ has absolute determinant $|r|^2$, so:</p>
-    <div class="eq tex">e^{-n(s^2+d^4)}\,ds\,dd
-      =e^{-nr^4(v^2+1)}|r|^2\,dr\,dv.</div>
-    <p>Near the exceptional line, substantial weight lies at $r$ of order $n^{-1/4}$. A radial width $n^{-1/4}$ times the area factor $r^2$ gives $n^{-3/4}$. The other charts cover the remaining directions; the direct integral in Part IV checks the same exponent over the full square.</p>
-    <details class="derivation"><summary>Does the actual tensor loss have the same behavior?</summary><p>Yes. Under the same two blowups, its exact loss becomes:</p><div class="eq tex">K=r^4\!\left[v^2+(1+r^2v^2)^2+\tfrac13r^4v^2(3+r^2v^2)^2\right].</div><p>The bracket is positive and bounded away from zero near any bounded piece of $r=0$. The Jacobian remains $|r|^2$. Thus the higher-order terms preserve the local exponent. The mean–separation coordinate change from $(a,b)$ has a constant nonzero Jacobian and does not alter it.</p></details>
-    <p><b>This is the connection to Hironaka:</b> blowups can turn complicated vanishing into coordinate powers, with corresponding powers in the volume form. Those powers make a hard integral calculable. The goal here is monomializing a loss, rather than smoothing a visible surface.</p>
-    <p><a href="./part-4.html">Continue to learning theory →</a> Why integrate over fits, and what does the exponent $3/4$ tell us?</p>
+    <aside class="teaching-note"><h3>What to take from the experiment</h3><p>Changing the parts and changing the prediction are different things. Opposite changes can hide each other. That leaves a direction in which the fit gets worse unusually slowly.</p></aside>
+    <p>Larger models can contain repeated parts too: two neurons may compute the same feature, or two mixture components may describe the same cluster. The full models have more knobs, but redundancy and cancellation are recurring sources of singularity.{cite:slt-book}</p>
+    <h2>Why the hidden change matters</h2>
+    <p>Real data come with noise. We usually have many nearly right fits, rather than one visibly perfect answer. A weakly changing direction lets the knobs move farther while the prediction remains acceptable. To understand the model, we need to know <b>how much room those nearly right settings occupy</b>.</p>
+    <p>Use two new knob coordinates: the <b>mean</b> $s=(a+b)/2$ tells how far the parts move together; the <b>separation</b> $d=(a-b)/2$ tells how far they pull apart. Close to the perfect fit, the loss behaves like:</p>
+    <div class="eq tex">K_0(s,d)=s^2+d^4.</div>
+    <p>The square describes the together move; the fourth power describes the apart move. A quadratic approximation—the Hessian—sees the first term and reports zero curvature for the second. It misses the size of the remaining error. This is the local degeneracy that makes the fit <b>singular</b>.</p>
+    <details class="derivation"><summary>Check the exact tensor loss and its Hessian</summary>
+      <p>Entries with one index equal to 1 have value s; those with two have value $s^2+d^2$; the last entry has value $s^3+3sd^2$. There are three entries of each of the first two types. Thus:</p>
+      <div class="eq tex">K(s,d)=s^2+(s^2+d^2)^2+\tfrac13(s^3+3sd^2)^2\asymp s^2+d^4.</div>
+      <div class="eq tex">H_K(0,0)=\begin{pmatrix}2&0\\0&0\end{pmatrix}.</div>
+      <p>Along the together move, $K(\delta,0)=\delta^2+\delta^4+\delta^6/3$. Along the apart move, $K(0,\delta)=\delta^4$ exactly. The symbol $\asymp$ means the exact loss is bounded above and below by positive constant multiples of the simpler one near the fit. This is the loss of the specified two-parameter family, not a formula for every tensor model.</p>
+    </details>
+    <h2 id="loss-blowups">Bring back the blowup</h2>
+    <p>The object has changed: we are now studying a polynomial in <em>knob settings</em>. Its zeros are perfect fits. The tool is familiar: choose new coordinates that expose what happens near the zero.</p>
+    <p>Blow up the parameter plane around its perfect-fit point. Two of the point blowups from Part I combine into the substitution $d=r$, $s=r^2v$. The perfect fit becomes an exceptional line $r=0$: every value of v on that line maps back to the one old setting $(s,d)=(0,0)$. In this chart the loss becomes:</p>
+    <div class="eq tex">K_0=r^4(1+v^2).</div>
+    <p>Now the vanishing is easy to see. For bounded v, the factor $1+v^2$ stays positive. The small factor is $r^4$.</p>
+    <details class="derivation"><summary>Work through the two ordinary point blowups</summary><ol class="resolution-steps">
+      <li>Set $s=dv_1$. Then $K_0=d^2(v_1^2+d^2)$. After extracting $d^2$, the remaining factor still vanishes at $(d,v_1)=(0,0)$.</li>
+      <li>Blow up that point: set $d=r$, $v_1=rv$. This gives $s=r^2v$, $d=r$, hence $K_0=r^4(1+v^2)$. The map is invertible for $r\ne0$ in this chart.</li>
+    </ol><p>There is also a link to Part I’s touching parabolas: over the complex numbers, $s^2+d^4=(s-id^2)(s+id^2)$. The same two blowups handle those conjugate branches. On the real parameter plane, the loss has just one zero.</p></details>
+    <p><b>To count settings, we must also track area.</b> A little rectangle in (r, v) does not keep its area when mapped back to (s, d). Its area is multiplied by $|r|^2$, the absolute Jacobian determinant:</p>
+    <div class="eq tex">ds\,dd=|r|^2\,dr\,dv.</div>
+    <p>So the useful answer has two parts: <b>how fast the error grows, and how much area each new coordinate patch represents.</b> Blowups expose both. In this small example we can also calculate directly without a blowup; that gives us a check. The curved cusp in Part IV needs more geometric work.</p>
+    <details class="derivation"><summary>Follow the powers into the statistical integral</summary>
+      <div class="eq tex">e^{-n(s^2+d^4)}\,ds\,dd=e^{-nr^4(1+v^2)}|r|^2\,dr\,dv.</div>
+      <p>On a bounded v-sector, substantial weight lies at $r\sim n^{-1/4}$. The radial width contributes $n^{-1/4}$ and the area factor contributes $n^{-1/2}$, giving $n^{-3/4}$. Other charts cover the remaining directions. The direct separated integral gives the same $n^{-1/2}n^{-1/4}=n^{-3/4}$ over the full square.</p>
+      <p>The actual tensor loss, under the same substitution, is:</p>
+      <div class="eq tex">K=r^4\!\left[v^2+(1+r^2v^2)^2+\tfrac13r^4v^2(3+r^2v^2)^2\right].</div>
+      <p>The bracket stays positive and bounded away from zero near a bounded piece of r = 0, so the leading exponent is unchanged. The mean–separation change of coordinates has a constant nonzero Jacobian.</p>
+    </details>
+    <p>That is our route back to Hironaka. Resolution turns difficult vanishing into powers of coordinates, and the map tells us how to count volume correctly. <a href="./part-4.html">Part IV asks what that volume means for learning</a>: when many settings fit the data, how should we weigh their predictions?</p>
     <h2 id="related-experiments">Optional: other meanings of “singularity”</h2>
     <p>The experiments below motivated the essay, but they ask different questions. A contact law needs limiting histories; a tensor approximation may lack an attainable optimum; a field can have a topological obstruction. Read these as separate case studies, rather than steps needed for the learning-theory argument.</p>
   </div>
@@ -145,12 +145,18 @@
 
 </details>
   <details class="experiment"><summary>Tensor and field side trips: border rank, cubics, and topological defects <span class="lab-badge">Figures {fig:borderfit}–{fig:glthree}</span></summary><div class="col">
-    <h3 id="border-rank-fit">A different pathology: border rank and the fit that never finishes</h3>
-    <div class="terms"><b>Key terms:</b> rank-one tensor, border rank, Veronese variety, tangent limit.</div>
-    <p>The collision above occurred at a finite point in parameter space. A completely different pathology occurs when a target tensor is approachable only by factors that diverge to infinity. Fitting a target $W$ with two rank-one components minimizes:</p>
-    <div class="eq tex">\text{minimize}\;\; E = \sum_{ijk}\big(a_{1i}b_{1j}c_{1k} + a_{2i}b_{2j}c_{2k} - W_{ijk}\big)^2.</div>
-    <p>For $W_{001}=W_{010}=W_{100}=1$ and all other entries zero, the tensor has rank 3 but border rank 2. There are rank-two approximations arbitrarily close to it. The stored gradient-descent trajectory shows growing, nearly canceling components. The following limiting construction establishes why arbitrarily accurate rank-two fits exist:</p><div class="eq tex">\frac{(e_0+h e_1)^{\otimes3}-e_0^{\otimes3}}{h}\longrightarrow W\quad(h\to0).</div>
-    <p class="read"><b>Figure {fig:borderfit}.</b> Gradient descent fitting $W$ with two rank-one components. The recorded pieces grow while their sum approaches $W$; the border-rank construction explains the limiting behavior. The target has rank 3 but <b>border rank 2</b>: it lies on the boundary of the rank-at-most-two set.</p>
+    <h3 id="border-rank-fit">A fit that needs an unreachable limit</h3>
+    <p>Here is another way two parts can cancel. Change the data: now three cells should be 1 and the rest 0. This target, W, needs <b>three</b> simple patterns for an exact match. Insist on using only <b>two</b>, and an optimizer can get arbitrarily close without ever reaching it.</p>
+    <p>The trick is to make the two parts large and almost opposite. One supplies large positive numbers; the other supplies large negative numbers. Most of that cancels, leaving a small, increasingly accurate answer. Watch the sum improve while the individual pieces grow.</p>
+    <p>This is called <b>border rank 2</b>: the target is a limit of two-part predictions, although its rank is 3. Every finite two-part fit still has some error.</p>
+    <details class="derivation"><summary>The exact target, objective, and limiting construction</summary>
+      <p>Set $W_{001}=W_{010}=W_{100}=1$ and all other entries zero. The two-rank-one-term fit minimizes:</p>
+      <div class="eq tex">E=\sum_{ijk}\big(a_{1i}b_{1j}c_{1k}+a_{2i}b_{2j}c_{2k}-W_{ijk}\big)^2.</div>
+      <p>Writing $e_0=(1,0)$ and $e_1=(0,1)$ gives an explicit sequence of rank-two approximations:</p>
+      <div class="eq tex">\frac{(e_0+h e_1)^{\otimes3}-e_0^{\otimes3}}{h}\longrightarrow W\quad(h\to0).</div>
+      <p>The quotient has the three desired entries equal to 1, the three double-1 entries equal to h, and entry 111 equal to h². Its limit is W. The two summands individually diverge while their difference converges.</p>
+    </details>
+    <p class="read"><b>Figure {fig:borderfit}.</b> Press <b>Play</b>. This recorded fitting run tries to match W using only two simple parts. Look at each part, then their sum, then the target. The error plot falls while the size plot rises. The construction above explains why such fits can keep improving without reaching a finite exact answer.</p>
   </div>
 
   <section class="panel" aria-label="Rank-2 fit of W">
@@ -176,8 +182,9 @@
   </section>
 
   <div class="col">
-    <p><b>A coordinate for the limit.</b> The difference-quotient expression $[(a+h a')\otimes(b+h b')\otimes(c+h c')-a\otimes b\otimes c]/h$ extends polynomially to $h=0$ after expansion. Its limit is a tangent tensor. This enlarged parameterization includes border-rank limits; it is not an invertible reparameterization of the original finite rank-two model at $h=0$.</p>
-    <p class="read"><b>Figure {fig:bordercompare}.</b> Gradient descent in standard parameters (orange) vs. blown-up coordinates (violet). The limiting parameterization includes the exact target at h = 0 with bounded coordinates. The finite optimization run illustrates the approach.</p>
+    <p><b>Describe the limit directly.</b> Keep a common pattern, the direction in which the two parts differ, and a small separation h. After expanding their difference, the formula has a finite value even at h = 0. This new description includes the limiting tensor that the original two-part model could only approach.</p>
+    <details class="derivation"><summary>The finite formula at the boundary</summary><p>Expand $[(a+ha')\otimes(b+hb')\otimes(c+hc')-a\otimes b\otimes c]/h$. Every numerator term contains h, so division leaves a polynomial. At h = 0 its value is $a'\otimes b\otimes c+a\otimes b'\otimes c+a\otimes b\otimes c'$, a tangent tensor. This enlarged parameterization includes border-rank limits; at its boundary it goes beyond the original finite rank-two model.</p></details>
+    <p class="read"><b>Figure {fig:bordercompare}.</b> Orange uses the original two-part parameters. Violet uses the description that includes the limiting pattern at h = 0. Compare the falling loss with the size of the parameters. The second description gives this optimizer access to a finite exact endpoint.</p>
   </div>
 
   <section class="panel" aria-label="Border rank">
