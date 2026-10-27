@@ -104,7 +104,7 @@
   <div class="col">
     <h2 id="appendix-c">Appendix C. Thermodynamic integration and WBIC</h2>
     <p>Let $\varphi$ be a normalized prior and $K\ge0$ a centered loss. Write $Z_c(\beta)=\int e^{-n\beta K(w)}\varphi(w)\,dw$. Since $Z_c(0)=1$, differentiation gives the exact identity:</p>
-    <div class="eq tex">-\log Z_c(1)=\int_0^1\mathbb E_\beta[nK],d\beta=\int_{-\infty}^0\beta\mathbb E_\beta[nK],d\log\beta.</div>
+    <div class="eq tex">-\log Z_c(1)=\int_0^1\mathbb E_\beta[nK]\,d\beta=\int_{-\infty}^0\beta\mathbb E_\beta[nK]\,d\log\beta.</div>
     <p>For a regular quadratic loss, the <em>scaled</em> quantity $\beta\mathbb E_\beta[nK]$ approaches $d/2$ in the concentrated regime. In a singular toy loss it approaches $\lambda$, with finite-concentration and possibly logarithmic corrections. The unscaled expectation behaves roughly as $\lambda/\beta$; it does not plateau at $\lambda$.</p>
     <p>For statistical evidence, replace $K$ with average negative log likelihood $L_n$ and retain the baseline term $nL_n(w^*)$. Watanabe’s WBIC uses $\mathbb E_{\beta^*}[nL_n]$ at $\beta^*=1/\log n$ to approximate the leading free-energy asymptotics under its stated assumptions. It is a finite-sample approximation, not an exact quadrature identity. The <a href="./part-4.html#thermometer">main chapter’s temperature experiment</a> displays the centered toy quantities separately.</p>
   </div><div class="col">
@@ -167,7 +167,7 @@
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-4.html"><span class="dir">← Previous</span><span class="t">Singular learning theory</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Stratum (Gemini 4 Argon), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
   <script type="module" src="./src/main.ts"></script>
 </body>
 </html>

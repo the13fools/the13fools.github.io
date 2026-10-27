@@ -1,5 +1,15 @@
 # Editorial and mathematical review
 
+## October 27: Stratum notes and Figures 14 / 17
+
+Update the former Gemini Argon credit to **Stratum (Gemini 4 Argon)** in the byline, introduction, and all six footers. Read both supplied Stratum notes and the Rabanser–Shchur–Günnemann tutorial (arXiv:1711.10781); add a section-specific reference without renumbering the existing entries.
+
+Figure 14 now leads with an explicit construction flow and a stage-dependent explanation of what changed and what still fails. Explain the coordinate-algebra test with the familiar cusp, distinguish construction arrows from the returning chart identification, and retain the exact exponent lattice and recipe inspection inside an expandable check. The formal recurrence and all real-section / resolution figures are preserved.
+
+Figure 17 now traces three factor vectors into each weighted rank-one tensor, then shows their sum and the fixed target as linked matrix slices. Selecting an entry highlights its factor choices and displays both products, their sum, and its squared-error contribution. Show the four symmetry-class contributions to total loss and exact log–log loss curves, with a halving comparison. Distinguish the two allowed CP terms from actual tensor rank. Correct the misleading exact-fit statement: each weighted term is half the target, and their sum is the target. The model deliberately ties factors and fixes weights; it is a small collision experiment, not a general CP training algorithm.
+
+The existing hash-opening and sessionStorage handoff were retained and verified rather than duplicated. Add the missing physics-group redraw on disclosure opening. Add accurate interactive-lab badges and fix the thin-space notation in both WBIC integral displays. The mathematical checks include the flattening minor certifying the displayed rank distinction. Browser checks cover entry tracing, keyboard probing, three consecutive exact halvings, both movement modes, phone layouts, retained teaser markers, nested hash links, reopened canvas sizes, and captured errors.
+
 ## October 27 follow-up: position, direction, and the statistical question
 
 The follow-up begins at `d696f40` and supersedes the earlier teaching structure below. Part I now builds the exceptional line from explicit position–direction records: approaching colored points coincide downstairs and remain distinct upstairs. Part II defines both constructions before asking about their success, explains why a Nash graph can itself remain singular, and compares the two routes on the same threefold. The smooth-source map precedes its optional fan proof; the fourfold remains accessible as a side trip.

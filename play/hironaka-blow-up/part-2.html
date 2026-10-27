@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-DdwJh7Ya.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-M7hgvZKX.css">
+  <script type="module" crossorigin src="./assets/main-BEQOngst.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-BzREZgK5.css">
 </head>
 <body>
   <header class="site-header">
@@ -202,7 +202,7 @@
     <h3 id="nash-three-charts">Compare the two routes on this same threefold</h3>
     <p>Recording tangent planes can separate some limiting positions without making the space of records smooth. That new space obeys its own algebraic relations and can have singular points of its own. Iteration asks Nash’s rule to resolve those new singularities as well.</p>
     <p>Keep the question fixed: <b>can every neighborhood upstairs be made smooth while retaining a map to this same $X$?</b> These two routes have different outcomes:</p>
-    <div class="method-comparison" id="threefold-comparison"><div><h4>Nash’s forced rule</h4><p>Singular X → tangent-plane records → tangent-plane records again.</p><p>After two steps, <b>one open chart is a copy of the original singular X</b>. Its origin still has tangent dimension 6 instead of 3. Repeating the rule inside that chart repeats the obstruction.</p><p><a href="#nash-three-charts">Follow the two Nash steps below ↓</a></p></div><div><h4>A chosen resolution</h4><p>The same X → normalization → a chosen subdivision → four smooth charts.</p><p>Each final chart has <b>three independent coordinates</b>. Their monomial maps satisfy the original equations exactly. The exceptional surfaces retain distinctions above the old singular set.</p><p><a href="#threefold-map">See the smooth space and its map ↓</a></p></div></div>
+    <div class="method-comparison" id="threefold-comparison"><div><h4>Nash’s forced rule</h4><p>Singular X → tangent-plane records → tangent-plane records again.</p><p>After two steps, <b>one open chart is a copy of the original singular X</b>. Its origin still has tangent dimension 6 instead of 3. Repeating the rule inside that chart repeats the obstruction.</p><p><a href="#nash-recurrence-demo">Follow the two Nash steps below ↓</a></p></div><div><h4>A chosen resolution</h4><p>The same X → normalization → a chosen subdivision → four smooth charts.</p><p>Each final chart has <b>three independent coordinates</b>. Their monomial maps satisfy the original equations exactly. The exceptional surfaces retain distinctions above the old singular set.</p><p><a href="#threefold-map">See the smooth space and its map ↓</a></p></div></div>
     <p>This second route uses the special monomial structure of this example. It demonstrates the endpoint promised by resolution, with every chart calculated. It is not an execution of the general Hironaka or ATW algorithm; the general center-selection procedure was explained in <a href="./part-1.html#resolution-algorithm">Part I</a>.</p>
     <p>The result of <a href="https://arxiv.org/html/2511.01772">Castillo, Duarte, Leyton-Álvarez, and Liendo</a><sup class="citation"><a id="cite-nash3-2" href="./appendix.html#ref-nash3" aria-label="Reference 11: Non-normalized Nash blowup fails to resolve singularities in dimension three">[11]</a></sup> concerns the <b>ordinary, non-normalized Nash blowup</b>. A selected open chart after two iterations is isomorphic to the starting singular threefold. It does not say that the entire blowup is unchanged, or settle normalized Nash resolution in dimension three.</p>
     <p>At $(x_1,\ldots,x_6)=0$, all five defining equations have zero linear part. The tangent space there has dimension 6, while $X$ has dimension 3: this fixed point is singular. We will see a point of this same local type return after two selected Nash charts.</p>
@@ -213,17 +213,23 @@
     <div class="eq tex">\phi: (\mathbf{k}^*)^3 \longrightarrow \mathbf{k}^6, \qquad (a, b, c) \longmapsto \left( a, b, c, \frac{c^2}{a^2 b}, \frac{ac}{b}, \frac{a^2 c}{b^2} \right).</div>
     <p><b>How tangent planes enter this calculation.</b> On the dense torus, the tangent-plane coordinates are Jacobian minors. Dividing by a chosen nonzero minor gives an affine Nash chart. Ratios of monomials subtract their exponent vectors: for example $x_5/x_1=\chi^{h_5-h_1}$. That is why the new lattice generators are differences, rather than arbitrarily chosen arrows.</p>
 </details>
-    <p class="read"><b>Figure 14.</b> Start with $S$, then follow one open chart at each blowup. The first chart fills the hole $u$ but has a new hole $w$. The second chart has the original semigroup in a new integer basis. The last button changes basis; it is not another blowup. Hollow orange points are missing <em>monomial exponents</em>, not holes cut out of the real surface above.</p>
+    <h4 id="nash-chart-lesson">What Figure 14 is checking</h4>
+    <p>A resolution has to make <em>every</em> neighborhood smooth. To disprove termination, it is enough to follow one bad neighborhood. Here a “chart” means an open piece of the new space, described by its own coordinates and equations.</p>
+    <p>The test below uses <b>which algebraic functions those coordinates can express</b>. A chart’s coordinate algebra consists of polynomial expressions in its coordinates, subject to its defining equations. On the cusp $(t^2,t^3)$, for comparison, the parameter $t$ is missing from its coordinate ring although $t^2$ and $t^3$ are present. Such a missing integral function witnesses non-normality, which implies singularity. The threefold has a similar obstruction. An exponent plot is bookkeeping for these functions, not a drawing of the variety.</p>
+    <p class="read"><b>Figure 14.</b> Click through the two Nash steps, then identify the returning chart. Read <b>what changed</b> and <b>what still fails</b>. The first step fixes one missing function but leaves another. After the second, the <em>whole coordinate algebra</em> is the original one in a new integer basis. That is why this singular neighborhood can recur indefinitely. Expand the lattice inspection only to check that arithmetic.</p>
   </div>
 
-  <section class="panel" aria-label="Three-dimensional Nash obstruction explorer">
+  <section class="panel" id="nash-recurrence-demo" aria-label="Three-dimensional Nash obstruction explorer">
     <div class="seg" role="group" aria-label="Nash chart construction">
       <button type="button" data-nash3-stage="-1" aria-pressed="true">Start: singular X</button>
       <button type="button" data-nash3-stage="0" aria-pressed="false">1. First Nash chart</button>
       <button type="button" data-nash3-stage="1" aria-pressed="false">2. Second Nash chart</button>
       <button type="button" data-nash3-stage="2" aria-pressed="false">Identify with the start (U₃⁻¹)</button>
     </div>
+    <svg id="nash3-route" role="img" aria-label="Two selected Nash charts lead back to the original singular chart type; the dashed return is a coordinate identification, not a third blowup"></svg>
+    <div id="nash3-lesson" class="nash-lesson" aria-live="polite"></div>
     <p class="read" id="nash3-proof-step" aria-live="polite">0 blowups · singular at the torus-fixed origin</p>
+    <details class="lattice-inspection"><summary>Inspect the exponent arithmetic <span class="lab-badge">3D algebra diagram</span></summary><p class="cap">A dot (i, j, k) means the monomial aⁱbʲcᵏ, not a spatial position. Multiplying monomials adds their exponents. Nonnegative integer sums of the solid generators give the allowed monomials. For example, q = c/b has exponent (0, −1, 1); its cube has exponent (0, −3, 3).</p>
     <div class="controls">
       <label class="sl"><span class="lbl">Inspect generator</span><select id="nash3-generator" aria-label="Inspect generator"><option value="1">g₂ = (0, −1, 1)</option></select></label>
       <label class="sl"><span class="lbl">Rotate lattice</span><input id="nash3-rotation" type="range" min="-180" max="180" step="1" value="37"><output id="nash3-rotation-out" for="nash3-rotation">37°</output></label>
@@ -248,13 +254,16 @@
     <div class="algebra" id="nash3-equation" aria-live="polite" aria-atomic="true">g₂ = h₅ − h₁ = (0, −1, 1).</div>
     <p class="cap" id="nash3-status">The first chart uses A = {h₁, h₄, h₆}, whose determinant is 3.</p>
     <p class="cap">Drag either plot to rotate the 3D lattice, or use the rotation slider. The coordinate axes represent integer exponent powers.</p>
+    </details>
   </section>
 
   <div class="col">
+    <details class="derivation"><summary>Verify the missing function and the returning coordinate algebra</summary>
     <p><b>Why there is a singularity to begin with:</b> The lattice point $u = (0, -1, 1)$ is absent from the semigroup ($u \notin S$), yet its third multiple $3u = h_4 + h_6 = (0, -3, 3)$ is present in $S$! Using the grading functional $L(x,y,z) = x + 2y + 3z$, all generators have positive integer grades, and only $h_1$ and $h_6$ have grade 1 (neither of which equals $u$). Because $S$ has missing lattice points, the semigroup is not saturated: its coordinate ring is not integrally closed, and the variety is singular.</p>
     <p><b>Why two Nash blowups cannot escape:</b> The first Nash chart introduces eight generators $g_i$. A subsequent Nash blowup produces a chart with six generators $t_i$. Their relation to the original six generators $h_i$ is an exact integer linear transformation:</p>
     <div class="eq tex">B_2 = U_3 B, \qquad U_3 = \begin{pmatrix} 1 & 4 & 2 \\ -2 & -1 & -1 \\ 1 & -1 & 0 \end{pmatrix}, \qquad \det U_3 = 1.</div>
     <p>Because $U_3 \in \operatorname{GL}(3, \mathbb{Z})$ is an unimodular integer matrix, it is an isomorphism of the integer lattice $\mathbb{Z}^3$. It identifies the full semigroup $T = U_3 S$ with $S$, proving that the resulting affine chart is <b>algebraically isomorphic to the starting variety</b>: $X(T) \cong X(S)$. Iterating Nash blowups simply reproduces this exact singular chart indefinitely.</p>
+    </details>
   </div>
 
   <div class="col">
@@ -368,6 +377,6 @@
 </main>
 
   <nav class="pager" aria-label="Previous and next"><a class="prev" href="./part-1.html"><span class="dir">← Previous</span><span class="t">What is a blowup?</span></a><a class="next" href="./part-3.html"><span class="dir">Next →</span><span class="t">A tensor fit and its blowups</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Stratum (Gemini 4 Argon), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

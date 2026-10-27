@@ -270,3 +270,28 @@ details > summary { cursor: pointer; font: 600 15px/1.5 var(--f-display); color:
 #tc-entries thead th:nth-child(2){color:var(--cold)}#tc-entries thead th:nth-child(3){color:var(--hot)}
 /* Contain absolutely positioned accessibility layers in long mathematical tables. */
 body{position:relative;overflow-x:hidden}
+
+/* Explicit proof steps precede the optional lattice bookkeeping. */
+.nash-lesson{border:1px solid var(--rule);border-radius:8px;background:var(--surface);padding:1.1rem;margin:1rem 0}
+.nash-lesson h4{font:650 1.05rem/1.35 var(--f-display);margin:0 0 1rem}.nash-lesson h5{font:650 .85rem var(--f-display);margin:0 0 .5rem;color:var(--blow)}
+.nash-lesson-columns{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}.nash-lesson p{font-size:.95rem;line-height:1.55;margin:0}
+.nash-lesson .nash-takeaway{border-top:1px solid var(--rule);margin-top:1rem;padding-top:.75rem}
+.lattice-inspection>summary{font-family:var(--f-display);padding:.5rem 0}.lattice-inspection[open]>summary{margin-bottom:1rem}
+.lab-badge{display:inline-block;font:600 .68rem/1.5 var(--f-display);color:var(--blow);background:var(--soft);border:1px solid var(--rule);border-radius:20px;padding:.15rem .55rem;margin:.25rem 0 .25rem .4rem;vertical-align:middle;white-space:nowrap}
+/* A compact, linked outer-product → prediction → error view. */
+.tensor-pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem;margin:1rem 0;scroll-margin-top:1rem}
+.tensor-card{border:1px solid var(--rule);border-radius:8px;padding:.7rem;background:var(--surface);min-width:0}
+.tensor-card h4{font:650 .82rem/1.35 var(--f-display);margin:0 0 .6rem;min-height:2.25rem}.tensor-cold h4{color:var(--cold)}.tensor-hot h4{color:var(--hot)}.tensor-blow h4{color:var(--blow)}
+.tensor-card-factors{min-height:105px;font:.77rem/1.5 var(--f-display)}.tensor-card-factors p{margin:0 0 .5rem}.tensor-sum-entry{font-family:var(--f-mono);overflow-wrap:anywhere}
+.tensor-vector-list>div{display:grid;grid-template-columns:1rem .3rem 1fr 1fr .3rem;align-items:center;gap:.15rem;margin:.2rem 0;font:500 .8rem var(--f-mono)}
+.factor-entry{text-align:center;border-radius:3px;padding:.15rem}.factor-entry.picked{background:var(--soft);outline:1px solid var(--blow)}.tensor-bracket{color:var(--muted)}
+.tensor-slices{display:grid;gap:.65rem}.tensor-slices table{width:100%;border-collapse:separate;border-spacing:2px;font:500 .68rem var(--f-display);table-layout:fixed}
+.tensor-slices caption{text-align:left;font-weight:650;margin-bottom:.15rem}.tensor-slices th{color:var(--muted);font-weight:500;padding:0}.tensor-slices th:first-child{width:1.7rem}
+.tensor-cell{display:block;width:100%;border:1px solid var(--rule);border-radius:4px;padding:.4rem 0;background:var(--surface);background:color-mix(in srgb,var(--cell-color) calc(var(--cell-strength)*100%),var(--surface));color:var(--ink);font:500 .78rem var(--f-mono);cursor:pointer}
+.tensor-cell.picked{outline:2px solid var(--blow);outline-offset:0}.tensor-cell:focus-visible{outline:3px solid var(--ink)}
+.tensor-entry-trace{background:var(--soft);border-radius:8px;padding:.8rem 1rem;font:.9rem/1.5 var(--f-display);margin:1rem 0}.tensor-entry-trace p{margin:0 0 .6rem}
+.tensor-trace-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1rem;font:.8rem/1.6 var(--f-mono);overflow-wrap:anywhere}
+.tensor-analysis{margin:1.4rem 0}.tensor-loss-budget h4{font:650 .85rem var(--f-display);margin:1rem 0 .5rem}.loss-budget-rows>div{display:flex;justify-content:space-between;font:.78rem/1.6 var(--f-mono);border-bottom:1px solid var(--rule);padding:.2rem 0}
+@media(max-width:700px){.nash-lesson-columns,.tensor-trace-grid{grid-template-columns:1fr}.tensor-pipeline{grid-template-columns:repeat(2,minmax(0,1fr))}.tensor-card{padding:.55rem}.tensor-cell{font-size:.7rem}.tensor-card h4{font-size:.76rem}.tensor-card-factors{font-size:.7rem}.tensor-vector-list>div{font-size:.72rem}.lab-badge{margin-left:0}.tensor-slices th:first-child{width:1.5rem}}
+
+#nash3-route{display:block;width:100%;height:auto;margin-top:1rem}

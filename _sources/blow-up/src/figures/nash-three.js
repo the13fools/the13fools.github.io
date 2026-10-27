@@ -73,7 +73,7 @@ function initNashThree() {
     }
     axes.forEach((a,i)=>{
       line(scale(a,-0.45),a,col("--rule"));
-      label(a,["x","y","z"][i],col("--muted"));
+      label(a,["a exponent","b exponent","c exponent"][i],col("--muted"));
     });
     const O=[0,0,0];
     gens.forEach((v,i)=>line(O,v,col(highlight.includes(i)?"--blow":"--steel"),highlight.includes(i)?2.5:1));
@@ -94,12 +94,40 @@ function initNashThree() {
     gens.forEach((v,i)=>{if(!highlight.includes(i))label(v,labels[i],col("--muted"));});
   }
 
+  function drawRoute(){
+    const svg=document.getElementById('nash3-route'),{E,T,C}=window.__E;
+    const W=Math.max(260,svg.getBoundingClientRect().width),gap=22,margin=8,box=(W-2*margin-2*gap)/3;
+    svg.replaceChildren();svg.setAttribute('viewBox',`0 0 ${W} 135`);
+    const active=Math.min(2,stage+1),middle=i=>margin+i*(box+gap)+box/2;
+    T(svg,W/2,9,'Solid arrows: one Nash step, then keep one chart',C.muted,{at:{'text-anchor':'middle'},st:';font-size:10px'});
+    for(let i=0;i<3;i++){
+      E('rect',{x:margin+i*(box+gap),y:14,width:box,height:58,rx:6,fill:i===active?C.soft:C.surface,stroke:i===active?C.blow:C.rule,'stroke-width':i===active?2:1},svg);
+      T(svg,middle(i),37,['Start X','1st chart Y','2nd chart Z'][i],C.ink,{at:{'text-anchor':'middle'},st:';font-size:12px;font-weight:600'});
+      T(svg,middle(i),57,i===2?'singular · ≅ X':'singular',C.bad,{at:{'text-anchor':'middle'},st:';font-size:11px'});
+      if(i<2){const x=margin+(i+1)*box+i*gap;E('line',{x1:x+3,x2:x+gap-4,y1:43,y2:43,stroke:C.ink},svg);E('path',{d:`M${x+gap-4} 43 l-5 -3 v6 Z`,fill:C.ink},svg);}
+    }
+    E('path',{d:`M${middle(2)} 75 V100 H${middle(0)} V75`,fill:'none',stroke:stage===2?C.blow:C.steel,'stroke-width':1.6,'stroke-dasharray':'4 4'},svg);
+    E('path',{d:`M${middle(0)} 75 l-3 5 h6 Z`,fill:stage===2?C.blow:C.steel},svg);
+    E('rect',{x:W/2-108,y:85,width:216,height:38,fill:C.paper},svg);
+    T(svg,W/2,99,'Z ≅ X: the same coordinate algebra',stage===2?C.blow:C.muted,{at:{'text-anchor':'middle'},st:';font-size:11px'});
+    T(svg,W/2,117,'Dashed return = identify, not blow up',C.muted,{at:{'text-anchor':'middle'},st:';font-size:10px'});
+  }
+
   function update() {
     stages.forEach(button=>button.setAttribute("aria-pressed",String(Number(button.dataset.nash3Stage)===stage)));
+    drawRoute();
     const vectors=source(),labels=currentNames();
     const headings={"-1":"Start · the same singular semigroup",0:"First Nash chart · 8 generators",1:"Second Nash chart · 6 generators",2:"After U₃⁻¹ · the original 6 generators"};
     document.getElementById("nash3-heading").textContent=headings[stage];
     document.getElementById("nash3-rotation-out").textContent=`${rotation.value}°`;
+    const lessons={
+      '-1':{title:'Start: one singular coordinate algebra',change:'The threefold has six coordinate functions. Its origin has tangent dimension 6, although the variety has dimension 3.',failure:'The quotient q = c/b is not a regular coordinate function on this affine variety, but q³ = x₄x₆ is. This missing integral function witnesses non-normality.',takeaway:'There is a singularity to remove. The orange hollow lattice point encodes q; it is not an absent spatial point.'},
+      0:{title:'First Nash step: one obstruction is repaired, another survives',change:'In the selected tangent-plane chart, q = c/b becomes an allowed coordinate function g₂.',failure:'A different function p = ab/c is still missing, even though p² is the coordinate g₇. This new chart is still non-normal and therefore singular.',takeaway:'Recording tangent planes can improve the coordinates without making the resulting space smooth.'},
+      1:{title:'Second Nash step: a copy of the original singularity returns',change:'This selected chart has six generators t₁,…,t₆. Every tᵢ is obtained from the original hᵢ by the same invertible integer map U₃.',failure:'The whole coordinate ring, including its relations, is isomorphic to the original ring. Thus this chart contains the same singular local type again.',takeaway:'The proof concerns one open neighborhood of the blowup. Other charts can improve while this one prevents resolution.'},
+      2:{title:'Identify the chart: repeat the same obstruction forever',change:'Applying U₃⁻¹ only renames the monomial coordinates. It performs no additional blowup.',failure:'Nash respects open subsets and isomorphisms. Its next two steps inside this copy reproduce the same singular neighborhood.',takeaway:'After 2, 4, 6, … steps, a singular chart survives. That proves nontermination of this ordinary Nash iteration.'}
+    };
+    const lesson=lessons[stage];
+    document.getElementById('nash3-lesson').innerHTML=`<h4>${lesson.title}</h4><div class="nash-lesson-columns"><div><h5>What changed?</h5><p>${lesson.change}</p></div><div><h5>What still fails?</h5><p>${lesson.failure}</p></div></div><p class="nash-takeaway"><b>Read this as:</b> ${lesson.takeaway}</p>`;
     const i=selected;
     let equation,summary;
     if(stage===-1){
@@ -140,6 +168,7 @@ function initNashThree() {
     new ResizeObserver(update).observe(canvas.parentElement);
   }
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",update);
+  new ResizeObserver(update).observe(document.getElementById("nash-recurrence-demo"));
   options();update();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",initNashThree);

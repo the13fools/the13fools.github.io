@@ -6,6 +6,8 @@ for (const [s,d] of [[0,0],[.3,0],[0,.3],[.21,-.37],[-.4,.1]]) {
   entries.forEach((v,i) => { const p=(i&1)+((i>>1)&1)+((i>>2)&1); near(v,(a**p+b**p)/2); });
   near(entries.reduce((sum,v,i)=>sum+(v-(i===0?1:0))**2,0)/3,tensorLoss(s,d));
   near(tensorLoss(0,d),d**4);
+  // A flattening minor certifies rank two when the components are distinct.
+  near(entries[0]*entries[3]-entries[1]*entries[2],d*d);
 }
 near(tensorLoss(0,.3)/tensorLoss(0,.15),16);
 // Part III's two ordinary blowups: s=d*v1, then (d,v1)=(r,r*v).

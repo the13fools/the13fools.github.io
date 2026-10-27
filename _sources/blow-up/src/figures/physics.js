@@ -479,6 +479,7 @@ import { cuspNeighborhoodShares } from "./learning-geometry.js";
     try { fig17f(); } catch (e) { console.error("fig17f error:", e); }
     try { fig17t(); } catch (e) { console.error("fig17t error:", e); }
   }
+  window.__draw3 = draw3;
   function drawAll() {
     try { window.__draw1(); } catch (e) { console.error("__draw1 error:", e); }
     try { window.__draw2(); } catch (e) { console.error("__draw2 error:", e); }

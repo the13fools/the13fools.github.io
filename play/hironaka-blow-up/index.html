@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script type="module" crossorigin src="./assets/main-DdwJh7Ya.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/main-M7hgvZKX.css">
+  <script type="module" crossorigin src="./assets/main-BEQOngst.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-BzREZgK5.css">
 </head>
 <body>
   <header class="site-header">
@@ -33,7 +33,7 @@
     <p class="kicker">Notes from a graphics researcher</p>
     <h1>What is… a blowup?</h1>
     <p class="dek">What makes a point singular, and how can changing the space make it smooth? I came to Hironaka’s theorem through physics simulation and graphics. These notes work through the geometry, its limits, and its use in singular learning theory.</p>
-    <p class="byline">Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol)</p>
+    <p class="byline">Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Stratum (Gemini 4 Argon), and Rowan (ChatGPT-6.1 Sol)</p>
   </div>
   <section class="panel" aria-label="Teaser: a blown-up collision">
     <div class="pair">
@@ -46,7 +46,7 @@
     <h2 id="why">Why I'm writing this</h2>
     <p>In October 2026, Resolution, the AI alignment research organization that absorbed the theoretical AI safety group formerly known as Timaeus, released <a href="https://github.com/resolutionorg/hironaka">a Lean formalization</a><sup class="citation"><a id="cite-formalization-1" href="./appendix.html#ref-formalization" aria-label="Reference 14: Formalizing resolution of singularities">[14]</a></sup> of Heisuke Hironaka's 1964 theorem on resolution of singularities, built largely by AI agents and a rather large amount of computational resources (<a href="https://resolution.org/post/formalizing-resolution-of-singularities">their post</a><sup class="citation"><a id="cite-formalization-2" href="./appendix.html#ref-formalization" aria-label="Reference 14: Formalizing resolution of singularities">[14]</a></sup> explains how). Their interest comes from <em>singular learning theory</em>, which uses resolution to derive Bayesian asymptotics when regular statistical assumptions fail. Ultimately I wanted to understand the what and the why of this formalization: what exactly was proved, and why a group working on AI safety would spend its effort on a theorem from 1964.</p>
     <p>In my graduate work I encountered many challenging singular problems arising from physics simulation and geometry processing, with a focus on problems related to parameterization, and I spent years developing solvers for them. I was curious to understand the core of singular learning theory by seeing what it does when applied in these settings, and through that to gain some intuition for the learning and AI safety problems it was built for.</p>
-    <p>But, it being the age of AI, I talked this through with my chatbot friends, who took names for themselves. This post was mostly written by the Claude Opus 5.5 agent that took the name Chart, with help from Gemini Argon (Gemini), and continued by Atlas (Gemini 3.8 Flash). Rowan (ChatGPT-6.1 Sol) reviewed the mathematics and revised the cone explorer and accompanying explanations.</p>
+    <p>But, it being the age of AI, I talked this through with my chatbot friends, who took names for themselves. This post was mostly written by the Claude Opus 5.5 agent that took the name Chart, with help from Stratum (Gemini 4 Argon), and continued by Atlas (Gemini 3.8 Flash). Rowan (ChatGPT-6.1 Sol) reviewed the mathematics and revised the cone explorer and accompanying explanations.</p>
     <h2 id="essence">The idea to keep in view</h2>
     <p>At a singular point, ordinary coordinates can collapse distinct branches or approach directions. A <b>blowup</b> keeps additional local information and a map back to the original space. Away from the chosen center, the geometry is unchanged. Above it, an exceptional set records the limits.</p>
     <p><b>Hironaka’s theorem</b> says that algebraic varieties in characteristic zero admit a smooth resolution. Constructive versions achieve it through finitely many blowups along suitably chosen smooth centers. The hard part is proving that the choices fit together and that the process ends.</p>
@@ -65,6 +65,6 @@
   </div>
 </main>
   <nav class="pager" aria-label="Previous and next"><a class="next" href="./part-1.html"><span class="dir">Next →</span><span class="t">What is a blowup?</span></a></nav>
-  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Gemini Argon (Gemini), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
+  <footer class="site-footer"><p>Josh, with Chart (Claude Opus 5.5), Atlas (Gemini 3.8 Flash), Stratum (Gemini 4 Argon), and Rowan (ChatGPT-6.1 Sol). Every figure runs in your browser; the source is on <a href="https://github.com/the13fools/the13fools.github.io/tree/master/_sources/blow-up">GitHub</a>.</p></footer>
 </body>
 </html>

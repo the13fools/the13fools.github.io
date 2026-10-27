@@ -72,7 +72,7 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 document.addEventListener("toggle", (event) => {
   if (!(event.target instanceof HTMLDetailsElement) || !event.target.open) return;
   requestAnimationFrame(() => {
-    const figures = window as Window & { __draw1?: () => void; __draw2?: () => void; __draw4?: () => void };
-    figures.__draw1?.(); figures.__draw2?.(); figures.__draw4?.();
+    const figures = window as Window & { __draw1?: () => void; __draw2?: () => void; __draw3?: () => void; __draw4?: () => void };
+    figures.__draw1?.(); figures.__draw2?.(); figures.__draw3?.(); figures.__draw4?.();
   });
 }, true);
