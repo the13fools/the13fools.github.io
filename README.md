@@ -18,3 +18,9 @@ The uploaded public_html backup and recovery material are kept outside this publ
 ## Blow-up essay
 
 The interactive essay is published at https://foolzone.com/play/hironaka-blow-up/. Its editable source is tracked in `_sources/blow-up/`; the checked production output is in `play/hironaka-blow-up/`. Run `npm ci --prefix _sources/blow-up` once, then `node tools/build-blow-up.mjs` from this repository root to build, audit and refresh it. Commit source and output together before publishing.
+
+## Experiments index
+
+`/play/` is the directory for current essays/labs and the two older Let’s Get Lost collections. Edit `play/index.html` and `css/play.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
+
+The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is marked as preparing for launch until its custom domain is live.
