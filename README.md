@@ -2,7 +2,7 @@
 
 Josh Vekhter’s personal website at https://foolzone.com/, served by GitHub Pages from the root of the master branch of the13fools/the13fools.github.io.
 
-The front door is `index.html` with `css/play.css` and its locally scoped `css/splash.css`. The academic homepage is preserved in `research/index.html` with `css/home.css`. Images live in img/ and papers in papers/. These pages have no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
+The academic front door is `index.html` with `css/home.css`; `/research/` retains a compatible academic copy with the homepage canonical. Its Play link opens the colorful `play/index.html`, styled by `css/play.css` and `css/splash.css`. Images live in img/ and papers in papers/. These pages have no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
 
 Local preview: python3 -m http.server 8765 --bind 127.0.0.1
 
@@ -21,7 +21,7 @@ The interactive essay is published at https://foolzone.com/play/hironaka-blow-up
 
 ## Experiments index
 
-`/play/` is the directory for current essays/labs and the two older Let’s Get Lost collections. Edit `play/index.html` and `css/play.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
+`/play/` is the colorful splash page leading to the current essays/labs and both Let’s Get Lost collections. The expanded directory with source links is `/play/experiments.html`. Edit those HTML files, `css/play.css`, and `css/splash.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
 
 The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is a separate project and is not included on the Foolzone splash or experiments index.
 
@@ -36,4 +36,4 @@ Ace 1.45.2 is the initial editor component, pinned and vendored with its BSD-3-C
 - Save draft uses localStorage under `foolzone-remix@1/`. JSON export/import preserves the three source buffers. HTML export embeds CSS and JS, escapes closing script/style tags, and omits the preview bridge/policy. Images or other external assets are not bundled. An exported page is an ordinary user-authored page, rather than an editor sandbox.
 - The small spring is a teaching sketch, not a replacement for the old course demos. Existing applications, research pages, and essay rendering are unchanged.
 
-Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The user authorized publication of the splash homepage and its linked features on October 28, 2026.
+Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The user authorized publication on October 28, 2026. Josh then clarified the hierarchy: academics at `/`, with Play leading to the splash at `/play/`. The remixer’s splash starter reads `/play/index.html`.
