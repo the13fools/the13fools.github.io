@@ -2,7 +2,7 @@
 
 Josh Vekhter’s personal website at https://foolzone.com/, served by GitHub Pages from the root of the master branch of the13fools/the13fools.github.io.
 
-The front door is `index.html` with `css/play.css`. The academic homepage is preserved in `research/index.html` with `css/home.css`. Images live in img/ and papers in papers/. These pages have no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
+The front door is `index.html` with `css/play.css` and its locally scoped `css/splash.css`. The academic homepage is preserved in `research/index.html` with `css/home.css`. Images live in img/ and papers in papers/. These pages have no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
 
 Local preview: python3 -m http.server 8765 --bind 127.0.0.1
 
