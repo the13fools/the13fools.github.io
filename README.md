@@ -8,7 +8,7 @@ Local preview: python3 -m http.server 8765 --bind 127.0.0.1
 
 ## Pending source files
 
-- papers/josh_vekhter_phd_thesis.pdf: add the file and restore its PDF link in the thesis section.
+- The thesis is linked from the homepage and research page to its official UT repository record: https://repositories.lib.utexas.edu/items/06db5b27-cd77-450b-b305-736ebacfbf95. Local PDF hosting is unnecessary.
 - papers/Mint3d_final.pdf: add the file and change the Mint Paper link to the local PDF if desired. The publisher page is linked in the meantime.
 - img/bunny_thesis.png: img/bunny.png is used in its place.
 - The original slides are approximately 198 MiB, exceeding GitHub’s 100 MiB file limit. They remain in the original public_html/papers/ backup outside this checkout. Lossless ZIP recompression still exceeds the limit. The IMA Presentation link remains available; restore a slide download link after preparing an appropriately sized deck or an external download location.
@@ -36,4 +36,4 @@ Ace 1.45.2 is the initial editor component, pinned and vendored with its BSD-3-C
 - Save draft uses localStorage under `foolzone-remix@1/`. JSON export/import preserves the three source buffers. HTML export embeds CSS and JS, escapes closing script/style tags, and omits the preview bridge/policy. Images or other external assets are not bundled. An exported page is an ordinary user-authored page, rather than an editor sandbox.
 - The small spring is a teaching sketch, not a replacement for the old course demos. Existing applications, research pages, and essay rendering are unchanged.
 
-Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The feature remains local and unpublished.
+Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The user authorized publication of the splash homepage and its linked features on October 28, 2026.

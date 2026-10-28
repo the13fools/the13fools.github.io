@@ -7,3 +7,5 @@
 @media(max-width:370px){.splash .intro h1{font-size:85px}.doodle-strip{width:112px;top:107px;right:-2px}.splash .section-head>span{font-size:8px;max-width:110px}.splash .path h3{font-size:20px}.splash .wordmark{font-size:15px}}
 
 .web-badges a{font:bold 10px/1.4 "Courier New",monospace;padding:4px 8px;background:#b1f35d;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);transform:rotate(3deg);text-decoration:none}.web-badges a:hover{background:#ffef63}
+
+.splash .research-door .thesis-link{font-size:13px;max-width:620px;margin:12px 0 0}.splash .thesis-link a{font-weight:bold}
