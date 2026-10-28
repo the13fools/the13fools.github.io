@@ -24,3 +24,16 @@ The interactive essay is published at https://foolzone.com/play/hironaka-blow-up
 `/play/` is the directory for current essays/labs and the two older Let’s Get Lost collections. Edit `play/index.html` and `css/play.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
 
 The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is a separate project and is not included on the Foolzone splash or experiments index.
+
+## Local remix workbench
+
+`/hack/` lets a visitor edit the splash page’s actual body/CSS, a small spring simulation, or a personal-page starter. The splash links to the editor and the personal corner. `?example=homepage`, `?example=spring`, and `?example=corner` select the starting point.
+
+Ace 1.45.2 is the initial editor component, pinned and vendored with its BSD-3-Clause license and verified npm package integrity in `vendor/ace-1.45.2/`. A plain textarea alternative is available. No build, CDN, account, or server write endpoint is used. The editor choice can change without changing the portable `foolzone-remix@1` project format.
+
+- Run recreates an opaque-origin iframe with only `allow-scripts`; it does not grant same-origin, popups, forms, downloads, or top navigation. A preview-only CSP blocks external scripts, network connections, child frames and objects. Parent message handling checks the source frame and per-run channel; preview console content is inserted as text.
+- Imported files are validated as bounded text and remain unexecuted until Run. Stop removes the running document, including its srcdoc. Scripts execute only in the browser preview; the workbench has no code-execution server.
+- Save draft uses localStorage under `foolzone-remix@1/`. JSON export/import preserves the three source buffers. HTML export embeds CSS and JS, escapes closing script/style tags, and omits the preview bridge/policy. Images or other external assets are not bundled. An exported page is an ordinary user-authored page, rather than an editor sandbox.
+- The small spring is a teaching sketch, not a replacement for the old course demos. Existing applications, research pages, and essay rendering are unchanged.
+
+Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The feature remains local and unpublished.
