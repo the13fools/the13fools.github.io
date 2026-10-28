@@ -2,7 +2,7 @@
 
 Josh Vekhter’s personal website at https://foolzone.com/, served by GitHub Pages from the root of the master branch of the13fools/the13fools.github.io.
 
-Edit index.html and css/home.css. Images live in img/ and papers in papers/. The homepage has no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
+The front door is `index.html` with `css/play.css`. The academic homepage is preserved in `research/index.html` with `css/home.css`. Images live in img/ and papers in papers/. These pages have no build step and no third-party font or script dependencies. CNAME preserves the existing custom domain. The previous landing page is preserved at /welcome.html; existing project paths remain in place.
 
 Local preview: python3 -m http.server 8765 --bind 127.0.0.1
 
@@ -23,4 +23,4 @@ The interactive essay is published at https://foolzone.com/play/hironaka-blow-up
 
 `/play/` is the directory for current essays/labs and the two older Let’s Get Lost collections. Edit `play/index.html` and `css/play.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
 
-The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is marked as preparing for launch until its custom domain is live.
+The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is a separate project and is not included on the Foolzone splash or experiments index.
