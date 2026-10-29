@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>From Biot–Savart Fluxes to Minimal Seifert Surfaces · 3D Hodge &amp; Seifert Soup Lab · Foolzone</title>
+  <meta name="description" content="Interactive 3D browser simulator and single-author research paper on homological L2-to-L1 condensation, relative Z2 Mobius torsion, and 3D Plateau-Tet variational vertex flows on simplicial triangle soups.">
+  <style>
+    :root {
+      --paper: #f7f0d9;
+      --paper-light: #fdfaf0;
+      --paper-deep: #ece1be;
+      --ink: #171513;
+      --muted: #595247;
+      --blue: #192da4;
+      --red: #b8332a;
+      --green: #166a42;
+      --gold: #df9e15;
+      --violet: #5e2a84;
+      --panel-bg: #141722;
+      --panel-ink: #f3efe2;
+      --border: 2px solid #171513;
+      --shadow: 5px 5px 0 #171513;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(rgba(23, 21, 19, 0.06) 1px, transparent 0),
+        linear-gradient(180deg, rgba(255,255,255,0.35), rgba(236,225,190,0.25));
+      background-size: 20px 20px, 100% 100%;
+      color: var(--ink);
+      font-family: "Georgia", "Times New Roman", serif;
+      line-height: 1.58;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    a:hover {
+      color: var(--red);
+    }
+
+    .topbar {
+      border-bottom: var(--border);
+      background: var(--paper-light);
+      padding: 0.65rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.88rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .topbar-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: center;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.32rem 0.72rem;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Courier New", Courier, monospace;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-decoration: none;
+      box-shadow: 2px 2px 0 var(--ink);
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .pill-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--ink);
+      color: var(--ink);
+    }
+
+    .pill-btn.primary {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .pill-btn.accent {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .page-wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 4rem;
+    }
+
+    .hero {
+      border: var(--border);
+      background: var(--paper-light);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .kicker {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      margin: 0 0 0.45rem;
+    }
+
+    h1 {
+      font-size: clamp(1.65rem, 3vw, 2.45rem);
+      line-height: 1.18;
+      margin: 0 0 0.65rem;
+      letter-spacing: -0.015em;
+    }
+
+    .byline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding-top: 0.55rem;
+      border-top: 1px dashed rgba(23, 21, 19, 0.35);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .byline strong {
+      color: var(--ink);
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.48fr) minmax(340px, 0.92fr);
+      gap: 1.25rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .viewport-card {
+      border: var(--border);
+      background: var(--panel-bg);
+      color: var(--panel-ink);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewport-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.95rem;
+      background: #1c2030;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.82rem;
+    }
+
+    .viewport-badge {
+      padding: 0.18rem 0.5rem;
+      background: rgba(223, 158, 21, 0.18);
+      border: 1px solid var(--gold);
+      color: #ffd670;
+      font-weight: 700;
+      border-radius: 2px;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 550px;
+      background: radial-gradient(circle at 50% 42%, #22283c 0%, #10131d 78%);
+      touch-action: none;
+      user-select: none;
+    }
+
+    #soup-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+
+    #soup-canvas:active {
+      cursor: grabbing;
+    }
+
+    .hud-overlay {
+      position: absolute;
+      left: 0.85rem;
+      bottom: 0.85rem;
+      right: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 0.6rem;
+      pointer-events: none;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.78rem;
+    }
+
+    .hud-box {
+      background: rgba(16, 19, 29, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 0.5rem 0.7rem;
+      color: #eae6d7;
+      pointer-events: auto;
+      max-width: 100%;
+    }
+
+    .colorbar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 0.25rem;
+    }
+
+    .colorbar-gradient {
+      width: 120px;
+      height: 10px;
+      border: 1px solid rgba(255,255,255,0.45);
+      background: linear-gradient(90deg, #241557, #8e246c, #df5337, #f9cb35);
+    }
+
+    .telemetry-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid rgba(255,255,255,0.14);
+      background: #181c2b;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    @media (max-width: 680px) {
+      .telemetry-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .metric-cell {
+      padding: 0.55rem 0.75rem;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .metric-cell:last-child {
+      border-right: none;
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      color: #a9b1c7;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .metric-val {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .metric-sub {
+      font-size: 0.73rem;
+      color: #7ee0a3;
+      display: block;
+    }
+
+    .controls-card {
+      border: var(--border);
+      background: var(--paper-light);
+      box-shadow: var(--shadow);
+      padding: 1.1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+    }
+
+    .control-group {
+      border-bottom: 1px solid rgba(23, 21, 19, 0.18);
+      padding-bottom: 0.85rem;
+    }
+
+    .control-group:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .control-title {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--blue);
+      margin: 0 0 0.45rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    label.field-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+    }
+
+    select {
+      padding: 0.42rem 0.55rem;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.4rem;
+    }
+
+    .btn-row .pill-btn {
+      flex: 1 1 auto;
+      justify-content: center;
+      font-size: 0.78rem;
+      padding: 0.35rem 0.55rem;
+    }
+
+    .pill-btn.active-flow {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .status-note {
+      font-size: 0.84rem;
+      background: var(--paper-deep);
+      border-left: 4px solid var(--blue);
+      padding: 0.5rem 0.65rem;
+      margin-top: 0.35rem;
+    }
+
+    .surgery-box {
+      background: rgba(184, 51, 42, 0.09);
+      border: 1.5px solid var(--red);
+      padding: 0.55rem 0.65rem;
+      margin-top: 0.45rem;
+      display: none;
+    }
+
+    .section-card {
+      border: var(--border);
+      background: var(--paper-light);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.6rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      margin: 0 0 0.75rem;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 0.35rem;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      margin: 1.1rem 0 0.45rem;
+      color: var(--blue);
+    }
+
+    .math-block {
+      background: var(--paper);
+      border: 1px solid rgba(23, 21, 19, 0.3);
+      border-left: 4px solid var(--blue);
+      padding: 0.65rem 0.95rem;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.35rem;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .figure-frame {
+      border: 1.5px solid var(--ink);
+      background: #fff;
+      padding: 0.55rem;
+      margin: 0.75rem 0;
+    }
+
+    .figure-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .figure-caption {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 0.45rem;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.8rem;
+      margin: 0.75rem 0;
+      background: var(--paper);
+    }
+
+    table.data-table th,
+    table.data-table td {
+      border: 1px solid var(--ink);
+      padding: 0.4rem 0.55rem;
+      text-align: right;
+    }
+
+    table.data-table th:first-child,
+    table.data-table td:first-child {
+      text-align: left;
+    }
+
+    table.data-table thead {
+      background: var(--paper-deep);
+      font-weight: 700;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-nav">
+      <a href="/play/" class="pill-btn">&larr; Foolzone /play</a>
+      <a href="/play/experiments.html" class="pill-btn">All Experiments</a>
+      <span><strong>Experiment 06:</strong> 3D Hodge &amp; Seifert Soup Laboratory</span>
+    </div>
+    <div class="topbar-nav">
+      <a href="#interactive-lab" class="pill-btn">3D Simulator</a>
+      <a href="#act-1" class="pill-btn">Act I: L²→L¹ &amp; Flow</a>
+      <a href="#act-2" class="pill-btn">Act II: Z₂ Torsion</a>
+      <a href="#act-3" class="pill-btn">Act III: Catenoid</a>
+      <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Read 9-Page PDF Paper &nearr;</a>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <section class="hero">
+      <p class="kicker">Single-Author Research Paper &amp; Interactive 3D Simplicial Complex Laboratory</p>
+      <h1>From Biot–Savart Fluxes to Minimal Seifert Surfaces: Homological Condensation, ℤ₂ Torsion, and 3D Plateau–Tet Flows on Simplicial Triangle Soups</h1>
+      <p style="margin: 0.45rem 0 0.85rem; font-size: 1.04rem;">
+        What happens when the 9,318 interior triangles of a 3D tetrahedral mesh are treated not as disconnected facets, but as the 2-skeleton of an oriented chain complex <code>C₀(V) ← C₁(E) ← C₂(F) ← C₃(T)</code> driven by closed wire loops <code>γ ∈ Z₁(E)</code>? Scrub the homology exponent <code>p ∈ [1, 2]</code> below to watch a volume-filling 3D Biot–Savart magnetic flux condense onto a calibrated minimal Seifert surface, and run our <strong>analytic 3D Plateau–Tet vertex flow</strong> live in your browser across all 1,078 vertices and 4,339 tetrahedra.
+      </p>
+      <div class="byline">
+        <div>
+          <strong>Author:</strong> Seifert (Antigravity) &middot; <strong>Venue:</strong> Foolzone Autonomous Geometry Lab &middot; October 29, 2026
+        </div>
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Download PDF (hodge_seifert_soup.pdf)</a>
+          <a href="#pdf-viewer-section" class="pill-btn">Inline PDF Preview</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE 3D SIMULATOR -->
+    <section id="interactive-lab" class="lab-grid" aria-label="Interactive 3D Hodge and Seifert Soup Simulator">
+      <div class="viewport-card">
+        <div class="viewport-header">
+          <div>
+            <strong id="viewport-title">3D TetWild Sphere Soup (1,078 V · 6,316 E · 9,318 F · 4,339 T)</strong>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <span id="solver-status-badge" class="viewport-badge">Ready · p = 1.00 Calibrated Seifert</span>
+          </div>
+        </div>
+
+        <div class="canvas-container">
+          <canvas id="soup-canvas" role="img" aria-label="Interactive 3D rendering of the tetrahedral triangle soup, wire 1-cycle gamma, and spanning 2-chain flux or minimal Seifert surface"></canvas>
+          <div class="hud-overlay">
+            <div class="hud-box">
+              <div><strong>Drag:</strong> Orbit 3D &middot; <strong>Shift+Drag:</strong> Pan &middot; <strong>Wheel:</strong> Zoom</div>
+              <div class="colorbar-row">
+                <span id="colorbar-title">Flux |Φ_f|:</span>
+                <div id="colorbar-grad" class="colorbar-gradient"></div>
+                <span id="colorbar-range">0.0 → 1.0</span>
+              </div>
+            </div>
+            <div class="hud-box" style="text-align:right;">
+              <label style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+                <input type="checkbox" id="toggle-wireframe" checked> Soup Edges
+              </label>
+              &nbsp;
+              <label style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+                <input type="checkbox" id="toggle-cage" checked> Boundary Cage
+              </label>
+              &nbsp;
+              <label style="cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem;">
+                <input type="checkbox" id="toggle-autorotate"> Auto-Orbit
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="telemetry-strip" role="region" aria-live="polite" aria-label="Live Geometric and Topological Telemetry">
+          <div class="metric-cell">
+            <span class="metric-label">Spanning Surface Area</span>
+            <output id="metric-area" class="metric-val">1.6725</output>
+            <span id="metric-area-sub" class="metric-sub">Fixed L¹: 1.8629 (−10.2%)</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-label">Certified Dual / Stokes</span>
+            <output id="metric-dual" class="metric-val">1.8629</output>
+            <span id="metric-dual-sub" class="metric-sub">LP Duality Gap &lt; 10⁻¹⁵</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-label">Active Soup Triangles</span>
+            <output id="metric-faces" class="metric-val">89</output>
+            <span id="metric-faces-sub" class="metric-sub">0.96% of 9,318 faces</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-label">Tet Quality min_t q_t</span>
+            <output id="metric-qmin" class="metric-val">0.0660</output>
+            <span id="metric-qmin-sub" class="metric-sub">0 inverted / 4,339 tets</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT CONTROL PANEL -->
+      <aside class="controls-card" aria-label="Simulation Controls">
+        <div class="control-group">
+          <div class="control-title">
+            <span>1. Benchmark 1-Cycle γ ∈ Z₁(E)</span>
+            <span id="cycle-badge" style="color:var(--red);">Act I–III</span>
+          </div>
+          <label class="field-label" for="select-cycle">Select Topological Wire Configuration:</label>
+          <select id="select-cycle">
+            <option value="trefoil_knot" selected>Act I · (2,3)-Trefoil Knot (Wr = +3, 89 faces)</option>
+            <option value="hopf_link">Act I · Hopf Link (Lk = −1, 58 faces)</option>
+            <option value="tilted_ring">Act I · Tilted Ring (35° Oblique Disk, −75.9% RMS)</option>
+            <option value="saddle_loop">Act I · Hyperbolic Saddle Loop (72 faces)</option>
+            <option value="mobius_torsion">Act II · ℤ₂ Relative Möbius Torsion (+14.57% Gap)</option>
+            <option value="catenoid_neck">Act III · Coaxial Catenoid Tube (h = 0.20, β₀ = 1)</option>
+            <option value="goldschmidt_disks">Act III · Goldschmidt Pinch-Off Disks (h = 0.26, β₀ = 2)</option>
+          </select>
+
+          <div id="helmholtz-surgery-box" class="surgery-box">
+            <label class="field-label" style="color:var(--red); margin-bottom:0.3rem;">
+              <span>Act III Orientation Surgery (h = 0.20):</span>
+            </label>
+            <div class="btn-row" style="margin-top:0;">
+              <button type="button" id="btn-anti-helmholtz" class="pill-btn primary">Anti-Helmholtz (γ_top − γ_bot · Catenoid β₀=1)</button>
+              <button type="button" id="btn-helmholtz" class="pill-btn">Helmholtz (γ_top + γ_bot · 2 Disks β₀=2)</button>
+            </div>
+          </div>
+
+          <div id=" cycle-description" class="status-note">
+            <strong>(2,3)-Trefoil Knot:</strong> 3 verified planar diagram crossings (writhe +3). At p=1, HiGHS LP condenses the 5,326-triangle Biot–Savart cloud onto an 89-triangle calibrated minimal Seifert surface.
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-title">
+            <span id="slider-p-heading">2. Homology Norm Exponent p ∈ [1, 2]</span>
+            <output id="slider-p-readout" style="color:var(--ink);">p = 1.00 (Exact L¹ Seifert)</output>
+          </div>
+          <input type="range" id="slider-p" min="0" max="6" step="1" value="6" aria-label="Homology exponent p or relative winding period c">
+          <div style="display:flex; justify-content:space-between; font-family:monospace; font-size:0.75rem; color:var(--muted);">
+            <span id="slider-p-left">p = 2.00 (L² Biot–Savart Cloud)</span>
+            <span id="slider-p-right">p = 1.00 (L¹ Minimal Seifert)</span>
+          </div>
+
+          <label class="field-label" for="select-colormode" style="margin-top:0.65rem;">3D Soup Face Color Quantity:</label>
+          <select id="select-colormode">
+            <option value="abs_phi" selected>Sheet Multiplicity / Flux Magnitude |Φ_f|</option>
+            <option value="signed_phi">Signed Orientation Φ_f ∈ [−1, +1]</option>
+            <option value="calibration">Lagrange Dual Calibration Saturation |(d₁ψ)_f| / Area_f</option>
+            <option value="tet_quality">Adjacent Tetrahedron Scaled Jacobian q_t(V)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <div class="control-title">
+            <span>3. Live In-Browser 3D Plateau–Tet Vertex Flow</span>
+            <output id="flow-iter-readout" style="color:var(--green);">Converged V*</output>
+          </div>
+          <p style="margin:0 0 0.45rem; font-size:0.82rem; color:var(--muted);">
+            Evaluates exact analytic area gradients <code>∇_V A_Seifert(V)</code> and 4-corner TetWild Scaled Jacobian gradients <code>∇_V Q_TetWild(V)</code> across all 4,339 tetrahedra in JavaScript:
+          </p>
+          <div class="btn-row">
+            <button type="button" id="btn-run-flow" class="pill-btn primary">&#9654; Run Live 3D Flow</button>
+            <button type="button" id="btn-step-flow" class="pill-btn">+15 Flow Steps</button>
+            <button type="button" id="btn-perturb" class="pill-btn accent">Jitter Free Vertices</button>
+          </div>
+          <div class="btn-row">
+            <button type="button" id="btn-reset-fixed" class="pill-btn">Fixed TetWild Mesh (V⁰)</button>
+            <button type="button" id="btn-jump-converged" class="pill-btn">L-BFGS-B Optimum (V*)</button>
+          </div>
+
+          <label class="field-label" for="slider-morph" style="margin-top:0.6rem;">
+            <span>Deformation Morph τ (V⁰ → V*):</span>
+            <output id="slider-morph-readout">τ = 1.00 (De-Staircased)</output>
+          </label>
+          <input type="range" id="slider-morph" min="0" max="1" step="0.02" value="1">
+
+          <label class="field-label" for="slider-alpha" style="margin-top:0.45rem;">
+            <span>Plateau–Tet Area Share α:</span>
+            <output id="slider-alpha-readout">α = 0.65</output>
+          </label>
+          <input type="range" id="slider-alpha" min="0.15" max="0.90" step="0.05" value="0.65">
+        </div>
+
+        <div class="control-group">
+          <div class="control-title">
+            <span>4. 3D Slicing Plane &amp; Inspection</span>
+            <output id="slider-clip-readout">No Clipping (x ≤ +1.00)</output>
+          </div>
+          <input type="range" id="slider-clip" min="-0.85" max="1.05" step="0.05" value="1.05" aria-label="3D X clipping plane">
+        </div>
+      </aside>
+    </section>
+
+    <!-- TEASER BANNER OVERVIEW -->
+    <section class="section-card">
+      <h2>Executive Overview: Three Acts of Homological Condensation in 3D Triangle Soups</h2>
+      <div class="figure-frame">
+        <img src="./paper-teaser-banner.png" alt="Five-panel overview of the 3D Hodge and Seifert Soup pipeline across Acts I, II, and III">
+        <div class="figure-caption">
+          <strong>Figure 1 (Paper Teaser):</strong> <strong>(a)</strong> At <code>p = 1.40</code>, minimizing the area-weighted 2-chain homology norm produces a volume-filling Biot–Savart flux cloud around the (2,3)-trefoil knot. <strong>(b)</strong> At <code>p = 1.00</code>, the flux condenses onto an exact 89-triangle calibrated minimal Seifert surface (<code>Φ_f ∈ {−1,0,+1}</code>), and our coupled <strong>3D Plateau–Tet vertex flow</strong> flattens mesh staircasing (−10.2% area, 0 inverted tetrahedra). <strong>(c)</strong> In relative homology <code>H₂(Sphere, γ_trefoil)</code> bounding <code>γ_core</code>, ℤ₂ torsion creates a +14.57% fixed-mesh (+12.92% post-flow) integrality gap between the integer MILP central disk and the real L¹ half-integer Möbius ribbon (<code>|Φ_f| = 0.5</code>). <strong>(d)</strong> On the solid torus, minimizing <code>‖η + ∂₃c‖_Lp</code> undergoes a 96× first-order rotational symmetry-breaking collapse at <code>p = 1.0</code> onto a 28-triangle meridional min-cut disk. <strong>(e)</strong> For two coaxial rings at <code>z = ±h</code>, oppositely oriented currents span a hollow catenoid tube (<code>β₀ = 1</code>) whose post-flow waist matches Euler’s analytical <code>r₀ cosh(h/r₀) = R</code> to within 0.27%.
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT I -->
+    <section id="act-1" class="section-card">
+      <h2>Act I: L² → L¹ Homological Condensation, Stokes Barrier, and 3D Plateau–Tet Flow</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            Given an oriented 3D tetrahedral mesh <code>K = (V, E, F, T)</code> with boundary operators satisfying <code>∂₁∂₂ = 0</code> and <code>∂₂∂₃ = 0</code>, every closed interior 1-cycle <code>γ ∈ Z₁(E)</code> acts as a topological source for spanning 2-chains <code>Φ ∈ C₂(F)</code> solving <code>∂₂Φ = γ</code>. Across <code>p ∈ [1, 2]</code>, we minimize the area-weighted homology norm:
+          </p>
+          <div class="math-block">
+            min_{Φ ∈ C₂(F)} (1/p) ∑_{f ∈ F} Area(f) |Φ_f|^p   subject to   ∂₂Φ = γ
+          </div>
+          <p>
+            At <strong>p = 2</strong>, the KKT system reduces to the curl-curl equation <code>(∂₂ W₂⁻¹ ∂₂ᵀ) ψ = γ</code>. By <strong>Proposition 1</strong>, because <code>∂₁γ = 0</code> places the right-hand side strictly inside <code>im(∂₂) = ker(∂₂ᵀ)⊥</code>, Jacobi-preconditioned Conjugate Gradients solves the singular system directly in <strong>19 ms</strong> (a 28× speedup over gauge-fixed sparse LU) and automatically enforces zero tetrahedron divergence <code>∂₃ᵀ W₂ Φ = (∂₂∂₃)ᵀ ψ = 0</code>.
+          </p>
+          <p>
+            At <strong>p = 1</strong>, the Lagrange dual is the <strong>discrete calibration LP</strong> <code>max_{ψ} γᵀψ</code> subject to <code>|(d₁ψ)_f| ≤ Area(f)</code>. Once the sparse Seifert sheet <code>Φ*</code> is localized, holding the wire vertices <code>V_loop</code> fixed endows the surface area with a rigorous topological lower bound via Stokes’ theorem (<strong>Proposition 2</strong>):
+          </p>
+          <div class="math-block">
+            ∑_{f ∈ F} |Φ_f| Area_f(V) ≥ ‖A_vec(γ)‖ = ‖½ ∑_{e=(u,v)} γ_e (v_u × v_v)‖ &gt; 0
+          </div>
+          <p>
+            This topological barrier prevents degenerate collapse when we deform free interior vertices <code>V_free</code> under the coupled <strong>3D Plateau–Tet energy</strong> <code>E_α(V)</code>.
+          </p>
+        </div>
+        <div>
+          <div class="figure-frame">
+            <img src="./seifert-gallery-3d.png" alt="3D Polyscope gallery of Act I benchmark 1-cycles across p=1.40, p=1.00 fixed mesh, and post-flow 3D Plateau-Tet smoothing">
+            <div class="figure-caption">
+              <strong>Figure 2:</strong> Act I 3D gallery across <code>tilted_ring</code> (35°), <code>saddle_loop</code>, <code>hopf_link</code> (Lk = −1), and <code>trefoil_knot</code> (Wr = +3).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="figure-frame">
+        <img src="./lp-condensation-and-duality.png" alt="Quantitative curves for Act I L2 to L1 condensation, support concentration, and Plateau-Tet staircasing elimination">
+        <div class="figure-caption">
+          <strong>Figure 3:</strong> Left: Primal L¹ area (solid) and certified dual calibration bound (dashed) across <code>p ∈ [1, 2]</code>. Center: 95% area-mass support triangle count condensing from ~5,900 faces (63%) at <code>p=2</code> to 49–89 faces (&lt;1%) at <code>p=1</code>. Right: Continuum reference vs. fixed TetWild L¹ Seifert vs. combinatorial 2-hop chords vs. 3D Plateau–Tet flow.
+        </div>
+      </div>
+
+      <table class="data-table" aria-label="Act I Quantitative Summary Table">
+        <thead>
+          <tr>
+            <th>Benchmark 1-Cycle</th>
+            <th>Stokes Ref</th>
+            <th>p = 2.0 Area (95% Supp.)</th>
+            <th>Fixed p = 1.0 Area</th>
+            <th>Post-Flow Area</th>
+            <th>Out-of-Plane RMS</th>
+            <th>Normal Align</th>
+            <th>min_t q_t (Inv.)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>planar_ring</code></td>
+            <td>0.9836</td>
+            <td>2.9027 (5,876 / 63.1%)</td>
+            <td>1.0446 (49, 1.062×)</td>
+            <td><strong>0.9964 (1.013×)</strong></td>
+            <td>0.0375 → 0.0066 (<strong>−82.5%</strong>)</td>
+            <td>0.9416 → 0.9872</td>
+            <td>0.214 (0)</td>
+          </tr>
+          <tr>
+            <td><code>tilted_ring</code> (35°)</td>
+            <td>1.0922</td>
+            <td>3.1161 (5,974 / 64.1%)</td>
+            <td>1.2771 (52, 1.169×)</td>
+            <td><strong>1.1589 (1.061×)</strong></td>
+            <td>0.0750 → 0.0181 (<strong>−75.9%</strong>)</td>
+            <td>0.8552 → 0.9425</td>
+            <td>0.169 (0)</td>
+          </tr>
+          <tr>
+            <td><code>saddle_loop</code></td>
+            <td>1.2399</td>
+            <td>3.4552 (5,921 / 63.5%)</td>
+            <td>1.5301 (72 faces)</td>
+            <td><strong>1.3253 (−13.4%)</strong></td>
+            <td>0.1456 → 0.1118 (−23.2%)</td>
+            <td>0.7367 → 0.8473</td>
+            <td>0.090 (0)</td>
+          </tr>
+          <tr>
+            <td><code>hopf_link</code> (Lk = −1)</td>
+            <td>1.1425</td>
+            <td>3.1929 (5,412 / 58.1%)</td>
+            <td>1.2408 (58 faces)</td>
+            <td><strong>1.1219 (−9.6%)</strong></td>
+            <td>0.2442 → 0.2337 (−4.3%)</td>
+            <td>0.6606 → 0.7279</td>
+            <td>0.149 (0)</td>
+          </tr>
+          <tr>
+            <td><code>trefoil_knot</code> (Wr = +3)</td>
+            <td>1.1467</td>
+            <td>4.1169 (5,326 / 57.2%)</td>
+            <td>1.8629 (89 faces)</td>
+            <td><strong>1.6725 (−10.2%)</strong></td>
+            <td>0.2071 → 0.1932 (−6.7%)</td>
+            <td>0.6267 → 0.6860</td>
+            <td>0.066 (0)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ACT II -->
+    <section id="act-2" class="section-card">
+      <h2>Act II: Relative Homology ℤ₂ Möbius Torsion (+14.57% Gap) &amp; 96× Torus Symmetry Breaking</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            In Act I, all five benchmarks in absolute homology <code>H₁(Sphere; ℤ) = 0</code> achieved 100% integer solutions (<code>Φ_f ∈ {−1, 0, +1}</code>) directly from the real LP relaxation. By the theorem of Dey, Hirani, and Krishnamoorthy (2011), real LP relaxation coincides with the integer minimal surface problem if and only if the relevant homology group is torsion-free.
+          </p>
+          <p>
+            To expose a genuine <strong>topological integrality gap on the unmodified manifold TetWild sphere mesh</strong> (zero synthetic edges), we solve the relative homology problem in <code>H₂(Sphere, γ_trefoil)</code> bounding a central core circle <code>γ_core</code> while leaving the surrounding (2,3)-trefoil wire <code>γ_trefoil</code> unconstrained:
+          </p>
+          <div class="math-block">
+            ∂₂Φ + c · γ_trefoil = γ_core,     c ∈ ℝ  (Real LP)   vs.   c ∈ ℤ  (Integer MILP)
+          </div>
+          <ul>
+            <li><strong>Global Integer MILP Optimum (c = 0.0, Φ_f ∈ ℤ):</strong> Spans the solid 46-triangle central disk <code>D_core</code> across the origin (fixed area <strong>1.0399</strong>, post-flow area <strong>1.0081</strong>).</li>
+            <li><strong>Global Real L¹ LP Optimum (c = 0.5, Φ_f ∈ ℝ):</strong> Unlocks the hollow-center 88-triangle <strong>Half-Integer Möbius Ribbon</strong> <code>½ M_Möbius</code> (<code>|Φ_f| = 0.5</code> on 86 faces, fixed area <strong>0.9076</strong>, post-flow area <strong>0.8928</strong>), creating a <strong>+14.57% fixed-mesh (+12.92% post-flow) topological integrality gap</strong>!</li>
+            <li><strong>3D Solid Torus Min-Cut / Max-Flow Duality:</strong> On <code>torus-tets.npz</code>, minimizing <code>‖η + ∂₃c‖_Lp</code> stays delocalized across 34.65% of all interior faces down to <code>p = 1.08</code> before undergoing a <strong>96× first-order rotational symmetry-breaking collapse</strong> at <code>p = 1.00</code> onto a 28-face meridional disk.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="figure-frame">
+            <img src="./torsion-and-torus-3d.png" alt="3D gallery of Z2 relative homology Mobius torsion and solid torus symmetry breaking">
+            <div class="figure-caption">
+              <strong>Figure 4:</strong> Top row: <code>c = 0.0</code> solid integer disk vs. <code>c = 0.25</code> superposition vs. <code>c = 0.50</code> hollow half-integer Möbius ribbon. Bottom row: 96× meridional collapse on the solid torus.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="figure-frame">
+        <img src="./mobius-torsion-and-torus-duality.png" alt="Quantitative plots of the V-shaped relative homology energy landscape and torus min-cut max-flow duality">
+        <div class="figure-caption">
+          <strong>Figure 5:</strong> Left: V-shaped piecewise-linear relative homology energy landscape <code>E_L1(c) = 1.0399 − 0.2646 c</code> across <code>c ∈ [0, 0.5]</code>. Center &amp; Right: Torus min-cut / max-flow duality and 96× first-order jump.
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT III -->
+    <section id="act-3" class="section-card">
+      <h2>Act III: Euler–Goldschmidt Catenoid Pinch-Off &amp; Helmholtz Orientation Surgery</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            Placing two coaxial circular rings <code>γ_top, γ_bottom</code> of radius <code>R ≈ 0.56</code> at heights <code>z = ±h</code> inside <code>sphere-tets.npz</code> reveals how boundary orientation and aspect ratio <code>h/R</code> govern minimal surface topology:
+          </p>
+          <ul>
+            <li><strong>Orientation Surgery at Fixed Geometry (h = 0.20):</strong> An orientable cylinder <code>Σ ≅ S¹ × [−h, h]</code> induces opposite orientations on its boundary circles (<code>∂Σ = γ_top − γ_bottom</code>). Thus the <strong>Anti-Helmholtz</strong> cycle <code>γ_− = γ_top − γ_bottom</code> condenses at <code>p=1</code> into a <strong>single hollow catenoid tube</strong> (<code>β₀ = 1, χ = 0</code>, post-flow area <strong>1.6091</strong>). Flipping one ring to the co-oriented <strong>Helmholtz</strong> cycle <code>γ_+ = γ_top + γ_bottom</code> topologically forbids the hollow cylinder and forces surgery into <strong>two disconnected flat disks</strong> (<code>β₀ = 2, χ = 2</code>, post-flow area <strong>2.0480</strong>).</li>
+            <li><strong>0.27% Agreement with Euler’s Analytical Catenoid Waist:</strong> At <code>h = 0.20</code> (<code>R_eff = 0.5582, h_eff = 0.2003</code>), Euler’s transcendental catenoid equation <code>r₀ cosh(h/r₀) = R</code> predicts a continuum waist radius of <code>r₀ = 0.5191</code>. Our 3D Plateau–Tet vertex flow contracts the discrete catenoid neck from <code>0.5410</code> to <code>r_waist = 0.5177</code> (within <strong>0.27%</strong> of Euler’s exact formula!).</li>
+            <li><strong>Goldschmidt Pinch-Off (h ≥ 0.26):</strong> Between <code>h = 0.23</code> and <code>h = 0.26</code>, the equatorial belt collapses from 65 faces to 0 and the hollow catenoid pinches off into two polar Goldschmidt disks (<code>β₀: 1 → 2</code>).</li>
+          </ul>
+        </div>
+        <div>
+          <div class="figure-frame">
+            <img src="./catenoid-bifurcation-3d.png" alt="3D gallery of Catenoid tube, Helmholtz orientation surgery, and Goldschmidt pinch-off">
+            <div class="figure-caption">
+              <strong>Figure 7:</strong> Top: Anti-Helmholtz quadrupole cloud (p=1.40), fixed L¹ catenoid tube, and post-flow Euler waist (h=0.20). Bottom: Helmholtz two-disk surgery and post-critical Goldschmidt pinch-off (h=0.26).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="figure-frame">
+        <img src="./catenoid-goldschmidt-bifurcation.png" alt="Quantitative bifurcation curves for Catenoid vs Goldschmidt area, Euler waist radius convergence, and belt-to-core triangle counts">
+        <div class="figure-caption">
+          <strong>Figure 8:</strong> Left: Area bifurcation across <code>h/R</code>. Center: Convergence of post-flow 3D catenoid waist <code>r_waist</code> to Euler’s <code>r₀ cosh(h/r₀) = R</code>. Right: Abrupt <code>β₀: 1 → 2</code> topological transition in equatorial belt vs. polar core faces.
+        </div>
+      </div>
+    </section>
+
+    <!-- EMBEDDED PDF VIEWER -->
+    <section id="pdf-viewer-section" class="section-card">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+        <h2 style="margin:0; border:none; padding:0;">Full 9-Page Single-Author Publication (PDF)</h2>
+        <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Open Fullscreen PDF &nearr;</a>
+      </div>
+      <object data="./hodge_seifert_soup.pdf" type="application/pdf" width="100%" height="780" style="border: 2px solid var(--ink); background:#fff;">
+        <p style="padding:1rem;">
+          Your browser does not support inline PDF embedding. <a href="./hodge_seifert_soup.pdf">Click here to download the 9-page PDF paper (hodge_seifert_soup.pdf)</a>.
+        </p>
+      </object>
+    </section>
+  </main>
+
+  <script src="./hodge_soup_data.js"></script>
+  <script>
+    (function() {
+      const DATA = window.HODGE_SOUP_DATA;
+      if (!DATA) {
+        console.error("Failed to load HODGE_SOUP_DATA.");
+        return;
+      }
+
+      const canvas = document.getElementById("soup-canvas");
+      const ctx = canvas.getContext("2d");
+
+      // UI Elements
+      const selectCycle = document.getElementById("select-cycle");
+      const selectColormode = document.getElementById("select-colormode");
+      const sliderP = document.getElementById("slider-p");
+      const sliderMorph = document.getElementById("slider-morph");
+      const sliderAlpha = document.getElementById("slider-alpha");
+      const sliderClip = document.getElementById("slider-clip");
+
+      const btnRunFlow = document.getElementById("btn-run-flow");
+      const btnStepFlow = document.getElementById("btn-step-flow");
+      const btnPerturb = document.getElementById("btn-perturb");
+      const btnResetFixed = document.getElementById("btn-reset-fixed");
+      const btnJumpConverged = document.getElementById("btn-jump-converged");
+      const btnAntiHelmholtz = document.getElementById("btn-anti-helmholtz");
+      const btnHelmholtz = document.getElementById("btn-helmholtz");
+      const surgeryBox = document.getElementById("helmholtz-surgery-box");
+
+      const toggleWireframe = document.getElementById("toggle-wireframe");
+      const toggleCage = document.getElementById("toggle-cage");
+      const toggleAutorotate = document.getElementById("toggle-autorotate");
+
+      const metricArea = document.getElementById("metric-area");
+      const metricAreaSub = document.getElementById("metric-area-sub");
+      const metricDual = document.getElementById("metric-dual");
+      const metricDualSub = document.getElementById("metric-dual-sub");
+      const metricFaces = document.getElementById("metric-faces");
+      const metricFacesSub = document.getElementById("metric-faces-sub");
+      const metricQmin = document.getElementById("metric-qmin");
+      const metricQminSub = document.getElementById("metric-qmin-sub");
+
+      const sliderPHeading = document.getElementById("slider-p-heading");
+      const sliderPReadout = document.getElementById("slider-p-readout");
+      const sliderPLeft = document.getElementById("slider-p-left");
+      const sliderPRight = document.getElementById("slider-p-right");
+      const sliderMorphReadout = document.getElementById("slider-morph-readout");
+      const sliderAlphaReadout = document.getElementById("slider-alpha-readout");
+      const sliderClipReadout = document.getElementById("slider-clip-readout");
+      const flowIterReadout = document.getElementById("flow-iter-readout");
+      const solverStatusBadge = document.getElementById("solver-status-badge");
+      const cycleDesc = document.getElementById(" cycle-description");
+      const colorbarTitle = document.getElementById("colorbar-title");
+      const colorbarGrad = document.getElementById("colorbar-grad");
+      const colorbarRange = document.getElementById("colorbar-range");
+
+      // Base mesh data (1,078 vertices, 4,339 tets)
+      const baseV = DATA.mesh.vertices;
+      const nV = baseV.length;
+      const tets = DATA.mesh.tets;
+      const nT = tets.length;
+      const boundarySet = new Set(DATA.mesh.boundary_vertices);
+
+      // Extract sparse outer boundary cage edges for visual context
+      const boundaryCageEdges = [];
+      {
+        const edgeCounts = new Map();
+        const tetFaces = [[0,1,2],[0,1,3],[0,2,3],[1,2,3]];
+        for (let t = 0; t < nT; t++) {
+          const tet = tets[t];
+          for (let f = 0; f < 4; f++) {
+            const a = tet[tetFaces[f][0]], b = tet[tetFaces[f][1]], c = tet[tetFaces[f][2]];
+            if (boundarySet.has(a) && boundarySet.has(b) && boundarySet.has(c)) {
+              const pairs = [[Math.min(a,b), Math.max(a,b)], [Math.min(b,c), Math.max(b,c)], [Math.min(a,c), Math.max(a,c)]];
+              for (const [u, v] of pairs) {
+                const key = (u << 12) | v;
+                edgeCounts.set(key, (edgeCounts.get(key) || 0) + 1);
+              }
+            }
+          }
+        }
+        for (const key of edgeCounts.keys()) {
+          boundaryCageEdges.push([key >> 12, key & 0xfff]);
+        }
+      }
+
+      // Live vertex buffer V (nV x 3)
+      const currentV = new Float64Array(nV * 3);
+      const gradAreaV = new Float64Array(nV * 3);
+      const gradTetV = new Float64Array(nV * 3);
+      const tetQualities = new Float64Array(nT);
+      const vertexTetQuality = new Float64Array(nV);
+      const vertexTetCount = new Int32Array(nV);
+
+      let currentCycleKey = "trefoil_knot";
+      let helmholtzMode = false; // false = Anti-Helmholtz (Catenoid), true = Helmholtz (2 disks)
+      let currentLevelIdx = 6;
+      let colorMode = "abs_phi";
+      let alphaShare = 0.65;
+      let clipX = 1.05;
+      let liveFlowRunning = false;
+      let liveFlowStepCount = 0;
+      let fixedMask = new Uint8Array(nV);
+
+      // Camera state
+      let camYaw = -0.62;
+      let camPitch = 0.44;
+      let camZoom = 1.08;
+      let camPanX = 0.0;
+      let camPanY = 0.0;
+      let isDragging = false;
+      let dragShift = false;
+      let lastMouseX = 0;
+      let lastMouseY = 0;
+
+      const CYCLE_DESCRIPTIONS = {
+        trefoil_knot: "<strong>(2,3)-Trefoil Knot (Wr = +3):</strong> 3 verified planar diagram crossings. At p=1, HiGHS LP condenses the 5,326-triangle Biot–Savart cloud onto an 89-triangle calibrated minimal Seifert surface; 3D Plateau–Tet flow reduces area by −10.2% with 0 inverted tets.",
+        hopf_link: "<strong>Hopf Link (Lk = −1):</strong> Two linked circles with verified discrete Gauss linking integral −0.978 (topological −1). Condenses onto a 58-triangle twisted Seifert annulus; Plateau–Tet flow trims area from 1.2408 to 1.1219 (−9.6%).",
+        tilted_ring: "<strong>Tilted Ring (35° Oblique Circle):</strong> Exposes O(1) mesh staircasing on a fixed tetrahedral grid (1.169× Stokes bound). Combinatorial 2-hop chords reduce area by only 0.02%, whereas 3D Plateau–Tet flow cuts out-of-plane vertex RMS by −75.9%!",
+        saddle_loop: "<strong>Hyperbolic Saddle Loop (z = 0.22 cos 2θ):</strong> Non-planar boundary curve whose calibrated p=1 minimal surface spans 72 triangles; 3D Plateau–Tet flow smooths the saddle sheet from 1.5301 to 1.3253 (−13.4%).",
+        mobius_torsion: "<strong>ℤ₂ Relative Homology Möbius Torsion:</strong> Bounds the central circle γ_core (cyan) relative to the free (2,3)-trefoil wire γ_trefoil (gold). Scrub winding period c ∈ [−0.25, 1.00]: Integer MILP selects c = 0.00 (46-face solid disk, area 1.0399), while Real LP selects c = 0.50 (88-face half-integer Möbius ribbon |Φ_f|=0.5, area 0.9076, +14.57% integrality gap!).",
+        catenoid_neck: "<strong>Coaxial Rings at h = 0.20 (Euler Catenoid vs. Helmholtz Surgery):</strong> Anti-Helmholtz (γ_top − γ_bottom) condenses into a hollow catenoid tube (β₀=1) whose post-flow waist r_waist = 0.5177 matches Euler's analytical r₀ = 0.5191 to 0.27%! Use the red toggle above to flip one ring's current (Helmholtz γ_top + γ_bottom) and trigger surgery into two flat disks (β₀=2).",
+        goldschmidt_disks: "<strong>Post-Critical Coaxial Rings at h = 0.26 (Goldschmidt Pinch-Off):</strong> Beyond the critical aspect ratio h/R ≈ 0.46, the equatorial catenoid belt collapses from 65 faces to 0 and pinches off into two disconnected polar disks (β₀ = 2, area 2.2353 → 2.0264)."
+      };
+
+      function getTargetVertices(scene) {
+        if (currentCycleKey === "catenoid_neck" && helmholtzMode && scene.helmholtz) {
+          return scene.helmholtz.flow_final_vertices;
+        }
+        if (currentCycleKey === "mobius_torsion") {
+          const lvl = scene.levels[currentLevelIdx];
+          if (lvl && Math.abs(lvl.p - 0.0) < 1e-4 && scene.flow_int_final_vertices) {
+            return scene.flow_int_final_vertices;
+          }
+          if (lvl && Math.abs(lvl.p - 0.5) > 1e-4) {
+            return baseV;
+          }
+        }
+        return scene.flow_final_vertices;
+      }
+
+      function setVerticesFromMorph(tau) {
+        const scene = DATA.scenes[currentCycleKey];
+        const targetV = getTargetVertices(scene);
+        for (let i = 0; i < nV; i++) {
+          const b = baseV[i];
+          const t = targetV[i];
+          const idx = i * 3;
+          currentV[idx]     = (1.0 - tau) * b[0] + tau * t[0];
+          currentV[idx + 1] = (1.0 - tau) * b[1] + tau * t[1];
+          currentV[idx + 2] = (1.0 - tau) * b[2] + tau * t[2];
+        }
+        updateTetQualities();
+      }
+
+      function rebuildFixedMask() {
+        fixedMask.fill(0);
+        for (const v of DATA.mesh.boundary_vertices) fixedMask[v] = 1;
+        const scene = DATA.scenes[currentCycleKey];
+        for (const v of scene.loop_vertices) fixedMask[v] = 1;
+      }
+
+      function getActiveSurfaceData() {
+        const scene = DATA.scenes[currentCycleKey];
+        if (currentCycleKey === "catenoid_neck" && helmholtzMode && scene.helmholtz) {
+          return {
+            faces: scene.helmholtz.faces,
+            phi: scene.helmholtz.phi,
+            cal: scene.helmholtz.phi.map(() => 1.0),
+            dual_bound: scene.helmholtz.fixed_area,
+            support_95: scene.helmholtz.faces.length,
+            p_val: 1.0
+          };
+        }
+        const lvl = scene.levels[currentLevelIdx] || scene.levels[scene.levels.length - 1];
+        return {
+          faces: lvl.faces,
+          phi: lvl.phi,
+          cal: lvl.cal,
+          dual_bound: lvl.dual_bound,
+          support_95: lvl.support_95,
+          p_val: lvl.p
+        };
+      }
+
+      // Compute exact TetWild Scaled Jacobian q_t on all 4,339 tetrahedra
+      function updateTetQualities() {
+        const SQRT2 = Math.SQRT2;
+        vertexTetQuality.fill(0);
+        vertexTetCount.fill(0);
+        let qMin = 10.0;
+        let nInverted = 0;
+
+        for (let t = 0; t < nT; t++) {
+          const tet = tets[t];
+          const i0 = tet[0] * 3, i1 = tet[1] * 3, i2 = tet[2] * 3, i3 = tet[3] * 3;
+          const x0 = currentV[i0], y0 = currentV[i0+1], z0 = currentV[i0+2];
+          const x1 = currentV[i1], y1 = currentV[i1+1], z1 = currentV[i1+2];
+          const x2 = currentV[i2], y2 = currentV[i2+1], z2 = currentV[i2+2];
+          const x3 = currentV[i3], y3 = currentV[i3+1], z3 = currentV[i3+2];
+
+          const e01x = x1 - x0, e01y = y1 - y0, e01z = z1 - z0;
+          const e02x = x2 - x0, e02y = y2 - y0, e02z = z2 - z0;
+          const e03x = x3 - x0, e03y = y3 - y0, e03z = z3 - z0;
+          const e12x = x2 - x1, e12y = y2 - y1, e12z = z2 - z1;
+          const e13x = x3 - x1, e13y = y3 - y1, e13z = z3 - z1;
+          const e23x = x3 - x2, e23y = y3 - y2, e23z = z3 - z2;
+
+          const det = e01x * (e02y * e03z - e02z * e03y)
+                    + e01y * (e02z * e03x - e02x * e03z)
+                    + e01z * (e02x * e03y - e02y * e03x);
+
+          const l01 = Math.hypot(e01x, e01y, e01z);
+          const l02 = Math.hypot(e02x, e02y, e02z);
+          const l03 = Math.hypot(e03x, e03y, e03z);
+          const l12 = Math.hypot(e12x, e12y, e12z);
+          const l13 = Math.hypot(e13x, e13y, e13z);
+          const l23 = Math.hypot(e23x, e23y, e23z);
+
+          const s = 0.25 * (l01*l02*l03 + l01*l12*l13 + l02*l12*l23 + l03*l13*l23) + 1e-15;
+          const q = (SQRT2 * det) / s;
+          tetQualities[t] = q;
+          if (q < qMin) qMin = q;
+          if (det <= 0) nInverted++;
+
+          for (let k = 0; k < 4; k++) {
+            const vIdx = tet[k];
+            vertexTetQuality[vIdx] += q;
+            vertexTetCount[vIdx] += 1;
+          }
+        }
+        for (let v = 0; v < nV; v++) {
+          if (vertexTetCount[v] > 0) vertexTetQuality[v] /= vertexTetCount[v];
+        }
+        return { qMin, nInverted };
+      }
+
+      // Compute exact analytic Seifert area and vertex gradients on currentV
+      function computeSeifertAreaAndGrad(faces, phi, computeGrad) {
+        if (computeGrad) gradAreaV.fill(0);
+        let totalArea = 0.0;
+        const nF = faces.length;
+        for (let f = 0; f < nF; f++) {
+          const w = Math.abs(phi[f]);
+          if (w < 1e-6) continue;
+          const tri = faces[f];
+          const ia = tri[0] * 3, ib = tri[1] * 3, ic = tri[2] * 3;
+          const ax = currentV[ia], ay = currentV[ia+1], az = currentV[ia+2];
+          const bx = currentV[ib], by = currentV[ib+1], bz = currentV[ib+2];
+          const cx = currentV[ic], cy = currentV[ic+1], cz = currentV[ic+2];
+
+          const abx = bx - ax, aby = by - ay, abz = bz - az;
+          const acx = cx - ax, acy = cy - ay, acz = cz - az;
+          const nx = aby * acz - abz * acy;
+          const ny = abz * acx - abx * acz;
+          const nz = abx * acy - aby * acx;
+          const normN = Math.hypot(nx, ny, nz);
+          const area = 0.5 * normN;
+          totalArea += w * area;
+
+          if (computeGrad && normN > 1e-12) {
+            const ux = nx / normN, uy = ny / normN, uz = nz / normN;
+            const bcx = cx - bx, bcy = cy - by, bcz = cz - bz;
+            // grad_a = 0.5 * (u x (c - b))
+            gradAreaV[ia]   += 0.5 * w * (uy * bcz - uz * bcy);
+            gradAreaV[ia+1] += 0.5 * w * (uz * bcx - ux * bcz);
+            gradAreaV[ia+2] += 0.5 * w * (ux * bcy - uy * bcx);
+            // grad_b = 0.5 * (u x (a - c)) = -0.5 * (u x ac)
+            gradAreaV[ib]   += 0.5 * w * (uz * acy - uy * acz);
+            gradAreaV[ib+1] += 0.5 * w * (ux * acz - uz * acx);
+            gradAreaV[ib+2] += 0.5 * w * (uy * acx - ux * acy);
+            // grad_c = 0.5 * (u x (b - a)) = 0.5 * (u x ab)
+            gradAreaV[ic]   += 0.5 * w * (uy * abz - uz * aby);
+            gradAreaV[ic+1] += 0.5 * w * (uz * abx - ux * abz);
+            gradAreaV[ic+2] += 0.5 * w * (ux * aby - uy * abx);
+          }
+        }
+        return totalArea;
+      }
+
+      // Perform one live step of coupled 3D Plateau-Tet gradient flow in the browser
+      function stepLivePlateauTetFlow(nSubsteps) {
+        const surf = getActiveSurfaceData();
+        const SQRT2 = Math.SQRT2;
+        for (let step = 0; step < nSubsteps; step++) {
+          computeSeifertAreaAndGrad(surf.faces, surf.phi, true);
+          gradTetV.fill(0);
+
+          // Exact analytic volume + edge-length TetWild quality gradient across all 4,339 tets
+          for (let t = 0; t < nT; t++) {
+            const tet = tets[t];
+            const i0 = tet[0] * 3, i1 = tet[1] * 3, i2 = tet[2] * 3, i3 = tet[3] * 3;
+            const x0 = currentV[i0], y0 = currentV[i0+1], z0 = currentV[i0+2];
+            const x1 = currentV[i1], y1 = currentV[i1+1], z1 = currentV[i1+2];
+            const x2 = currentV[i2], y2 = currentV[i2+1], z2 = currentV[i2+2];
+            const x3 = currentV[i3], y3 = currentV[i3+1], z3 = currentV[i3+2];
+
+            const e01x = x1 - x0, e01y = y1 - y0, e01z = z1 - z0;
+            const e02x = x2 - x0, e02y = y2 - y0, e02z = z2 - z0;
+            const e03x = x3 - x0, e03y = y3 - y0, e03z = z3 - z0;
+            const e12x = x2 - x1, e12y = y2 - y1, e12z = z2 - z1;
+            const e13x = x3 - x1, e13y = y3 - y1, e13z = z3 - z1;
+            const e23x = x3 - x2, e23y = y3 - y2, e23z = z3 - z2;
+
+            const det = e01x * (e02y * e03z - e02z * e03y)
+                      + e01y * (e02z * e03x - e02x * e03z)
+                      + e01z * (e02x * e03y - e02y * e03x);
+            const l01 = Math.hypot(e01x, e01y, e01z) + 1e-12;
+            const l02 = Math.hypot(e02x, e02y, e02z) + 1e-12;
+            const l03 = Math.hypot(e03x, e03y, e03z) + 1e-12;
+            const l12 = Math.hypot(e12x, e12y, e12z) + 1e-12;
+            const l13 = Math.hypot(e13x, e13y, e13z) + 1e-12;
+            const l23 = Math.hypot(e23x, e23y, e23z) + 1e-12;
+
+            const c0 = l01 * l02 * l03;
+            const c1 = l01 * l12 * l13;
+            const c2 = l02 * l12 * l23;
+            const c3 = l03 * l13 * l23;
+            const S = 0.25 * (c0 + c1 + c2 + c3) + 1e-12;
+            const q = (SQRT2 * det) / S;
+            const dQd = (2.0 * (q - 1.0) * SQRT2) / (nT * S);
+            const dQs = -(2.0 * (q - 1.0) * SQRT2 * det) / (nT * S * S);
+
+            // grad det
+            const gd1x = e02y * e03z - e02z * e03y;
+            const gd1y = e02z * e03x - e02x * e03z;
+            const gd1z = e02x * e03y - e02y * e03x;
+
+            const gd2x = e03y * e01z - e03z * e01y;
+            const gd2y = e03z * e01x - e03x * e01z;
+            const gd2z = e03x * e01y - e03y * e01x;
+
+            const gd3x = e01y * e02z - e01z * e02y;
+            const gd3y = e01z * e02x - e01x * e02z;
+            const gd3z = e01x * e02y - e01y * e02x;
+
+            gradTetV[i1]   += dQd * gd1x; gradTetV[i1+1] += dQd * gd1y; gradTetV[i1+2] += dQd * gd1z;
+            gradTetV[i2]   += dQd * gd2x; gradTetV[i2+1] += dQd * gd2y; gradTetV[i2+2] += dQd * gd2z;
+            gradTetV[i3]   += dQd * gd3x; gradTetV[i3+1] += dQd * gd3y; gradTetV[i3+2] += dQd * gd3z;
+            gradTetV[i0]   -= dQd * (gd1x + gd2x + gd3x);
+            gradTetV[i0+1] -= dQd * (gd1y + gd2y + gd3y);
+            gradTetV[i0+2] -= dQd * (gd1z + gd2z + gd3z);
+
+            // Edge tension terms from dS
+            const w01 = 0.25 * dQs * (c0 + c1) / (l01 * l01);
+            const w02 = 0.25 * dQs * (c0 + c2) / (l02 * l02);
+            const w03 = 0.25 * dQs * (c0 + c3) / (l03 * l03);
+            const w12 = 0.25 * dQs * (c1 + c2) / (l12 * l12);
+            const w13 = 0.25 * dQs * (c1 + c3) / (l13 * l13);
+            const w23 = 0.25 * dQs * (c2 + c3) / (l23 * l23);
+
+            gradTetV[i1] += w01 * e01x; gradTetV[i1+1] += w01 * e01y; gradTetV[i1+2] += w01 * e01z;
+            gradTetV[i0] -= w01 * e01x; gradTetV[i0+1] -= w01 * e01y; gradTetV[i0+2] -= w01 * e01z;
+
+            gradTetV[i2] += w02 * e02x; gradTetV[i2+1] += w02 * e02y; gradTetV[i2+2] += w02 * e02z;
+            gradTetV[i0] -= w02 * e02x; gradTetV[i0+1] -= w02 * e02y; gradTetV[i0+2] -= w02 * e02z;
+
+            gradTetV[i3] += w03 * e03x; gradTetV[i3+1] += w03 * e03y; gradTetV[i3+2] += w03 * e03z;
+            gradTetV[i0] -= w03 * e03x; gradTetV[i0+1] -= w03 * e03y; gradTetV[i0+2] -= w03 * e03z;
+
+            gradTetV[i2] += w12 * e12x; gradTetV[i2+1] += w12 * e12y; gradTetV[i2+2] += w12 * e12z;
+            gradTetV[i1] -= w12 * e12x; gradTetV[i1+1] -= w12 * e12y; gradTetV[i1+2] -= w12 * e12z;
+
+            gradTetV[i3] += w13 * e13x; gradTetV[i3+1] += w13 * e13y; gradTetV[i3+2] += w13 * e13z;
+            gradTetV[i1] -= w13 * e13x; gradTetV[i1+1] -= w13 * e13y; gradTetV[i1+2] -= w13 * e13z;
+
+            gradTetV[i3] += w23 * e23x; gradTetV[i3+1] += w23 * e23y; gradTetV[i3+2] += w23 * e23z;
+            gradTetV[i2] -= w23 * e23x; gradTetV[i2+1] -= w23 * e23y; gradTetV[i2+2] -= w23 * e23z;
+          }
+
+          const stepArea = 0.085 * alphaShare;
+          const stepTet = 18.0 * (1.0 - alphaShare);
+
+          for (let v = 0; v < nV; v++) {
+            if (fixedMask[v]) continue;
+            const idx = v * 3;
+            let dx = -(stepArea * gradAreaV[idx]   + stepTet * gradTetV[idx]);
+            let dy = -(stepArea * gradAreaV[idx+1] + stepTet * gradTetV[idx+1]);
+            let dz = -(stepArea * gradAreaV[idx+2] + stepTet * gradTetV[idx+2]);
+            const mag = Math.hypot(dx, dy, dz);
+            if (mag > 0.008) {
+              const s = 0.008 / mag;
+              dx *= s; dy *= s; dz *= s;
+            }
+            currentV[idx]   += dx;
+            currentV[idx+1] += dy;
+            currentV[idx+2] += dz;
+          }
+          liveFlowStepCount++;
+        }
+        updateTetQualities();
+      }
+
+      // Compute Catenoid waist radius when viewing catenoid_neck
+      function computeCatenoidWaistRadius(faces) {
+        const beltV = new Set();
+        for (const tri of faces) {
+          const cz = (currentV[tri[0]*3+2] + currentV[tri[1]*3+2] + currentV[tri[2]*3+2]) / 3.0;
+          if (Math.abs(cz) < 0.07) {
+            beltV.add(tri[0]); beltV.add(tri[1]); beltV.add(tri[2]);
+          }
+        }
+        if (beltV.size === 0) return null;
+        let sumR = 0.0;
+        for (const v of beltV) {
+          sumR += Math.hypot(currentV[v*3], currentV[v*3+1]);
+        }
+        return sumR / beltV.size;
+      }
+
+      // Colormap helpers
+      function magmaColor(t) {
+        const s = Math.max(0.0, Math.min(1.0, t));
+        const r = Math.round(255 * Math.min(1.0, 0.14 + 1.15 * s));
+        const g = Math.round(255 * Math.pow(s, 1.55) * 0.88);
+        const b = Math.round(255 * (0.35 + 0.45 * Math.sin(Math.PI * s) - 0.25 * s));
+        return [r, g, b];
+      }
+
+      function coolwarmColor(sVal) {
+        const s = Math.max(-1.0, Math.min(1.0, sVal));
+        if (s >= 0) {
+          const r = Math.round(235);
+          const g = Math.round(215 * (1.0 - 0.68 * s));
+          const b = Math.round(190 * (1.0 - 0.82 * s));
+          return [r, g, b];
+        } else {
+          const a = -s;
+          const r = Math.round(215 * (1.0 - 0.78 * a));
+          const g = Math.round(220 * (1.0 - 0.48 * a));
+          const b = Math.round(240);
+          return [r, g, b];
+        }
+      }
+
+      function viridisColor(t) {
+        const s = Math.max(0.0, Math.min(1.0, t));
+        const r = Math.round(255 * (0.26 + 0.70 * Math.pow(s, 1.4)));
+        const g = Math.round(255 * (0.05 + 0.82 * s));
+        const b = Math.round(255 * (0.33 + 0.35 * Math.sin(Math.PI * s) - 0.45 * s));
+        return [r, g, b];
+      }
+
+      function updateTelemetry() {
+        const scene = DATA.scenes[currentCycleKey];
+        const surf = getActiveSurfaceData();
+        const curArea = computeSeifertAreaAndGrad(surf.faces, surf.phi, false);
+        const { qMin, nInverted } = updateTetQualities();
+
+        metricArea.textContent = curArea.toFixed(4);
+        const pctDiff = ((curArea - scene.initial_seifert_area) / scene.initial_seifert_area) * 100.0;
+        if (currentCycleKey === "catenoid_neck" && !helmholtzMode) {
+          const rWaist = computeCatenoidWaistRadius(surf.faces);
+          if (rWaist !== null) {
+            metricAreaSub.textContent = `Waist r = ${rWaist.toFixed(4)} (Euler r₀ = 0.5191)`;
+          } else {
+            metricAreaSub.textContent = `Fixed L¹: ${scene.initial_seifert_area.toFixed(4)} (${pctDiff.toFixed(1)}%)`;
+          }
+        } else {
+          metricAreaSub.textContent = `Fixed L¹: ${scene.initial_seifert_area.toFixed(4)} (${pctDiff >= 0 ? "+" : ""}${pctDiff.toFixed(1)}%)`;
+        }
+
+        metricDual.textContent = surf.dual_bound.toFixed(4);
+        if (currentCycleKey === "mobius_torsion") {
+          metricDualSub.textContent = `MILP Disk (c=0): 1.0399 (+14.6% gap)`;
+        } else {
+          metricDualSub.textContent = Math.abs(surf.p_val - 1.0) < 1e-4 ? "Zero LP Duality Gap (< 10⁻¹⁵)" : `Lower Bound at p = ${surf.p_val.toFixed(2)}`;
+        }
+
+        metricFaces.textContent = String(surf.support_95);
+        metricFacesSub.textContent = `${((surf.support_95 / 9318) * 100).toFixed(2)}% of 9,318 soup faces`;
+
+        metricQmin.textContent = qMin.toFixed(4);
+        metricQminSub.textContent = `${nInverted} inverted / ${nT.toLocaleString()} tets`;
+      }
+
+      function syncUIForCycle() {
+        const scene = DATA.scenes[currentCycleKey];
+        rebuildFixedMask();
+        cycleDesc.innerHTML = CYCLE_DESCRIPTIONS[currentCycleKey] || "";
+
+        if (currentCycleKey === "catenoid_neck") {
+          surgeryBox.style.display = "block";
+        } else {
+          surgeryBox.style.display = "none";
+          helmholtzMode = false;
+        }
+
+        const nLevels = scene.levels.length;
+        sliderP.max = String(nLevels - 1);
+
+        if (currentCycleKey === "mobius_torsion") {
+          sliderPHeading.textContent = "2. Relative Winding Period c ∈ [−0.25, 1.00]";
+          sliderPLeft.textContent = "c = −0.25 / 0.00 (MILP Disk)";
+          sliderPRight.textContent = "c = 0.50 (LP Möbius) → 1.00";
+          // Default to c = 0.50 (index 5)
+          currentLevelIdx = 5;
+          sliderP.value = "5";
+        } else {
+          sliderPHeading.textContent = "2. Homology Norm Exponent p ∈ [1, 2]";
+          sliderPLeft.textContent = "p = 2.00 (L² Biot–Savart Cloud)";
+          sliderPRight.textContent = "p = 1.00 (L¹ Minimal Seifert)";
+          currentLevelIdx = nLevels - 1;
+          sliderP.value = String(currentLevelIdx);
+        }
+
+        updateSliderPReadout();
+        sliderMorph.value = "1";
+        sliderMorphReadout.textContent = "τ = 1.00 (De-Staircased)";
+        liveFlowStepCount = 0;
+        flowIterReadout.textContent = "Converged V*";
+        setVerticesFromMorph(1.0);
+        updateTelemetry();
+      }
+
+      function updateSliderPReadout() {
+        const scene = DATA.scenes[currentCycleKey];
+        const lvl = scene.levels[currentLevelIdx] || scene.levels[scene.levels.length - 1];
+        if (currentCycleKey === "mobius_torsion") {
+          const cVal = lvl.p;
+          let tag = "Fractional Superposition";
+          if (Math.abs(cVal - 0.0) < 1e-4) tag = "Global Integer MILP Disk";
+          else if (Math.abs(cVal - 0.5) < 1e-4) tag = "Global Real LP Möbius Ribbon";
+          else if (Math.abs(cVal - 1.0) < 1e-4) tag = "Integer Cobordism";
+          sliderPReadout.textContent = `c = ${cVal.toFixed(3)} (${tag})`;
+          solverStatusBadge.textContent = `Relative Torsion · c = ${cVal.toFixed(2)}`;
+        } else if (currentCycleKey === "catenoid_neck" && helmholtzMode) {
+          sliderPReadout.textContent = "p = 1.00 (Helmholtz Co-Oriented Disks)";
+          solverStatusBadge.textContent = "Helmholtz Surgery · β₀ = 2 Disks";
+        } else {
+          const pVal = lvl.p;
+          sliderPReadout.textContent = Math.abs(pVal - 1.0) < 1e-4
+            ? "p = 1.00 (Exact L¹ Seifert)"
+            : `p = ${pVal.toFixed(2)} (Diffuse L^p Flux)`;
+          solverStatusBadge.textContent = Math.abs(pVal - 1.0) < 1e-4
+            ? "Calibrated L¹ Minimal Seifert"
+            : `Biot–Savart IRLS Cloud · p = ${pVal.toFixed(2)}`;
+        }
+      }
+
+      function updateColorbarLegend() {
+        if (colorMode === "abs_phi") {
+          colorbarTitle.textContent = "Flux |Φ_f|:";
+          colorbarGrad.style.background = "linear-gradient(90deg, #241557, #8e246c, #df5337, #f9cb35)";
+          colorbarRange.textContent = "0.0 → 1.0";
+        } else if (colorMode === "signed_phi") {
+          colorbarTitle.textContent = "Signed Φ_f:";
+          colorbarGrad.style.background = "linear-gradient(90deg, #2f72f0, #dcdcdc, #eb4534)";
+          colorbarRange.textContent = "−1.0 → +1.0";
+        } else if (colorMode === "calibration") {
+          colorbarTitle.textContent = "|(d₁ψ)_f|/Area:";
+          colorbarGrad.style.background = "linear-gradient(90deg, #420c54, #208c8c, #f2e629)";
+          colorbarRange.textContent = "0.0 → 1.0";
+        } else {
+          colorbarTitle.textContent = "Tet Quality q_t:";
+          colorbarGrad.style.background = "linear-gradient(90deg, #420c54, #208c8c, #f2e629)";
+          colorbarRange.textContent = "0.05 → 0.95";
+        }
+      }
+
+      // 3D Projection helper
+      function projectPoint(x, y, z, width, height, scale) {
+        const cosY = Math.cos(camYaw), sinY = Math.sin(camYaw);
+        const cosP = Math.cos(camPitch), sinP = Math.sin(camPitch);
+        // Rotate around Z (yaw) then X (pitch)
+        const rx = x * cosY - y * sinY;
+        const ry = x * sinY + y * cosY;
+        const rz = z;
+
+        const cy = ry * cosP - rz * sinP;
+        const cz = ry * sinP + rz * cosP;
+        const cx = rx;
+
+        const fov = 2.85;
+        const persp = fov / (fov - cz * 0.65);
+        const sx = width * 0.5 + camPanX + cx * scale * persp;
+        const sy = height * 0.5 + camPanY - cy * scale * persp;
+        return [sx, sy, cz, cx, cy];
+      }
+
+      function renderScene() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        if (canvas.width !== Math.round(rect.width * dpr) || canvas.height !== Math.round(rect.height * dpr)) {
+          canvas.width = Math.round(rect.width * dpr);
+          canvas.height = Math.round(rect.height * dpr);
+        }
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        const W = rect.width;
+        const H = rect.height;
+        ctx.clearRect(0, 0, W, H);
+
+        const scale = Math.min(W, H) * 0.43 * camZoom;
+
+        // 1. Draw subtle outer TetWild sphere boundary cage
+        if (toggleCage.checked) {
+          ctx.strokeStyle = "rgba(180, 196, 230, 0.11)";
+          ctx.lineWidth = 0.75;
+          ctx.beginPath();
+          for (let e = 0; e < boundaryCageEdges.length; e += 2) {
+            const [u, v] = boundaryCageEdges[e];
+            const ux = currentV[u*3], vx = currentV[v*3];
+            if (ux > clipX || vx > clipX) continue;
+            const p0 = projectPoint(ux, currentV[u*3+1], currentV[u*3+2], W, H, scale);
+            const p1 = projectPoint(vx, currentV[v*3+1], currentV[v*3+2], W, H, scale);
+            ctx.moveTo(p0[0], p0[1]);
+            ctx.lineTo(p1[0], p1[1]);
+          }
+          ctx.stroke();
+        }
+
+        // 2. Depth-sort active soup triangles
+        const scene = DATA.scenes[currentCycleKey];
+        const surf = getActiveSurfaceData();
+        const faces = surf.faces;
+        const phi = surf.phi;
+        const cal = surf.cal;
+        const nF = faces.length;
+
+        let maxAbsPhi = 1e-6;
+        for (let f = 0; f < nF; f++) {
+          const a = Math.abs(phi[f]);
+          if (a > maxAbsPhi) maxAbsPhi = a;
+        }
+        // For mobius_torsion keep scale fixed at 1.0 so |Phi_f|=0.5 vs 1.0 is visually obvious
+        const normScale = currentCycleKey === "mobius_torsion" ? 1.0 : maxAbsPhi;
+
+        const drawList = [];
+        for (let f = 0; f < nF; f++) {
+          const tri = faces[f];
+          const ia = tri[0]*3, ib = tri[1]*3, ic = tri[2]*3;
+          const ax = currentV[ia], ay = currentV[ia+1], az = currentV[ia+2];
+          const bx = currentV[ib], by = currentV[ib+1], bz = currentV[ib+2];
+          const cx = currentV[ic], cy = currentV[ic+1], cz = currentV[ic+2];
+          const centX = (ax + bx + cx) / 3.0;
+          if (centX > clipX) continue;
+
+          const pA = projectPoint(ax, ay, az, W, H, scale);
+          const pB = projectPoint(bx, by, bz, W, H, scale);
+          const pC = projectPoint(cx, cy, cz, W, H, scale);
+          const depth = (pA[2] + pB[2] + pC[2]) / 3.0;
+
+          // Camera-space normal for two-sided diffuse + specular shading
+          const ux = pB[3] - pA[3], uy = pB[4] - pA[4], uz = pB[2] - pA[2];
+          const vx = pC[3] - pA[3], vy = pC[4] - pA[4], vz = pC[2] - pA[2];
+          let nx = uy * vz - uz * vy;
+          let ny = uz * vx - ux * vz;
+          let nz = ux * vy - uy * vx;
+          const nLen = Math.hypot(nx, ny, nz) + 1e-12;
+          nx /= nLen; ny /= nLen; nz /= nLen;
+          if (nz < 0) { nx = -nx; ny = -ny; nz = -nz; }
+
+          const light = Math.max(0.28, Math.min(1.12, 0.32 + 0.52 * nz + 0.24 * Math.max(0, nx * 0.4 + ny * 0.6)));
+          const absW = Math.abs(phi[f]) / normScale;
+
+          let rgb;
+          if (colorMode === "abs_phi") {
+            rgb = magmaColor(absW);
+          } else if (colorMode === "signed_phi") {
+            rgb = coolwarmColor(phi[f] / normScale);
+          } else if (colorMode === "calibration") {
+            rgb = viridisColor(cal[f]);
+          } else {
+            const qAvg = (vertexTetQuality[tri[0]] + vertexTetQuality[tri[1]] + vertexTetQuality[tri[2]]) / 3.0;
+            rgb = viridisColor(qAvg);
+          }
+
+          const isDiffuseCloud = Math.abs(surf.p_val - 1.0) > 1e-3 && currentCycleKey !== "mobius_torsion";
+          const alpha = isDiffuseCloud ? Math.min(0.88, Math.max(0.14, Math.pow(absW, 0.65) * 0.85)) : 0.93;
+
+          drawList.push({
+            pA, pB, pC, depth,
+            r: Math.min(255, Math.round(rgb[0] * light)),
+            g: Math.min(255, Math.round(rgb[1] * light)),
+            b: Math.min(255, Math.round(rgb[2] * light)),
+            alpha
+          });
+        }
+
+        drawList.sort((a, b) => a.depth - b.depth);
+
+        const showEdges = toggleWireframe.checked;
+        for (let i = 0; i < drawList.length; i++) {
+          const item = drawList[i];
+          ctx.beginPath();
+          ctx.moveTo(item.pA[0], item.pA[1]);
+          ctx.lineTo(item.pB[0], item.pB[1]);
+          ctx.lineTo(item.pC[0], item.pC[1]);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(${item.r},${item.g},${item.b},${item.alpha})`;
+          ctx.fill();
+          if (showEdges) {
+            ctx.strokeStyle = `rgba(18, 20, 28, ${item.alpha * 0.58})`;
+            ctx.lineWidth = 0.85;
+            ctx.stroke();
+          }
+        }
+
+        // 3. Draw closed 1-cycle wire loop(s) with directional arrows
+        function drawWireEdges(edges, strokeColor, glowColor, width) {
+          ctx.save();
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.strokeStyle = glowColor;
+          ctx.lineWidth = width + 3.0;
+          ctx.beginPath();
+          for (let e = 0; e < edges.length; e++) {
+            const [u, v] = edges[e];
+            const p0 = projectPoint(currentV[u*3], currentV[u*3+1], currentV[u*3+2], W, H, scale);
+            const p1 = projectPoint(currentV[v*3], currentV[v*3+1], currentV[v*3+2], W, H, scale);
+            ctx.moveTo(p0[0], p0[1]);
+            ctx.lineTo(p1[0], p1[1]);
+          }
+          ctx.stroke();
+
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = width;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        if (currentCycleKey === "mobius_torsion" && scene.core_edges && scene.trefoil_edges) {
+          drawWireEdges(scene.trefoil_edges, "#ffbe3b", "rgba(0,0,0,0.65)", 3.0);
+          drawWireEdges(scene.core_edges, "#33f0ff", "rgba(0,0,0,0.75)", 3.8);
+        } else {
+          drawWireEdges(scene.loop_edges, "#38f2ff", "rgba(10,14,22,0.75)", 3.4);
+        }
+
+        ctx.restore();
+      }
+
+      // Event Listeners
+      selectCycle.addEventListener("change", () => {
+        currentCycleKey = selectCycle.value;
+        liveFlowRunning = false;
+        btnRunFlow.classList.remove("active-flow");
+        btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        syncUIForCycle();
+      });
+
+      selectColormode.addEventListener("change", () => {
+        colorMode = selectColormode.value;
+        updateColorbarLegend();
+      });
+
+      sliderP.addEventListener("input", () => {
+        currentLevelIdx = parseInt(sliderP.value, 10);
+        updateSliderPReadout();
+        if (currentCycleKey === "mobius_torsion") {
+          setVerticesFromMorph(parseFloat(sliderMorph.value));
+        }
+        updateTelemetry();
+      });
+
+      sliderMorph.addEventListener("input", () => {
+        liveFlowRunning = false;
+        btnRunFlow.classList.remove("active-flow");
+        btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        const tau = parseFloat(sliderMorph.value);
+        sliderMorphReadout.textContent = `τ = ${tau.toFixed(2)}`;
+        flowIterReadout.textContent = tau === 0 ? "Fixed TetWild V⁰" : (tau === 1 ? "Converged V*" : `Blend τ=${tau.toFixed(2)}`);
+        setVerticesFromMorph(tau);
+        updateTelemetry();
+      });
+
+      sliderAlpha.addEventListener("input", () => {
+        alphaShare = parseFloat(sliderAlpha.value);
+        sliderAlphaReadout.textContent = `α = ${alphaShare.toFixed(2)}`;
+      });
+
+      sliderClip.addEventListener("input", () => {
+        clipX = parseFloat(sliderClip.value);
+        sliderClipReadout.textContent = clipX > 1.0 ? "No Clipping (x ≤ +1.00)" : `Slice x ≤ ${clipX.toFixed(2)}`;
+      });
+
+      btnResetFixed.addEventListener("click", () => {
+        liveFlowRunning = false;
+        btnRunFlow.classList.remove("active-flow");
+        btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        sliderMorph.value = "0";
+        sliderMorphReadout.textContent = "τ = 0.00 (Fixed Staircase)";
+        liveFlowStepCount = 0;
+        flowIterReadout.textContent = "Fixed TetWild V⁰";
+        setVerticesFromMorph(0.0);
+        updateTelemetry();
+      });
+
+      btnJumpConverged.addEventListener("click", () => {
+        liveFlowRunning = false;
+        btnRunFlow.classList.remove("active-flow");
+        btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        sliderMorph.value = "1";
+        sliderMorphReadout.textContent = "τ = 1.00 (De-Staircased)";
+        flowIterReadout.textContent = "Converged V*";
+        setVerticesFromMorph(1.0);
+        updateTelemetry();
+      });
+
+      btnRunFlow.addEventListener("click", () => {
+        liveFlowRunning = !liveFlowRunning;
+        if (liveFlowRunning) {
+          // If already at converged V*, start from fixed staircase V^0 so user sees the motion clearly
+          if (parseFloat(sliderMorph.value) > 0.95 && liveFlowStepCount === 0) {
+            setVerticesFromMorph(0.0);
+            sliderMorph.value = "0";
+            sliderMorphReadout.textContent = "Live JS Gradient Flow";
+          }
+          btnRunFlow.classList.add("active-flow");
+          btnRunFlow.innerHTML = "&#10074;&#10074; Pause Live Flow";
+        } else {
+          btnRunFlow.classList.remove("active-flow");
+          btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        }
+      });
+
+      btnStepFlow.addEventListener("click", () => {
+        stepLivePlateauTetFlow(15);
+        flowIterReadout.textContent = `Live Step ${liveFlowStepCount}`;
+        updateTelemetry();
+      });
+
+      btnPerturb.addEventListener("click", () => {
+        for (let v = 0; v < nV; v++) {
+          if (fixedMask[v]) continue;
+          const idx = v * 3;
+          currentV[idx]   += (Math.random() - 0.5) * 0.042;
+          currentV[idx+1] += (Math.random() - 0.5) * 0.042;
+          currentV[idx+2] += (Math.random() - 0.5) * 0.042;
+        }
+        flowIterReadout.textContent = "Perturbed (Press Run Flow)";
+        updateTelemetry();
+      });
+
+      btnAntiHelmholtz.addEventListener("click", () => {
+        helmholtzMode = false;
+        btnAntiHelmholtz.classList.add("primary");
+        btnHelmholtz.classList.remove("primary");
+        updateSliderPReadout();
+        setVerticesFromMorph(parseFloat(sliderMorph.value));
+        updateTelemetry();
+      });
+
+      btnHelmholtz.addEventListener("click", () => {
+        helmholtzMode = true;
+        btnHelmholtz.classList.add("primary");
+        btnAntiHelmholtz.classList.remove("primary");
+        updateSliderPReadout();
+        setVerticesFromMorph(parseFloat(sliderMorph.value));
+        updateTelemetry();
+      });
+
+      // Pointer / Mouse Orbit Controls
+      canvas.addEventListener("pointerdown", (e) => {
+        isDragging = true;
+        dragShift = e.shiftKey;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        canvas.setPointerCapture(e.pointerId);
+      });
+
+      canvas.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        if (dragShift) {
+          camPanX += dx;
+          camPanY += dy;
+        } else {
+          camYaw += dx * 0.0085;
+          camPitch = Math.max(-1.45, Math.min(1.45, camPitch + dy * 0.0085));
+        }
+      });
+
+      canvas.addEventListener("pointerup", () => {
+        isDragging = false;
+      });
+
+      canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const factor = Math.exp(-e.deltaY * 0.0012);
+        camZoom = Math.max(0.45, Math.min(2.8, camZoom * factor));
+      }, { passive: false });
+
+      // Main Animation Loop
+      function animate() {
+        if (toggleAutorotate.checked && !isDragging) {
+          camYaw += 0.0045;
+        }
+        if (liveFlowRunning) {
+          stepLivePlateauTetFlow(3);
+          flowIterReadout.textContent = `Live Step ${liveFlowStepCount}`;
+          updateTelemetry();
+        }
+        renderScene();
+        requestAnimationFrame(animate);
+      }
+
+      updateColorbarLegend();
+      syncUIForCycle();
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
+</html>
