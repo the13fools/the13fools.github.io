@@ -37,3 +37,11 @@ Ace 1.45.2 is the initial editor component, pinned and vendored with its BSD-3-C
 - The small spring is a teaching sketch, not a replacement for the old course demos. Existing applications, research pages, and essay rendering are unchanged.
 
 Checks: `node tools/check-remix.mjs`, JS syntax checks, and static link/ID audit. Browser review covered Ace edits, plain editing, run, draft save/reload, stop, original restore, opaque parent isolation, closing-tag handling, standalone HTML download and independent interaction, JSON download/import/run, and phone navigation at 390px. The user authorized publication on October 28, 2026. Josh then clarified the hierarchy: academics at `/`, with Play leading to the splash at `/play/`. The remixer’s splash starter reads `/play/index.html`.
+
+## Agent-led publications and the Play secret
+
+`/play/#agent-led` is the shelf for agent-led publications and experiments; the expanded index repeats it at `/play/experiments.html#agent-led`. The existing Hodge & Seifert Soup lab and PDF are listed there, outside the general project list and the Let's Get Lost course grid. Credit is preserved as **Seifert (Antigravity)**, matching the publication. New entries should keep their author/model provenance and direct artifact links together. The academic homepage stays at `/`.
+
+The little creature on Play opens the Moss Club, a native HTML dialog with a small resettable garden. It also recognizes the old up/up/down/down/left/right/left/right/B/A sequence outside typing fields. `js/play-secret.js` makes no storage or network calls; the default graphic remains present without JavaScript. Escape closes the dialog and focus returns to its opener. The splash remixer loads the same behavior as its editable JavaScript buffer.
+
+Validation for this addition: link/ID audit; JavaScript syntax and existing remix boundary checks; browser checks of desktop/390px layouts, dialog open/grow/close/Escape/focus return, and the sandboxed remix; a direct script-logic check of the key sequence, ignored typing fields, and garden reset. The existing paper's mathematical claims and solver were not changed or independently reviewed by this navigation pass.

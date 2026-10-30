@@ -77,10 +77,10 @@ async function text(url) {
 async function starter(id) {
   if (id === 'imported') return validateProject(JSON.parse(localStorage.getItem(storagePrefix + id)));
   if (id === 'homepage') {
-    const [html, css, splash] = await Promise.all([text('../play/index.html'), text('../css/play.css'), text('../css/splash.css')]);
+    const [html, css, splash, behavior] = await Promise.all([text('../play/index.html'), text('../css/play.css'), text('../css/splash.css'), text('../js/play-secret.js')]);
     const doc = new DOMParser().parseFromString(html, 'text/html');
     for (const link of doc.querySelectorAll('a[href^="/"]')) link.href = new URL(link.getAttribute('href'), 'https://foolzone.com/').href;
-    return {format:'foolzone-remix@1', name:'My Foolzone remix', bodyClass:doc.body.className, files:{html:doc.body.innerHTML.trim(), css:'/* The real Foolzone styles. Search for #b1f35d to change the green. */\n' + css + '\n' + splash, js:'// The splash page does not need JavaScript.\n// Add some behavior of your own, then press Run preview.\nconsole.log("Hello from my corner of the web!");\n'}};
+    return {format:'foolzone-remix@1', name:'My Foolzone remix', bodyClass:doc.body.className, files:{html:doc.body.innerHTML.trim(), css:'/* The real Foolzone styles. Search for #b1f35d to change the green. */\n' + css + '\n' + splash, js:behavior}};
   }
   const base = id === 'corner' ? 'corner' : 'spring';
   const [html, css, js] = await Promise.all([text('./' + base + '.html'), text('./' + base + '.css'), text('./' + base + '.js')]);
