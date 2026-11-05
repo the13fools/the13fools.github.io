@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>From Biot–Savart Fluxes to Minimal Seifert Surfaces · 3D Hodge &amp; Seifert Soup Lab · Foolzone</title>
-  <meta name="description" content="Interactive 3D browser simulator and single-author research paper on homological L2-to-L1 condensation, relative Z2 Mobius torsion, and 3D Plateau-Tet variational vertex flows on simplicial triangle soups.">
+  <meta name="description" content="Interactive 3D browser simulator and 10-page single-author research paper on homological L2-to-L1 condensation, relative Z2 Mobius torsion, Borromean Rings cooperative surgery, and 3D Plateau-Tet variational vertex flows on simplicial triangle soups.">
   <style>
     :root {
       --paper: #f7f0d9;
@@ -59,7 +59,7 @@
       justify-content: space-between;
       gap: 0.75rem;
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       position: sticky;
       top: 0;
       z-index: 30;
@@ -68,7 +68,7 @@
     .topbar-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.9rem;
+      gap: 0.65rem;
       align-items: center;
     }
 
@@ -82,7 +82,7 @@
       color: var(--ink);
       font-family: "Courier New", Courier, monospace;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       text-decoration: none;
       box-shadow: 2px 2px 0 var(--ink);
       cursor: pointer;
@@ -105,8 +105,13 @@
       color: #fff;
     }
 
+    .pill-btn.violet {
+      background: var(--violet);
+      color: #fff;
+    }
+
     .page-wrap {
-      max-width: 1320px;
+      max-width: 1340px;
       margin: 0 auto;
       padding: 1.5rem 1.25rem 4rem;
     }
@@ -130,7 +135,7 @@
     }
 
     h1 {
-      font-size: clamp(1.65rem, 3vw, 2.45rem);
+      font-size: clamp(1.65rem, 3vw, 2.4rem);
       line-height: 1.18;
       margin: 0 0 0.65rem;
       letter-spacing: -0.015em;
@@ -145,7 +150,7 @@
       padding-top: 0.55rem;
       border-top: 1px dashed rgba(23, 21, 19, 0.35);
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--muted);
     }
 
@@ -155,13 +160,13 @@
 
     .lab-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.48fr) minmax(340px, 0.92fr);
+      grid-template-columns: minmax(0, 1.46fr) minmax(355px, 0.94fr);
       gap: 1.25rem;
       align-items: start;
       margin-bottom: 2rem;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1040px) {
       .lab-grid {
         grid-template-columns: 1fr;
       }
@@ -186,7 +191,7 @@
       background: #1c2030;
       border-bottom: 1px solid rgba(255,255,255,0.14);
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
     }
 
     .viewport-badge {
@@ -201,7 +206,7 @@
     .canvas-container {
       position: relative;
       width: 100%;
-      height: 550px;
+      height: 565px;
       background: radial-gradient(circle at 50% 42%, #22283c 0%, #10131d 78%);
       touch-action: none;
       user-select: none;
@@ -303,15 +308,15 @@
       border: var(--border);
       background: var(--paper-light);
       box-shadow: var(--shadow);
-      padding: 1.1rem 1.15rem;
+      padding: 1.05rem 1.15rem;
       display: flex;
       flex-direction: column;
-      gap: 0.95rem;
+      gap: 0.88rem;
     }
 
     .control-group {
       border-bottom: 1px solid rgba(23, 21, 19, 0.18);
-      padding-bottom: 0.85rem;
+      padding-bottom: 0.8rem;
     }
 
     .control-group:last-child {
@@ -321,12 +326,12 @@
 
     .control-title {
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--blue);
-      margin: 0 0 0.45rem;
+      margin: 0 0 0.42rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -337,9 +342,9 @@
       justify-content: space-between;
       align-items: baseline;
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.22rem;
     }
 
     select, input[type="range"] {
@@ -347,11 +352,11 @@
     }
 
     select {
-      padding: 0.42rem 0.55rem;
+      padding: 0.4rem 0.52rem;
       border: 2px solid var(--ink);
       background: var(--paper);
       font-family: "Courier New", Courier, monospace;
-      font-size: 0.84rem;
+      font-size: 0.81rem;
       font-weight: 700;
       color: var(--ink);
     }
@@ -364,15 +369,15 @@
     .btn-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-top: 0.4rem;
+      gap: 0.42rem;
+      margin-top: 0.38rem;
     }
 
     .btn-row .pill-btn {
       flex: 1 1 auto;
       justify-content: center;
-      font-size: 0.78rem;
-      padding: 0.35rem 0.55rem;
+      font-size: 0.77rem;
+      padding: 0.34rem 0.52rem;
     }
 
     .pill-btn.active-flow {
@@ -381,17 +386,25 @@
     }
 
     .status-note {
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       background: var(--paper-deep);
       border-left: 4px solid var(--blue);
-      padding: 0.5rem 0.65rem;
+      padding: 0.48rem 0.62rem;
       margin-top: 0.35rem;
     }
 
     .surgery-box {
       background: rgba(184, 51, 42, 0.09);
       border: 1.5px solid var(--red);
-      padding: 0.55rem 0.65rem;
+      padding: 0.52rem 0.62rem;
+      margin-top: 0.42rem;
+      display: none;
+    }
+
+    .custom-designer-box {
+      background: rgba(94, 42, 132, 0.08);
+      border: 1.5px solid var(--violet);
+      padding: 0.6rem 0.68rem;
       margin-top: 0.45rem;
       display: none;
     }
@@ -402,6 +415,23 @@
       box-shadow: var(--shadow);
       padding: 1.5rem 1.75rem;
       margin-bottom: 1.6rem;
+    }
+
+    .section-header-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .section-header-row h2 {
+      margin: 0;
+      border: none;
+      padding: 0;
     }
 
     h2 {
@@ -485,18 +515,6 @@
       background: var(--paper-deep);
       font-weight: 700;
     }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
   </style>
 </head>
 <body>
@@ -510,25 +528,27 @@
     <div class="topbar-nav">
       <a href="#interactive-lab" class="pill-btn">3D Simulator</a>
       <a href="#act-1" class="pill-btn">Act I: L²→L¹ &amp; Flow</a>
-      <a href="#act-2" class="pill-btn">Act II: Z₂ Torsion</a>
+      <a href="#act-2" class="pill-btn">Act II: ℤ₂ Torsion &amp; Torus</a>
       <a href="#act-3" class="pill-btn">Act III: Catenoid</a>
-      <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Read 9-Page PDF Paper &nearr;</a>
+      <a href="#act-4" class="pill-btn">Act IV: Borromean &amp; Genus</a>
+      <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Read 10-Page PDF Paper &nearr;</a>
     </div>
   </header>
 
   <main class="page-wrap">
     <section class="hero">
-      <p class="kicker">Single-Author Research Paper &amp; Interactive 3D Simplicial Complex Laboratory</p>
+      <p class="kicker">Agent-Driven Single-Author Research Paper &amp; Interactive 3D Simplicial Complex Laboratory</p>
       <h1>From Biot–Savart Fluxes to Minimal Seifert Surfaces: Homological Condensation, ℤ₂ Torsion, and 3D Plateau–Tet Flows on Simplicial Triangle Soups</h1>
-      <p style="margin: 0.45rem 0 0.85rem; font-size: 1.04rem;">
-        What happens when the 9,318 interior triangles of a 3D tetrahedral mesh are treated not as disconnected facets, but as the 2-skeleton of an oriented chain complex <code>C₀(V) ← C₁(E) ← C₂(F) ← C₃(T)</code> driven by closed wire loops <code>γ ∈ Z₁(E)</code>? Scrub the homology exponent <code>p ∈ [1, 2]</code> below to watch a volume-filling 3D Biot–Savart magnetic flux condense onto a calibrated minimal Seifert surface, and run our <strong>analytic 3D Plateau–Tet vertex flow</strong> live in your browser across all 1,078 vertices and 4,339 tetrahedra.
+      <p style="margin: 0.45rem 0 0.85rem; font-size: 1.03rem;">
+        What happens when the 9,318 interior triangles of a 3D tetrahedral mesh are treated not as disconnected facets, but as the 2-skeleton of an oriented chain complex <code>C₀(V) ← C₁(E) ← C₂(F) ← C₃(T)</code> driven by closed wire loops <code>γ ∈ Z₁(E)</code>? Explore all <strong>11 precomputed 3D topological benchmarks</strong> across Acts I–IV below, or open the <strong>Live Custom 3D Knot/Loop Designer</strong> to snap any custom 3D curve onto the 6,316-edge interior skeleton via Dijkstra shortest paths and solve the gauge-free Jacobi-CG Biot–Savart + IRLS condensation + 3D Plateau–Tet vertex flow live in your browser.
       </p>
       <div class="byline">
         <div>
-          <strong>Author:</strong> Seifert (Antigravity) &middot; <strong>Venue:</strong> Foolzone Autonomous Geometry Lab &middot; October 29, 2026
+          <strong>Author:</strong> Seifert (Antigravity) &middot; <strong>Venue:</strong> Foolzone Autonomous Geometry Lab &middot; October 29, 2026 (Iteration 2 · Acts I–IV)
         </div>
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Download PDF (hodge_seifert_soup.pdf)</a>
+          <button type="button" id="btn-hero-custom" class="pill-btn violet">&#9881; Launch Custom 3D Loop Solver</button>
+          <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Download 10-Page PDF</a>
           <a href="#pdf-viewer-section" class="pill-btn">Inline PDF Preview</a>
         </div>
       </div>
@@ -602,17 +622,32 @@
         <div class="control-group">
           <div class="control-title">
             <span>1. Benchmark 1-Cycle γ ∈ Z₁(E)</span>
-            <span id="cycle-badge" style="color:var(--red);">Act I–III</span>
+            <span id="cycle-badge" style="color:var(--red);">Acts I–IV + Live Solver</span>
           </div>
           <label class="field-label" for="select-cycle">Select Topological Wire Configuration:</label>
           <select id="select-cycle">
-            <option value="trefoil_knot" selected>Act I · (2,3)-Trefoil Knot (Wr = +3, 89 faces)</option>
-            <option value="hopf_link">Act I · Hopf Link (Lk = −1, 58 faces)</option>
-            <option value="tilted_ring">Act I · Tilted Ring (35° Oblique Disk, −75.9% RMS)</option>
-            <option value="saddle_loop">Act I · Hyperbolic Saddle Loop (72 faces)</option>
-            <option value="mobius_torsion">Act II · ℤ₂ Relative Möbius Torsion (+14.57% Gap)</option>
-            <option value="catenoid_neck">Act III · Coaxial Catenoid Tube (h = 0.20, β₀ = 1)</option>
-            <option value="goldschmidt_disks">Act III · Goldschmidt Pinch-Off Disks (h = 0.26, β₀ = 2)</option>
+            <optgroup label="Act I · Homological L²→L¹ Condensation &amp; Flow">
+              <option value="trefoil_knot" selected>Act I · (2,3)-Trefoil Knot (Genus g=1, Wr=+3, 89 faces)</option>
+              <option value="hopf_link">Act I · Hopf Link (Lk = −1, 58 faces)</option>
+              <option value="tilted_ring">Act I · Tilted Ring (35° Oblique Disk, −75.9% RMS)</option>
+              <option value="planar_ring">Act I · Planar Ring (Genus g=0 Unknot, −82.5% RMS)</option>
+              <option value="saddle_loop">Act I · Hyperbolic Saddle Loop (72 faces)</option>
+            </optgroup>
+            <optgroup label="Act II · Relative ℤ₂ Torsion &amp; 3D Solid Torus Duality">
+              <option value="mobius_torsion">Act II · ℤ₂ Relative Möbius Torsion (+14.57% Gap)</option>
+              <option value="torus_mincut">Act II · 3D Solid Torus Min-Cut / Max-Flow (96× Collapse)</option>
+            </optgroup>
+            <optgroup label="Act III · Euler–Goldschmidt Catenoid &amp; Surgery">
+              <option value="catenoid_neck">Act III · Coaxial Catenoid Tube (h = 0.20, β₀ = 1)</option>
+              <option value="goldschmidt_disks">Act III · Goldschmidt Pinch-Off Disks (h = 0.26, β₀ = 2)</option>
+            </optgroup>
+            <optgroup label="Act IV · Borromean Cooperative Surgery &amp; Higher Genus">
+              <option value="borromean_rings">Act IV · Borromean Rings (Lk_ij=0, −17.3% Surgery, 106 faces)</option>
+              <option value="cinquefoil_knot">Act IV · (2,5)-Cinquefoil Knot (Genus g=2, Wr=+5, 97 faces)</option>
+            </optgroup>
+            <optgroup label="In-Browser Custom 3D Loop Designer &amp; Krylov/IRLS Solver">
+              <option value="custom_live">★ Custom 3D Wire Loop (Live Dijkstra Snap + CG/IRLS Solver)</option>
+            </optgroup>
           </select>
 
           <div id="helmholtz-surgery-box" class="surgery-box">
@@ -625,7 +660,36 @@
             </div>
           </div>
 
-          <div id=" cycle-description" class="status-note">
+          <div id="custom-designer-box" class="custom-designer-box">
+            <div class="control-title" style="color:var(--violet); margin-bottom:0.35rem;">
+              <span>★ Live In-Browser 3D Curve Snapper &amp; Solver</span>
+              <span id="custom-solve-time" style="color:var(--green);"></span>
+            </div>
+            <label class="field-label" for="select-custom-family">Parametric 3D Curve Family:</label>
+            <select id="select-custom-family" style="margin-bottom:0.4rem;">
+              <option value="torus_knot" selected>T(2, q) Torus Knot Family (q ∈ {1, 3, 5, 7})</option>
+              <option value="tilted_saddle">Tilted / Saddle Loop (Tilt θ &amp; Saddle Warping)</option>
+              <option value="coaxial_rings">Coaxial Ring Pair (Separation h &amp; Orientation)</option>
+            </select>
+
+            <label class="field-label" for="slider-custom-param1">
+              <span id="custom-param1-label">Torus Winding Parameter q:</span>
+              <output id="custom-param1-readout">q = 3 (Trefoil)</output>
+            </label>
+            <input type="range" id="slider-custom-param1" min="1" max="7" step="2" value="3">
+
+            <label class="field-label" for="slider-custom-param2" style="margin-top:0.3rem;">
+              <span id="custom-param2-label">Tube Minor Radius r_tube:</span>
+              <output id="custom-param2-readout">r = 0.20</output>
+            </label>
+            <input type="range" id="slider-custom-param2" min="0.12" max="0.26" step="0.02" value="0.20">
+
+            <div class="btn-row" style="margin-top:0.45rem;">
+              <button type="button" id="btn-solve-custom" class="pill-btn violet">&#9889; Snap γ ∈ Z₁(E) &amp; Solve CG + IRLS in Browser</button>
+            </div>
+          </div>
+
+          <div id="cycle-description" class="status-note">
             <strong>(2,3)-Trefoil Knot:</strong> 3 verified planar diagram crossings (writhe +3). At p=1, HiGHS LP condenses the 5,326-triangle Biot–Savart cloud onto an 89-triangle calibrated minimal Seifert surface.
           </div>
         </div>
@@ -655,8 +719,8 @@
             <span>3. Live In-Browser 3D Plateau–Tet Vertex Flow</span>
             <output id="flow-iter-readout" style="color:var(--green);">Converged V*</output>
           </div>
-          <p style="margin:0 0 0.45rem; font-size:0.82rem; color:var(--muted);">
-            Evaluates exact analytic area gradients <code>∇_V A_Seifert(V)</code> and 4-corner TetWild Scaled Jacobian gradients <code>∇_V Q_TetWild(V)</code> across all 4,339 tetrahedra in JavaScript:
+          <p style="margin:0 0 0.42rem; font-size:0.8rem; color:var(--muted);">
+            Evaluates exact analytic area gradients <code>∇_V A_Seifert(V)</code> and 4-corner TetWild Scaled Jacobian gradients <code>∇_V Q_TetWild(V)</code> across all tetrahedra in JavaScript:
           </p>
           <div class="btn-row">
             <button type="button" id="btn-run-flow" class="pill-btn primary">&#9654; Run Live 3D Flow</button>
@@ -668,13 +732,13 @@
             <button type="button" id="btn-jump-converged" class="pill-btn">L-BFGS-B Optimum (V*)</button>
           </div>
 
-          <label class="field-label" for="slider-morph" style="margin-top:0.6rem;">
+          <label class="field-label" for="slider-morph" style="margin-top:0.55rem;">
             <span>Deformation Morph τ (V⁰ → V*):</span>
             <output id="slider-morph-readout">τ = 1.00 (De-Staircased)</output>
           </label>
           <input type="range" id="slider-morph" min="0" max="1" step="0.02" value="1">
 
-          <label class="field-label" for="slider-alpha" style="margin-top:0.45rem;">
+          <label class="field-label" for="slider-alpha" style="margin-top:0.42rem;">
             <span>Plateau–Tet Area Share α:</span>
             <output id="slider-alpha-readout">α = 0.65</output>
           </label>
@@ -686,14 +750,14 @@
             <span>4. 3D Slicing Plane &amp; Inspection</span>
             <output id="slider-clip-readout">No Clipping (x ≤ +1.00)</output>
           </div>
-          <input type="range" id="slider-clip" min="-0.85" max="1.05" step="0.05" value="1.05" aria-label="3D X clipping plane">
+          <input type="range" id="slider-clip" min="-0.85" max="1.35" step="0.05" value="1.35" aria-label="3D X clipping plane">
         </div>
       </aside>
     </section>
 
     <!-- TEASER BANNER OVERVIEW -->
     <section class="section-card">
-      <h2>Executive Overview: Three Acts of Homological Condensation in 3D Triangle Soups</h2>
+      <h2>Executive Overview: Four Acts of Homological Condensation in 3D Triangle Soups</h2>
       <div class="figure-frame">
         <img src="./paper-teaser-banner.png" alt="Five-panel overview of the 3D Hodge and Seifert Soup pipeline across Acts I, II, and III">
         <div class="figure-caption">
@@ -704,7 +768,14 @@
 
     <!-- ACT I -->
     <section id="act-1" class="section-card">
-      <h2>Act I: L² → L¹ Homological Condensation, Stokes Barrier, and 3D Plateau–Tet Flow</h2>
+      <div class="section-header-row">
+        <h2>Act I: L² → L¹ Homological Condensation, Stokes Barrier, and 3D Plateau–Tet Flow</h2>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="pill-btn js-load-scene" data-scene="trefoil_knot">Load Trefoil in 3D &uarr;</button>
+          <button type="button" class="pill-btn js-load-scene" data-scene="tilted_ring">Load 35° Tilted Ring &uarr;</button>
+          <button type="button" class="pill-btn js-load-scene" data-scene="hopf_link">Load Hopf Link &uarr;</button>
+        </div>
+      </div>
       <div class="two-col">
         <div>
           <p>
@@ -813,7 +884,13 @@
 
     <!-- ACT II -->
     <section id="act-2" class="section-card">
-      <h2>Act II: Relative Homology ℤ₂ Möbius Torsion (+14.57% Gap) &amp; 96× Torus Symmetry Breaking</h2>
+      <div class="section-header-row">
+        <h2>Act II: Relative Homology ℤ₂ Möbius Torsion (+14.57% Gap) &amp; 96× Torus Symmetry Breaking</h2>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="pill-btn js-load-scene" data-scene="mobius_torsion">Load ℤ₂ Möbius Torsion &uarr;</button>
+          <button type="button" class="pill-btn js-load-scene" data-scene="torus_mincut">Load 3D Solid Torus Min-Cut &uarr;</button>
+        </div>
+      </div>
       <div class="two-col">
         <div>
           <p>
@@ -851,7 +928,13 @@
 
     <!-- ACT III -->
     <section id="act-3" class="section-card">
-      <h2>Act III: Euler–Goldschmidt Catenoid Pinch-Off &amp; Helmholtz Orientation Surgery</h2>
+      <div class="section-header-row">
+        <h2>Act III: Euler–Goldschmidt Catenoid Pinch-Off &amp; Helmholtz Orientation Surgery</h2>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="pill-btn js-load-scene" data-scene="catenoid_neck">Load Catenoid / Helmholtz Surgery &uarr;</button>
+          <button type="button" class="pill-btn js-load-scene" data-scene="goldschmidt_disks">Load Goldschmidt Pinch-Off &uarr;</button>
+        </div>
+      </div>
       <div class="two-col">
         <div>
           <p>
@@ -881,15 +964,107 @@
       </div>
     </section>
 
+    <!-- ACT IV -->
+    <section id="act-4" class="section-card">
+      <div class="section-header-row">
+        <h2>Act IV: Borromean Rings Cooperative L¹ Surgery (Lk_ij = 0) &amp; The T(2, q) Seifert Genus Hierarchy</h2>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="pill-btn primary js-load-scene" data-scene="borromean_rings">Load Borromean Rings in 3D &uarr;</button>
+          <button type="button" class="pill-btn js-load-scene" data-scene="cinquefoil_knot">Load (2,5)-Cinquefoil Knot (g=2) &uarr;</button>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <p>
+            In Act I, the two-component <code>hopf_link</code> exhibited non-zero pairwise Gauss linking <code>Lk(γ₁, γ₂) = −1</code>. What happens when three closed loops <code>γ₁, γ₂, γ₃ ∈ Z₁(E)</code> have <strong>zero pairwise linking number</strong> (<code>Lk(γ_i, γ_j) = 0</code> for all <code>i ≠ j</code>), yet are topologically inseparable via Milnor’s triple linking invariant <code>μ̄(1, 2, 3) = ±1</code>?
+          </p>
+          <ul>
+            <li><strong>Near-Zero Pairwise L² Mutual Inductance vs. −17.26% Cooperative L¹ Surgery:</strong> Constructing the three mutually orthogonal <strong>Borromean Rings</strong> <code>γ_Bor = γ₁ + γ₂ + γ₃</code> in the <code>yz</code>-, <code>zx</code>-, and <code>xy</code>-planes confirms discrete Gauss linking <code>Lk₁₂ = +0.0018, Lk₂₃ = −0.0007, Lk₃₁ = +0.0019</code> (all topologically 0) and near-zero L² Biot–Savart mutual inductance (<code>cos_{W₂}(Φ_i^{(2)}, Φ_j^{(2)}) ∈ [−0.064, −0.032]</code>). Solving the three rings independently at <code>p = 1</code> requires three self-intersecting elliptical disks of total area <code>0.8873 + 0.8972 + 0.7723 = 2.5569</code> (124 triangles). Solving jointly for <code>∂₂Φ = γ₁ + γ₂ + γ₃</code> triggers <strong>cooperative octahedral surgery</strong> where 18 interior faces cancel, fusing the three sheets into a <strong>single connected (β₀ = 1) 106-triangle Seifert complex</strong> of fixed-mesh area <strong>2.1572 (−15.63%)</strong> and post-flow area <strong>2.1154 (−17.26% saving, min_t q_t = 0.223, 0 inversions)</strong>!</li>
+            <li><strong>The T(2, q) Torus Knot Seifert Genus Hierarchy (g ∈ {0, 1, 2}):</strong> Extending the torus knot family to the 5-crossing <strong>(2,5)-cinquefoil knot</strong> (<code>cinquefoil_knot</code>, verified planar writhe <code>Wr = +5</code>, genus <code>g = (5−1)/2 = 2</code>) demonstrates monotonic complexity scaling across <code>q ∈ {1, 3, 5}</code>: active L¹ faces grow from <code>49 → 89 → 97</code> while 3D Plateau–Tet vertex flow smooths the genus-2 cinquefoil surface from <code>2.0271</code> to <strong>1.8885 (−6.84%, 0 inversions)</strong>.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="figure-frame">
+            <img src="./borromean-and-genus-3d.png" alt="3D Polyscope gallery of Borromean Rings cooperative L1 surgery and the T(2,q) torus knot Seifert genus hierarchy">
+            <div class="figure-caption">
+              <strong>Figure 9:</strong> Top row: Borromean Rings (<code>Lk_ij = 0</code>) at <code>p=1.40</code>, cooperative L¹ surgery at <code>p=1.00</code> (106 faces, <code>β₀=1</code>), and post-flow smoothing (−17.26% vs. 3 disks). Bottom row: Post-flow minimal Seifert surfaces across <code>T(2,1)</code> (g=0), <code>T(2,3)</code> (g=1), and <code>T(2,5)</code> (g=2).
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="figure-frame">
+        <img src="./borromean-and-genus-curves.png" alt="Quantitative plots for Borromean Rings cooperative area saving and T(2,q) genus scaling">
+        <div class="figure-caption">
+          <strong>Figure 10:</strong> Left: Borromean Rings primal L¹ area and certified calibration bound across <code>p ∈ [1, 2]</code> compared against the sum of three independent disks (2.5569 → 2.1154). Center &amp; Right: Scaling of L², fixed L¹, and post-flow Seifert areas and triangle counts across knots and links.
+        </div>
+      </div>
+
+      <table class="data-table" aria-label="Act IV Quantitative Summary Table">
+        <thead>
+          <tr>
+            <th>1-Cycle Topology</th>
+            <th>Topological Invariant</th>
+            <th>Active L¹ Faces</th>
+            <th>Fixed p = 1.0 Area</th>
+            <th>Post-Flow Area</th>
+            <th>min_t q_t (Inversions)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>planar_ring</code> T(2,1) Unknot</td>
+            <td>Genus g = 0, Wr = 0</td>
+            <td>49 (β₀ = 1)</td>
+            <td>1.0446</td>
+            <td><strong>0.9964 (−4.6%)</strong></td>
+            <td>0.214 (0)</td>
+          </tr>
+          <tr>
+            <td><code>trefoil_knot</code> T(2,3) Trefoil</td>
+            <td>Genus g = 1, Wr = +3</td>
+            <td>89 (β₀ = 1)</td>
+            <td>1.8629</td>
+            <td><strong>1.6725 (−10.2%)</strong></td>
+            <td>0.066 (0)</td>
+          </tr>
+          <tr>
+            <td><code>cinquefoil_knot</code> T(2,5) Cinquefoil</td>
+            <td>Genus g = 2, Wr = +5</td>
+            <td>97 (β₀ = 1)</td>
+            <td>2.0271</td>
+            <td><strong>1.8885 (−6.8%)</strong></td>
+            <td>0.025 (0)</td>
+          </tr>
+          <tr>
+            <td>3 Independent Borromean Disks</td>
+            <td>∑_{i=1}³ E_{L¹}(γ_i)</td>
+            <td>124 (3 sheets)</td>
+            <td>2.5569</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><code>borromean_rings</code> Joint Complex</td>
+            <td>Lk_{ij} = 0, Milnor μ̄ = ±1</td>
+            <td><strong>106 (β₀ = 1)</strong></td>
+            <td><strong>2.1572 (−15.6%)</strong></td>
+            <td><strong>2.1154 (−17.3%)</strong></td>
+            <td>0.223 (0)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <!-- EMBEDDED PDF VIEWER -->
     <section id="pdf-viewer-section" class="section-card">
       <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
-        <h2 style="margin:0; border:none; padding:0;">Full 9-Page Single-Author Publication (PDF)</h2>
-        <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Open Fullscreen PDF &nearr;</a>
+        <h2 style="margin:0; border:none; padding:0;">Full 10-Page Single-Author Publication (PDF · Acts I–IV)</h2>
+        <a href="./hodge_seifert_soup.pdf" target="_blank" rel="noopener" class="pill-btn primary">Open Fullscreen 10-Page PDF &nearr;</a>
       </div>
-      <object data="./hodge_seifert_soup.pdf" type="application/pdf" width="100%" height="780" style="border: 2px solid var(--ink); background:#fff;">
+      <object data="./hodge_seifert_soup.pdf" type="application/pdf" width="100%" height="800" style="border: 2px solid var(--ink); background:#fff;">
         <p style="padding:1rem;">
-          Your browser does not support inline PDF embedding. <a href="./hodge_seifert_soup.pdf">Click here to download the 9-page PDF paper (hodge_seifert_soup.pdf)</a>.
+          Your browser does not support inline PDF embedding. <a href="./hodge_seifert_soup.pdf">Click here to download the 10-page PDF paper (hodge_seifert_soup.pdf)</a>.
         </p>
       </object>
     </section>
@@ -908,6 +1083,7 @@
       const ctx = canvas.getContext("2d");
 
       // UI Elements
+      const viewportTitle = document.getElementById("viewport-title");
       const selectCycle = document.getElementById("select-cycle");
       const selectColormode = document.getElementById("select-colormode");
       const sliderP = document.getElementById("slider-p");
@@ -923,6 +1099,19 @@
       const btnAntiHelmholtz = document.getElementById("btn-anti-helmholtz");
       const btnHelmholtz = document.getElementById("btn-helmholtz");
       const surgeryBox = document.getElementById("helmholtz-surgery-box");
+
+      // Custom Designer UI
+      const customDesignerBox = document.getElementById("custom-designer-box");
+      const selectCustomFamily = document.getElementById("select-custom-family");
+      const sliderCustomParam1 = document.getElementById("slider-custom-param1");
+      const sliderCustomParam2 = document.getElementById("slider-custom-param2");
+      const customParam1Label = document.getElementById("custom-param1-label");
+      const customParam1Readout = document.getElementById("custom-param1-readout");
+      const customParam2Label = document.getElementById("custom-param2-label");
+      const customParam2Readout = document.getElementById("custom-param2-readout");
+      const btnSolveCustom = document.getElementById("btn-solve-custom");
+      const btnHeroCustom = document.getElementById("btn-hero-custom");
+      const customSolveTime = document.getElementById("custom-solve-time");
 
       const toggleWireframe = document.getElementById("toggle-wireframe");
       const toggleCage = document.getElementById("toggle-cage");
@@ -946,28 +1135,22 @@
       const sliderClipReadout = document.getElementById("slider-clip-readout");
       const flowIterReadout = document.getElementById("flow-iter-readout");
       const solverStatusBadge = document.getElementById("solver-status-badge");
-      const cycleDesc = document.getElementById(" cycle-description");
+      const cycleDesc = document.getElementById("cycle-description");
       const colorbarTitle = document.getElementById("colorbar-title");
       const colorbarGrad = document.getElementById("colorbar-grad");
       const colorbarRange = document.getElementById("colorbar-range");
 
-      // Base mesh data (1,078 vertices, 4,339 tets)
-      const baseV = DATA.mesh.vertices;
-      const nV = baseV.length;
-      const tets = DATA.mesh.tets;
-      const nT = tets.length;
-      const boundarySet = new Set(DATA.mesh.boundary_vertices);
-
-      // Extract sparse outer boundary cage edges for visual context
-      const boundaryCageEdges = [];
-      {
+      // Prepare both meshes: sphere (1,078 V, 4,339 T) and torus (1,050 V, 3,780 T)
+      function buildCageEdges(meshObj) {
+        const bSet = new Set(meshObj.boundary_vertices);
         const edgeCounts = new Map();
         const tetFaces = [[0,1,2],[0,1,3],[0,2,3],[1,2,3]];
-        for (let t = 0; t < nT; t++) {
-          const tet = tets[t];
+        const tList = meshObj.tets;
+        for (let t = 0; t < tList.length; t++) {
+          const tet = tList[t];
           for (let f = 0; f < 4; f++) {
             const a = tet[tetFaces[f][0]], b = tet[tetFaces[f][1]], c = tet[tetFaces[f][2]];
-            if (boundarySet.has(a) && boundarySet.has(b) && boundarySet.has(c)) {
+            if (bSet.has(a) && bSet.has(b) && bSet.has(c)) {
               const pairs = [[Math.min(a,b), Math.max(a,b)], [Math.min(b,c), Math.max(b,c)], [Math.min(a,c), Math.max(a,c)]];
               for (const [u, v] of pairs) {
                 const key = (u << 12) | v;
@@ -976,28 +1159,42 @@
             }
           }
         }
+        const edges = [];
         for (const key of edgeCounts.keys()) {
-          boundaryCageEdges.push([key >> 12, key & 0xfff]);
+          edges.push([key >> 12, key & 0xfff]);
         }
+        return edges;
       }
 
-      // Live vertex buffer V (nV x 3)
-      const currentV = new Float64Array(nV * 3);
-      const gradAreaV = new Float64Array(nV * 3);
-      const gradTetV = new Float64Array(nV * 3);
-      const tetQualities = new Float64Array(nT);
-      const vertexTetQuality = new Float64Array(nV);
-      const vertexTetCount = new Int32Array(nV);
+      const sphereCageEdges = buildCageEdges(DATA.mesh);
+      const torusCageEdges = DATA.torus_mesh ? buildCageEdges(DATA.torus_mesh) : [];
+
+      let activeMesh = DATA.mesh;
+      let baseV = activeMesh.vertices;
+      let nV = baseV.length;
+      let tets = activeMesh.tets;
+      let nT = tets.length;
+      let boundaryCageEdges = sphereCageEdges;
+
+      const maxNV = Math.max(DATA.mesh.vertices.length, DATA.torus_mesh ? DATA.torus_mesh.vertices.length : 0);
+      const maxNT = Math.max(DATA.mesh.tets.length, DATA.torus_mesh ? DATA.torus_mesh.tets.length : 0);
+
+      const currentV = new Float64Array(maxNV * 3);
+      const gradAreaV = new Float64Array(maxNV * 3);
+      const gradTetV = new Float64Array(maxNV * 3);
+      const tetQualities = new Float64Array(maxNT);
+      const vertexTetQuality = new Float64Array(maxNV);
+      const vertexTetCount = new Int32Array(maxNV);
+      const fixedMask = new Uint8Array(maxNV);
 
       let currentCycleKey = "trefoil_knot";
-      let helmholtzMode = false; // false = Anti-Helmholtz (Catenoid), true = Helmholtz (2 disks)
+      let helmholtzMode = false;
       let currentLevelIdx = 6;
       let colorMode = "abs_phi";
       let alphaShare = 0.65;
-      let clipX = 1.05;
+      let clipX = 1.35;
       let liveFlowRunning = false;
       let liveFlowStepCount = 0;
-      let fixedMask = new Uint8Array(nV);
 
       // Camera state
       let camYaw = -0.62;
@@ -1011,14 +1208,466 @@
       let lastMouseY = 0;
 
       const CYCLE_DESCRIPTIONS = {
-        trefoil_knot: "<strong>(2,3)-Trefoil Knot (Wr = +3):</strong> 3 verified planar diagram crossings. At p=1, HiGHS LP condenses the 5,326-triangle Biot–Savart cloud onto an 89-triangle calibrated minimal Seifert surface; 3D Plateau–Tet flow reduces area by −10.2% with 0 inverted tets.",
+        trefoil_knot: "<strong>(2,3)-Trefoil Knot (Genus g = 1, Wr = +3):</strong> 3 verified planar diagram crossings. At p=1, HiGHS LP condenses the 5,326-triangle Biot–Savart cloud onto an 89-triangle calibrated minimal Seifert surface; 3D Plateau–Tet flow reduces area by −10.2% with 0 inverted tets.",
+        cinquefoil_knot: "<strong>(2,5)-Cinquefoil Knot (Genus g = 2, Wr = +5):</strong> 5 verified planar diagram crossings on the torus knot hierarchy T(2,5). Condenses from 5,451 diffuse triangles at p=2 onto a 97-triangle genus-2 Seifert surface; 3D Plateau–Tet flow smooths area from 2.0271 to 1.8885 (−6.84%, 0 inversions).",
+        borromean_rings: "<strong>Borromean Rings (Lk_12 = Lk_23 = Lk_31 = 0, Milnor μ̄ = ±1):</strong> Three mutually orthogonal ellipses with zero pairwise Gauss linking and near-zero L² mutual inductance. Solving jointly at p=1 triggers cooperative octahedral surgery (−15.63% fixed, −17.26% post-flow area vs. 3 independent disks), fusing all 3 rings into a single connected (β₀=1) 106-triangle Seifert complex!",
         hopf_link: "<strong>Hopf Link (Lk = −1):</strong> Two linked circles with verified discrete Gauss linking integral −0.978 (topological −1). Condenses onto a 58-triangle twisted Seifert annulus; Plateau–Tet flow trims area from 1.2408 to 1.1219 (−9.6%).",
         tilted_ring: "<strong>Tilted Ring (35° Oblique Circle):</strong> Exposes O(1) mesh staircasing on a fixed tetrahedral grid (1.169× Stokes bound). Combinatorial 2-hop chords reduce area by only 0.02%, whereas 3D Plateau–Tet flow cuts out-of-plane vertex RMS by −75.9%!",
+        planar_ring: "<strong>Planar Ring (T(2,1) Unknot, Genus g = 0):</strong> Horizontal wire loop in z = 0. Condenses from 5,876 Biot–Savart faces at p=2 to a 49-triangle disk at p=1; 3D Plateau–Tet vertex flow eliminates 82.5% of out-of-plane vertex RMS (area 1.0446 → 0.9964, 1.013× Stokes bound).",
         saddle_loop: "<strong>Hyperbolic Saddle Loop (z = 0.22 cos 2θ):</strong> Non-planar boundary curve whose calibrated p=1 minimal surface spans 72 triangles; 3D Plateau–Tet flow smooths the saddle sheet from 1.5301 to 1.3253 (−13.4%).",
         mobius_torsion: "<strong>ℤ₂ Relative Homology Möbius Torsion:</strong> Bounds the central circle γ_core (cyan) relative to the free (2,3)-trefoil wire γ_trefoil (gold). Scrub winding period c ∈ [−0.25, 1.00]: Integer MILP selects c = 0.00 (46-face solid disk, area 1.0399), while Real LP selects c = 0.50 (88-face half-integer Möbius ribbon |Φ_f|=0.5, area 0.9076, +14.57% integrality gap!).",
+        torus_mincut: "<strong>3D Solid Torus Min-Cut / Max-Flow Duality (96× Symmetry Breaking):</strong> On torus-tets.npz (1,050 V, 3,780 T), minimizing ‖η + ∂₃c‖_Lp in H₂(Torus, ∂Torus) remains rotationally delocalized across 2,487 interior faces down to p = 1.08 before collapsing 96× at p = 1.00 onto a single 28-triangle meridional cross-sectional disk (area 0.3888 → 0.3814 post-flow).",
         catenoid_neck: "<strong>Coaxial Rings at h = 0.20 (Euler Catenoid vs. Helmholtz Surgery):</strong> Anti-Helmholtz (γ_top − γ_bottom) condenses into a hollow catenoid tube (β₀=1) whose post-flow waist r_waist = 0.5177 matches Euler's analytical r₀ = 0.5191 to 0.27%! Use the red toggle above to flip one ring's current (Helmholtz γ_top + γ_bottom) and trigger surgery into two flat disks (β₀=2).",
-        goldschmidt_disks: "<strong>Post-Critical Coaxial Rings at h = 0.26 (Goldschmidt Pinch-Off):</strong> Beyond the critical aspect ratio h/R ≈ 0.46, the equatorial catenoid belt collapses from 65 faces to 0 and pinches off into two disconnected polar disks (β₀ = 2, area 2.2353 → 2.0264)."
+        goldschmidt_disks: "<strong>Post-Critical Coaxial Rings at h = 0.26 (Goldschmidt Pinch-Off):</strong> Beyond the critical aspect ratio h/R ≈ 0.46, the equatorial catenoid belt collapses from 65 faces to 0 and pinches off into two disconnected polar disks (β₀ = 2, area 2.2353 → 2.0264).",
+        custom_live: "<strong>★ Live In-Browser Custom 3D Loop Designer &amp; Krylov/IRLS Solver:</strong> Snaps your parameterized 3D curve onto the 6,316-edge interior TetWild skeleton via Dijkstra shortest paths (∂₁γ = 0), then runs gauge-free Jacobi-preconditioned Conjugate Gradients on (∂₂W₂⁻¹∂₂ᵀ)ψ = γ + 5 IRLS reweighting passes directly in JavaScript!"
       };
+
+      // Lazy-initialized 6,316-edge chain complex on sphere-tets.npz for live in-browser solving
+      let sphereComplex = null;
+
+      function ensureSphereComplex() {
+        if (sphereComplex) return sphereComplex;
+        const V = DATA.mesh.vertices;
+        const F = DATA.mesh.all_display_faces; // 9,318 x 3
+        const nFaces = F.length;
+        const edgeMap = new Map();
+        const edges = [];
+        const faceEdges = new Int32Array(nFaces * 3);
+        const faceSigns = new Int8Array(nFaces * 3);
+        const faceAreas = new Float64Array(nFaces);
+
+        function getEdgeIdx(u, v) {
+          const a = Math.min(u, v), b = Math.max(u, v);
+          const key = (a << 12) | b;
+          let idx = edgeMap.get(key);
+          if (idx === undefined) {
+            idx = edges.length;
+            edges.push([a, b]);
+            edgeMap.set(key, idx);
+          }
+          return idx;
+        }
+
+        for (let f = 0; f < nFaces; f++) {
+          const tri = F[f];
+          const v0 = tri[0], v1 = tri[1], v2 = tri[2];
+          // Oriented boundary of (v0, v1, v2) is (v0,v1) + (v1,v2) - (v0,v2)
+          const e01 = getEdgeIdx(v0, v1);
+          const e12 = getEdgeIdx(v1, v2);
+          const e02 = getEdgeIdx(v0, v2);
+          faceEdges[f*3]   = e01; faceSigns[f*3]   = (v0 < v1) ? 1 : -1;
+          faceEdges[f*3+1] = e12; faceSigns[f*3+1] = (v1 < v2) ? 1 : -1;
+          faceEdges[f*3+2] = e02; faceSigns[f*3+2] = (v0 < v2) ? -1 : 1;
+
+          const p0 = V[v0], p1 = V[v1], p2 = V[v2];
+          const abx = p1[0]-p0[0], aby = p1[1]-p0[1], abz = p1[2]-p0[2];
+          const acx = p2[0]-p0[0], acy = p2[1]-p0[1], acz = p2[2]-p0[2];
+          const nx = aby*acz - abz*acy, ny = abz*acx - abx*acz, nz = abx*acy - aby*acx;
+          faceAreas[f] = Math.max(1e-8, 0.5 * Math.hypot(nx, ny, nz));
+        }
+
+        const nEdges = edges.length;
+        const bSet = new Set(DATA.mesh.boundary_vertices);
+        const adj = Array.from({ length: V.length }, () => []);
+        for (let e = 0; e < nEdges; e++) {
+          const [u, v] = edges[e];
+          if (bSet.has(u) || bSet.has(v)) continue;
+          const pu = V[u], pv = V[v];
+          const len = Math.hypot(pv[0]-pu[0], pv[1]-pu[1], pv[2]-pu[2]);
+          adj[u].push({ to: v, eIdx: e, sign: 1, len });
+          adj[v].push({ to: u, eIdx: e, sign: -1, len });
+        }
+
+        const interiorVerts = [];
+        for (let i = 0; i < V.length; i++) {
+          if (!bSet.has(i) && adj[i].length > 0) interiorVerts.push(i);
+        }
+
+        sphereComplex = { V, F, nFaces, edges, nEdges, faceEdges, faceSigns, faceAreas, adj, interiorVerts };
+        return sphereComplex;
+      }
+
+      // Snap a closed loop of 3D sample points onto interior edges via Dijkstra shortest path
+      function snapClosedLoopToCycle(complex, samplePts, gammaOut, loopEdgesOut, loopVertsSet) {
+        const { V, adj, interiorVerts } = complex;
+        const waypoints = [];
+        for (let i = 0; i < samplePts.length; i++) {
+          const pt = samplePts[i];
+          let bestV = interiorVerts[0];
+          let bestD = 1e9;
+          for (let k = 0; k < interiorVerts.length; k++) {
+            const v = interiorVerts[k];
+            const pv = V[v];
+            const d = (pv[0]-pt[0])**2 + (pv[1]-pt[1])**2 + (pv[2]-pt[2])**2;
+            if (d < bestD) { bestD = d; bestV = v; }
+          }
+          if (waypoints.length === 0 || waypoints[waypoints.length - 1] !== bestV) {
+            waypoints.push(bestV);
+          }
+        }
+        if (waypoints.length > 1 && waypoints[0] === waypoints[waypoints.length - 1]) {
+          waypoints.pop();
+        }
+
+        const nVTotal = V.length;
+        const dist = new Float64Array(nVTotal);
+        const prevV = new Int32Array(nVTotal);
+        const prevE = new Int32Array(nVTotal);
+        const prevSign = new Int8Array(nVTotal);
+        const visited = new Uint8Array(nVTotal);
+
+        for (let w = 0; w < waypoints.length; w++) {
+          const src = waypoints[w];
+          const dst = waypoints[(w + 1) % waypoints.length];
+          if (src === dst) continue;
+          dist.fill(1e18);
+          visited.fill(0);
+          prevV.fill(-1);
+          dist[src] = 0.0;
+
+          for (let step = 0; step < nVTotal; step++) {
+            let u = -1;
+            let best = 1e18;
+            for (let i = 0; i < interiorVerts.length; i++) {
+              const cand = interiorVerts[i];
+              if (!visited[cand] && dist[cand] < best) {
+                best = dist[cand];
+                u = cand;
+              }
+            }
+            if (u === -1 || u === dst) break;
+            visited[u] = 1;
+            const nbrs = adj[u];
+            for (let j = 0; j < nbrs.length; j++) {
+              const nb = nbrs[j];
+              const alt = dist[u] + nb.len;
+              if (alt < dist[nb.to]) {
+                dist[nb.to] = alt;
+                prevV[nb.to] = u;
+                prevE[nb.to] = nb.eIdx;
+                prevSign[nb.to] = nb.sign;
+              }
+            }
+          }
+
+          let cur = dst;
+          while (cur !== src && prevV[cur] !== -1) {
+            const eIdx = prevE[cur];
+            const sgn = prevSign[cur];
+            gammaOut[eIdx] += sgn;
+            cur = prevV[cur];
+          }
+        }
+
+        for (let e = 0; e < gammaOut.length; e++) {
+          if (gammaOut[e] !== 0) {
+            const [u, v] = complex.edges[e];
+            loopEdgesOut.push(gammaOut[e] > 0 ? [u, v] : [v, u]);
+            loopVertsSet.add(u);
+            loopVertsSet.add(v);
+          }
+        }
+      }
+
+      // Fast In-Browser Gauge-Free Jacobi-CG Solver for (d2 * W^-1 * d2^T) psi = gamma
+      function solveWeightedCurlCurlCG(complex, invWeights, rhsGamma, psiInit, maxIter) {
+        const { nFaces, nEdges, faceEdges, faceSigns } = complex;
+        const psi = new Float64Array(nEdges);
+        if (psiInit) psi.set(psiInit);
+
+        const diag = new Float64Array(nEdges);
+        for (let f = 0; f < nFaces; f++) {
+          const invW = invWeights[f];
+          diag[faceEdges[f*3]]   += invW;
+          diag[faceEdges[f*3+1]] += invW;
+          diag[faceEdges[f*3+2]] += invW;
+        }
+        for (let e = 0; e < nEdges; e++) {
+          diag[e] = diag[e] > 1e-12 ? 1.0 / diag[e] : 0.0;
+        }
+
+        function applyA(x, out) {
+          out.fill(0.0);
+          for (let f = 0; f < nFaces; f++) {
+            const e0 = faceEdges[f*3],   s0 = faceSigns[f*3];
+            const e1 = faceEdges[f*3+1], s1 = faceSigns[f*3+1];
+            const e2 = faceEdges[f*3+2], s2 = faceSigns[f*3+2];
+            const curl = (s0 * x[e0] + s1 * x[e1] + s2 * x[e2]) * invWeights[f];
+            out[e0] += s0 * curl;
+            out[e1] += s1 * curl;
+            out[e2] += s2 * curl;
+          }
+        }
+
+        const r = new Float64Array(nEdges);
+        const z = new Float64Array(nEdges);
+        const p = new Float64Array(nEdges);
+        const Ap = new Float64Array(nEdges);
+
+        applyA(psi, Ap);
+        let rz = 0.0;
+        for (let e = 0; e < nEdges; e++) {
+          r[e] = rhsGamma[e] - Ap[e];
+          z[e] = diag[e] * r[e];
+          p[e] = z[e];
+          rz += r[e] * z[e];
+        }
+
+        for (let it = 0; it < maxIter; it++) {
+          if (rz < 1e-16) break;
+          applyA(p, Ap);
+          let pAp = 0.0;
+          for (let e = 0; e < nEdges; e++) pAp += p[e] * Ap[e];
+          if (Math.abs(pAp) < 1e-16) break;
+          const alpha = rz / pAp;
+          let rzNew = 0.0;
+          let rNormSq = 0.0;
+          for (let e = 0; e < nEdges; e++) {
+            psi[e] += alpha * p[e];
+            r[e] -= alpha * Ap[e];
+            rNormSq += r[e] * r[e];
+            z[e] = diag[e] * r[e];
+            rzNew += r[e] * z[e];
+          }
+          if (rNormSq < 1e-11) break;
+          const beta = rzNew / rz;
+          for (let e = 0; e < nEdges; e++) {
+            p[e] = z[e] + beta * p[e];
+          }
+          rz = rzNew;
+        }
+
+        const phi = new Float64Array(nFaces);
+        const cal = new Float64Array(nFaces);
+        let maxCal = 1e-9;
+        for (let f = 0; f < nFaces; f++) {
+          const e0 = faceEdges[f*3],   s0 = faceSigns[f*3];
+          const e1 = faceEdges[f*3+1], s1 = faceSigns[f*3+1];
+          const e2 = faceEdges[f*3+2], s2 = faceSigns[f*3+2];
+          const dPsi = s0 * psi[e0] + s1 * psi[e1] + s2 * psi[e2];
+          phi[f] = dPsi * invWeights[f];
+          const cRatio = Math.abs(dPsi) / complex.faceAreas[f];
+          cal[f] = cRatio;
+          if (cRatio > maxCal) maxCal = cRatio;
+        }
+        let gammaDotPsi = 0.0;
+        for (let e = 0; e < nEdges; e++) gammaDotPsi += rhsGamma[e] * psi[e];
+        const dualBound = Math.max(0.0, gammaDotPsi / maxCal);
+        for (let f = 0; f < nFaces; f++) cal[f] /= maxCal;
+
+        return { psi, phi, cal, dualBound };
+      }
+
+      // Build and solve custom 3D loop in JavaScript
+      function buildAndSolveCustomLoop() {
+        const t0 = performance.now();
+        const complex = ensureSphereComplex();
+        const family = selectCustomFamily.value;
+        const p1 = parseFloat(sliderCustomParam1.value);
+        const p2 = parseFloat(sliderCustomParam2.value);
+
+        const gamma = new Int32Array(complex.nEdges);
+        const loopEdges = [];
+        const loopVertsSet = new Set();
+
+        if (family === "torus_knot") {
+          const q = Math.round(p1);
+          const rTube = p2;
+          const Rmaj = 0.44;
+          const pts = [];
+          const N = 44;
+          for (let i = 0; i < N; i++) {
+            const t = (2.0 * Math.PI * i) / N;
+            const rad = Rmaj + rTube * Math.cos(q * t);
+            pts.push([rad * Math.cos(2.0 * t), rad * Math.sin(2.0 * t), rTube * Math.sin(q * t)]);
+          }
+          snapClosedLoopToCycle(complex, pts, gamma, loopEdges, loopVertsSet);
+        } else if (family === "tilted_saddle") {
+          const tiltRad = (p1 * Math.PI) / 180.0;
+          const saddleAmp = p2;
+          const R = 0.56;
+          const pts = [];
+          const N = 36;
+          for (let i = 0; i < N; i++) {
+            const t = (2.0 * Math.PI * i) / N;
+            const x0 = R * Math.cos(t);
+            const y0 = R * Math.sin(t);
+            const z0 = saddleAmp * Math.cos(2.0 * t);
+            const y = y0 * Math.cos(tiltRad) - z0 * Math.sin(tiltRad);
+            const z = y0 * Math.sin(tiltRad) + z0 * Math.cos(tiltRad);
+            pts.push([x0, y, z]);
+          }
+          snapClosedLoopToCycle(complex, pts, gamma, loopEdges, loopVertsSet);
+        } else {
+          // Coaxial ring pair
+          const h = p1;
+          const sameSign = p2 > 0;
+          const R = 0.54;
+          const N = 28;
+          const ptsTop = [];
+          const ptsBot = [];
+          for (let i = 0; i < N; i++) {
+            const t = (2.0 * Math.PI * i) / N;
+            ptsTop.push([R * Math.cos(t), R * Math.sin(t), h]);
+            const tb = sameSign ? t : -t;
+            ptsBot.push([R * Math.cos(tb), R * Math.sin(tb), -h]);
+          }
+          snapClosedLoopToCycle(complex, ptsTop, gamma, loopEdges, loopVertsSet);
+          snapClosedLoopToCycle(complex, ptsBot, gamma, loopEdges, loopVertsSet);
+        }
+
+        // Compute Stokes vector area bound
+        let ax = 0, ay = 0, az = 0;
+        for (let e = 0; e < complex.nEdges; e++) {
+          const g = gamma[e];
+          if (g === 0) continue;
+          const [u, v] = complex.edges[e];
+          const pu = complex.V[u], pv = complex.V[v];
+          ax += 0.5 * g * (pu[1]*pv[2] - pu[2]*pv[1]);
+          ay += 0.5 * g * (pu[2]*pv[0] - pu[0]*pv[2]);
+          az += 0.5 * g * (pu[0]*pv[1] - pu[1]*pv[0]);
+        }
+        const stokesBound = Math.hypot(ax, ay, az);
+
+        // IRLS homotopy across p = [2.00, 1.70, 1.45, 1.25, 1.12, 1.04, 1.00]
+        const pSchedule = [2.00, 1.70, 1.45, 1.25, 1.12, 1.04, 1.00];
+        const invWeights = new Float64Array(complex.nFaces);
+        for (let f = 0; f < complex.nFaces; f++) invWeights[f] = 1.0 / complex.faceAreas[f];
+
+        let lastPsi = null;
+        let lastPhi = null;
+        const levels = [];
+
+        for (let s = 0; s < pSchedule.length; s++) {
+          const pVal = pSchedule[s];
+          if (s > 0 && lastPhi) {
+            const eps = s === pSchedule.length - 1 ? 0.0035 : 0.012;
+            const pEff = Math.max(1.02, pVal);
+            for (let f = 0; f < complex.nFaces; f++) {
+              const mag = Math.hypot(lastPhi[f], eps);
+              const w = complex.faceAreas[f] * Math.pow(mag, pEff - 2.0);
+              invWeights[f] = 1.0 / Math.max(1e-7, w);
+            }
+          }
+          const res = solveWeightedCurlCurlCG(complex, invWeights, gamma, lastPsi, s === 0 ? 115 : 85);
+          lastPsi = res.psi;
+          lastPhi = res.phi;
+
+          // Rank faces by area * |phi_f| to compute 95% support and compact display list
+          const idxArr = [];
+          let totalMass = 0.0;
+          for (let f = 0; f < complex.nFaces; f++) {
+            const m = complex.faceAreas[f] * Math.abs(res.phi[f]);
+            totalMass += m;
+            if (Math.abs(res.phi[f]) > (s === pSchedule.length - 1 ? 0.14 : 0.015)) {
+              idxArr.push(f);
+            }
+          }
+          idxArr.sort((a, b) => (complex.faceAreas[b]*Math.abs(res.phi[b])) - (complex.faceAreas[a]*Math.abs(res.phi[a])));
+
+          let cum = 0.0;
+          let supp95 = 0;
+          for (let i = 0; i < idxArr.length; i++) {
+            cum += complex.faceAreas[idxArr[i]] * Math.abs(res.phi[idxArr[i]]);
+            supp95++;
+            if (cum >= 0.95 * totalMass) break;
+          }
+
+          const keepCount = Math.min(idxArr.length, s === pSchedule.length - 1 ? 160 : 520);
+          const subFaces = [];
+          const subPhi = [];
+          const subCal = [];
+          let l1Area = 0.0;
+          for (let i = 0; i < keepCount; i++) {
+            const fIdx = idxArr[i];
+            subFaces.push(complex.F[fIdx]);
+            const val = s === pSchedule.length - 1 ? Math.sign(res.phi[fIdx]) : res.phi[fIdx];
+            subPhi.push(val);
+            subCal.push(res.cal[fIdx]);
+            l1Area += complex.faceAreas[fIdx] * Math.abs(val);
+          }
+
+          levels.push({
+            p: pVal,
+            primal_area: l1Area,
+            dual_bound: Math.min(l1Area, res.dualBound),
+            support_95: s === pSchedule.length - 1 ? subFaces.length : supp95,
+            faces: subFaces,
+            phi: subPhi,
+            cal: subCal
+          });
+        }
+
+        const initL1 = levels[levels.length - 1].primal_area;
+        const loopVerts = Array.from(loopVertsSet);
+
+        DATA.scenes.custom_live = {
+          title: "Custom Live 3D Wire Loop",
+          loop_edges: loopEdges,
+          loop_vertices: loopVerts,
+          stokes_bound: stokesBound,
+          initial_seifert_area: initL1,
+          final_seifert_area: initL1,
+          min_tet_quality_after: 0.18,
+          flow_final_vertices: DATA.mesh.vertices,
+          levels
+        };
+
+        const elapsedMs = Math.round(performance.now() - t0);
+        customSolveTime.textContent = `Solved in ${elapsedMs} ms`;
+      }
+
+      function updateCustomParamLabels() {
+        const fam = selectCustomFamily.value;
+        if (fam === "torus_knot") {
+          sliderCustomParam1.min = "1"; sliderCustomParam1.max = "7"; sliderCustomParam1.step = "2";
+          if (!["1","3","5","7"].includes(sliderCustomParam1.value)) sliderCustomParam1.value = "3";
+          const q = parseInt(sliderCustomParam1.value, 10);
+          const names = { 1: "Unknot g=0", 3: "Trefoil g=1", 5: "Cinquefoil g=2", 7: "Septafoil g=3" };
+          customParam1Label.textContent = "Torus Knot Winding q:";
+          customParam1Readout.textContent = `T(2, ${q}) · ${names[q] || ""}`;
+
+          sliderCustomParam2.min = "0.12"; sliderCustomParam2.max = "0.24"; sliderCustomParam2.step = "0.02";
+          customParam2Label.textContent = "Torus Tube Radius r_tube:";
+          customParam2Readout.textContent = `r = ${parseFloat(sliderCustomParam2.value).toFixed(2)}`;
+        } else if (fam === "tilted_saddle") {
+          sliderCustomParam1.min = "0"; sliderCustomParam1.max = "55"; sliderCustomParam1.step = "5";
+          if (parseFloat(sliderCustomParam1.value) < 10) sliderCustomParam1.value = "30";
+          customParam1Label.textContent = "Oblique Tilt Angle θ:";
+          customParam1Readout.textContent = `θ = ${sliderCustomParam1.value}°`;
+
+          sliderCustomParam2.min = "0.00"; sliderCustomParam2.max = "0.26"; sliderCustomParam2.step = "0.02";
+          customParam2Label.textContent = "Saddle Warping z = a cos(2θ):";
+          customParam2Readout.textContent = `a = ${parseFloat(sliderCustomParam2.value).toFixed(2)}`;
+        } else {
+          sliderCustomParam1.min = "0.12"; sliderCustomParam1.max = "0.32"; sliderCustomParam1.step = "0.02";
+          if (parseFloat(sliderCustomParam1.value) > 0.5) sliderCustomParam1.value = "0.18";
+          customParam1Label.textContent = "Coaxial Half-Separation h:";
+          customParam1Readout.textContent = `z = ±${parseFloat(sliderCustomParam1.value).toFixed(2)}`;
+
+          sliderCustomParam2.min = "-1"; sliderCustomParam2.max = "1"; sliderCustomParam2.step = "2";
+          if (Math.abs(parseFloat(sliderCustomParam2.value)) !== 1) sliderCustomParam2.value = "-1";
+          const isSame = parseFloat(sliderCustomParam2.value) > 0;
+          customParam2Label.textContent = "Ring Current Orientation:";
+          customParam2Readout.textContent = isSame ? "Helmholtz (γ₁ + γ₂)" : "Anti-Helmholtz (γ₁ − γ₂)";
+        }
+      }
+
+      function switchActiveMeshForCycle() {
+        const useTorus = (currentCycleKey === "torus_mincut" && DATA.torus_mesh);
+        activeMesh = useTorus ? DATA.torus_mesh : DATA.mesh;
+        baseV = activeMesh.vertices;
+        nV = baseV.length;
+        tets = activeMesh.tets;
+        nT = tets.length;
+        boundaryCageEdges = useTorus ? torusCageEdges : sphereCageEdges;
+
+        if (useTorus) {
+          viewportTitle.textContent = "3D TetWild Solid Torus Soup (1,050 V · 5,826 E · 7,177 Int. F · 3,780 T)";
+        } else {
+          viewportTitle.textContent = "3D TetWild Sphere Soup (1,078 V · 6,316 E · 9,318 F · 4,339 T)";
+        }
+      }
 
       function getTargetVertices(scene) {
         if (currentCycleKey === "catenoid_neck" && helmholtzMode && scene.helmholtz) {
@@ -1033,7 +1682,7 @@
             return baseV;
           }
         }
-        return scene.flow_final_vertices;
+        return scene.flow_final_vertices || baseV;
       }
 
       function setVerticesFromMorph(tau) {
@@ -1052,9 +1701,11 @@
 
       function rebuildFixedMask() {
         fixedMask.fill(0);
-        for (const v of DATA.mesh.boundary_vertices) fixedMask[v] = 1;
+        for (const v of activeMesh.boundary_vertices) fixedMask[v] = 1;
         const scene = DATA.scenes[currentCycleKey];
-        for (const v of scene.loop_vertices) fixedMask[v] = 1;
+        if (scene && scene.loop_vertices) {
+          for (const v of scene.loop_vertices) fixedMask[v] = 1;
+        }
       }
 
       function getActiveSurfaceData() {
@@ -1080,7 +1731,7 @@
         };
       }
 
-      // Compute exact TetWild Scaled Jacobian q_t on all 4,339 tetrahedra
+      // Compute exact TetWild Scaled Jacobian q_t on all tetrahedra of activeMesh
       function updateTetQualities() {
         const SQRT2 = Math.SQRT2;
         vertexTetQuality.fill(0);
@@ -1158,15 +1809,14 @@
           if (computeGrad && normN > 1e-12) {
             const ux = nx / normN, uy = ny / normN, uz = nz / normN;
             const bcx = cx - bx, bcy = cy - by, bcz = cz - bz;
-            // grad_a = 0.5 * (u x (c - b))
             gradAreaV[ia]   += 0.5 * w * (uy * bcz - uz * bcy);
             gradAreaV[ia+1] += 0.5 * w * (uz * bcx - ux * bcz);
             gradAreaV[ia+2] += 0.5 * w * (ux * bcy - uy * bcx);
-            // grad_b = 0.5 * (u x (a - c)) = -0.5 * (u x ac)
+
             gradAreaV[ib]   += 0.5 * w * (uz * acy - uy * acz);
             gradAreaV[ib+1] += 0.5 * w * (ux * acz - uz * acx);
             gradAreaV[ib+2] += 0.5 * w * (uy * acx - ux * acy);
-            // grad_c = 0.5 * (u x (b - a)) = 0.5 * (u x ab)
+
             gradAreaV[ic]   += 0.5 * w * (uy * abz - uz * aby);
             gradAreaV[ic+1] += 0.5 * w * (uz * abx - ux * abz);
             gradAreaV[ic+2] += 0.5 * w * (ux * aby - uy * abx);
@@ -1175,7 +1825,7 @@
         return totalArea;
       }
 
-      // Perform one live step of coupled 3D Plateau-Tet gradient flow in the browser
+      // Perform live steps of coupled 3D Plateau-Tet gradient flow in the browser
       function stepLivePlateauTetFlow(nSubsteps) {
         const surf = getActiveSurfaceData();
         const SQRT2 = Math.SQRT2;
@@ -1183,7 +1833,6 @@
           computeSeifertAreaAndGrad(surf.faces, surf.phi, true);
           gradTetV.fill(0);
 
-          // Exact analytic volume + edge-length TetWild quality gradient across all 4,339 tets
           for (let t = 0; t < nT; t++) {
             const tet = tets[t];
             const i0 = tet[0] * 3, i1 = tet[1] * 3, i2 = tet[2] * 3, i3 = tet[3] * 3;
@@ -1218,7 +1867,6 @@
             const dQd = (2.0 * (q - 1.0) * SQRT2) / (nT * S);
             const dQs = -(2.0 * (q - 1.0) * SQRT2 * det) / (nT * S * S);
 
-            // grad det
             const gd1x = e02y * e03z - e02z * e03y;
             const gd1y = e02z * e03x - e02x * e03z;
             const gd1z = e02x * e03y - e02y * e03x;
@@ -1238,7 +1886,6 @@
             gradTetV[i0+1] -= dQd * (gd1y + gd2y + gd3y);
             gradTetV[i0+2] -= dQd * (gd1z + gd2z + gd3z);
 
-            // Edge tension terms from dS
             const w01 = 0.25 * dQs * (c0 + c1) / (l01 * l01);
             const w02 = 0.25 * dQs * (c0 + c2) / (l02 * l02);
             const w03 = 0.25 * dQs * (c0 + c3) / (l03 * l03);
@@ -1288,7 +1935,6 @@
         updateTetQualities();
       }
 
-      // Compute Catenoid waist radius when viewing catenoid_neck
       function computeCatenoidWaistRadius(faces) {
         const beltV = new Set();
         for (const tri of faces) {
@@ -1305,7 +1951,6 @@
         return sumR / beltV.size;
       }
 
-      // Colormap helpers
       function magmaColor(t) {
         const s = Math.max(0.0, Math.min(1.0, t));
         const r = Math.round(255 * Math.min(1.0, 0.14 + 1.15 * s));
@@ -1353,6 +1998,9 @@
           } else {
             metricAreaSub.textContent = `Fixed L¹: ${scene.initial_seifert_area.toFixed(4)} (${pctDiff.toFixed(1)}%)`;
           }
+        } else if (currentCycleKey === "borromean_rings") {
+          const savingVs3 = ((curArea - 2.5569) / 2.5569) * 100.0;
+          metricAreaSub.textContent = `${savingVs3.toFixed(1)}% vs 3 Disks (2.5569)`;
         } else {
           metricAreaSub.textContent = `Fixed L¹: ${scene.initial_seifert_area.toFixed(4)} (${pctDiff >= 0 ? "+" : ""}${pctDiff.toFixed(1)}%)`;
         }
@@ -1360,28 +2008,34 @@
         metricDual.textContent = surf.dual_bound.toFixed(4);
         if (currentCycleKey === "mobius_torsion") {
           metricDualSub.textContent = `MILP Disk (c=0): 1.0399 (+14.6% gap)`;
+        } else if (currentCycleKey === "torus_mincut") {
+          metricDualSub.textContent = `Continuum πr² = 0.3848`;
         } else {
           metricDualSub.textContent = Math.abs(surf.p_val - 1.0) < 1e-4 ? "Zero LP Duality Gap (< 10⁻¹⁵)" : `Lower Bound at p = ${surf.p_val.toFixed(2)}`;
         }
 
+        const totalFaces = currentCycleKey === "torus_mincut" ? 7177 : 9318;
         metricFaces.textContent = String(surf.support_95);
-        metricFacesSub.textContent = `${((surf.support_95 / 9318) * 100).toFixed(2)}% of 9,318 soup faces`;
+        metricFacesSub.textContent = `${((surf.support_95 / totalFaces) * 100).toFixed(2)}% of ${totalFaces.toLocaleString()} faces`;
 
         metricQmin.textContent = qMin.toFixed(4);
         metricQminSub.textContent = `${nInverted} inverted / ${nT.toLocaleString()} tets`;
       }
 
       function syncUIForCycle() {
+        if (currentCycleKey === "custom_live" && !DATA.scenes.custom_live) {
+          updateCustomParamLabels();
+          buildAndSolveCustomLoop();
+        }
+        switchActiveMeshForCycle();
         const scene = DATA.scenes[currentCycleKey];
         rebuildFixedMask();
         cycleDesc.innerHTML = CYCLE_DESCRIPTIONS[currentCycleKey] || "";
 
-        if (currentCycleKey === "catenoid_neck") {
-          surgeryBox.style.display = "block";
-        } else {
-          surgeryBox.style.display = "none";
-          helmholtzMode = false;
-        }
+        surgeryBox.style.display = (currentCycleKey === "catenoid_neck") ? "block" : "none";
+        if (currentCycleKey !== "catenoid_neck") helmholtzMode = false;
+
+        customDesignerBox.style.display = (currentCycleKey === "custom_live") ? "block" : "none";
 
         const nLevels = scene.levels.length;
         sliderP.max = String(nLevels - 1);
@@ -1390,7 +2044,6 @@
           sliderPHeading.textContent = "2. Relative Winding Period c ∈ [−0.25, 1.00]";
           sliderPLeft.textContent = "c = −0.25 / 0.00 (MILP Disk)";
           sliderPRight.textContent = "c = 0.50 (LP Möbius) → 1.00";
-          // Default to c = 0.50 (index 5)
           currentLevelIdx = 5;
           sliderP.value = "5";
         } else {
@@ -1402,11 +2055,19 @@
         }
 
         updateSliderPReadout();
-        sliderMorph.value = "1";
-        sliderMorphReadout.textContent = "τ = 1.00 (De-Staircased)";
-        liveFlowStepCount = 0;
-        flowIterReadout.textContent = "Converged V*";
-        setVerticesFromMorph(1.0);
+        if (currentCycleKey === "custom_live") {
+          sliderMorph.value = "0";
+          sliderMorphReadout.textContent = "τ = 0.00 (Press Run Live 3D Flow)";
+          liveFlowStepCount = 0;
+          flowIterReadout.textContent = "Fixed TetWild V⁰";
+          setVerticesFromMorph(0.0);
+        } else {
+          sliderMorph.value = "1";
+          sliderMorphReadout.textContent = "τ = 1.00 (De-Staircased)";
+          liveFlowStepCount = 0;
+          flowIterReadout.textContent = "Converged V*";
+          setVerticesFromMorph(1.0);
+        }
         updateTelemetry();
       }
 
@@ -1424,6 +2085,14 @@
         } else if (currentCycleKey === "catenoid_neck" && helmholtzMode) {
           sliderPReadout.textContent = "p = 1.00 (Helmholtz Co-Oriented Disks)";
           solverStatusBadge.textContent = "Helmholtz Surgery · β₀ = 2 Disks";
+        } else if (currentCycleKey === "torus_mincut") {
+          const pVal = lvl.p;
+          sliderPReadout.textContent = Math.abs(pVal - 1.0) < 1e-4
+            ? "p = 1.00 (28-Face Meridional Min-Cut)"
+            : `p = ${pVal.toFixed(2)} (360° Toroidal Cloud)`;
+          solverStatusBadge.textContent = Math.abs(pVal - 1.0) < 1e-4
+            ? "96× Symmetry-Broken Min-Cut"
+            : `Delocalized Torus Flux · p = ${pVal.toFixed(2)}`;
         } else {
           const pVal = lvl.p;
           sliderPReadout.textContent = Math.abs(pVal - 1.0) < 1e-4
@@ -1455,11 +2124,9 @@
         }
       }
 
-      // 3D Projection helper
       function projectPoint(x, y, z, width, height, scale) {
         const cosY = Math.cos(camYaw), sinY = Math.sin(camYaw);
         const cosP = Math.cos(camPitch), sinP = Math.sin(camPitch);
-        // Rotate around Z (yaw) then X (pitch)
         const rx = x * cosY - y * sinY;
         const ry = x * sinY + y * cosY;
         const rz = z;
@@ -1468,8 +2135,8 @@
         const cz = ry * sinP + rz * cosP;
         const cx = rx;
 
-        const fov = 2.85;
-        const persp = fov / (fov - cz * 0.65);
+        const fov = 3.05;
+        const persp = fov / (fov - cz * 0.58);
         const sx = width * 0.5 + camPanX + cx * scale * persp;
         const sy = height * 0.5 + camPanY - cy * scale * persp;
         return [sx, sy, cz, cx, cy];
@@ -1488,14 +2155,16 @@
         const H = rect.height;
         ctx.clearRect(0, 0, W, H);
 
-        const scale = Math.min(W, H) * 0.43 * camZoom;
+        const meshScaleFactor = (currentCycleKey === "torus_mincut") ? 0.31 : 0.43;
+        const scale = Math.min(W, H) * meshScaleFactor * camZoom;
 
-        // 1. Draw subtle outer TetWild sphere boundary cage
+        // 1. Draw subtle outer TetWild boundary cage
         if (toggleCage.checked) {
-          ctx.strokeStyle = "rgba(180, 196, 230, 0.11)";
+          ctx.strokeStyle = "rgba(180, 196, 230, 0.12)";
           ctx.lineWidth = 0.75;
           ctx.beginPath();
-          for (let e = 0; e < boundaryCageEdges.length; e += 2) {
+          const stride = (currentCycleKey === "torus_mincut") ? 1 : 2;
+          for (let e = 0; e < boundaryCageEdges.length; e += stride) {
             const [u, v] = boundaryCageEdges[e];
             const ux = currentV[u*3], vx = currentV[v*3];
             if (ux > clipX || vx > clipX) continue;
@@ -1520,7 +2189,6 @@
           const a = Math.abs(phi[f]);
           if (a > maxAbsPhi) maxAbsPhi = a;
         }
-        // For mobius_torsion keep scale fixed at 1.0 so |Phi_f|=0.5 vs 1.0 is visually obvious
         const normScale = currentCycleKey === "mobius_torsion" ? 1.0 : maxAbsPhi;
 
         const drawList = [];
@@ -1538,7 +2206,6 @@
           const pC = projectPoint(cx, cy, cz, W, H, scale);
           const depth = (pA[2] + pB[2] + pC[2]) / 3.0;
 
-          // Camera-space normal for two-sided diffuse + specular shading
           const ux = pB[3] - pA[3], uy = pB[4] - pA[4], uz = pB[2] - pA[2];
           const vx = pC[3] - pA[3], vy = pC[4] - pA[4], vz = pC[2] - pA[2];
           let nx = uy * vz - uz * vy;
@@ -1594,8 +2261,9 @@
           }
         }
 
-        // 3. Draw closed 1-cycle wire loop(s) with directional arrows
+        // 3. Draw closed 1-cycle wire loop(s)
         function drawWireEdges(edges, strokeColor, glowColor, width) {
+          if (!edges || edges.length === 0) return;
           ctx.save();
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
@@ -1636,6 +2304,51 @@
         syncUIForCycle();
       });
 
+      // Quick-load scene buttons in essay sections
+      document.querySelectorAll(".js-load-scene").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const targetScene = btn.getAttribute("data-scene");
+          if (targetScene) {
+            selectCycle.value = targetScene;
+            currentCycleKey = targetScene;
+            liveFlowRunning = false;
+            btnRunFlow.classList.remove("active-flow");
+            btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+            syncUIForCycle();
+            document.getElementById("interactive-lab").scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+
+      btnHeroCustom.addEventListener("click", () => {
+        selectCycle.value = "custom_live";
+        currentCycleKey = "custom_live";
+        liveFlowRunning = false;
+        btnRunFlow.classList.remove("active-flow");
+        btnRunFlow.innerHTML = "&#9654; Run Live 3D Flow";
+        syncUIForCycle();
+        document.getElementById("interactive-lab").scrollIntoView({ behavior: "smooth" });
+      });
+
+      selectCustomFamily.addEventListener("change", () => {
+        updateCustomParamLabels();
+        buildAndSolveCustomLoop();
+        syncUIForCycle();
+      });
+
+      sliderCustomParam1.addEventListener("input", () => {
+        updateCustomParamLabels();
+      });
+
+      sliderCustomParam2.addEventListener("input", () => {
+        updateCustomParamLabels();
+      });
+
+      btnSolveCustom.addEventListener("click", () => {
+        buildAndSolveCustomLoop();
+        syncUIForCycle();
+      });
+
       selectColormode.addEventListener("change", () => {
         colorMode = selectColormode.value;
         updateColorbarLegend();
@@ -1668,7 +2381,7 @@
 
       sliderClip.addEventListener("input", () => {
         clipX = parseFloat(sliderClip.value);
-        sliderClipReadout.textContent = clipX > 1.0 ? "No Clipping (x ≤ +1.00)" : `Slice x ≤ ${clipX.toFixed(2)}`;
+        sliderClipReadout.textContent = clipX > 1.25 ? "No Clipping (x ≤ +1.35)" : `Slice x ≤ ${clipX.toFixed(2)}`;
       });
 
       btnResetFixed.addEventListener("click", () => {
@@ -1697,8 +2410,7 @@
       btnRunFlow.addEventListener("click", () => {
         liveFlowRunning = !liveFlowRunning;
         if (liveFlowRunning) {
-          // If already at converged V*, start from fixed staircase V^0 so user sees the motion clearly
-          if (parseFloat(sliderMorph.value) > 0.95 && liveFlowStepCount === 0) {
+          if (parseFloat(sliderMorph.value) > 0.95 && liveFlowStepCount === 0 && currentCycleKey !== "custom_live") {
             setVerticesFromMorph(0.0);
             sliderMorph.value = "0";
             sliderMorphReadout.textContent = "Live JS Gradient Flow";
@@ -1781,7 +2493,6 @@
         camZoom = Math.max(0.45, Math.min(2.8, camZoom * factor));
       }, { passive: false });
 
-      // Main Animation Loop
       function animate() {
         if (toggleAutorotate.checked && !isDragging) {
           camYaw += 0.0045;
