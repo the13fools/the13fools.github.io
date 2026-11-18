@@ -23,10 +23,16 @@
       "@type": "Person",
       "name": "Josh Vekhter"
     },
-    "contributor": {
-      "@type": "Person",
-      "name": "Curlew (Antigravity)"
-    },
+    "contributor": [
+      {
+        "@type": "Person",
+        "name": "Curlew (Antigravity)"
+      },
+      {
+        "@type": "Person",
+        "name": "Nuthatch"
+      }
+    ],
     "dateModified": "2026-11-18",
     "keywords": ["Guru Yoga", "Longchen Nyingtik", "Chökyi Drakpa", "AI agents", "agent continuity", "lineage standing", "source grounding"]
   }
@@ -217,14 +223,12 @@
       color: var(--purple);
     }
 
-    .hero-frame img,
     .plate img {
       display: block;
       width: 100%;
       height: auto;
     }
 
-    .hero-frame figcaption,
     .plate figcaption {
       padding: 13px 16px;
       font-size: 14px;
@@ -234,7 +238,6 @@
       background: var(--card);
     }
 
-    .hero-frame figcaption strong,
     .plate figcaption strong {
       color: var(--ink);
     }
@@ -1093,18 +1096,18 @@
         <div class="trace-grid" aria-label="Three forensic failure traces">
           <div class="trace-card">
             <p class="tag">Trace A · Cross-Witness Leak</p>
-            <h3>Dodrupchen I overwritten by Khyentse</h3>
-            <p>Queried for post-dissolution seat in Dodrupchen I (<span class="bo" lang="bo">སྙིང་གར</span>, heart). Pointer-only Luna emitted rival master Jamyang Khyentse Wangpo’s crown seat (<span class="bo" lang="bo">སྤྱི་བོར</span>) at low, medium, and high draws; grounded slice gave <code>100%</code> exact match.</p>
+            <h3>Dodrupchen stanza projected onto root terma</h3>
+            <p>Queried on Jigme Lingpa’s root text where Dodrupchen I’s lineage clause is absent (<span class="bo" lang="bo">མེད</span>), pointer-only draws answered <span class="bo" lang="bo">ཡོད</span> across low, medium, and high settings by projecting the later recitation liturgy onto the root witness; grounded excerpts gave the exact match.</p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace B · Prior Override (3/3)</p>
-            <h3>Rare locative hijacked by ablative</h3>
-            <p>Asked to insert only word-separating dots without changing letters, Luna rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (<em>in</em> mindstream) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་</span> (<em>from</em>…) on all <code>3 / 3</code> independent draws.</p>
+            <h3>Rare locative replaced by ablative</h3>
+            <p>Asked to restore missing syllable separators without altering letters, the model rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (“arisen <em>in</em> one’s mindstream”) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་སྐྱེས་པ</span> (“arisen <em>from</em>…”) on all <code>3 / 3</code> draws.</p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace C · Stochastic Split (k=3)</p>
-            <h3>Same prompt, three distinct modes</h3>
-            <p>Across 3 draws on one verse: draw 1 kept exact spelling, draw 2 inserted spaces everywhere, and draw 3 folk-etymologized <span class="bo" lang="bo">སྟ་གོན</span> (consecration) into <span class="bo" lang="bo">སྟག་གོན</span> (“wearing tiger skin”).</p>
+            <h3>Same prompt, three outcomes</h3>
+            <p>Across 3 draws on one line: draw 1 preserved the spelling, draw 2 inserted spaces after syllables, and draw 3 replaced <span class="bo" lang="bo">སྟ་གོན</span> (preliminary consecration) with <span class="bo" lang="bo">སྟག་གོན</span> (“wearing tiger skin”).</p>
           </div>
         </div>
 
@@ -1193,11 +1196,11 @@
         <div class="plate-pair">
           <figure class="plate">
             <img src="img/pixel-field-desktop-hero.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Refuge Field hero: burgundy header, deep indigo patterned backdrop, bold pixel-shadow typography, and a framed 4-pixel-grid schematic tree.">
-            <figcaption><strong>Frame-of-reference precision.</strong> Because the text places Bodhisattvas on the <em>source’s right</em> and Śrāvakas on the <em>source’s left</em>, the viewer-facing projection flips them consistently to viewer-left and viewer-right.</figcaption>
+            <figcaption><strong>Left and right from the text’s point of view.</strong> Because the guide places Bodhisattvas on the <em>source’s right</em> and Śrāvakas on the <em>source’s left</em>, the viewer-facing diagram puts blue Bodhisattva tiles on viewer-left and red Śrāvaka tiles on viewer-right.</figcaption>
           </figure>
           <figure class="plate">
             <img src="img/pixel-field-desktop-inspector.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Field relation inspector showing relation refuge-e5 ('central-guru RELEASES INTO nonreference') tagged INTERPRETIVE, with separate Direction, Projection, Uncertainty, and Exact Source Record boxes.">
-            <figcaption><strong>Separating probe from ground truth.</strong> Any interpretive edge is visibly badged so editorial inference cannot pass as source text.</figcaption>
+            <figcaption><strong>Separating source wording from editorial notes.</strong> Interpretive edges carry their own badge so editorial inference never passes as the source text.</figcaption>
           </figure>
         </div>
 
@@ -1219,8 +1222,8 @@
 
       <section class="chapter" aria-labelledby="ch-termas">
         <h2 id="ch-termas">The guide and its commentaries</h2>
-        <p>Patrul Rinpoche’s guide belongs to the Longchen Nyingtik, the Heart-Essence of the Vast Expanse. The tradition identifies the cycle revealed by Jigme Lingpa in eighteenth-century Tibet as a <em>mind treasure</em> (<em>dgongs gter</em>, <span class="bo" lang="bo">དགོངས་གཏེར</span>). Later liturgies and commentaries help readers trace how the cycle was taught. Even punctuation matters when comparing them: the treasure mark <span class="bo" lang="bo">༔</span> and the shad <span class="bo" lang="bo">།</span> remain distinct in the transcription. <a href="https://www.lotsawahouse.org/about/longchen-nyingtik-project">Longchen Nyingtik Project</a></p>
-        <p>In a close reading of Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, the project records a provisional reading of the Tibetan before consulting Adam Pearcey’s translation. The resulting notes preserve unresolved readings and index 611 verbatim phrase matches with two related liturgies. A match helps locate parallels for review.</p>
+        <p>Five centuries after the fourteenth-century master Longchenpa (1308–1364) organized earlier Nyingtik revelations across thirteen volumes, the corpus had outgrown what a single practitioner could carry. Roughly two and a half centuries ago, Jigme Lingpa (1730–1798) entered a three-year cave retreat at Chimphu above Samye pondering that open inheritance, and returned with the two-volume <em>Longchen Nyingtik</em>—the <em>Heart-Essence of the Vast Expanse</em>—classified by the tradition as a <em>mind treasure</em> (<em>dgongs gter</em>, <span class="bo" lang="bo">དགོངས་གཏེར</span>) rather than an excavated scroll. Downstream masters—Dodrupchen I, Patrul Rinpoche, Chökyi Drakpa, and Dodrupchen III—built the liturgies and manuals around it; even punctuation separates strata, keeping the treasure mark <span class="bo" lang="bo">༔</span> distinct from ordinary prose shad <span class="bo" lang="bo">།</span>. <a href="https://www.lotsawahouse.org/about/longchen-nyingtik-project" rel="noopener noreferrer">Longchen Nyingtik Project ↗</a></p>
+        <p>In a close reading of Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, the project records a provisional reading of the Tibetan before consulting Adam Pearcey’s translation. The resulting notes preserve unresolved readings and index 611 verbatim phrase matches with two related liturgies, locating parallels for human review.</p>
       </section>
 
       <section class="chapter" aria-labelledby="sources">
@@ -1234,7 +1237,7 @@
               <li><a href="https://www.himalayanart.org/items/90503" rel="noopener noreferrer">Nineteenth-Century Standard Field Composition · HAR 90503 ↗</a></li>
               <li><a href="https://www.himalayanart.org/items/90523" rel="noopener noreferrer">Standing Four-Armed Avalokiteśvara (Wish-Fulfilling Jewel) · HAR 90523 ↗</a></li>
               <li><a href="https://rubinmuseum.org/collection/c2006-66-229/" rel="noopener noreferrer">Padmasambhava Lineage Composition · Rubin Museum C2006.66.229 ↗</a></li>
-              <li><a href="https://www.himalayanart.org/search/set.cfm?setID=8209" rel="noopener noreferrer">White Tārā (HAR Set 8209 &amp; Item 658) ↗</a> · <a href="https://rubinmuseum.org/collection/c2005-16-45/" rel="noopener noreferrer">Green Tārā (Rubin C2005.16.45 ↗</a> / <a href="https://www.himalayanart.org/search/set.cfm?setID=8217" rel="noopener noreferrer">HAR Set 8217 ↗</a>)</li>
+              <li><a href="https://www.himalayanart.org/search/set.cfm?setID=8209" rel="noopener noreferrer">White Tārā (HAR Set 8209 &amp; Item 658) ↗</a> · <a href="https://rubinmuseum.org/collection/c2005-16-45/" rel="noopener noreferrer">Green Tārā (Rubin C2005.16.45) ↗</a> · <a href="https://www.himalayanart.org/search/set.cfm?setID=8217" rel="noopener noreferrer">HAR Set 8217 ↗</a></li>
             </ul>
           </div>
           <div class="cite-card">
@@ -1242,9 +1245,9 @@
             <ul>
               <li><a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide to the Preliminaries (Tibetan, Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide (English, Lotsawa House) ↗</a></li>
-              <li><a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Chökyi Drakpa · <em>A Torch for the Path to Omniscience</em></a>, translated by Adam Pearcey</li>
-              <li><a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro">First Dodrupchen · Longchen Nyingtik Ngöndro</a></li>
-              <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-lingpa/wish-fulfilling-jewel-outer-guru-yoga">Jigme Lingpa · <em>The Wish-Fulfilling Jewel</em></a>, translated by Rigpa Translations and Han Kop with Tulku Dawa</li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path" rel="noopener noreferrer">Chökyi Drakpa · <em>A Torch for the Path to Omniscience</em> (translated by Adam Pearcey, Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro" rel="noopener noreferrer">First Dodrupchen · Longchen Nyingtik Ngöndro (Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-lingpa/wish-fulfilling-jewel-outer-guru-yoga" rel="noopener noreferrer">Jigme Lingpa · <em>The Wish-Fulfilling Jewel</em> (Rigpa Translations &amp; Han Kop with Tulku Dawa, Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-III/staircase-lotus-light-guru-yoga-instructions" rel="noopener noreferrer">Dodrupchen III · Staircase to Lotus Light: Guru Yoga Instructions (Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-lingpa/guru-yoga" rel="noopener noreferrer">Dzogchenpa Rangjung Dorjé · Guru Yoga Relying on Rigdzin Jigme Lingpa (Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-losal/longchen-nyingtik-karchak" rel="noopener noreferrer">1802 Longchen Nyingtik Catalogue (Lotsawa House) ↗</a></li>
@@ -1297,7 +1300,7 @@
 
     <footer>
       <a href="/play/">← Foolzone / Play</a>
-      <span>Original teaser by Curlew (Antigravity) · updated 18 November 2026</span>
+      <span>Written by Curlew &amp; Nuthatch (Antigravity) · updated 18 November 2026</span>
     </footer>
   </div>
 
