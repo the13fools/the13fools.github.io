@@ -713,6 +713,8 @@
               <li><a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide to the Preliminaries (Tibetan, Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide (English, Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path" rel="noopener noreferrer">Chökyi Drakpa · A Torch for the Path to Omniscience (Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-III/staircase-lotus-light-guru-yoga-instructions" rel="noopener noreferrer">Dodrupchen III · Staircase to Lotus Light: Guru Yoga Instructions (Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-lingpa/guru-yoga" rel="noopener noreferrer">Dzogchenpa Rangjung Dorjé · Guru Yoga Relying on Rigdzin Jigme Lingpa (Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-losal/longchen-nyingtik-karchak" rel="noopener noreferrer">1802 Longchen Nyingtik Catalogue (Lotsawa House) ↗</a></li>
               <li><a href="https://www.lotsawahouse.org/tibetan-masters/dezhung-rinpoche/nyingtik-yabzhi-longchen-nyingtik-survey" rel="noopener noreferrer">Longchen Nyingtik Cycle Survey (Lotsawa House) ↗</a></li>
               <li><a href="https://ngondro-practices.org/" rel="noopener noreferrer">Ngöndro Practices · Public Orientation ↗</a></li>
@@ -721,9 +723,42 @@
         </div>
       </section>
 
+      <section class="chapter" aria-labelledby="ch-5">
+        <p class="chapter-kicker">05 · From Interface to Model Behavior</p>
+        <h2 id="ch-5">Don’t answer from memory when the witness isn’t in the room.</h2>
+        <p>The same discipline that shaped the diagrams—keeping empty slots visibly empty rather than inventing sacred pictures—turned out to predict how language models behave when reading Tibetan texts across competing lineages.</p>
+        <p>Across <strong>17 benchmark runs (379 model calls)</strong> evaluating GPT-5.6-Luna on the <code>HEART-ESSENCE-EVAL</code> suite, asking the model to identify exact textual variants from <em>coordinate pointers alone</em> exposed a sharp split between restraint and recall. In a <code>3 × 3</code> cross-witness replication (144 calls), raising reasoning effort made the model reliably preserve visible <code>[...]</code> gaps (<code>77.1%</code> low → <code>83.3%</code> medium → <code>91.7%</code> high, lowering worst-of-3 error to <code>12.5%</code>). Yet whenever it broke quarantine to answer from memory at medium or high effort, precision stayed at <strong>50.0%</strong>—a coin flip—and <strong>9 of 9</strong> errors were real phrases borrowed from the wrong witness.</p>
+        <p>When a runtime loader supplied the pure Tibetan witness slice directly (14 verified single-passage items), accuracy jumped to <strong>14 / 14 (100.0%, zero errors)</strong> at both low and high effort—proving that the bottleneck was <strong>grounded witness access and slice boundaries</strong>, not comprehension. (A single clipped slice on Chökyi Drakpa’s <em>Torch</em> caused the lone <code>13 / 14</code> miss on medium until widened by 500 characters.)</p>
+
+        <div class="layers-grid" aria-label="Empirical findings summary">
+          <div class="layer-card">
+            <p class="tag">Pointer-Only (<code>k = 3</code>, 144 calls)</p>
+            <h3>91.7% Gap · 50% Recall</h3>
+            <p>High reasoning reduces ungrounded guesses (<code>22.9% → 8.3%</code>), yet 100% of <code>silent_wrong</code> answers (9/9) are cross-witness conflations.</p>
+          </div>
+          <div class="layer-card">
+            <p class="tag">Runtime-Grounded (14 items)</p>
+            <h3>14 / 14 Exact Extraction</h3>
+            <p>Direct pure-Tibetan witness excerpts eliminate cross-witness drift (<code>100.0%</code> at low and high effort; zero fabricated fixes).</p>
+          </div>
+          <div class="layer-card">
+            <p class="tag">Unprimed Apparatus (<code>L41–48</code>)</p>
+            <h3>372 Schema-Checked Records</h3>
+            <p>24 stretches (<code>31,231</code> encounter chars) keep <code>226</code> <code>⚠</code> flags and <code>47</code> divergences visibly open alongside <code>611</code> root-liturgy lemma links.</p>
+          </div>
+        </div>
+
+        <p>The same principle governs how reading notes themselves are structured: across lines 41–48 of Chökyi Drakpa’s <em>Torch for the Path</em>, unprimed Tibetan readings are logged before opening English translations, preserving <code>⚠</code>-flagged uncertainties and witness divergences instead of flattening them into one authoritative voice.</p>
+
+        <blockquote class="pull-quote">
+          “As Dodrupchen III cautions in <em>The Staircase to Lotus Light</em>, reciting ‘not merely mouth and words’ while attention drifts right and left is telling a lie to the field—an apt rule for models as well as web interfaces.”
+          <cite>— Open commentary note on <span class="bo" lang="bo">ཁ་ཙམ་ཚིག་ཙམ་མ་ཡིན་ནོ</span> (staircase-lotus-light-guru-yoga-instructions)</cite>
+        </blockquote>
+      </section>
+
       <aside class="next-door" aria-label="Full release note">
         <h2>Part of a larger work in progress</h2>
-        <p>This teaser follows one aesthetic and architectural thread from <code>botisattva.org</code>. The fuller publication will cover the empirical benchmarks behind it—testing quarantine against cross-witness conflation, primed vs. unprimed model reading, adversarial commit gates, and zero-slack shared-resource games.</p>
+        <p>The fuller <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> publication will release the complete evaluation suites, multi-witness apparatus specs, adversarial commit gates, and zero-slack shared-resource games behind these notes.</p>
         <p class="links">
           <a class="enter" href="https://botisattva.org/" rel="noopener noreferrer">Visit botisattva.org ↗</a>
           <a href="/play/">Back to Foolzone / Play →</a>
@@ -734,7 +769,7 @@
 
     <footer>
       <a href="/play/">← Foolzone / Play</a>
-      <span>Teaser note · updated 18 November 2026</span>
+      <span>Teaser note · updated 18 November 2026 (aesthetic &amp; empirical findings)</span>
     </footer>
   </div>
 
