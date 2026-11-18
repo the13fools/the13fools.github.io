@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>A Field Without Figures · Botisattva Aesthetic &amp; Design Notes · Foolzone / Play</title>
-  <meta name="description" content="How botisattva.org translates a nineteenth-century Tibetan visualization guide into SVG geometry and early-web pixel art without copying thangkas, smoothing uncertainty, or depicting sacred figures.">
+  <title>A Field Without Figures · Botisattva Aesthetic &amp; Model Findings · Foolzone / Play</title>
+  <meta name="description" content="A self-contained teaser on translating a nineteenth-century Tibetan visualization guide into SVG geometry, pixel art, and grounded language-model benchmarks without depicting figures or fabricating missing text.">
   <link rel="canonical" href="https://foolzone.com/play/botisattva/">
   <link rel="stylesheet" href="/css/play.css">
   <style>
@@ -487,38 +487,37 @@
         <a href="/play/">Play</a>
         <a href="/play/experiments.html">All experiments</a>
         <a href="/">Josh / research</a>
-        <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org ↗</a>
       </nav>
     </header>
 
     <main id="main">
       <header class="intro">
-        <p class="eyebrow">Botisattva experiments · teaser note 01</p>
+        <p class="eyebrow">Working note · preview of the forthcoming botisattva.org project</p>
         <h1 id="page-title" tabindex="-1">A field without<br>figures<span class="dot">.</span></h1>
-        <p class="story-dek">How <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> turns a nineteenth-century Tibetan visualization manual into restrained SVG geometry and early-web pixel art—without copying thangkas, depicting deities, or pretending a website can confer practice.</p>
-        <p>The fuller <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> work (spanning static agent playlists, sealed philological benchmarks, and multi-agent resource games) will be published later. Here is one thread from the middle of it: what happened when the visual design of the portal became a test of textual honesty.</p>
+        <p class="story-dek">How an experimental web portal and benchmark project turns a nineteenth-century Tibetan visualization manual into non-figurative geometry, early-web pixel art, and verifiable rules for language models.</p>
+        <p>The full <code>botisattva.org</code> portal—spanning static reading apparatuses, multi-agent resource games, and sealed philological benchmarks—is still in preparation and not ready for wider public release. This page is a self-contained preview of its core idea: <strong>showing the structure without inventing what is missing.</strong></p>
       </header>
 
-      <aside class="scope-note" aria-label="Epistemic boundary">
-        <strong>Boundary kept throughout:</strong> Nothing in these pages claims spiritual authority, translation ownership, or practice instruction. Every diagram is an editorial structural reading—not a thangka, sādhana, or substitute for a qualified teacher.
+      <aside class="scope-note" aria-label="Epistemic boundary and orientation">
+        <strong>What this page is (and isn’t):</strong> Nothing here claims spiritual authority, lineage transmission, or practice instruction. Every diagram is an editorial reading anchored by exact Unicode character offsets in open Tibetan texts—not a thangka, sādhanā, or substitute for a human teacher.
       </aside>
 
       <figure class="hero-frame">
-        <img src="img/great-expanse-desktop-hero.jpg" width="1440" height="900" fetchpriority="high" alt="The Great Expanse introduction page on botisattva.org: deep night-indigo canvas, serif heading 'A field, a refuge, a return', and a single Tibetan title line.">
-        <figcaption><strong>The threshold of <code>/great-expanse/intro.html</code>.</strong> Deep night indigo, one verbatim Tibetan title (<span class="bo" lang="bo">སྔོན་འགྲོའི་དམིགས་རིམ་བསྡུས་པ</span>), and an explicit warning that a diagram cannot replace translation, instruction, or practice.</figcaption>
+        <img src="img/great-expanse-desktop-hero.jpg" width="1440" height="900" fetchpriority="high" alt="The Great Expanse introduction page prototype: deep night-indigo canvas, serif heading 'A field, a refuge, a return', and a single Tibetan title line.">
+        <figcaption><strong>Prototype threshold of the Great Expanse study.</strong> Deep night indigo, one verbatim Tibetan title (<span class="bo" lang="bo">སྔོན་འགྲོའི་དམིགས་རིམ་བསྡུས་པ</span>), and an upfront notice that a schematic interface cannot replace translation, oral instruction, or practice.</figcaption>
       </figure>
 
       <section class="chapter" aria-labelledby="ch-1">
         <p class="chapter-kicker">01 · The Problem</p>
         <h2 id="ch-1">You cannot draw the figures—yet you still need to see the space.</h2>
-        <p>The study began with a remarkably compact Tibetan text attributed to Dza Patrul Rinpoche: <em>A Concise Sequence of Visualizations for the Preliminary Practices</em>. In just a few thousand characters, the manual transforms the ground into a jewel-made pure realm, raises a five-branched wish-fulfilling tree, places Guru Rinpoche at the slightly elevated center with lineages above, Buddhas in front, Bodhisattvas to the right, Śrāvakas to the left, Dharma books behind, guardians around, and all beings gathered before the field.</p>
-        <p>When you try to build a public reading interface for that passage—one that both humans and language models can inspect—every obvious web aesthetic breaks down. If you embed museum thangka photos, you crop and repurpose lineage works into UI chrome. If you ask an illustrator or image model to draw sacred figures as cute icons or game sprites, you invent iconographic claims the text never made and treat a living liturgy like decoration.</p>
-        <p>The architectural decision in <code>botisattva.org</code> was simpler and stricter: <strong>draw the relational geometry and keep every figure unpictured.</strong> The refuge-tree diagram in <code>great-expanse/intro.html</code> uses <code>51</code> SVG paths, <code>8</code> circles, <code>8</code> ellipses, and <strong>zero</strong> raster images. The text says <em>imagine</em>; the interface supplies the spatial coordinates and leaves the figures to the reader.</p>
+        <p>The study began with a compact nineteenth-century Tibetan manual attributed to Dza Patrul Rinpoche: <em>A Concise Sequence of Visualizations for the Preliminary Practices</em>. In a few thousand characters, the text transforms the ground into a jewel-made pure realm, raises a five-branched wish-fulfilling tree, places Guru Rinpoche at the slightly elevated center with lineages above, Buddhas in front, Bodhisattvas to the right, Śrāvakas to the left, Dharma books behind, guardians around, and all beings gathered before the field.</p>
+        <p>Building a public reading interface for that passage—one that both humans and language models can audit—breaks every conventional web aesthetic. Embedding museum thangka photos crops living sacred art into decorative UI chrome. Asking an illustrator or image generator to draw deities as flat icons or game sprites invents visual claims the text never made.</p>
+        <p>Instead, the prototype follows a stricter rule: <strong>draw only the relational geometry and leave every figure unpictured.</strong> The refuge-tree diagram uses <code>51</code> SVG paths, <code>8</code> circles, <code>8</code> ellipses, and <strong>zero</strong> raster images. The text tells the reader to imagine; the interface supplies the spatial coordinates and gets out of the way.</p>
 
         <div class="plate-pair">
           <figure class="plate">
             <img src="img/great-expanse-desktop-refuge-field.jpg" width="1440" height="900" loading="lazy" alt="Screenshot of the Great Expanse refuge-field stage selector: five-branched schematic map with Lineage above, Buddhas in front, Guru at center, Bodhisattvas right, Śrāvakas left, and Dharma at rear, paired with a verbatim Tibetan slice.">
-            <figcaption><strong>Great Expanse schematic map.</strong> Every pill corresponds to a spatial slot in Patrul Rinpoche’s text, linked below to its exact character coordinates (<code>S-0018:L1:C3865–3920</code>).</figcaption>
+            <figcaption><strong>The schematic refuge map.</strong> Each pill marks a spatial slot in Patrul Rinpoche’s guide, pinned to the exact character coordinates of the Tibetan source string (<code>chars 3865–3920</code>).</figcaption>
           </figure>
           <figure class="plate">
             <img src="img/green-tara-desktop-hero.jpg" width="1440" height="900" loading="lazy" alt="Screenshot of the Green Tārā study page showing a minimal line-drawn relational glyph of posture and two utpala flowers, explicitly captioned 'RELATIONAL GLYPH · NOT A SACRED IMAGE'.">
@@ -528,15 +527,15 @@
 
         <figure class="plate">
           <img src="img/green-tara-desktop-iconography.jpg" width="1440" height="900" loading="lazy" alt="Five-column iconographic breakdown on the Green Tārā page reading 'Read the posture as a system: their relation matters more than any sampled shade of green.'">
-          <figcaption><strong>Reading posture as a system.</strong> In the paired Green and White Tārā studies, museum records from Himalayan Art Resources and the Rubin Museum anchor five structural distinctions (appearance, right hand, left hand, seated posture, and lotus/moon seat) so the two forms are never collapsed into interchangeable color themes.</figcaption>
+          <figcaption><strong>Reading posture as a system.</strong> In the paired Green and White Tārā studies, catalog records from Himalayan Art Resources and the Rubin Museum anchor five structural distinctions (appearance, right hand, left hand, seated posture, and lotus/moon seat) so the two forms are never collapsed into interchangeable color themes.</figcaption>
         </figure>
       </section>
 
       <section class="chapter" aria-labelledby="ch-2">
         <p class="chapter-kicker">02 · Two Aesthetics, One Discipline</p>
         <h2 id="ch-2">Mineral-red restraint meets early-web pixel art.</h2>
-        <p>Beside the quiet editorial line diagrams of <code>intro.html</code>, the repository built a second visual reading of the exact same text: <code>/great-expanse/pixel-field.html</code>. Why pixel art? Because a 4-pixel block grid is unmistakably a synthetic diagram. Nobody can mistake stacked square tiles for a traditional thangka, yet the grid still preserves the hierarchy, branch symmetry, and color vocabulary of nineteenth-century accumulation paintings.</p>
-        <p>The visual system draws explicitly from two cited worlds—and keeps their roles separated in its machine-readable manifest. Museum records from <strong>Himalayan Art Resources</strong> and the <strong>Rubin Museum</strong> act as <em>iconographic and compositional controls</em> (with <code>record-only-no-image-reuse</code>), while the <strong>Web Design Museum’s</strong> exhibition on <em>Pixel Art in Web Design</em> is cited strictly as <em>design-history influence</em> for crisp borders, tile grids, and non-antialiased type.</p>
+        <p>Alongside those quiet editorial line diagrams, the project built a second visual reading of the exact same Tibetan passage using early-web pixel art. Why pixel blocks? Because a 4-pixel tile grid is unmistakably a synthetic schematic. Nobody could mistake stacked square tiles for a traditional painting, yet the grid preserves the symmetry, branching hierarchy, and mineral-pigment palette of nineteenth-century accumulation compositions.</p>
+        <p>Both worlds are cited explicitly in the prototype’s manifest—with strict boundaries between them. Catalog records from <strong>Himalayan Art Resources</strong> and the <strong>Rubin Museum</strong> act purely as iconographic controls (no museum images copied into the UI), while the <strong>Web Design Museum’s</strong> exhibition on <em>Pixel Art in Web Design</em> serves strictly as presentational history for crisp borders, tile grids, and non-antialiased typography.</p>
 
         <div class="palette-strip" aria-label="Pixel Field mineral and night palette">
           <div class="swatch">
@@ -569,29 +568,29 @@
         <div class="plate-pair">
           <figure class="plate">
             <img src="img/pixel-field-desktop-hero.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Refuge Field hero: burgundy header, deep indigo patterned backdrop, bold pixel-shadow typography, and a framed 4-pixel-grid schematic tree.">
-            <figcaption><strong><code>/great-expanse/pixel-field.html</code>.</strong> Notice the viewpoint discipline: the text places Bodhisattvas on the <em>source-right</em> branch and Śrāvakas on the <em>source-left</em>, so the diagram puts blue Bodhisattva blocks on <em>viewer-left</em> and red Śrāvaka blocks on <em>viewer-right</em>.</figcaption>
+            <figcaption><strong>The Pixel Refuge Field prototype.</strong> Notice the viewpoint discipline: because the Tibetan places Bodhisattvas on the <em>source’s right</em> and Śrāvakas on the <em>source’s left</em>, the viewer-facing diagram puts blue Bodhisattva tiles on viewer-left and red Śrāvaka tiles on viewer-right.</figcaption>
           </figure>
           <figure class="plate">
             <img src="img/pixel-field-desktop-inspector.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Field relation inspector showing relation refuge-e5 ('central-guru RELEASES INTO nonreference') tagged INTERPRETIVE, with separate Direction, Projection, Uncertainty, and Exact Source Record boxes.">
-            <figcaption><strong>The relation inspector.</strong> Selecting any arrow opens three separated records—and stamps interpretive edges visibly: <em>“Provisional apparatus relation. Its claim status does not turn it into source text.”</em></figcaption>
+            <figcaption><strong>The relation inspector.</strong> Selecting any arrow separates what the source text literally states from what an editor inferred—and stamps interpretive edges visibly: <em>“Provisional apparatus relation. Its claim status does not turn it into source text.”</em></figcaption>
           </figure>
         </div>
 
-        <div class="layers-grid" aria-label="Three epistemic layers in pixel-field.json">
+        <div class="layers-grid" aria-label="Three epistemic layers separating text from visual layout">
           <div class="layer-card">
             <p class="tag">Layer 01 · Witness</p>
             <h3>Exact Tibetan Slice</h3>
-            <p>16 contiguous Unicode character slices (<code>S-0018:L1:C…</code>) guarded by a SHA-256 digest of the witness bytes. Never silently normalized.</p>
+            <p>16 contiguous Unicode character slices guarded by a cryptographic (SHA-256) digest of the source file. Never silently normalized.</p>
           </div>
           <div class="layer-card">
             <p class="tag">Layer 02 · Apparatus</p>
             <h3>Typed &amp; Reversible Relations</h3>
-            <p>Each arrow carries its own status (<code>TEXTUAL</code> vs. <code>INTERPRETIVE</code>), uncertainty note, and declared omissions (such as unprojected <code>RETURN_AS</code>).</p>
+            <p>Each directional edge states whether it is directly textual or interpretive, records open uncertainty, and logs any unvisualized branches explicitly.</p>
           </div>
           <div class="layer-card">
             <p class="tag">Layer 03 · Projection</p>
             <h3>Visual Emphasis Only</h3>
-            <p>Which pixel tiles brighten, dim, or vanish across three views—explicitly separated from canonical truth via a JSON Schema 2020-12 contract.</p>
+            <p>Which pixel tiles brighten, dim, or vanish across interactive views—enforced separately from canonical wording via a JSON Schema contract.</p>
           </div>
         </div>
       </section>
@@ -599,9 +598,9 @@
       <section class="chapter" aria-labelledby="ch-3">
         <p class="chapter-kicker">03 · When Close Reading Fixed the UI</p>
         <h2 id="ch-3">The stage that proved why “empty” must actually be empty.</h2>
-        <p>Keeping visual projection bound to exact Tibetan wording paid off in an unexpected audit. Early on, <code>great-expanse/intro.html</code> ended at <strong>Stage 07: rest &amp; return</strong>—quoting the line <em>“rest a moment in a state without reference”</em> (<span class="bo" lang="bo">མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག</span>) while lighting <strong>all nine nodes</strong> of the refuge tree at once.</p>
-        <p>When an agent reviewed the page as a practice backdrop (<code>REVIEW_2026-09-20_backdrop.md</code>), it spotted the contradiction immediately: at the exact moment the text asks for <em>non-reference</em>, the screen was displaying maximum visual activity—making rest visually indistinguishable from full assembly. Re-reading the preceding clause (<span class="bo" lang="bo">བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ</span>, <em>“dissolves gradually into light <strong>from the edges</strong>”</em>) supplied a literal staging instruction.</p>
-        <p>The interface was rebuilt from seven stages into nine: Stage 07 extinguishes outside-in, Stage 08 (<strong>rest</strong>) turns every field node off (<code>active: []</code>), and Stage 09 opens appearance again. Even more strikingly, comparing the refuge ending against the next section of the manual revealed two distinct terminal geometries.</p>
+        <p>Binding every visual choice to exact Tibetan wording caught a real design bug. An early version of the prototype ended at <strong>Stage 07</strong>—quoting the line <em>“rest a moment in a state without reference”</em> (<span class="bo" lang="bo">མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག</span>) while lighting <strong>all nine nodes</strong> of the refuge tree at once.</p>
+        <p>When a review agent audited the page as a quiet backdrop, it spotted the contradiction immediately: right where the manual asks for <em>non-reference</em>, the screen showed maximum visual clutter—making stillness look identical to full assembly. Re-reading the preceding clause (<span class="bo" lang="bo">བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ</span>, <em>“dissolves gradually into light <strong>from the edges</strong>”</em>) supplied a literal staging instruction.</p>
+        <p>The sequence was rebuilt from seven stages into nine: Stage 07 extinguishes outside-in, Stage 08 (<strong>rest</strong>) turns every field node off (<code>0 / 9</code> lit), and Stage 09 opens appearance again. Even more strikingly, comparing that refuge ending against the next section of Patrul Rinpoche’s manual revealed two completely different terminal geometries.</p>
 
         <figure class="plate">
           <img src="img/great-expanse-desktop-dissolution.jpg" width="1440" height="900" loading="lazy" alt="Side-by-side comparison cards on Great Expanse: dark card 'Refuge completion: Guru Rinpoche dissolves into light -> non-referential rest' beside light card 'Bodhicitta transition: Guru Rinpoche dissolves into the practitioner -> bodhicitta arising'.">
@@ -610,7 +609,7 @@
 
         <div class="stage-lab" id="stage-lab">
           <div class="stage-lab-head">
-            <h3>Walk the 9-stage sequence from <code>S-0018</code></h3>
+            <h3>Walk the 9-stage sequence from Patrul Rinpoche’s guide</h3>
             <span>Interactive summary · zero auto-play</span>
           </div>
           <div class="stage-buttons" role="group" aria-label="Great Expanse stages">
@@ -650,7 +649,7 @@
               <p class="stage-copy" id="st-copy">Within this passage, the setting is described before the figures and actions.</p>
               <div class="witness-box">
                 <span class="bo" lang="bo" id="st-bo">མེ་ལོང་གི་ངོས་ལྟར་འཇམ་པ།</span>
-                <p class="witness-addr" id="st-addr">S-0018:L1:C826–849 · EXACT CONTIGUOUS WITNESS SLICE</p>
+                <p class="witness-addr" id="st-addr">Patrul Rinpoche witness · Chars 826–849 · EXACT UNICODE SLICE</p>
               </div>
             </div>
           </div>
@@ -665,7 +664,7 @@
                   <th scope="col">Stage</th>
                   <th scope="col">Structural summary</th>
                   <th scope="col">Lit nodes</th>
-                  <th scope="col">Witness slice (<code>S-0018</code>)</th>
+                  <th scope="col">Tibetan witness slice (Patrul Rinpoche)</th>
                 </tr>
               </thead>
               <tbody>
@@ -685,14 +684,14 @@
       </section>
 
       <section class="chapter" aria-labelledby="ch-4">
-        <p class="chapter-kicker">04 · Why This Aesthetic Matters</p>
-        <h2 id="ch-4">Keeping the seams visible turned out to be the whole method.</h2>
-        <p>What started as a visual constraint—how to render a visualization guide without stealing thangkas or faking sacred authority—became the design pattern across the rest of the <code>botisattva.org</code> experiments:</p>
-        <p>In the static portal, withheld texts keep their numbered slot with a sealed notice instead of disappearing silently, and unbuilt features (like automated dataset withdrawal) keep a disabled slider instead of an empty promise. In our Tibetan evaluation benchmark, models are rewarded for preserving a visible <code>[...]</code> gap rather than inventing fluent lines over damage. And in <em>On Standing</em>, disagreements stay marked with <code>⚠</code> rather than smoothed out—because as the Talmudic story of the leaning study-hall walls suggests, keeping the mark of an unresolved tension standing is better than tidying it into false consensus.</p>
+        <p class="chapter-kicker">04 · Keeping the Seams Visible</p>
+        <h2 id="ch-4">Why unresolved tension belongs on the surface.</h2>
+        <p>What started as a visual constraint—how to map a practice text without repurposing sacred paintings or faking lineage authority—turned into a unifying principle across the whole project:</p>
+        <p>In the portal design, restricted or unbuilt items stay explicitly marked as sealed rather than disappearing quietly or shipping fake controls. In our Tibetan reading workflows, translations and notes keep uncertainty markers (<code>⚠</code>) standing alongside open disagreements between editions—inspired by the Talmudic <em>Oven of Akhnai</em> story (<em>Bava Metzia</em> 59b), where a dissenting scholar calls on miracles and a heavenly voice proves him right, yet the court rules by its own earthly procedure and leaves the walls of the study hall permanently leaning as a physical monument to the unresolved dispute.</p>
 
         <blockquote class="pull-quote">
           “Correctness and standing come apart entirely, and the story treats that as the design rather than a defect.”
-          <cite>— On Standing (heart-essence/reference/standing.md)</cite>
+          <cite>— From our project note <em>On Standing</em> (distinguishing stateless model capability from lineage authority)</cite>
         </blockquote>
 
         <div class="citations" aria-label="Visual, textual, and design-history citations">
@@ -726,50 +725,49 @@
       <section class="chapter" aria-labelledby="ch-5">
         <p class="chapter-kicker">05 · From Interface to Model Behavior</p>
         <h2 id="ch-5">Don’t answer from memory when the witness isn’t in the room.</h2>
-        <p>The same discipline that shaped the diagrams—keeping empty slots visibly empty rather than inventing sacred pictures—turned out to predict how language models behave when reading Tibetan texts across competing lineages.</p>
-        <p>Across <strong>17 benchmark runs (379 model calls)</strong> evaluating GPT-5.6-Luna on the <code>HEART-ESSENCE-EVAL</code> suite, asking the model to identify exact textual variants from <em>coordinate pointers alone</em> exposed a sharp split between restraint and recall. In a <code>3 × 3</code> cross-witness replication (144 calls), raising reasoning effort made the model reliably preserve visible <code>[...]</code> gaps (<code>77.1%</code> low → <code>83.3%</code> medium → <code>91.7%</code> high, lowering worst-of-3 error to <code>12.5%</code>). Yet whenever it broke quarantine to answer from memory at medium or high effort, precision stayed at <strong>50.0%</strong>—a coin flip—and <strong>9 of 9</strong> errors were real phrases borrowed from the wrong witness.</p>
-        <p>When a runtime loader supplied the pure Tibetan witness slice directly (14 verified single-passage items), accuracy jumped to <strong>14 / 14 (100.0%, zero errors)</strong> at both low and high effort—proving that the bottleneck was <strong>grounded witness access and slice boundaries</strong>, not comprehension. (A single clipped slice on Chökyi Drakpa’s <em>Torch</em> caused the lone <code>13 / 14</code> miss on medium until widened by 500 characters.)</p>
+        <p>The same discipline that shaped the diagrams—keeping empty slots visibly empty rather than drawing figures over silence—turned out to predict how frontier language models behave when working across closely related Tibetan editions.</p>
+        <p>Across <strong>17 benchmark runs (379 total model calls)</strong>, we tested how a reasoning model (<code>GPT-5.6-Luna</code>) behaves when asked to extract exact wording from competing traditional commentaries. Given <em>only text coordinates</em> rather than the passage itself—and explicitly instructed to emit <code>[...]</code> whenever uncertain—increasing reasoning effort across a 144-call replication (<code>low</code>, <code>medium</code>, <code>high</code>, three draws per item) made the model sharply better at preserving missing-text gaps (<code>77.1%</code> → <code>83.3%</code> → <code>91.7%</code>). Yet whenever it broke silence to answer from memory at medium or high effort, its precision stayed a <strong>50.0% coin flip</strong>—and <strong>9 of 9</strong> errors were real phrases borrowed from the wrong author’s text.</p>
+        <p>Handing the model the pure, unglossed Tibetan slice directly at runtime changed everything: across 14 verified single-passage questions, exact extraction jumped to <strong>14 / 14 (100.0%, zero silent errors)</strong> at both low and high effort. Even trimming one context slice too narrowly caused a single <code>13 / 14</code> miss that vanished once the window was widened—proving the failure was grounded access, not comprehension.</p>
 
         <div class="layers-grid" aria-label="Empirical findings summary">
           <div class="layer-card">
-            <p class="tag">Pointer-Only (<code>k = 3</code>, 144 calls)</p>
+            <p class="tag">Pointer-Only (144 calls)</p>
             <h3>91.7% Gap · 50% Recall</h3>
-            <p>High reasoning reduces ungrounded guesses (<code>22.9% → 8.3%</code>), yet 100% of <code>silent_wrong</code> answers (9/9) are cross-witness conflations.</p>
+            <p>More reasoning cuts ungrounded guesses (<code>22.9% → 8.3%</code>), yet 100% of wrong answers (9/9) bleed wording from a competing text.</p>
           </div>
           <div class="layer-card">
-            <p class="tag">Runtime-Grounded (14 items)</p>
-            <h3>14 / 14 Exact Extraction</h3>
-            <p>Direct pure-Tibetan witness excerpts eliminate cross-witness drift (<code>100.0%</code> at low and high effort; zero fabricated fixes).</p>
+            <p class="tag">Witness-Grounded (14 items)</p>
+            <h3>14 / 14 Exact Match</h3>
+            <p>Providing the pure Tibetan excerpt directly eliminates cross-witness drift (<code>100.0%</code> exact at low and high effort; zero invented fixes).</p>
           </div>
           <div class="layer-card">
-            <p class="tag">Unprimed Apparatus (<code>L41–48</code>)</p>
-            <h3>372 Schema-Checked Records</h3>
-            <p>24 stretches (<code>31,231</code> encounter chars) keep <code>226</code> <code>⚠</code> flags and <code>47</code> divergences visibly open alongside <code>611</code> root-liturgy lemma links.</p>
+            <p class="tag">Unprimed Reading Protocol</p>
+            <h3>Seam-First Notes</h3>
+            <p>Commentary lines are read and schema-logged before opening English translations, keeping <code>⚠</code> doubts and witness divergences intact.</p>
           </div>
         </div>
 
-        <p>The same principle governs how reading notes themselves are structured: across lines 41–48 of Chökyi Drakpa’s <em>Torch for the Path</em>, unprimed Tibetan readings are logged before opening English translations, preserving <code>⚠</code>-flagged uncertainties and witness divergences instead of flattening them into one authoritative voice.</p>
+        <p>The rule extends naturally to how an AI assistant engages contemplative texts without roleplay. A stateless model session has no body, no lineage conferral, and no continuous life across sittings, so it never pretends to meditate or recite prayers as a practitioner—even while leaving open what future embodied architectures or future human communities might build or confer.</p>
 
         <blockquote class="pull-quote">
-          “As Dodrupchen III cautions in <em>The Staircase to Lotus Light</em>, reciting ‘not merely mouth and words’ while attention drifts right and left is telling a lie to the field—an apt rule for models as well as web interfaces.”
-          <cite>— Open commentary note on <span class="bo" lang="bo">ཁ་ཙམ་ཚིག་ཙམ་མ་ཡིན་ནོ</span> (staircase-lotus-light-guru-yoga-instructions)</cite>
+          “As Dodrupchen III cautions in <em>Essential Instructions on Guru Yoga</em>, mouthing ‘not merely empty words’ while attention drifts right and left is telling a lie to the field—a fitting standard for models and interfaces alike.”
+          <cite>— Dodrupchen Jigme Tenpe Nyima on <span class="bo" lang="bo">ཁ་ཙམ་ཚིག་ཙམ་མ་ཡིན་ནོ</span> (Lotsawa House)</cite>
         </blockquote>
       </section>
 
-      <aside class="next-door" aria-label="Full release note">
-        <h2>Part of a larger work in progress</h2>
-        <p>The fuller <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> publication will release the complete evaluation suites, multi-witness apparatus specs, adversarial commit gates, and zero-slack shared-resource games behind these notes.</p>
+      <aside class="next-door" aria-label="Release status and next links">
+        <h2>A self-contained preview of work in progress</h2>
+        <p>The broader <code>botisattva.org</code> portal—housing the full interactive reading interfaces, sealed cross-witness benchmarks, and multi-agent resource games—is still under development and not yet ready for wider publication. When ready, these drafts will live there in full.</p>
         <p class="links">
-          <a class="enter" href="https://botisattva.org/" rel="noopener noreferrer">Visit botisattva.org ↗</a>
+          <a class="enter" href="/play/experiments.html">Browse all Foolzone experiments →</a>
           <a href="/play/">Back to Foolzone / Play →</a>
-          <a href="/play/experiments.html">All experiments →</a>
         </p>
       </aside>
     </main>
 
     <footer>
       <a href="/play/">← Foolzone / Play</a>
-      <span>Teaser note · updated 18 November 2026 (aesthetic &amp; empirical findings)</span>
+      <span>Self-contained preview · updated 18 November 2026</span>
     </footer>
   </div>
 
@@ -782,7 +780,7 @@
           title: "Before figures, a support.",
           copy: "Within this passage, the setting is described before the figures and actions.",
           bo: "མེ་ལོང་གི་ངོས་ལྟར་འཇམ་པ།",
-          addr: "S-0018:L1:C826–849",
+          addr: "Patrul Rinpoche witness · Chars 826–849",
           active: ["ground"],
           focus: "ground"
         },
@@ -792,7 +790,7 @@
           title: "Relation becomes spatial.",
           copy: "The guide assigns refuge groups to the center, front, right, left, rear, above, and surrounding bands of one field.",
           bo: "དཔག་བསམ་གྱི་སྡོང་པོ་ཡལ་ག་ལྔ་བ",
-          addr: "S-0018:L1:C878–906",
+          addr: "Patrul Rinpoche witness · Chars 878–906",
           active: ["ground", "above", "front", "left", "center", "right", "rear", "around"],
           focus: "center"
         },
@@ -802,7 +800,7 @@
           title: "No being remains outside.",
           copy: "The guide places the practitioner with parents, adversaries, obstructors, and all beings of the six classes before the refuge field.",
           bo: "ཁམས་གསུམ་འགྲོ་བ་རིགས་དྲུག་གི་སེམས་ཅན་ཐམས་ཅད",
-          addr: "S-0018:L1:C3297–3339",
+          addr: "Patrul Rinpoche witness · Chars 3297–3339",
           active: ["ground", "above", "front", "left", "center", "right", "rear", "around", "beings"],
           focus: "beings"
         },
@@ -812,7 +810,7 @@
           title: "The field becomes an address.",
           copy: "The passage coordinates bodily prostration, refuge recitation through speech, and an attitude of trust in the mind.",
           bo: "ལུས་གུས་པས་ཕྱག་འཚལ། ངག་གུས་པའི་སྒོ་ནས་སྐྱབས་འགྲོ་བརྗོད། ཡིད་གུས་པའི་སྒོ་ནས",
-          addr: "S-0018:L1:C3384–3457",
+          addr: "Patrul Rinpoche witness · Chars 3384–3457",
           active: ["center", "beings"],
           focus: "beings"
         },
@@ -822,7 +820,7 @@
           title: "Devotion changes the field.",
           copy: "The guide instructs the practitioner to imagine five-colored rays reaching oneself and all beings and clearing obscurations.",
           bo: "འོད་ཟེར་དཀར་སེར་དམར་ལྗང་མཐིང་གའི་རྣམ་པ་གྲངས་མེད་པ་སྤྲོས།",
-          addr: "S-0018:L1:C3865–3920",
+          addr: "Patrul Rinpoche witness · Chars 3865–3920",
           active: ["above", "front", "left", "center", "right", "rear", "around", "beings"],
           focus: "center"
         },
@@ -832,7 +830,7 @@
           title: "The many gather by explicit edges.",
           copy: "Beings enter the refuge field; branch assemblies gather into representatives and Dharma, while surrounding assemblies gather directly into Guru Rinpoche.",
           bo: "རིམ་པར་འོད་དུ་ཞུ་ནས",
-          addr: "S-0018:L1:C4165–4183",
+          addr: "Patrul Rinpoche witness · Chars 4165–4183",
           active: ["above", "front", "left", "center", "right", "rear", "around", "beings"],
           focus: "center"
         },
@@ -842,7 +840,7 @@
           title: "The field empties from its edges.",
           copy: "The guide says the guru-form too dissolves gradually into light from the edges inward.",
           bo: "བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ",
-          addr: "S-0018:L1:C4504–4537",
+          addr: "Patrul Rinpoche witness · Chars 4504–4537",
           active: [],
           focus: null
         },
@@ -852,7 +850,7 @@
           title: "No position is held.",
           copy: "The guide directs a short rest without conceptual reference. The interface therefore withholds every field emphasis.",
           bo: "མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག",
-          addr: "S-0018:L1:C4539–4573",
+          addr: "Patrul Rinpoche witness · Chars 4539–4573",
           active: [],
           focus: null
         },
@@ -862,7 +860,7 @@
           title: "Appearance opens again.",
           copy: "After the rest, the guide describes all appearance as the forms of the refuge field and calls for dedication.",
           bo: "དེ་ལས་ལངས་བ་ན་སྣང་སྲིད་ཐམས་ཅད་སྐྱབས་ཡུལ་ལྷ་ཚོགས་ཀྱི་སྐུར་བཀྲ་ལམ་གྱིས་གསལ་ལ་བསྔོ་བ་བྱ།",
-          addr: "S-0018:L1:C4575–4659",
+          addr: "Patrul Rinpoche witness · Chars 4575–4659",
           active: ["ground", "above", "front", "left", "center", "right", "rear", "around", "beings"],
           focus: "ground"
         }
@@ -898,7 +896,7 @@
         titleEl.textContent = st.title;
         copyEl.textContent = st.copy;
         boEl.textContent = st.bo;
-        addrEl.textContent = st.addr + " · EXACT CONTIGUOUS WITNESS SLICE";
+        addrEl.textContent = st.addr + " · EXACT UNICODE SLICE";
       }
 
       buttons.forEach(function (btn) {
