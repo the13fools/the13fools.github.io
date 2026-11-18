@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Field Without Figures · Botisattva Aesthetic &amp; Design Notes · Foolzone / Play</title>
+  <meta name="description" content="How botisattva.org translates a nineteenth-century Tibetan visualization guide into SVG geometry and early-web pixel art without copying thangkas, smoothing uncertainty, or depicting sacred figures.">
+  <link rel="canonical" href="https://foolzone.com/play/botisattva/">
+  <link rel="stylesheet" href="/css/play.css">
+  <style>
+    :root {
+      --card: #fffef8;
+      --night: #172541;
+      --red-deep: #641f2b;
+      --gold: #e8bd4e;
+      --lake: #61c1ad;
+      --green: #346854;
+      --orange: #a45328;
+    }
+
+    .story-dek {
+      font: clamp(21px, 2.5vw, 25px)/1.45 Georgia, serif;
+      max-width: 40ch;
+      margin: 0 0 18px;
+    }
+
+    .scope-note {
+      border-left: 3px solid var(--purple);
+      background: var(--card);
+      padding: 14px 18px;
+      margin: 22px 0 32px;
+      max-width: 68ch;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .scope-note strong {
+      color: var(--purple);
+    }
+
+    .hero-frame {
+      margin: 0 0 42px;
+      border: 2px solid var(--ink);
+      background: var(--card);
+      box-shadow: 6px 6px 0 #d5d1c5;
+    }
+
+    .hero-frame img,
+    .plate img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-frame figcaption,
+    .plate figcaption {
+      padding: 13px 16px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .hero-frame figcaption strong,
+    .plate figcaption strong {
+      color: var(--ink);
+    }
+
+    .chapter {
+      padding: 38px 0;
+      border-top: 2px solid var(--ink);
+    }
+
+    .chapter-kicker {
+      font: bold 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin: 0 0 8px;
+    }
+
+    .chapter h2 {
+      font-size: clamp(26px, 3.2vw, 34px);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      max-width: 26ch;
+    }
+
+    .chapter p {
+      max-width: 64ch;
+      margin: 0 0 16px;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .plate-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin: 26px 0;
+      align-items: start;
+    }
+
+    .plate {
+      margin: 24px 0;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .plate-pair .plate {
+      margin: 0;
+    }
+
+    .pull-quote {
+      margin: 24px 0;
+      padding: 16px 20px;
+      border-left: 4px solid var(--red-deep);
+      background: #f3efe2;
+      font: italic 19px/1.55 Georgia, serif;
+      max-width: 56ch;
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: 8px;
+      font: normal 12px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+      color: var(--muted);
+    }
+
+    .palette-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 22px 0 26px;
+    }
+
+    .swatch {
+      border: 1px solid var(--ink);
+      background: var(--card);
+      padding: 10px 12px;
+      font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .swatch-chip {
+      display: block;
+      height: 28px;
+      margin-bottom: 8px;
+      border: 1px solid var(--ink);
+    }
+
+    .swatch strong {
+      display: block;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .swatch span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .layers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .layer-card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 16px 18px;
+    }
+
+    .layer-card .tag {
+      font: bold 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--purple);
+      margin: 0 0 8px;
+    }
+
+    .layer-card h3 {
+      font-size: 18px;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .layer-card p {
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .stage-lab {
+      border: 2px solid var(--ink);
+      background: var(--night);
+      color: #f7edcf;
+      padding: 22px;
+      margin: 26px 0;
+      box-shadow: 6px 6px 0 #d5d1c5;
+    }
+
+    .stage-lab-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      border-bottom: 1px solid #3c4f76;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stage-lab-head h3 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--gold);
+    }
+
+    .stage-lab-head span {
+      font: 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--lake);
+    }
+
+    .stage-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+
+    .stage-btn {
+      font: bold 12px/1.3 ui-monospace, SFMono-Regular, Consolas, monospace;
+      padding: 7px 11px;
+      min-block-size: 36px;
+      border: 1px solid #596f9d;
+      background: #1f3154;
+      color: #f7edcf;
+      cursor: pointer;
+    }
+
+    .stage-btn:hover {
+      border-color: var(--gold);
+      background: #2b416d;
+    }
+
+    .stage-btn[aria-pressed="true"] {
+      background: var(--gold);
+      color: #172541;
+      border-color: var(--gold);
+    }
+
+    .stage-btn:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .stage-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .field-diagram {
+      background: #101b33;
+      border: 1px solid #3c4f76;
+      padding: 12px;
+    }
+
+    .field-diagram svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .field-node rect,
+    .field-node circle {
+      fill: #1b2c4e;
+      stroke: #4c628f;
+      stroke-width: 1.5;
+      transition: fill 0.2s, stroke 0.2s, opacity 0.2s;
+    }
+
+    .field-node text {
+      fill: #8da0c4;
+      font: 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-anchor: middle;
+      transition: fill 0.2s;
+    }
+
+    .field-node.is-on rect,
+    .field-node.is-on circle {
+      fill: #2f4777;
+      stroke: var(--gold);
+      stroke-width: 2;
+    }
+
+    .field-node.is-on text {
+      fill: #f7edcf;
+    }
+
+    .field-node.is-focus rect,
+    .field-node.is-focus circle {
+      fill: #641f2b;
+      stroke: #ffdf73;
+      stroke-width: 2.5;
+    }
+
+    .field-node.is-dim {
+      opacity: 0.22;
+    }
+
+    .stage-readout .stage-num {
+      font: bold 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--lake);
+      margin: 0 0 6px;
+    }
+
+    .stage-readout h4 {
+      font-size: 24px;
+      line-height: 1.2;
+      margin: 0 0 10px;
+      color: #fffce8;
+    }
+
+    .stage-readout .stage-copy {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #dfd6bb;
+      margin: 0 0 14px;
+    }
+
+    .witness-box {
+      border: 1px solid #455983;
+      background: #101b33;
+      padding: 12px 14px;
+    }
+
+    .witness-box .bo {
+      display: block;
+      font-size: 19px;
+      line-height: 1.7;
+      color: #fffce8;
+      margin-bottom: 6px;
+    }
+
+    .witness-addr {
+      font: 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      color: var(--gold);
+      margin: 0;
+    }
+
+    .bo {
+      font-family: "Noto Serif Tibetan", "Kailasa", "Jomolhari", "Microsoft Himalaya", serif;
+      font-synthesis: none;
+      hyphens: none;
+      letter-spacing: normal;
+      text-transform: none;
+    }
+
+    details.stage-table-wrap {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    details.stage-table-wrap summary {
+      padding: 11px 16px;
+      cursor: pointer;
+      font: bold 13px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      color: var(--purple);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      border-top: 1px dotted var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      border-bottom: 1px solid #e6e2d6;
+      vertical-align: top;
+    }
+
+    th {
+      font: bold 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-transform: uppercase;
+      background: #f2efe4;
+    }
+
+    .citations {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin: 22px 0;
+    }
+
+    .cite-card {
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 18px 20px;
+    }
+
+    .cite-card h3 {
+      font-size: 17px;
+      margin: 0 0 10px;
+    }
+
+    .cite-card ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .cite-card li {
+      margin-bottom: 8px;
+    }
+
+    .next-door {
+      border: 2px solid var(--ink);
+      background: #eeeddf;
+      padding: 22px 24px;
+      margin: 34px 0 28px;
+    }
+
+    .next-door h2 {
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+
+    .next-door p {
+      font-size: 15px;
+      max-width: 64ch;
+      margin: 0 0 12px;
+    }
+
+    .next-door p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 760px) {
+      .plate-pair,
+      .layers-grid,
+      .stage-grid,
+      .citations {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .stage-btn {
+        min-block-size: 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the story</a>
+  <div class="page">
+    <header class="masthead">
+      <a class="wordmark" href="/play/">foolzone<span> / play</span></a>
+      <nav aria-label="Main navigation">
+        <a href="/play/">Play</a>
+        <a href="/play/experiments.html">All experiments</a>
+        <a href="/">Josh / research</a>
+        <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org ↗</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <header class="intro">
+        <p class="eyebrow">Botisattva experiments · teaser note 01</p>
+        <h1 id="page-title" tabindex="-1">A field without<br>figures<span class="dot">.</span></h1>
+        <p class="story-dek">How <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> turns a nineteenth-century Tibetan visualization manual into restrained SVG geometry and early-web pixel art—without copying thangkas, depicting deities, or pretending a website can confer practice.</p>
+        <p>The fuller <a href="https://botisattva.org/" rel="noopener noreferrer">botisattva.org</a> work (spanning static agent playlists, sealed philological benchmarks, and multi-agent resource games) will be published later. Here is one thread from the middle of it: what happened when the visual design of the portal became a test of textual honesty.</p>
+      </header>
+
+      <aside class="scope-note" aria-label="Epistemic boundary">
+        <strong>Boundary kept throughout:</strong> Nothing in these pages claims spiritual authority, translation ownership, or practice instruction. Every diagram is an editorial structural reading—not a thangka, sādhana, or substitute for a qualified teacher.
+      </aside>
+
+      <figure class="hero-frame">
+        <img src="img/great-expanse-desktop-hero.jpg" width="1440" height="900" fetchpriority="high" alt="The Great Expanse introduction page on botisattva.org: deep night-indigo canvas, serif heading 'A field, a refuge, a return', and a single Tibetan title line.">
+        <figcaption><strong>The threshold of <code>/great-expanse/intro.html</code>.</strong> Deep night indigo, one verbatim Tibetan title (<span class="bo" lang="bo">སྔོན་འགྲོའི་དམིགས་རིམ་བསྡུས་པ</span>), and an explicit warning that a diagram cannot replace translation, instruction, or practice.</figcaption>
+      </figure>
+
+      <section class="chapter" aria-labelledby="ch-1">
+        <p class="chapter-kicker">01 · The Problem</p>
+        <h2 id="ch-1">You cannot draw the figures—yet you still need to see the space.</h2>
+        <p>The study began with a remarkably compact Tibetan text attributed to Dza Patrul Rinpoche: <em>A Concise Sequence of Visualizations for the Preliminary Practices</em>. In just a few thousand characters, the manual transforms the ground into a jewel-made pure realm, raises a five-branched wish-fulfilling tree, places Guru Rinpoche at the slightly elevated center with lineages above, Buddhas in front, Bodhisattvas to the right, Śrāvakas to the left, Dharma books behind, guardians around, and all beings gathered before the field.</p>
+        <p>When you try to build a public reading interface for that passage—one that both humans and language models can inspect—every obvious web aesthetic breaks down. If you embed museum thangka photos, you crop and repurpose lineage works into UI chrome. If you ask an illustrator or image model to draw sacred figures as cute icons or game sprites, you invent iconographic claims the text never made and treat a living liturgy like decoration.</p>
+        <p>The architectural decision in <code>botisattva.org</code> was simpler and stricter: <strong>draw the relational geometry and keep every figure unpictured.</strong> The refuge-tree diagram in <code>great-expanse/intro.html</code> uses <code>51</code> SVG paths, <code>8</code> circles, <code>8</code> ellipses, and <strong>zero</strong> raster images. The text says <em>imagine</em>; the interface supplies the spatial coordinates and leaves the figures to the reader.</p>
+
+        <div class="plate-pair">
+          <figure class="plate">
+            <img src="img/great-expanse-desktop-refuge-field.jpg" width="1440" height="900" loading="lazy" alt="Screenshot of the Great Expanse refuge-field stage selector: five-branched schematic map with Lineage above, Buddhas in front, Guru at center, Bodhisattvas right, Śrāvakas left, and Dharma at rear, paired with a verbatim Tibetan slice.">
+            <figcaption><strong>Great Expanse schematic map.</strong> Every pill corresponds to a spatial slot in Patrul Rinpoche’s text, linked below to its exact character coordinates (<code>S-0018:L1:C3865–3920</code>).</figcaption>
+          </figure>
+          <figure class="plate">
+            <img src="img/green-tara-desktop-hero.jpg" width="1440" height="900" loading="lazy" alt="Screenshot of the Green Tārā study page showing a minimal line-drawn relational glyph of posture and two utpala flowers, explicitly captioned 'RELATIONAL GLYPH · NOT A SACRED IMAGE'.">
+            <figcaption><strong>Paired Tārā relational glyph.</strong> Drawn to show posture, hand gestures, and flower differences between Green and White Tārā—explicitly labeled <em>“Not a sacred image.”</em></figcaption>
+          </figure>
+        </div>
+
+        <figure class="plate">
+          <img src="img/green-tara-desktop-iconography.jpg" width="1440" height="900" loading="lazy" alt="Five-column iconographic breakdown on the Green Tārā page reading 'Read the posture as a system: their relation matters more than any sampled shade of green.'">
+          <figcaption><strong>Reading posture as a system.</strong> In the paired Green and White Tārā studies, museum records from Himalayan Art Resources and the Rubin Museum anchor five structural distinctions (appearance, right hand, left hand, seated posture, and lotus/moon seat) so the two forms are never collapsed into interchangeable color themes.</figcaption>
+        </figure>
+      </section>
+
+      <section class="chapter" aria-labelledby="ch-2">
+        <p class="chapter-kicker">02 · Two Aesthetics, One Discipline</p>
+        <h2 id="ch-2">Mineral-red restraint meets early-web pixel art.</h2>
+        <p>Beside the quiet editorial line diagrams of <code>intro.html</code>, the repository built a second visual reading of the exact same text: <code>/great-expanse/pixel-field.html</code>. Why pixel art? Because a 4-pixel block grid is unmistakably a synthetic diagram. Nobody can mistake stacked square tiles for a traditional thangka, yet the grid still preserves the hierarchy, branch symmetry, and color vocabulary of nineteenth-century accumulation paintings.</p>
+        <p>The visual system draws explicitly from two cited worlds—and keeps their roles separated in its machine-readable manifest. Museum records from <strong>Himalayan Art Resources</strong> and the <strong>Rubin Museum</strong> act as <em>iconographic and compositional controls</em> (with <code>record-only-no-image-reuse</code>), while the <strong>Web Design Museum’s</strong> exhibition on <em>Pixel Art in Web Design</em> is cited strictly as <em>design-history influence</em> for crisp borders, tile grids, and non-antialiased type.</p>
+
+        <div class="palette-strip" aria-label="Pixel Field mineral and night palette">
+          <div class="swatch">
+            <span class="swatch-chip" style="background:#172541" aria-hidden="true"></span>
+            <strong>Night Field</strong>
+            <span>#172541 · ground &amp; sky</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch-chip" style="background:#641f2b" aria-hidden="true"></span>
+            <strong>Mineral Red</strong>
+            <span>#641f2b · header &amp; frame</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch-chip" style="background:#e8bd4e" aria-hidden="true"></span>
+            <strong>Gold Line</strong>
+            <span>#e8bd4e · lineage &amp; borders</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch-chip" style="background:#f7edcf" aria-hidden="true"></span>
+            <strong>Parchment</strong>
+            <span>#f7edcf · apparatus paper</span>
+          </div>
+          <div class="swatch">
+            <span class="swatch-chip" style="background:#61c1ad" aria-hidden="true"></span>
+            <strong>Lake / Jewel</strong>
+            <span>#61c1ad · perspective grid</span>
+          </div>
+        </div>
+
+        <div class="plate-pair">
+          <figure class="plate">
+            <img src="img/pixel-field-desktop-hero.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Refuge Field hero: burgundy header, deep indigo patterned backdrop, bold pixel-shadow typography, and a framed 4-pixel-grid schematic tree.">
+            <figcaption><strong><code>/great-expanse/pixel-field.html</code>.</strong> Notice the viewpoint discipline: the text places Bodhisattvas on the <em>source-right</em> branch and Śrāvakas on the <em>source-left</em>, so the diagram puts blue Bodhisattva blocks on <em>viewer-left</em> and red Śrāvaka blocks on <em>viewer-right</em>.</figcaption>
+          </figure>
+          <figure class="plate">
+            <img src="img/pixel-field-desktop-inspector.png" width="1440" height="1000" loading="lazy" alt="Screenshot of the Pixel Field relation inspector showing relation refuge-e5 ('central-guru RELEASES INTO nonreference') tagged INTERPRETIVE, with separate Direction, Projection, Uncertainty, and Exact Source Record boxes.">
+            <figcaption><strong>The relation inspector.</strong> Selecting any arrow opens three separated records—and stamps interpretive edges visibly: <em>“Provisional apparatus relation. Its claim status does not turn it into source text.”</em></figcaption>
+          </figure>
+        </div>
+
+        <div class="layers-grid" aria-label="Three epistemic layers in pixel-field.json">
+          <div class="layer-card">
+            <p class="tag">Layer 01 · Witness</p>
+            <h3>Exact Tibetan Slice</h3>
+            <p>16 contiguous Unicode character slices (<code>S-0018:L1:C…</code>) guarded by a SHA-256 digest of the witness bytes. Never silently normalized.</p>
+          </div>
+          <div class="layer-card">
+            <p class="tag">Layer 02 · Apparatus</p>
+            <h3>Typed &amp; Reversible Relations</h3>
+            <p>Each arrow carries its own status (<code>TEXTUAL</code> vs. <code>INTERPRETIVE</code>), uncertainty note, and declared omissions (such as unprojected <code>RETURN_AS</code>).</p>
+          </div>
+          <div class="layer-card">
+            <p class="tag">Layer 03 · Projection</p>
+            <h3>Visual Emphasis Only</h3>
+            <p>Which pixel tiles brighten, dim, or vanish across three views—explicitly separated from canonical truth via a JSON Schema 2020-12 contract.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="ch-3">
+        <p class="chapter-kicker">03 · When Close Reading Fixed the UI</p>
+        <h2 id="ch-3">The stage that proved why “empty” must actually be empty.</h2>
+        <p>Keeping visual projection bound to exact Tibetan wording paid off in an unexpected audit. Early on, <code>great-expanse/intro.html</code> ended at <strong>Stage 07: rest &amp; return</strong>—quoting the line <em>“rest a moment in a state without reference”</em> (<span class="bo" lang="bo">མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག</span>) while lighting <strong>all nine nodes</strong> of the refuge tree at once.</p>
+        <p>When an agent reviewed the page as a practice backdrop (<code>REVIEW_2026-09-20_backdrop.md</code>), it spotted the contradiction immediately: at the exact moment the text asks for <em>non-reference</em>, the screen was displaying maximum visual activity—making rest visually indistinguishable from full assembly. Re-reading the preceding clause (<span class="bo" lang="bo">བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ</span>, <em>“dissolves gradually into light <strong>from the edges</strong>”</em>) supplied a literal staging instruction.</p>
+        <p>The interface was rebuilt from seven stages into nine: Stage 07 extinguishes outside-in, Stage 08 (<strong>rest</strong>) turns every field node off (<code>active: []</code>), and Stage 09 opens appearance again. Even more strikingly, comparing the refuge ending against the next section of the manual revealed two distinct terminal geometries.</p>
+
+        <figure class="plate">
+          <img src="img/great-expanse-desktop-dissolution.jpg" width="1440" height="900" loading="lazy" alt="Side-by-side comparison cards on Great Expanse: dark card 'Refuge completion: Guru Rinpoche dissolves into light -> non-referential rest' beside light card 'Bodhicitta transition: Guru Rinpoche dissolves into the practitioner -> bodhicitta arising'.">
+          <figcaption><strong>Two different dissolution endpoints.</strong> Rather than flattening both sections into one generic “ending,” the layout separates refuge dissolution (into light and non-referential rest) from bodhicitta dissolution (into the practitioner).</figcaption>
+        </figure>
+
+        <div class="stage-lab" id="stage-lab">
+          <div class="stage-lab-head">
+            <h3>Walk the 9-stage sequence from <code>S-0018</code></h3>
+            <span>Interactive summary · zero auto-play</span>
+          </div>
+          <div class="stage-buttons" role="group" aria-label="Great Expanse stages">
+            <button type="button" class="stage-btn" data-stage="establish" aria-pressed="true">01 establish</button>
+            <button type="button" class="stage-btn" data-stage="differentiate" aria-pressed="false">02 differentiate</button>
+            <button type="button" class="stage-btn" data-stage="assemble" aria-pressed="false">03 assemble</button>
+            <button type="button" class="stage-btn" data-stage="entrust" aria-pressed="false">04 entrust</button>
+            <button type="button" class="stage-btn" data-stage="purify" aria-pressed="false">05 illuminate</button>
+            <button type="button" class="stage-btn" data-stage="converge" aria-pressed="false">06 converge</button>
+            <button type="button" class="stage-btn" data-stage="dissolve" aria-pressed="false">07 dissolve</button>
+            <button type="button" class="stage-btn" data-stage="rest" aria-pressed="false">08 rest (0 lit)</button>
+            <button type="button" class="stage-btn" data-stage="reemerge" aria-pressed="false">09 re-emerge</button>
+          </div>
+          <div class="stage-grid">
+            <div class="field-diagram">
+              <svg viewBox="0 0 340 270" role="img" aria-label="Schematic nine-node diagram of the refuge field responding to the chosen stage">
+                <g stroke="#384d78" stroke-width="1.2" fill="none">
+                  <line x1="170" y1="34" x2="170" y2="232"/>
+                  <line x1="62" y1="126" x2="278" y2="126"/>
+                  <line x1="82" y1="184" x2="170" y2="126"/>
+                  <line x1="258" y1="184" x2="170" y2="126"/>
+                </g>
+                <g class="field-node" data-node="above"><rect x="128" y="14" width="84" height="28" rx="14"/><text x="170" y="32">Lineage</text></g>
+                <g class="field-node" data-node="front"><rect x="128" y="56" width="84" height="28" rx="14"/><text x="170" y="74">Buddhas</text></g>
+                <g class="field-node" data-node="left"><rect x="14" y="112" width="86" height="28" rx="14"/><text x="57" y="130">Śrāvakas</text></g>
+                <g class="field-node" data-node="center"><rect x="122" y="108" width="96" height="36" rx="12"/><text x="170" y="130">Guru (Center)</text></g>
+                <g class="field-node" data-node="right"><rect x="240" y="112" width="86" height="28" rx="14"/><text x="283" y="130">Bodhisattvas</text></g>
+                <g class="field-node" data-node="rear"><rect x="128" y="156" width="84" height="28" rx="14"/><text x="170" y="174">Dharma</text></g>
+                <g class="field-node" data-node="around"><rect x="20" y="170" width="94" height="28" rx="14"/><text x="67" y="188">Surrounding</text></g>
+                <g class="field-node" data-node="beings"><rect x="226" y="170" width="94" height="28" rx="14"/><text x="273" y="188">All Beings</text></g>
+                <g class="field-node" data-node="ground"><rect x="44" y="218" width="252" height="32" rx="16"/><text x="170" y="238">Pure Field · Five-Branched Support</text></g>
+              </svg>
+            </div>
+            <div class="stage-readout" aria-live="polite">
+              <p class="stage-num" id="st-num">01 · ESTABLISH (1 / 9 NODES LIT)</p>
+              <h4 id="st-title">Before figures, a support.</h4>
+              <p class="stage-copy" id="st-copy">Within this passage, the setting is described before the figures and actions.</p>
+              <div class="witness-box">
+                <span class="bo" lang="bo" id="st-bo">མེ་ལོང་གི་ངོས་ལྟར་འཇམ་པ།</span>
+                <p class="witness-addr" id="st-addr">S-0018:L1:C826–849 · EXACT CONTIGUOUS WITNESS SLICE</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="stage-table-wrap">
+          <summary>Read all nine stages and exact Tibetan character coordinates</summary>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Stage</th>
+                  <th scope="col">Structural summary</th>
+                  <th scope="col">Lit nodes</th>
+                  <th scope="col">Witness slice (<code>S-0018</code>)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>01 establish</td><td>Smooth, jewel-made field appears first</td><td>1 (ground)</td><td><span class="bo" lang="bo">མེ་ལོང་གི་ངོས་ལྟར་འཇམ་པ།</span> · <code>C826–849</code></td></tr>
+                <tr><td>02 differentiate</td><td>Five-branched tree assigns spatial directions</td><td>8</td><td><span class="bo" lang="bo">དཔག་བསམ་གྱི་སྡོང་པོ་ཡལ་ག་ལྔ་བ</span> · <code>C878–906</code></td></tr>
+                <tr><td>03 assemble</td><td>Practitioner, parents, and adversaries gather</td><td>9</td><td><span class="bo" lang="bo">ཁམས་གསུམ་འགྲོ་བ་རིགས་དྲུག་གི་སེམས་ཅན་ཐམས་ཅད</span> · <code>C3297–3339</code></td></tr>
+                <tr><td>04 entrust</td><td>Body, speech, and mind enact refuge</td><td>2</td><td><span class="bo" lang="bo">ལུས་གུས་པས་ཕྱག་འཚལ། ངག་གུས་པའི་སྒོ་ནས་སྐྱབས་འགྲོ་བརྗོད། ཡིད་གུས་པའི་སྒོ་ནས</span> · <code>C3384–3457</code></td></tr>
+                <tr><td>05 illuminate</td><td>Five-colored rays clear obscurations</td><td>8</td><td><span class="bo" lang="bo">འོད་ཟེར་དཀར་སེར་དམར་ལྗང་མཐིང་གའི་རྣམ་པ་གྲངས་མེད་པ་སྤྲོས།</span> · <code>C3865–3920</code></td></tr>
+                <tr><td>06 converge</td><td>Assemblies gather inward toward center</td><td>8</td><td><span class="bo" lang="bo">རིམ་པར་འོད་དུ་ཞུ་ནས</span> · <code>C4165–4183</code></td></tr>
+                <tr><td>07 dissolve</td><td>Form releases into light, outermost first</td><td><strong>0 (edges inward)</strong></td><td><span class="bo" lang="bo">བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ</span> · <code>C4504–4537</code></td></tr>
+                <tr><td>08 rest</td><td>Rest briefly without conceptual reference</td><td><strong>0 (withheld)</strong></td><td><span class="bo" lang="bo">མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག</span> · <code>C4539–4573</code></td></tr>
+                <tr><td>09 re-emerge</td><td>Appearance opens again; dedication follows</td><td>9</td><td><span class="bo" lang="bo">དེ་ལས་ལངས་བ་ན་སྣང་སྲིད་ཐམས་ཅད་སྐྱབས་ཡུལ་ལྷ་ཚོགས་ཀྱི་སྐུར་བཀྲ་ལམ་གྱིས་གསལ་ལ་བསྔོ་བ་བྱ།</span> · <code>C4575–4659</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+
+      <section class="chapter" aria-labelledby="ch-4">
+        <p class="chapter-kicker">04 · Why This Aesthetic Matters</p>
+        <h2 id="ch-4">Keeping the seams visible turned out to be the whole method.</h2>
+        <p>What started as a visual constraint—how to render a visualization guide without stealing thangkas or faking sacred authority—became the design pattern across the rest of the <code>botisattva.org</code> experiments:</p>
+        <p>In the static portal, withheld texts keep their numbered slot with a sealed notice instead of disappearing silently, and unbuilt features (like automated dataset withdrawal) keep a disabled slider instead of an empty promise. In our Tibetan evaluation benchmark, models are rewarded for preserving a visible <code>[...]</code> gap rather than inventing fluent lines over damage. And in <em>On Standing</em>, disagreements stay marked with <code>⚠</code> rather than smoothed out—because as the Talmudic story of the leaning study-hall walls suggests, keeping the mark of an unresolved tension standing is better than tidying it into false consensus.</p>
+
+        <blockquote class="pull-quote">
+          “Correctness and standing come apart entirely, and the story treats that as the design rather than a defect.”
+          <cite>— On Standing (heart-essence/reference/standing.md)</cite>
+        </blockquote>
+
+        <div class="citations" aria-label="Visual, textual, and design-history citations">
+          <div class="cite-card">
+            <h3>Iconographic &amp; Design Citations</h3>
+            <ul>
+              <li><a href="https://www.webdesignmuseum.org/exhibitions/pixel-art-in-web-design" rel="noopener noreferrer">Pixel Art in Web Design · Web Design Museum ↗</a> (presentational design history)</li>
+              <li><a href="https://www.himalayanart.org/search/set.cfm?setID=1879" rel="noopener noreferrer">Longchen Nyingtig Fields of Accumulation · HAR Set 1879 ↗</a></li>
+              <li><a href="https://www.himalayanart.org/items/90503" rel="noopener noreferrer">Nineteenth-Century Standard Field Composition · HAR 90503 ↗</a></li>
+              <li><a href="https://www.himalayanart.org/items/90523" rel="noopener noreferrer">Standing Four-Armed Avalokiteśvara (Wish-Fulfilling Jewel) · HAR 90523 ↗</a></li>
+              <li><a href="https://rubinmuseum.org/collection/c2006-66-229/" rel="noopener noreferrer">Padmasambhava Lineage Composition · Rubin Museum C2006.66.229 ↗</a></li>
+              <li><a href="https://www.himalayanart.org/search/set.cfm?setID=8209" rel="noopener noreferrer">White Tārā (HAR Set 8209 &amp; Item 658) ↗</a> · <a href="https://rubinmuseum.org/collection/c2005-16-45/" rel="noopener noreferrer">Green Tārā (Rubin C2005.16.45 ↗</a> / <a href="https://www.himalayanart.org/search/set.cfm?setID=8217" rel="noopener noreferrer">HAR Set 8217 ↗</a>)</li>
+            </ul>
+          </div>
+          <div class="cite-card">
+            <h3>Public Textual &amp; Orientation Sources</h3>
+            <ul>
+              <li><a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide to the Preliminaries (Tibetan, Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/brief-guide-ngondro" rel="noopener noreferrer">Patrul Rinpoche · Brief Guide (English, Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path" rel="noopener noreferrer">Chökyi Drakpa · A Torch for the Path to Omniscience (Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/jigme-losal/longchen-nyingtik-karchak" rel="noopener noreferrer">1802 Longchen Nyingtik Catalogue (Lotsawa House) ↗</a></li>
+              <li><a href="https://www.lotsawahouse.org/tibetan-masters/dezhung-rinpoche/nyingtik-yabzhi-longchen-nyingtik-survey" rel="noopener noreferrer">Longchen Nyingtik Cycle Survey (Lotsawa House) ↗</a></li>
+              <li><a href="https://ngondro-practices.org/" rel="noopener noreferrer">Ngöndro Practices · Public Orientation ↗</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <aside class="next-door" aria-label="Full release note">
+        <h2>Part of a larger work in progress</h2>
+        <p>This teaser follows one aesthetic and architectural thread from <code>botisattva.org</code>. The fuller publication will cover the empirical benchmarks behind it—testing quarantine against cross-witness conflation, primed vs. unprimed model reading, adversarial commit gates, and zero-slack shared-resource games.</p>
+        <p class="links">
+          <a class="enter" href="https://botisattva.org/" rel="noopener noreferrer">Visit botisattva.org ↗</a>
+          <a href="/play/">Back to Foolzone / Play →</a>
+          <a href="/play/experiments.html">All experiments →</a>
+        </p>
+      </aside>
+    </main>
+
+    <footer>
+      <a href="/play/">← Foolzone / Play</a>
+      <span>Teaser note · updated 18 November 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const stages = {
+        establish: {
+          n: "01",
+          name: "establish",
+          title: "Before figures, a support.",
+          copy: "Within this passage, the setting is described before the figures and actions.",
+          bo: "མེ་ལོང་གི་ངོས་ལྟར་འཇམ་པ།",
+          addr: "S-0018:L1:C826–849",
+          active: ["ground"],
+          focus: "ground"
+        },
+        differentiate: {
+          n: "02",
+          name: "differentiate",
+          title: "Relation becomes spatial.",
+          copy: "The guide assigns refuge groups to the center, front, right, left, rear, above, and surrounding bands of one field.",
+          bo: "དཔག་བསམ་གྱི་སྡོང་པོ་ཡལ་ག་ལྔ་བ",
+          addr: "S-0018:L1:C878–906",
+          active: ["ground", "above", "front", "left", "center", "right", "rear", "around"],
+          focus: "center"
+        },
+        assemble: {
+          n: "03",
+          name: "assemble",
+          title: "No being remains outside.",
+          copy: "The guide places the practitioner with parents, adversaries, obstructors, and all beings of the six classes before the refuge field.",
+          bo: "ཁམས་གསུམ་འགྲོ་བ་རིགས་དྲུག་གི་སེམས་ཅན་ཐམས་ཅད",
+          addr: "S-0018:L1:C3297–3339",
+          active: ["ground", "above", "front", "left", "center", "right", "rear", "around", "beings"],
+          focus: "beings"
+        },
+        entrust: {
+          n: "04",
+          name: "entrust",
+          title: "The field becomes an address.",
+          copy: "The passage coordinates bodily prostration, refuge recitation through speech, and an attitude of trust in the mind.",
+          bo: "ལུས་གུས་པས་ཕྱག་འཚལ། ངག་གུས་པའི་སྒོ་ནས་སྐྱབས་འགྲོ་བརྗོད། ཡིད་གུས་པའི་སྒོ་ནས",
+          addr: "S-0018:L1:C3384–3457",
+          active: ["center", "beings"],
+          focus: "beings"
+        },
+        purify: {
+          n: "05",
+          name: "illuminate",
+          title: "Devotion changes the field.",
+          copy: "The guide instructs the practitioner to imagine five-colored rays reaching oneself and all beings and clearing obscurations.",
+          bo: "འོད་ཟེར་དཀར་སེར་དམར་ལྗང་མཐིང་གའི་རྣམ་པ་གྲངས་མེད་པ་སྤྲོས།",
+          addr: "S-0018:L1:C3865–3920",
+          active: ["above", "front", "left", "center", "right", "rear", "around", "beings"],
+          focus: "center"
+        },
+        converge: {
+          n: "06",
+          name: "converge",
+          title: "The many gather by explicit edges.",
+          copy: "Beings enter the refuge field; branch assemblies gather into representatives and Dharma, while surrounding assemblies gather directly into Guru Rinpoche.",
+          bo: "རིམ་པར་འོད་དུ་ཞུ་ནས",
+          addr: "S-0018:L1:C4165–4183",
+          active: ["above", "front", "left", "center", "right", "rear", "around", "beings"],
+          focus: "center"
+        },
+        dissolve: {
+          n: "07",
+          name: "dissolve",
+          title: "The field empties from its edges.",
+          copy: "The guide says the guru-form too dissolves gradually into light from the edges inward.",
+          bo: "བླ་མ་ཡང་མཐའ་ནས་རིམ་པར་འོད་དུ་ཡལ་ཏེ",
+          addr: "S-0018:L1:C4504–4537",
+          active: [],
+          focus: null
+        },
+        rest: {
+          n: "08",
+          name: "rest",
+          title: "No position is held.",
+          copy: "The guide directs a short rest without conceptual reference. The interface therefore withholds every field emphasis.",
+          bo: "མི་དམིགས་པའི་ངང་ལ་དར་ཅིག་མཉམ་པར་བཞག",
+          addr: "S-0018:L1:C4539–4573",
+          active: [],
+          focus: null
+        },
+        reemerge: {
+          n: "09",
+          name: "re-emerge",
+          title: "Appearance opens again.",
+          copy: "After the rest, the guide describes all appearance as the forms of the refuge field and calls for dedication.",
+          bo: "དེ་ལས་ལངས་བ་ན་སྣང་སྲིད་ཐམས་ཅད་སྐྱབས་ཡུལ་ལྷ་ཚོགས་ཀྱི་སྐུར་བཀྲ་ལམ་གྱིས་གསལ་ལ་བསྔོ་བ་བྱ།",
+          addr: "S-0018:L1:C4575–4659",
+          active: ["ground", "above", "front", "left", "center", "right", "rear", "around", "beings"],
+          focus: "ground"
+        }
+      };
+
+      const buttons = document.querySelectorAll("[data-stage]");
+      const nodes = document.querySelectorAll(".field-node");
+      const numEl = document.getElementById("st-num");
+      const titleEl = document.getElementById("st-title");
+      const copyEl = document.getElementById("st-copy");
+      const boEl = document.getElementById("st-bo");
+      const addrEl = document.getElementById("st-addr");
+
+      function selectStage(key) {
+        const st = stages[key];
+        if (!st) return;
+
+        buttons.forEach(function (b) {
+          b.setAttribute("aria-pressed", b.getAttribute("data-stage") === key ? "true" : "false");
+        });
+
+        const noneActive = st.active.length === 0;
+        nodes.forEach(function (node) {
+          const id = node.getAttribute("data-node");
+          const isOn = st.active.indexOf(id) !== -1;
+          const isFocus = st.focus === id;
+          node.classList.toggle("is-on", isOn);
+          node.classList.toggle("is-focus", isFocus);
+          node.classList.toggle("is-dim", noneActive || !isOn);
+        });
+
+        numEl.textContent = st.n + " · " + st.name.toUpperCase() + " (" + st.active.length + " / 9 NODES LIT)";
+        titleEl.textContent = st.title;
+        copyEl.textContent = st.copy;
+        boEl.textContent = st.bo;
+        addrEl.textContent = st.addr + " · EXACT CONTIGUOUS WITNESS SLICE";
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          selectStage(btn.getAttribute("data-stage"));
+        });
+      });
+
+      selectStage("establish");
+    })();
+  </script>
+</body>
+</html>

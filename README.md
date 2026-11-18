@@ -23,7 +23,7 @@ The interactive essay is published at https://foolzone.com/play/hironaka-blow-up
 
 `/play/` is the colorful splash page leading to the current essays/labs and both Let’s Get Lost collections. The expanded directory with source links is `/play/experiments.html`. Edit those HTML files, `css/play.css`, and `css/splash.css`; no build is needed. `/lets-get-lost/index.html` gives the preserved sketches a working entrance. `/playground/` is served by its separate existing repository and retains its current address.
 
-The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva is a separate project and is not included on the Foolzone splash or experiments index.
+The index links to the existing Direction Field Lab and multiagent deployments. It does not copy or alter those projects; the budget-free Commons Game publication remains a separate backlog item. Botisattva remains a separate project at `botisattva.org`, with a working-conclusions teaser page linked at `/play/botisattva/`.
 
 ## Local remix workbench
 
