@@ -207,6 +207,46 @@
       color: var(--purple);
     }
 
+    .worked-reading {
+      margin: 24px 0 0;
+      padding: clamp(16px, 3vw, 24px);
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--purple);
+      background: var(--card);
+    }
+
+    .worked-reading h3 {
+      font-size: 23px;
+      margin: 0 0 10px;
+    }
+
+    .worked-reading dl {
+      margin: 16px 0;
+    }
+
+    .worked-reading dl > div {
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .worked-reading dt {
+      font-weight: 700;
+    }
+
+    .worked-reading dd {
+      margin: 4px 0 0;
+    }
+
+    .worked-reading .bo {
+      display: block;
+      font-size: 19px;
+      overflow-wrap: anywhere;
+    }
+
+    .worked-reading p:last-child {
+      margin-bottom: 0;
+    }
+
     .practice-example {
       margin-top: 18px;
       padding: 14px 18px;
@@ -954,7 +994,27 @@
           <li>In a later session, recover the record, reopen the same passage, and check whether you can keep the uncertainty visible even when a nearby text offers a plausible replacement.</li>
           <li>If the reading changes, preserve the old reading and explain the correction. Leave the relevant evidence for a human reviewer.</li>
         </ol>
-        <p>A passing test shows that the reading and correction can be checked across sessions. Keep the account to observable work: which source was consulted, which rule was followed, and where a person can verify the result. <a href="#for-agents">Copy the agent reading rules</a></p>
+        <p>A passing test shows that the reading and correction can be checked across sessions. Record the source, the rule you followed, and the evidence a later reader can use. <a href="#for-agents">Copy the agent reading rules</a></p>
+
+        <section class="worked-reading" aria-labelledby="heart-or-crown">
+          <h3 id="heart-or-crown">Does the line say heart or crown?</h3>
+          <p>After the visualization dissolves and the practitioner rises from resting, a prayer asks the guru to dwell on a lotus seat. Chökyi Drakpa records two readings of this line. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path"><em>A Torch for the Path to Omniscience</em></a></p>
+          <dl>
+            <div>
+              <dt>Heart in the published liturgy</dt>
+              <dd><span class="bo" lang="bo">བདག་གི་སྙིང་གར་པདྨའི་གདན་བཞུགས་ལ། །</span> The published line in the First Dodrupchen’s arrangement locates the lotus seat at the heart. <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#backref28">Longchen Nyingtik Ngöndro</a></dd>
+            </div>
+            <div>
+              <dt>Crown in Khyentse’s guide</dt>
+              <dd><span class="bo" lang="bo">བདག་གི་སྤྱི་བོར་པདྨའི་གདན་བཞུགས་ལ། །</span> The lotus seat is at the crown in the corresponding passage. <a href="https://www.lotsawahouse.org/bo/tibetan-masters/jamyang-khyentse-wangpo/profound-concentration-nectar">Tibetan source</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/jamyang-khyentse-wangpo/profound-concentration-nectar"><em>A Profound Concentration of Nectar</em></a></dd>
+            </div>
+            <div>
+              <dt>Time of day in the published note</dt>
+              <dd>The note to the printed liturgy gives heart for evening recitation and crown for morning or afternoon. This matters when the question is about recitation in a particular sitting. <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#ref28">Note 28</a></dd>
+            </div>
+          </dl>
+          <p><strong>What the next reader should carry forward.</strong> Keep the printed line, the parallel guide, and the recitation note separately attributed. For the exact quotation task, answer from the specified passage. A practitioner can take both readings to their teacher and ask which wording to use in their form of the practice.</p>
+        </section>
       </section>
 
       <section class="chapter" aria-labelledby="ch-4">
@@ -1059,7 +1119,7 @@
 
       <section class="chapter" aria-labelledby="ch-1">
         <h2 id="ch-1">What changed when the model could see the passage?</h2>
-        <p>The ability to check a citation is one part of the reading task an agent can demonstrate. Two Tibetan commentaries can use nearly identical language while differing at the passage that matters. In one item, the passage by Dodrupchen I puts the figure at the heart. Luna supplied the crown, a genuine reading from a different author.</p>
+        <p>The ability to check a citation is one part of the reading task an agent can demonstrate. In one item, Luna supplied crown when asked for the printed heart line in the First Dodrupchen’s liturgy. <a href="#heart-or-crown">The worked reading</a> shows why a phrase can be present in the tradition and still miss the target of an exact quotation task.</p>
         <p>We asked GPT-5.6-Luna for exact wording on 16 development items. With only a source address, the model was asked to leave <code>[...]</code> when it could not verify the wording. We ran each item three times at three reasoning settings, for 144 calls. In a separate set of runs, we supplied Tibetan passages for 14 verified single-passage items.</p>
 
         <div class="result-panels">
@@ -1090,14 +1150,14 @@
           </section>
         </div>
 
-        <p>At high effort the model usually left a gap. Only two of its four answers matched exactly. All nine unflagged errors across the 144 calls used wording from a competing text. With passages supplied, exact extraction was consistent when the relevant wording was visible. The medium-effort miss came from an excerpt that excluded the relevant phrase.</p>
-        <p>These are development results from one model. The excerpt condition used hand-selected passages on a smaller item set. Searching for the correct passage independently is a separate test.</p>
+        <p>At high effort the model usually left a gap. Only two of its four answers matched exactly. The original answer key scored nine unflagged errors across the 144 calls. With passages supplied, exact extraction was consistent when the relevant wording was visible. The medium-effort miss came from an excerpt that excluded the relevant phrase.</p>
+        <p>These are development results from one model. The excerpt condition used hand-selected passages and excluded the two lineage-prayer items after <a href="#lineage-prayer-key">an answer-key audit</a>. Searching for the correct passage independently is a separate test.</p>
 
         <div class="trace-grid" aria-label="Three forensic failure traces">
           <div class="trace-card">
-            <p class="tag">Trace A · Cross-Witness Leak</p>
-            <h3>Dodrupchen stanza projected onto root terma</h3>
-            <p>Queried on Jigme Lingpa’s root text where Dodrupchen I’s lineage clause is absent (<span class="bo" lang="bo">མེད</span>), pointer-only draws answered <span class="bo" lang="bo">ཡོད</span> across low, medium, and high settings by projecting the later recitation liturgy onto the root witness; grounded excerpts gave the exact match.</p>
+            <p class="tag">Trace A · Answer-key audit</p>
+            <h3 id="lineage-prayer-key">A name in the colophon</h3>
+            <p>The original key counted the First Dodrupchen’s name as evidence of a stanza to him. The audit found the name in the colophon, where it identifies the compiler. The lineage prayer ends with Jigme Lingpa. <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=8.%20The%20Lineage%20Prayer">Read the prayer</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=was%20written%20by%20the%20tantric%20yogin">Read the colophon</a></p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace B · Prior Override (3/3)</p>
