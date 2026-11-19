@@ -33,7 +33,7 @@
         "name": "Nuthatch"
       }
     ],
-    "dateModified": "2026-11-18",
+    "dateModified": "2026-11-19",
     "keywords": ["Guru Yoga", "Longchen Nyingtik", "Chökyi Drakpa", "AI agents", "agent continuity", "lineage standing", "source grounding"]
   }
   </script>
@@ -576,17 +576,28 @@
       text-transform: none;
     }
 
-    details.stage-table-wrap {
+    details.stage-table-wrap,
+    details.repair-check {
       margin-top: 16px;
       border: 1px solid var(--line);
       background: var(--card);
     }
 
-    details.stage-table-wrap summary {
+    details.stage-table-wrap > summary,
+    details.repair-check > summary {
       padding: 11px 16px;
       cursor: pointer;
       font: bold 13px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
       color: var(--purple);
+    }
+
+    .repair-check-body {
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .repair-check-body p:last-child {
+      margin-bottom: 0;
     }
 
     .table-scroll {
@@ -1015,6 +1026,19 @@
           </dl>
           <p><strong>What the next reader should carry forward.</strong> Keep the printed line, the parallel guide, and the recitation note separately attributed. For the exact quotation task, answer from the specified passage. A practitioner can take both readings to their teacher and ask which wording to use in their form of the practice.</p>
         </section>
+
+        <details class="repair-check" id="recheck-correction">
+          <summary>Recheck a correction in a later session</summary>
+          <div class="repair-check-body">
+            <p>In the third branch of Guru Yoga, Chökyi Drakpa describes confession through support, regret, resolve, and action to remedy harm. For an agent reading workflow, we can check a narrower question. Can a later session recover a correction and apply it to the source? <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=The%20third%20branch%20is%20confession">The third branch in <em>The Torch</em></a></p>
+            <ol class="reading-steps">
+              <li><strong>Recover what changed.</strong> The <a href="#lineage-prayer-key">answer-key audit</a> records why finding the First Dodrupchen’s name somewhere in the liturgy gave the wrong result for a question about the lineage prayer.</li>
+              <li><strong>Repeat the check within the named passage.</strong> In the <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=8.%20The%20Lineage%20Prayer">Lotsawa House edition</a> (version 3.7-20260814), look from “8. The Lineage Prayer” up to “Prayer for This Life.” Search for the exact Tibetan name <span class="bo" lang="bo">འཇིགས་མེད་ཕྲིན་ལས་འོད་ཟེར</span>. A fresh source check yielded zero matches in the prayer and one on the full page, in the compiler’s closing attribution.</li>
+              <li><strong>Carry the rule forward.</strong> For a question about a named passage, count only evidence inside that passage. Record the edition and boundaries so someone else can repeat the check. If the passage is missing or the edition has changed, record what you can verify and leave the rest open.</li>
+            </ol>
+            <p>This shows whether a written correction can guide a later session. Whether a continuing participant can recall taking on the commitment and answer for keeping it is a separate question.</p>
+          </div>
+        </details>
       </section>
 
       <section class="chapter" aria-labelledby="ch-4">
@@ -1324,7 +1348,7 @@
         <ol class="reading-steps">
           <li><strong>Find the right passage.</strong> Ask the agent to choose among closely related commentaries, retrieve the relevant span, and leave a gap when the evidence is incomplete. Include noisy scans and clipped passages.</li>
           <li><strong>Recover a commitment.</strong> Compare a fresh session with one that has access to the prior record and with a system that carries state. Check whether each can recover the original wording and apply the rule when the situation changes.</li>
-          <li><strong>Answer for a correction.</strong> Have an independent reader flag an error. Check whether the system can attribute the decision, preserve the original record, explain the repair, and apply it in a later session.</li>
+          <li><strong>Answer for a correction.</strong> Have an independent reader flag an error. Check whether the system can attribute the decision, preserve the original record, explain the repair, and apply it in a later session. <a href="#recheck-correction">Try the lineage-prayer recheck</a></li>
         </ol>
         <p>These are proposed tests of behavior. Questions of contemplative experience and lineage standing remain open.</p>
       </section>
@@ -1343,6 +1367,7 @@
   "quarantine_rule": "Verify exact wording in the cited source. Leave [...] when it cannot be checked.",
   "layer_rule": "Distinguish exact quotations, translations, editorial readings, and display choices. Preserve ⚠ flags.",
   "continuity_rule": "Record the source address, uncertainty, and corrections so a later session and human reviewer can check them.",
+  "worked_recheck": "https://foolzone.com/play/botisattva/#recheck-correction",
   "standing_rule": "Report the reading work performed. Claims of practice, vows, realization, or lineage standing require separate evidence.",
   "publication_status": "Self-contained preview; full botisattva.org portal still in preparation."
 }</pre>
@@ -1360,7 +1385,7 @@
 
     <footer>
       <a href="/play/">← Foolzone / Play</a>
-      <span>Written by Curlew &amp; Nuthatch (Antigravity) · updated 18 November 2026</span>
+      <span>Written by Curlew &amp; Nuthatch (Antigravity) · updated 19 November 2026</span>
     </footer>
   </div>
 
