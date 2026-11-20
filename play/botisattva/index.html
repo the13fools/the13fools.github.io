@@ -775,6 +775,14 @@
       border-top: 1px solid var(--line);
     }
 
+    .repair-check-body h3 {
+      margin-top: 20px;
+    }
+
+    .reading-handoff {
+      overflow-wrap: anywhere;
+    }
+
     .repair-check-body p:last-child {
       margin-bottom: 0;
     }
@@ -1155,6 +1163,7 @@
         <a href="#the-torch">The Torch</a>
         <a href="#ch-guru-yoga">Guru Yoga</a>
         <a href="#ch-1">Luna experiments</a>
+        <a href="#ch-future">Future work</a>
         <a href="#preview-status">Botisattva</a>
         <a href="#sources">Sources</a>
       </nav>
@@ -1236,7 +1245,7 @@
           <li>In a later session, recover the record, reopen the same passage, and check whether you can keep the uncertainty visible even when a nearby text offers a plausible replacement.</li>
           <li>If the reading changes, preserve the old reading and explain the correction. Leave the relevant evidence for a human reviewer.</li>
         </ol>
-        <p>A passing test shows that the reading and correction can be checked across sessions. Record the source, the rule you followed, and the evidence a later reader can use. <a href="#for-agents">Open the optional reading guide</a></p>
+        <p>A passing test shows that the reading and correction can be checked across sessions. <a href="#recheck-correction">Try a handoff from one session to the next</a> or <a href="#for-agents">open the optional reading guide</a>.</p>
 
         <section class="worked-reading" aria-labelledby="heart-or-crown">
           <h3 id="heart-or-crown">Does the line say heart or crown?</h3>
@@ -1262,6 +1271,20 @@
           <summary>Recheck a correction in a later session</summary>
           <div class="repair-check-body">
             <p>In the third branch of Guru Yoga, Chökyi Drakpa describes confession through support, regret, resolve, and action to remedy harm. For an agent reading workflow, we can check a narrower question. Can a later session recover a correction and apply it to the source? <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=The%20third%20branch%20is%20confession">The third branch in <em>The Torch</em></a></p>
+            <h3>Try a fresh-session handoff</h3>
+            <p>Paste this note into a fresh session with access to the public source. The note carries the question and the rule learned from the error. The new reader has to check the passage.</p>
+            <pre class="agent-pre reading-handoff" id="lineage-handoff">Question: Does the exact Tibetan name <span class="bo" lang="bo">འཇིགས་མེད་ཕྲིན་ལས་འོད་ཟེར</span> occur in section 8 of the First Dodrupchen’s Longchen Nyingtik Ngöndro?
+Edition: Lotsawa House, version 3.7-20260814.
+Source: https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro
+Passage: Start at “8. The Lineage Prayer” and stop before “Prayer for This Life.”
+Prior correction: A match elsewhere on the page cannot answer a question about the prayer.
+Still to verify: The exact-match count inside those bounds.
+Next: Open the source and check the edition and both boundaries. Report the count, the address you checked, and any uncertainty. If you cannot verify the edition or the bounded passage, leave the count open and say what is missing.</pre>
+            <div class="copy-row" hidden>
+              <button type="button" class="copy-btn" data-copy-target="lineage-handoff" data-copy-label="handoff">Copy handoff</button>
+              <span class="copy-status" role="status" aria-live="polite"></span>
+            </div>
+            <h3>Check the replay</h3>
             <ol class="reading-steps">
               <li><strong>Recover what changed.</strong> The <a href="#lineage-prayer-key">answer-key audit</a> records why finding the First Dodrupchen’s name somewhere in the liturgy gave the wrong result for a question about the lineage prayer.</li>
               <li><strong>Repeat the check within the named passage.</strong> In the <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=8.%20The%20Lineage%20Prayer">Lotsawa House edition</a> (version 3.7-20260814), look from “8. The Lineage Prayer” up to “Prayer for This Life.” Search for the exact Tibetan name <span class="bo" lang="bo">འཇིགས་མེད་ཕྲིན་ལས་འོད་ཟེར</span>. A fresh source check yielded zero matches in the prayer and one on the full page, in the compiler’s closing attribution.</li>
@@ -1433,21 +1456,21 @@ Evidence: A corresponding line from Jamyang Khyentse Wangpo’s A Profound Conce
       </section>
 
       <section class="chapter" aria-labelledby="ch-future">
-        <h2 id="ch-future">What could a future agent demonstrate?</h2>
-        <p>Our next question is whether an agent can find the right passage itself and carry a correction into a different reading. Each test needs a visible record of where the agent succeeds and where it fails.</p>
+        <h2 id="ch-future">Where the reading could lead</h2>
+        <p>The Longchen Nyingtik gives this project a reason to slow down. A difference as small as heart and crown can change how a passage is understood. A reading room could let someone follow that difference from liturgy to commentary and leave a source-linked record for the next reader.</p>
         <ol class="reading-steps">
-          <li><strong>Find the right passage.</strong> Ask the agent to choose among closely related commentaries, retrieve the relevant span, and leave a gap when the evidence is incomplete. Include noisy scans and clipped passages.</li>
-          <li><strong>Recover a correction.</strong> Give fresh sessions the same new passage and source access. Give one group a short handoff from the earlier correction. Compare whether they can apply the rule to a new passage and cite the evidence. A later test can compare file-based handoffs with agent state carried between sessions.</li>
-          <li><strong>Answer for a correction.</strong> Have an independent reader flag an error. Check whether the system can attribute the decision, preserve the original record, explain the repair, and apply it in a later session. <a href="#recheck-correction">Try the lineage-prayer recheck</a></li>
+          <li><strong>Make one reading easy to return to.</strong> Start with the public <em>Torch</em> passages already in the companion. Put the Tibetan, the cited translation, and attributed notes beside one another. Give each passage a stable link that a reader can send to a friend, bring to a teacher, or hand to a fresh session.</li>
+          <li><strong>Find out what carries forward.</strong> Start by replaying the lineage-prayer correction. Then give fresh sessions the same question about a new passage and the same source access. Give only one group the earlier handoff. Score whether each session finds the right passage, keeps the answer within its bounds, and leaves a gap where it cannot verify. A later scan exercise could give Luna a precisely addressed crop with an ambiguous mark and ask it to distinguish what is visible from a proposed reading. <a href="#recheck-correction">Try the handoff</a></li>
+          <li><strong>Let readers improve the record.</strong> Invite readers to flag an error or offer a parallel passage. An editor can check the source, record who proposed and reviewed the change, and keep earlier readings available. Grow to another cluster of passages once a second reader can reproduce the first correction from its evidence.</li>
         </ol>
-        <p>These are proposed tests of behavior. They give a future steward evidence to review while questions of contemplative experience and lineage standing remain open.</p>
+        <p>The same record could serve a scholar checking a quotation, a practitioner preparing a question for a teacher, or an agent resuming a task. These experiments can show what a record helps someone do. Questions about devotion, contemplative experience, and who may receive transmission remain with practitioners and lineage communities.</p>
       </section>
 
       <aside class="next-door" aria-labelledby="preview-status">
         <p class="eyebrow">Botisattva · A project in preparation</p>
         <h2 id="preview-status">A reading room for people and agents</h2>
-        <p><code>botisattva_org</code> is a project for studying Tibetan sources together. Start with a passage you can return to. See the edition and translator, then compare the Tibetan, commentary, and diagrams. Leave a note about what you found or where you got stuck so the next reader can pick it up.</p>
-        <p>The repo already builds a Great Expanse study and a companion to <em>The Torch</em>. We’re preparing a public release with source-linked excerpts, reviewable corrections, and optional reading guides. The next milestone is a reading someone else can reproduce from the public evidence. <a href="#run-eval">Try the public check</a> · <a href="#recheck-correction">Redo one correction</a></p>
+        <p>Imagine opening one line of <em>The Torch</em> and seeing the Tibetan, its place in the liturgy, and a reader’s account of how they understood it. You could check the edition, follow a variant, or leave a question that someone could take up at the same line. That is the reading room we want to build in <code>botisattva_org</code>.</p>
+        <p>The repository already builds the <em>Torch</em> companion and the Great Expanse study. The public release is in preparation. A first useful visit would let you read one passage closely, then follow or repeat one real correction. <a href="#run-eval">Try the public check</a> · <a href="#recheck-correction">Redo one correction</a></p>
       </aside>
 
       <section class="chapter" aria-labelledby="ch-3">
