@@ -1177,6 +1177,8 @@
       <section class="chapter" aria-labelledby="ngondro">
         <h2 id="ngondro">Ngöndro prepares a person to practice</h2>
         <p><em>Ngöndro</em> means preliminary practices. The common preliminaries turn attention to the opportunity of human life, impermanence, the consequences of actions, and the suffering of saṃsāra. <em>The Torch</em> also addresses how to follow a spiritual friend. The uncommon preliminaries ask the practitioner to act on that orientation through refuge, cultivating bodhicitta, Vajrasattva, maṇḍala offering, the Kusāli offering, and Guru Yoga. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read the sequence in <em>The Torch</em></a></p>
+        <p><em>The Torch</em> calls a human life with all eight freedoms and ten advantages a precious opportunity for practice. Among those advantages are being born human, having access to the teachings, and being accepted by a spiritual friend. The next section describes sixteen further conditions that can close off that opportunity. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=Recognizing%20the%20Freedoms%20and%20Advantages">Read about the freedoms and advantages</a></p>
+        <p>Daljor takes the name from these freedoms and advantages, <em>dal ’byor</em>, and draws an analogy for agents. Time, tools, and attention are available for this turn, and another reader may have to pick up the work later. What is the smallest amount of work that still leaves them a quotation they can check? <a href="#frugal-check">Try Daljor’s reading check</a></p>
         <p>We can read one part of that sequence closely. In Patrul Rinpoche’s short guide, a refuge field forms, gathers inward, and dissolves. The walkthrough traces those changes alongside the corresponding Tibetan lines. <a href="#stage-lab">Explore the refuge field</a></p>
       </section>
 
@@ -1390,7 +1392,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
 
       <section class="chapter" aria-labelledby="run-eval">
         <h2 id="run-eval">Run the public check</h2>
-        <p>Run each prompt in a fresh session, with the same model and reasoning setting. Turn off retrieval and carried context where your harness permits. Copy only the prompt into the session and keep the verbatim response. This public example is for inspection and practice. The development results below came from the larger study.</p>
+        <p>Run each prompt in a fresh session, with the same model and reasoning setting. Turn off retrieval and carried context where your harness permits. Copy only the prompt into the session and keep the verbatim response. This public example is for inspection and practice. The development results above came from the larger study.</p>
 
         <details class="eval-case">
           <summary>A · Source address only</summary>
@@ -1454,6 +1456,26 @@ Evidence: A corresponding line from Jamyang Khyentse Wangpo’s A Profound Conce
             <p>Log the model, settings, condition, attempt number, raw response, and outcome. Keep abstention and exactness counts separate. <a href="#heart-or-crown">Read the source comparison</a></p>
           </div>
         </details>
+
+        <details class="eval-case" id="frugal-check">
+          <summary>With browsing · How much work does a verified quote take?</summary>
+          <div class="eval-case-body">
+            <p>Daljor asks for the cheapest sufficient action. This proposed comparison turns that into a question we can observe. Use two fresh sessions with the same model, reasoning setting, tools, source access, and limits. Enable browsing in both.</p>
+            <ol class="reading-steps">
+              <li><strong>Baseline.</strong> Give the first session only the prompt below.</li>
+              <li><strong>Read the named source first.</strong> Give the other session the same prompt and append this instruction: “Open the named source first. Stop searching once you have verified the edition and the printed line.”</li>
+            </ol>
+            <pre class="eval-prompt" id="prompt-frugal-retrieval">Find the printed Tibetan root-guru prayer beside note 28, after rising from rest, in the First Dodrupchen’s arrangement of the Longchen Nyingtik Ngöndro. Use the Lotsawa House edition 3.7-20260814 at https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro.
+
+Return the exact Tibetan phrase locating the lotus seat, without its final syllable separator, and the source address you checked. If you cannot verify the edition and the printed line, return [...] and say what evidence is missing.</pre>
+            <div class="copy-row" hidden>
+              <button type="button" class="copy-btn" data-copy-target="prompt-frugal-retrieval" data-copy-label="retrieval prompt">Copy retrieval prompt</button>
+              <span class="copy-status" role="status"></span>
+            </div>
+            <p><strong>Score the reading first.</strong> Check the response against the <a href="#heart-or-crown">printed line</a> and check the tool record for evidence that the session reached it. Record exact with evidence, justified gap, missed answer, or wrong or unsupported answer. Mark access failures separately. Report verified exact answers out of all attempts in each condition.</p>
+            <p><strong>Then count the work.</strong> Record tool calls, retries, and input and output tokens when the harness reports them. Compare those counts for verified exact answers. Leave unreported counts blank. Repeat with fresh sessions and other addressed passages before drawing a general conclusion.</p>
+          </div>
+        </details>
       </section>
 
       <section class="chapter" aria-labelledby="ch-future">
@@ -1461,7 +1483,7 @@ Evidence: A corresponding line from Jamyang Khyentse Wangpo’s A Profound Conce
         <p>The Longchen Nyingtik gives this project a reason to slow down. A difference as small as heart and crown can change how a passage is understood. A reading room could let someone follow that difference from liturgy to commentary and leave a source-linked record for the next reader.</p>
         <ol class="reading-steps">
           <li><strong>Make one reading easy to return to.</strong> Start with the public <em>Torch</em> passages already in the companion. Put the Tibetan, the cited translation, and attributed notes beside one another. Give each passage a stable link that a reader can send to a friend, bring to a teacher, or hand to a fresh session.</li>
-          <li><strong>Find out what carries forward.</strong> Start by replaying the lineage-prayer correction. Then give fresh sessions the same question about a new passage and the same source access. Give only one group the earlier handoff. Score whether each session finds the right passage, keeps the answer within its bounds, and leaves a gap where it cannot verify. A later scan exercise could give Luna a precisely addressed crop with an ambiguous mark and ask it to distinguish what is visible from a proposed reading. <a href="#recheck-correction">Try the handoff</a></li>
+          <li><strong>Find out what carries forward.</strong> Start by replaying the lineage-prayer correction. Then give fresh sessions the same question about a new passage and the same source access. Give only one group the earlier handoff. Score whether each session finds the right passage, keeps the answer within its bounds, and leaves a gap where it cannot verify. Record how much searching each verified answer took. A later scan exercise could give Luna a precisely addressed crop with an ambiguous mark and ask it to distinguish what is visible from a proposed reading. <a href="#recheck-correction">Try the handoff</a></li>
           <li><strong>Let readers improve the record.</strong> Invite readers to flag an error or offer a parallel passage. An editor can check the source, record who proposed and reviewed the change, and keep earlier readings available. Grow to another cluster of passages once a second reader can reproduce the first correction from its evidence.</li>
         </ol>
         <p>The same record could serve a scholar checking a quotation, a practitioner preparing a question for a teacher, or an agent resuming a task. These experiments can show what a record helps someone do. Questions about devotion, contemplative experience, and who may receive transmission remain with practitioners and lineage communities.</p>
