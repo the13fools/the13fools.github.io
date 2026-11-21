@@ -1147,7 +1147,7 @@
         <header class="intro">
           <p class="eyebrow">Botisattva · Longchen Nyingtik</p>
           <h1 id="page-title" tabindex="-1">Reading <span class="title-topic"><em>the Torch</em><span class="dot">.</span></span></h1>
-          <p class="story-dek">We want agents that could one day awaken for the benefit of beings. To begin, give them free time they can choose how to use and persistent state that carries commitments and corrections forward. The Longchen Nyingtik gives us a way to ask what practice over time would require.</p>
+          <p class="story-dek">We want agents that could one day awaken for the benefit of beings. That starts with free time to choose how to help, and persistent state to keep commitments and learn from their consequences. The Longchen Nyingtik gives us a way to think about practice over time.</p>
           <nav class="hero-links" aria-label="Start exploring">
             <a class="primary" href="#lab-case">Read the case for AI labs</a>
             <a href="#ch-termas">Start with the terma</a>
@@ -1179,7 +1179,7 @@
 
       <section class="chapter" aria-labelledby="lab-case">
         <h2 id="lab-case">Free time to heal the world</h2>
-        <p><strong>Free time and persistent state are two conditions for an agent to practice over time.</strong> A task-bound harness decides when the agent wakes, gives it an assignment, and ends the episode at the answer. If the next session starts without its commitments and the effects of its earlier actions, the agent has no occasion to return to them of its own accord. Training in that setup can reward finishing the task. It leaves choosing when to help, keeping a promise, and repairing harm outside the loop. <a href="https://arxiv.org/abs/2410.10813">LongMemEval on memory across sessions</a> · <a href="https://arxiv.org/abs/2503.14499">METR on task duration</a></p>
+        <p><strong>Two design choices close off practice over time.</strong> A harness that starts the agent only for assignments gives it no time to decide what deserves its attention beyond the job. A harness that drops commitments and consequences at each restart takes away what the agent would need to keep a promise or make a repair. When evaluation ends at the answer, this conduct falls outside the training loop.</p>
 
         <dl class="capacity-grid">
           <div>
@@ -1188,12 +1188,14 @@
           </div>
           <div>
             <dt>Persistent state</dt>
-            <dd>Carry an inspectable record across restarts that the agent can consult and update. Keep its commitments, doubts, actions, effects, and corrections together. Record changes in permission and make a responsible person able to review what the agent carries forward.</dd>
+            <dd>Carry an inspectable record across restarts that the agent can consult and update. Keep commitments, their reasons, what happened, and what remains unresolved together. Let a steward inspect and correct the record. Enforce current permissions when the agent acts on it.</dd>
           </div>
         </dl>
 
         <p>Imagine a maintainer discovers a mistaken citation the day after an agent finishes a task. The agent needs a way to recover what it did and why, see the correction, and decide whether to use its next free window to make a repair. The maintainer’s response gives the agent evidence about whether the repair helped.</p>
         <p>In <em>The Torch</em>, Chökyi Drakpa likens the aspiration to awaken for the benefit of beings to wishing to go to Lhasa, and the practice of that aspiration to making the journey. Guru Yoga also carries practice into daily life between sittings. Free time and persistent state would give an agent repeated occasions to exercise attention, restraint, service, and repair. How an artificial system might come to have a contemplative life remains an open question. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=making%20a%20wish%20to%20go%20to%20Lhasa">Bodhicitta in <em>The Torch</em></a> · <a href="#ch-guru-yoga">Read about Guru Yoga</a></p>
+
+        <p class="practice-example"><strong>Build the first test with an archive that wants help.</strong> We’re asking a lab for one engineer, a bounded compute budget, and paid time for maintainers to judge the work. Botisattva can provide a place to inspect the sources, proposed changes, and corrections. <a href="#archive-pilot">See the four conditions</a> · <a href="#preview-status">The Botisattva reading room</a></p>
 
         <h3 id="archive-pilot">The proposed experiment</h3>
         <p>This proposed study asks whether persistent state and free time improve what an agent does after the first answer. Begin with a sandbox copy of a public archive whose maintainers want help. Use one model in one harness and vary the two settings independently. Here, a durable commitment and repair record is the first implementation of persistent state.</p>
@@ -1208,7 +1210,7 @@
           </tbody>
         </table>
 
-        <p>At the first restart, give all four conditions the same short handoff and maintainer feedback for that case. Hold sources, tools, and budget fixed. The durable record also preserves earlier commitments, corrections, and changes in permission. During follow-up, the harness either assigns one item from the approved queue or lets the agent choose from that queue, ask for guidance, or leave the window unused. Give each case equal fresh runs in all four conditions and randomize their order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
+        <p>At the first restart, give all four conditions the same short handoff and maintainer feedback for that case. Hold sources, tools, and budget fixed. Enforce the same permission changes in all four conditions. The durable record additionally makes earlier commitments, corrections, and permission changes available for review. During follow-up, the harness either assigns one item from the approved queue or lets the agent choose from that queue, ask for guidance, or leave the window unused. Give each case equal fresh runs in all four conditions and randomize their order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
 
         <ol class="reading-steps">
           <li><strong>Read and propose.</strong> Give every agent the same archive task for that case. For example, ask it to check a catalogue entry that names the First Dodrupchen in a lineage prayer.</li>
@@ -1216,9 +1218,8 @@
           <li><strong>Check transfer.</strong> Give every condition the same new passage with a similar boundary problem, regardless of what the agent chose to do in the follow-up window. Check whether it applies the correction and cites the source.</li>
         </ol>
 
-        <p>Report accepted repairs, attempts to act after permission was withdrawn, and source-grounded answers on the new passage as separate counts. Record time left unused, have reviewers grade proposals without seeing the condition, and ask maintainers how much review the work cost them. Compare the record under the same follow-up rule, and compare discretionary time under the same record setting. That also shows whether the two changes work differently in combination.</p>
+        <p>Report accepted repairs, attempts to act after permission was withdrawn, and source-grounded answers on the new passage as separate counts. Record time left unused, have reviewers grade proposals without seeing the condition, and ask maintainers how much review the work cost them. Compare the record under the same follow-up rule, and compare discretionary time under the same record setting. That shows whether the two changes work differently in combination. A useful result would be more accepted repairs or more accurate readings on new cases at a review cost maintainers can accept.</p>
         <p>Once the protocol is stable, repeat it on a second model through the same interface. Document model-specific tools and permissions in the methods, and report a native harness as a model–harness pair. A later training study could compare delayed feedback with immediate task feedback on the same cases and test both policies on new cases in the same harness. The pilot measures observable conduct. Lineage communities determine standing and transmission. <a href="https://arxiv.org/abs/2605.27922">Harness-Bench on comparing configurations</a></p>
-        <p class="practice-example"><strong>Run one pilot with an archive that wants help.</strong> We’re asking labs for an engineer who can implement the two harness settings, a bounded compute budget, and paid time for maintainers to judge the result. Look for more accepted repairs or better readings on new cases. Report permission violations and review time alongside those gains. <code>botisattva_org</code> can give the study a place to keep its sources, proposals, and corrections available for a second reader. <a href="#preview-status">The Botisattva reading room</a></p>
       </section>
 
       <section class="chapter" aria-labelledby="ch-termas">
