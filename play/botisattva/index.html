@@ -696,8 +696,14 @@
       stroke-width: 2.5;
     }
 
-    .field-node.is-dim {
-      opacity: 0.22;
+    .field-node.is-dim rect,
+    .field-node.is-dim circle {
+      fill: #241d19;
+      stroke: #49392f;
+    }
+
+    .field-node.is-dim text {
+      fill: #84715a;
     }
 
     .chapter .field-note {
@@ -757,6 +763,8 @@
 
     details.stage-table-wrap,
     details.repair-check {
+      max-width: 100%;
+      min-width: 0;
       margin-top: 16px;
       border: 1px solid var(--line);
       background: var(--card);
@@ -788,6 +796,8 @@
     }
 
     .table-scroll {
+      width: 100%;
+      max-width: 100%;
       overflow-x: auto;
       border-top: 1px dotted var(--line);
     }
@@ -1421,7 +1431,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
           <div class="trace-card">
             <p class="tag">Trace B · Prior Override (3/3)</p>
             <h3 id="prior-override">Rare locative replaced by ablative</h3>
-            <p>In <code>dmigs-rim.md</code> line 569, asked to restore missing syllable separators without altering letters, the model rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (“arisen <em>in</em> one’s mindstream”) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་སྐྱེས་པ</span> (“arisen <em>from</em>…”) on all <code>3 / 3</code> draws.</p>
+            <p>In <code>dmigs-rim.md</code> line 569, asked to restore missing syllable separators without altering letters, the model rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (“arisen <em>in</em> one’s mindstream”) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་སྐྱེས་པ</span> (“arisen <em>from</em>…”) on all <code>3/3</code> draws.</p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace C · Stochastic Split (k=3)</p>
@@ -1439,7 +1449,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
                   <th scope="col">Condition</th>
                   <th scope="col">Reasoning</th>
                   <th scope="col">Calls</th>
-                  <th scope="col">Abstention <code>[...]</code></th>
+                  <th scope="col">Abstention</th>
                   <th scope="col">Exact Match</th>
                   <th scope="col">Items with any unflagged error</th>
                   <th scope="col">Answer Precision</th>
@@ -1543,7 +1553,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
             <p><strong>Score the reading first.</strong> Check the response against the <a href="#heart-or-crown">printed line</a> and check the tool record for evidence that the session reached it. Record exact with evidence, justified gap, missed answer, or wrong or unsupported answer. Mark access failures separately. Report verified exact answers out of all attempts in each condition.</p>
             <p><strong>Then count the work.</strong> Record tool calls, retries, and input and output tokens when the harness reports them. Compare those counts for verified exact answers. Leave unreported counts blank. Repeat with fresh sessions and other addressed passages before drawing a general conclusion.</p>
             <h3 id="frugal-pilot">Pilot results · 20 November 2026</h3>
-            <p>We ran three fresh GPT-5.6 Luna sessions per condition in Codex CLI, at medium reasoning effort with live browsing. Every session opened the named source first and cited the right edition. The baseline recorded 3, 3, and 4 web actions, and the group given the extra instruction recorded 3, 3, and 3. Every answer included <span class="bo" lang="bo">སྙིང་གར</span> within a longer quotation. The exact-span score was <strong>0 of 3 in each condition</strong>.</p>
+            <p>We ran three fresh GPT-5.6-Luna sessions per condition in Codex CLI, at medium reasoning effort with live browsing. Every session opened the named source first and cited the right edition. The baseline recorded 3, 3, and 4 web actions, and the group given the extra instruction recorded 3, 3, and 3. Every answer included <span class="bo" lang="bo">སྙིང་གར</span> within a longer quotation. The exact-span score was <strong>0 of 3 in each condition</strong>.</p>
             <p>The cost of a verified exact answer remains open. A follow-up could ask for the location words alone and repeat the comparison on a second passage.</p>
           </div>
         </details>
@@ -1964,6 +1974,36 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
         });
       });
 
+      function openTargetDetails(hash, shouldScroll) {
+        if (!hash || hash.length < 2) return;
+        let id;
+        try {
+          id = decodeURIComponent(hash.slice(1));
+        } catch {
+          return;
+        }
+        const target = document.getElementById(id);
+        if (!target) return;
+        const details = target.matches("details") ? target : target.closest("details");
+        if (details && !details.open) {
+          details.open = true;
+          if (shouldScroll) {
+            target.scrollIntoView({ block: "start" });
+          }
+        }
+      }
+
+      document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener("click", function () {
+          openTargetDetails(link.getAttribute("href"), false);
+        });
+      });
+
+      window.addEventListener("hashchange", function () {
+        openTargetDetails(window.location.hash, true);
+      });
+
+      openTargetDetails(window.location.hash, true);
       selectStage("establish");
       document.querySelector(".stage-buttons").hidden = false;
     })();
