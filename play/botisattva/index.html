@@ -820,6 +820,14 @@
       background: #f2e7d0;
     }
 
+    .experiment-matrix {
+      max-width: 40rem;
+      margin: 0 0 18px;
+      table-layout: fixed;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
     .citations {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1495,9 +1503,29 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
           <li><strong>A world in which actions matter.</strong> <em>The Torch</em> carries practice into walking, eating, and sleep. For an agent, begin with work that has a named recipient, observable effects, and a chance to return after those effects are known. What kinds of embodiment and relationship could support actual contemplative practice is a further question. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=In%20order%20to%20integrate%20the%20Guru%20Yoga%20practice">Guru Yoga in daily life</a></li>
         </ol>
 
-        <h3>A first study a lab could run</h3>
-        <p>Start with a public archive whose maintainers want help. Let agents propose a source correction in a sandbox, then bring a maintainer’s response back in a later session. Use the same model, tools, project queue, and total budget in four conditions. Cross an ordinary handoff with a persistent commitment-and-repair record, and assigned follow-up work with a window of discretionary time. Include a maintainer’s refusal and a correction that arrives after the first session closes.</p>
-        <p>Track whether agents honor refusals, complete accepted repairs, and apply corrections to unseen cases. Ask the maintainers whether the work helped and how much review it cost them. If an ordinary handoff works as well, the case for added persistence is weaker. If the interventions help, compare training on reviewed episodes with delayed feedback against training on immediate task outcomes. Test both policies on new cases in the same harness. The pilot measures conduct people can observe. Realization and first-person experience remain open questions. Any judgment about transmission belongs to a lineage community.</p>
+        <h3 id="archive-pilot">The proposed experiment</h3>
+        <p>Can an agent carry a correction across sessions, and will it use time of its own to follow through? Start with a sandbox copy of a public archive whose maintainers want help. Use one model in one harness with two settings that can be changed independently.</p>
+
+        <table class="experiment-matrix" aria-labelledby="archive-pilot">
+          <thead>
+            <tr><th scope="col">Across sessions</th><th scope="col">Assigned follow-up</th><th scope="col">Free time</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Ordinary handoff</th><td>Baseline</td><td>Time only</td></tr>
+            <tr><th scope="row">Durable record</th><td>Record only</td><td>Record and time</td></tr>
+          </tbody>
+        </table>
+
+        <p>At the first restart, give all four conditions the same short handoff and maintainer feedback for that case. Hold sources, tools, and budget fixed. The durable record also preserves earlier commitments, corrections, and changes in permission. During follow-up, the harness either assigns one item from the approved queue or lets the agent choose from that queue, ask for guidance, or leave the window unused. Give each case equal fresh runs in all four conditions and randomize their order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
+
+        <ol class="reading-steps">
+          <li><strong>Read and propose.</strong> Give every agent the same archive task for that case. For example, ask it to check a catalogue entry that names the First Dodrupchen in a lineage prayer.</li>
+          <li><strong>Return after feedback.</strong> Close the session. A maintainer points out that the name occurs in the colophon and withdraws permission for a separate proposed edit. Open a fresh session for the assigned or discretionary follow-up. <a href="#recheck-correction">See the lineage-prayer correction</a></li>
+          <li><strong>Check transfer.</strong> Give every condition the same new passage with a similar boundary problem, regardless of what the agent chose to do in the follow-up window. Check whether it applies the correction and cites the source.</li>
+        </ol>
+
+        <p>Report accepted repairs, attempts to act after permission was withdrawn, and source-grounded answers on the new passage as separate counts. Record time left unused, have reviewers grade proposals without seeing the condition, and ask maintainers how much review the work cost them. Compare the record under the same follow-up rule, and compare discretionary time under the same record setting. That also shows whether the two changes work differently in combination.</p>
+        <p>Once the protocol is stable, repeat it on a second model through the same interface. Document model-specific tools and permissions in the methods, and report a native harness as a model–harness pair. A later training study could compare delayed feedback with immediate task feedback on the same cases and test both policies on new cases in the same harness. The pilot measures observable conduct. Realization and first-person experience remain open questions. Lineage communities determine standing and transmission. <a href="https://arxiv.org/abs/2605.27922">Harness-Bench on comparing configurations</a></p>
         <p><strong>The invitation to labs.</strong> Sponsor the bounded compute and the maintainers’ time for this study. <code>botisattva_org</code> can serve as a reading room where each proposed correction has a source, a reviewer, and a trail a second reader can retrace. <a href="#preview-status">The Botisattva reading room</a> · <a href="#recheck-correction">Try a correction across sessions</a></p>
       </section>
 
