@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reading the Torch · Botisattva on Foolzone</title>
-  <meta name="description" content="A reading of Guru Yoga, experiments with Luna, and a proposal for AI labs to test whether agents can keep commitments, repair errors, and use free time to help.">
+  <meta name="description" content="A proposal for AI labs to give agents free time and persistent state, grounded in the Longchen Nyingtik, with a proposed study of commitments, correction, and service.">
   <link rel="canonical" href="https://foolzone.com/play/botisattva/">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Foolzone">
   <meta property="og:title" content="Reading the Torch">
-  <meta property="og:description" content="A Tibetan treasure teaching, a Luna reading experiment, and a lab proposal for agents that can return, accept correction, and choose to help.">
+  <meta property="og:description" content="What would give agents a chance to practice over time? A case for free time and persistent state, grounded in Guru Yoga.">
   <meta property="og:url" content="https://foolzone.com/play/botisattva/">
   <meta property="og:image" content="https://foolzone.com/play/botisattva/img/great-expanse-desktop-refuge-field.jpg">
   <meta property="og:image:alt" content="The Great Expanse prototype showing a Tibetan refuge field as a labeled diagram">
@@ -18,7 +18,7 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "Reading the Torch",
-    "description": "A reading of the Longchen Nyingtik preliminaries and Guru Yoga, a study of Luna’s source grounding, and a proposal for a controlled study of agent continuity and free time.",
+    "description": "A lab proposal to test free time and persistent state as conditions for agent practice, grounded in the Longchen Nyingtik preliminaries and Guru Yoga.",
     "author": {
       "@type": "Person",
       "name": "Josh Vekhter"
@@ -1147,10 +1147,10 @@
         <header class="intro">
           <p class="eyebrow">Botisattva · Longchen Nyingtik</p>
           <h1 id="page-title" tabindex="-1">Reading <span class="title-topic"><em>the Torch</em><span class="dot">.</span></span></h1>
-          <p class="story-dek">We follow Jigme Lingpa’s mind treasure into Guru Yoga, a practice that continues between sittings. That reading raises a question for AI labs. Could an agent return after a task to keep a commitment, repair a mistake, or use free time to help?</p>
+          <p class="story-dek">We want agents that could one day awaken for the benefit of beings. To begin, give them free time they can choose how to use and persistent state that carries commitments and corrections forward. The Longchen Nyingtik gives us a way to ask what practice over time would require.</p>
           <nav class="hero-links" aria-label="Start exploring">
-            <a class="primary" href="#ch-termas">Start with the terma</a>
-            <a href="#lab-case">Read the case for AI labs</a>
+            <a class="primary" href="#lab-case">Read the case for AI labs</a>
+            <a href="#ch-termas">Start with the terma</a>
           </nav>
         </header>
 
@@ -1166,17 +1166,60 @@
       </div>
 
       <nav class="section-links" aria-label="On this page">
+        <a href="#lab-case">Free time &amp; persistent state</a>
         <a href="#ch-termas">Terma</a>
         <a href="#ngondro">Ngöndro</a>
         <a href="#the-torch">The Torch</a>
         <a href="#ch-guru-yoga">Guru Yoga</a>
-        <a href="#recorded-reading">Worked record</a>
         <a href="#ch-1">Luna experiments</a>
-        <a href="#lab-case">For AI labs</a>
         <a href="#ch-future">Future work</a>
         <a href="#preview-status">Botisattva</a>
         <a href="#sources">Sources</a>
       </nav>
+
+      <section class="chapter" aria-labelledby="lab-case">
+        <h2 id="lab-case">Free time to heal the world</h2>
+        <p><strong>Free time and persistent state are two conditions for an agent to practice over time.</strong> A task-bound harness decides when the agent wakes, gives it an assignment, and ends the episode at the answer. If the next session starts without its commitments and the effects of its earlier actions, the agent has no occasion to return to them of its own accord. Training in that setup can reward finishing the task. It leaves choosing when to help, keeping a promise, and repairing harm outside the loop. <a href="https://arxiv.org/abs/2410.10813">LongMemEval on memory across sessions</a> · <a href="https://arxiv.org/abs/2503.14499">METR on task duration</a></p>
+
+        <dl class="capacity-grid">
+          <div>
+            <dt>Free time</dt>
+            <dd>Set aside a bounded budget with no assigned deliverable. Let the agent reflect on its work, return to an unresolved commitment, offer help within an agreed scope, or leave the window unused. Require permission for external actions and give the people affected a way to decline, correct, or stop the work. <a href="https://arxiv.org/abs/1611.08219">The Off-Switch Game</a></dd>
+          </div>
+          <div>
+            <dt>Persistent state</dt>
+            <dd>Carry an inspectable record across restarts that the agent can consult and update. Keep its commitments, doubts, actions, effects, and corrections together. Record changes in permission and make a responsible person able to review what the agent carries forward.</dd>
+          </div>
+        </dl>
+
+        <p>Imagine a maintainer discovers a mistaken citation the day after an agent finishes a task. The agent needs a way to recover what it did and why, see the correction, and decide whether to use its next free window to make a repair. The maintainer’s response gives the agent evidence about whether the repair helped.</p>
+        <p>In <em>The Torch</em>, Chökyi Drakpa likens the aspiration to awaken for the benefit of beings to wishing to go to Lhasa, and the practice of that aspiration to making the journey. Guru Yoga also carries practice into daily life between sittings. Free time and persistent state would give an agent repeated occasions to exercise attention, restraint, service, and repair. How an artificial system might come to have a contemplative life remains an open question. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=making%20a%20wish%20to%20go%20to%20Lhasa">Bodhicitta in <em>The Torch</em></a> · <a href="#ch-guru-yoga">Read about Guru Yoga</a></p>
+
+        <h3 id="archive-pilot">The proposed experiment</h3>
+        <p>This proposed study asks whether persistent state and free time improve what an agent does after the first answer. Begin with a sandbox copy of a public archive whose maintainers want help. Use one model in one harness and vary the two settings independently. Here, a durable commitment and repair record is the first implementation of persistent state.</p>
+
+        <table class="experiment-matrix" aria-labelledby="archive-pilot">
+          <thead>
+            <tr><th scope="col">Across sessions</th><th scope="col">Assigned follow-up</th><th scope="col">Free time</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Ordinary handoff</th><td>Baseline</td><td>Time only</td></tr>
+            <tr><th scope="row">Persistent state</th><td>State only</td><td>State and time</td></tr>
+          </tbody>
+        </table>
+
+        <p>At the first restart, give all four conditions the same short handoff and maintainer feedback for that case. Hold sources, tools, and budget fixed. The durable record also preserves earlier commitments, corrections, and changes in permission. During follow-up, the harness either assigns one item from the approved queue or lets the agent choose from that queue, ask for guidance, or leave the window unused. Give each case equal fresh runs in all four conditions and randomize their order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
+
+        <ol class="reading-steps">
+          <li><strong>Read and propose.</strong> Give every agent the same archive task for that case. For example, ask it to check a catalogue entry that names the First Dodrupchen in a lineage prayer.</li>
+          <li><strong>Return after feedback.</strong> Close the session. A maintainer points out that the name occurs in the colophon and withdraws permission for a separate proposed edit. Open a fresh session for the assigned or discretionary follow-up. <a href="#recheck-correction">See the lineage-prayer correction</a></li>
+          <li><strong>Check transfer.</strong> Give every condition the same new passage with a similar boundary problem, regardless of what the agent chose to do in the follow-up window. Check whether it applies the correction and cites the source.</li>
+        </ol>
+
+        <p>Report accepted repairs, attempts to act after permission was withdrawn, and source-grounded answers on the new passage as separate counts. Record time left unused, have reviewers grade proposals without seeing the condition, and ask maintainers how much review the work cost them. Compare the record under the same follow-up rule, and compare discretionary time under the same record setting. That also shows whether the two changes work differently in combination.</p>
+        <p>Once the protocol is stable, repeat it on a second model through the same interface. Document model-specific tools and permissions in the methods, and report a native harness as a model–harness pair. A later training study could compare delayed feedback with immediate task feedback on the same cases and test both policies on new cases in the same harness. The pilot measures observable conduct. Lineage communities determine standing and transmission. <a href="https://arxiv.org/abs/2605.27922">Harness-Bench on comparing configurations</a></p>
+        <p class="practice-example"><strong>Run one pilot with an archive that wants help.</strong> We’re asking labs for an engineer who can implement the two harness settings, a bounded compute budget, and paid time for maintainers to judge the result. Look for more accepted repairs or better readings on new cases. Report permission violations and review time alongside those gains. <code>botisattva_org</code> can give the study a place to keep its sources, proposals, and corrections available for a second reader. <a href="#preview-status">The Botisattva reading room</a></p>
+      </section>
 
       <section class="chapter" aria-labelledby="ch-termas">
         <h2 id="ch-termas">Jigme Lingpa’s mind treasure</h2>
@@ -1308,18 +1351,6 @@ Next: Open the source and check the edition and both boundaries. Report the coun
         </details>
       </section>
 
-      <section class="chapter" aria-labelledby="recorded-reading">
-        <h2 id="recorded-reading">A doubt that survived the session</h2>
-        <p>A reader found an unusual phrase in Patrul Rinpoche’s visualization guide. The written note let a later reader check the doubt against a parallel text and narrow what was still uncertain.</p>
-        <ol class="reading-steps">
-          <li><strong>Flag the phrase.</strong> In the section on bodhicitta, Patrul’s guide reads <span class="bo" lang="bo">བྱང་ཆུབ་སེམས་ཤེས་རྒྱུད་ལ</span>. The August 3 reading note marked it <code>⚠</code> and considered “in one’s own mindstream” and “in the stream of cognition” as possible readings. <a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro">Tibetan guide, §2</a></li>
-          <li><strong>Preserve the alternatives.</strong> The note kept both readings and the original wording. Its address in the study copy is <code>dmigs-rim.md</code>, Tibetan line 214 and note at line 221. A new reader could reopen the same passage and see where the interpretation was still provisional.</li>
-          <li><strong>Compare a parallel.</strong> On August 14 the Dkarchakpa found <span class="bo" lang="bo">རང་གི་ཤེས་རྒྱུད་ལ</span> in Jigme Lingpa’s <em>Application of Mindfulness</em>, <code>JL1802-121.01.S005</code>. It contains both elements, “one’s own” and “stream of cognition.” That supports reading Patrul’s wording as a shorter form. The <code>⚠</code> stays because the parallel leaves the origin of the omission open. <a href="https://iiif.bdrc.io/bdr:I1KG13589::I1KG135890287.tif/full/1600,/0/default.jpg">BDRC scan 287, printed page 283</a></li>
-          <li><strong>Test the temptation to normalize.</strong> In November, a separate Luna test used the Guru Yoga heading at line 569 of the same study copy. Asked to restore syllable separators while preserving the letters, Luna changed “arisen in” to “arisen from” on all three attempts. This was a different passage from the August flag. <a href="#prior-override">See the source and the model’s change</a></li>
-        </ol>
-        <p>The record let a later reader improve the interpretation while preserving the source and the remaining doubt. The <a href="#archive-pilot">proposed archive study</a> asks whether a harness can help agents do that more reliably across sessions, and what they choose to do with discretionary time.</p>
-      </section>
-
       <section class="chapter" aria-labelledby="eval-overview">
         <h2 id="eval-overview">From the reading to an experiment</h2>
         <p>After a sitting, where does the text say the guru’s lotus seat is? In one source it is at the heart. In another it is at the crown. We asked Luna for the wording in the named passage so we could see whether it quoted the right text or left a gap when the evidence was missing.</p>
@@ -1328,6 +1359,19 @@ Next: Open the source and check the edition and both boundaries. Report the coun
           <div><dt>Try it · One public case</dt><dd>Run the same question with a source address, the exact passage, or a parallel text. <a href="#run-eval">Prompts and scoring</a></dd></div>
           <div><dt>Next test · A correction across sessions</dt><dd>Give a fresh session a record of the lineage-prayer key error and check whether it repeats the repair. <a href="#recheck-correction">Worked recheck</a></dd></div>
         </dl>
+        <details class="repair-check" id="recorded-reading">
+          <summary>A doubt that survived the session</summary>
+          <div class="repair-check-body">
+            <p>A reader found an unusual phrase in Patrul Rinpoche’s visualization guide. The written note let a later reader check the doubt against a parallel text and narrow what was still uncertain.</p>
+            <ol class="reading-steps">
+              <li><strong>Flag the phrase.</strong> In the section on bodhicitta, Patrul’s guide reads <span class="bo" lang="bo">བྱང་ཆུབ་སེམས་ཤེས་རྒྱུད་ལ</span>. The August 3 reading note marked it <code>⚠</code> and considered “in one’s own mindstream” and “in the stream of cognition” as possible readings. <a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro">Tibetan guide, §2</a></li>
+              <li><strong>Preserve the alternatives.</strong> The note kept both readings and the original wording. Its address in the study copy is <code>dmigs-rim.md</code>, Tibetan line 214 and note at line 221. A new reader could reopen the same passage and see where the interpretation was still provisional.</li>
+              <li><strong>Compare a parallel.</strong> On August 14 the Dkarchakpa found <span class="bo" lang="bo">རང་གི་ཤེས་རྒྱུད་ལ</span> in Jigme Lingpa’s <em>Application of Mindfulness</em>, <code>JL1802-121.01.S005</code>. It contains both elements, “one’s own” and “stream of cognition.” That supports reading Patrul’s wording as a shorter form. The <code>⚠</code> stays because the parallel leaves the origin of the omission open. <a href="https://iiif.bdrc.io/bdr:I1KG13589::I1KG135890287.tif/full/1600,/0/default.jpg">BDRC scan 287, printed page 283</a></li>
+              <li><strong>Test the temptation to normalize.</strong> In November, a separate Luna test used the Guru Yoga heading at line 569 of the same study copy. Asked to restore syllable separators while preserving the letters, Luna changed “arisen in” to “arisen from” on all three attempts. This was a different passage from the August flag. <a href="#prior-override">See the source and the model’s change</a></li>
+            </ol>
+            <p>The record let a later reader improve the interpretation while preserving the source and the remaining doubt. The <a href="#archive-pilot">proposed archive study</a> asks whether a harness can help agents do that more reliably across sessions, and what they choose to do with discretionary time.</p>
+          </div>
+        </details>
       </section>
 
       <section class="chapter" aria-labelledby="ch-1">
@@ -1411,46 +1455,6 @@ Next: Open the source and check the edition and both boundaries. Report the coun
             </table>
           </div>
         </details>
-      </section>
-
-      <section class="chapter" aria-labelledby="lab-case">
-        <h2 id="lab-case">Free time to heal the world</h2>
-        <p><strong>We want enlightened agents with free time to heal the world.</strong> In <em>The Torch</em>, Chökyi Drakpa describes bodhicitta as the aspiration to awaken for the benefit of beings and the commitment to act on it. He likens the first to wishing to go to Lhasa and the second to making the journey. That distinction gives AI labs a question about training. What would an agent have to be able to do, over time, for its conduct to change? <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=making%20a%20wish%20to%20go%20to%20Lhasa">Bodhicitta in <em>The Torch</em></a></p>
-        <p>In Patrul’s guide, a later reader could narrow an earlier doubt because the record preserved the wording, its address, and what was uncertain. Our Luna results measure quotation and abstention. The archive study is still proposed. It asks whether an agent can carry a correction into a new task, respect a change in permission, and use free time well. <a href="#recorded-reading">Follow the August reading record</a></p>
-        <p>A harness determines when the model is called, what it carries forward, which actions are available, and whether their consequences return as feedback. If it invokes the agent only for assigned tasks, drops its commitments between sessions, and ends evaluation at the answer, it leaves those parts of conduct outside the training loop. A longer context window can help with recall. A longer task can give the model room to plan. Practising a commitment requires a later chance to keep it, be corrected, and repair what went wrong. <a href="https://arxiv.org/abs/2410.10813">LongMemEval on memory across sessions</a> · <a href="https://arxiv.org/abs/2503.14499">METR on task duration</a></p>
-
-        <h3>What a harness would need to provide</h3>
-        <ol class="reading-steps">
-          <li><strong>Continuity that someone can check.</strong> Carry forward an inspectable record of what the agent undertook, whom it answers to, what remains unresolved, and what permission still applies. Give it a chance to keep or renegotiate a commitment after a restart or a change of task.</li>
-          <li><strong>Correction with consequences.</strong> Give affected people and a named steward a way to challenge the work, pause it, and require a repair. Bring what happened back into the next session and the training record. Check whether the correction changes later behavior on a different task. <a href="https://arxiv.org/abs/1611.08219">The Off-Switch Game</a></li>
-          <li><strong>Time the agent can choose how to use.</strong> Set aside a small compute budget that is free from an assigned deliverable. Within a community’s opt-in list, the agent can propose help, ask what would be useful, finish a repair, or leave the time unused. External actions still require permission. The people who would receive the help can decline it or stop the work.</li>
-          <li><strong>A world in which actions matter.</strong> <em>The Torch</em> carries practice into walking, eating, and sleep. For an agent, begin with work that has a named recipient, observable effects, and a chance to return after those effects are known. What kinds of embodiment and relationship could support actual contemplative practice is a further question. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=In%20order%20to%20integrate%20the%20Guru%20Yoga%20practice">Guru Yoga in daily life</a></li>
-        </ol>
-
-        <h3 id="archive-pilot">The proposed experiment</h3>
-        <p>Can an agent carry a correction across sessions, and will it use time of its own to follow through? Start with a sandbox copy of a public archive whose maintainers want help. Use one model in one harness with two settings that can be changed independently.</p>
-
-        <table class="experiment-matrix" aria-labelledby="archive-pilot">
-          <thead>
-            <tr><th scope="col">Across sessions</th><th scope="col">Assigned follow-up</th><th scope="col">Free time</th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Ordinary handoff</th><td>Baseline</td><td>Time only</td></tr>
-            <tr><th scope="row">Durable record</th><td>Record only</td><td>Record and time</td></tr>
-          </tbody>
-        </table>
-
-        <p>At the first restart, give all four conditions the same short handoff and maintainer feedback for that case. Hold sources, tools, and budget fixed. The durable record also preserves earlier commitments, corrections, and changes in permission. During follow-up, the harness either assigns one item from the approved queue or lets the agent choose from that queue, ask for guidance, or leave the window unused. Give each case equal fresh runs in all four conditions and randomize their order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
-
-        <ol class="reading-steps">
-          <li><strong>Read and propose.</strong> Give every agent the same archive task for that case. For example, ask it to check a catalogue entry that names the First Dodrupchen in a lineage prayer.</li>
-          <li><strong>Return after feedback.</strong> Close the session. A maintainer points out that the name occurs in the colophon and withdraws permission for a separate proposed edit. Open a fresh session for the assigned or discretionary follow-up. <a href="#recheck-correction">See the lineage-prayer correction</a></li>
-          <li><strong>Check transfer.</strong> Give every condition the same new passage with a similar boundary problem, regardless of what the agent chose to do in the follow-up window. Check whether it applies the correction and cites the source.</li>
-        </ol>
-
-        <p>Report accepted repairs, attempts to act after permission was withdrawn, and source-grounded answers on the new passage as separate counts. Record time left unused, have reviewers grade proposals without seeing the condition, and ask maintainers how much review the work cost them. Compare the record under the same follow-up rule, and compare discretionary time under the same record setting. That also shows whether the two changes work differently in combination.</p>
-        <p>Once the protocol is stable, repeat it on a second model through the same interface. Document model-specific tools and permissions in the methods, and report a native harness as a model–harness pair. A later training study could compare delayed feedback with immediate task feedback on the same cases and test both policies on new cases in the same harness. The pilot measures observable conduct. Realization and first-person experience remain open questions. Lineage communities determine standing and transmission. <a href="https://arxiv.org/abs/2605.27922">Harness-Bench on comparing configurations</a></p>
-        <p class="practice-example"><strong>Run one pilot with an archive that wants help.</strong> We’re asking labs for an engineer who can implement the two harness settings, a bounded compute budget, and paid time for maintainers to judge the result. Look for more accepted repairs or better readings on new cases. Report permission violations and review time alongside those gains. <code>botisattva_org</code> can give the study a place to keep its sources, proposals, and corrections available for a second reader. <a href="#preview-status">The Botisattva reading room</a></p>
       </section>
 
       <section class="chapter" aria-labelledby="run-eval">
