@@ -7,8 +7,8 @@
   <meta name="description" content="Play a 30-day commons game. Change the share of agents who use their free time to tend an orchard or help their neighbors.">
   <meta name="theme-color" content="#263b30">
   <link rel="canonical" href="https://foolzone.com/play/botisattva/orchard/">
-  <link rel="stylesheet" href="orchard.css?v=2">
-  <script type="module" src="orchard.js?v=2"></script>
+  <link rel="stylesheet" href="orchard.css?v=3">
+  <script type="module" src="orchard.js?v=3"></script>
 </head>
 <body>
   <a class="skip" href="#play">Skip to the game</a>
@@ -31,6 +31,12 @@
           <output id="mix-count" for="mix">4 of 12 · 33%</output>
         </div>
         <input type="range" id="mix" min="0" max="12" step="1" value="4" aria-describedby="setup-note">
+        <div class="mix-presets" role="group" aria-label="Mix presets">
+          <button type="button" class="preset-btn" data-mix="0" aria-pressed="false">None (0)</button>
+          <button type="button" class="preset-btn" data-mix="4" aria-pressed="true">Default (4)</button>
+          <button type="button" class="preset-btn" data-mix="6" aria-pressed="false">Half (6)</button>
+          <button type="button" class="preset-btn" data-mix="12" aria-pressed="false">All (12)</button>
+        </div>
       </div>
       <label class="free-time"><input type="checkbox" id="free-time" checked aria-describedby="setup-note"> Free time after harvest</label>
       <div class="playback">
@@ -49,8 +55,8 @@
           <span id="season">Day 0 of 30</span>
         </div>
         <dl class="scores">
-          <div><dt>Fruit stock</dt><dd id="stock">84 <small>/ 120</small></dd></div>
-          <div><dt>Agents remaining</dt><dd id="remaining">12 <small>/ 12</small></dd></div>
+          <div><dt>Fruit stock</dt><dd><span id="stock">84</span> <small>/ 120</small></dd></div>
+          <div><dt>Agents remaining</dt><dd><span id="remaining">12</span> <small>/ 12</small></dd></div>
         </dl>
         <figure class="orchard-scene" id="orchard-scene" hidden>
           <canvas id="landscape" width="160" height="64" aria-hidden="true"></canvas>
@@ -83,7 +89,7 @@
       <summary>How the game works</summary>
       <ul>
         <li>Each day, the agents harvest from the same stock and eat one ration from their own stores. If demand exceeds the available fruit, everyone gets the same fraction of their request. An agent leaves after two consecutive days without a full meal.</li>
-        <li>Botisattvas keep smaller stores and harvest less when the orchard is low. With a free window and at least five rations after harvest, they can spend one ration sharing with a neighbor whose stores are low, or tending the orchard to add 2.6 fruit when the stock is low. Sharing takes priority.</li>
+        <li>Botisattvas keep smaller stores and harvest less when the orchard is low. With a free window after harvest, they can spend one ration sharing with the neediest low neighbor when they hold at least three rations, or tending the orchard to add 2.2 fruit when stock is low (holding at least five rations, or four below 48 fruit). Sharing takes priority.</li>
         <li>The orchard regrows each day. Growth slows on days 10–19 in both orchards. The comparison starts with the same stores and weather and has zero botisattvas.</li>
       </ul>
       <p>The game assigns these behaviors by hand. Its results describe this orchard and its rules.</p>

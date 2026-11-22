@@ -29,7 +29,7 @@ function requestedHarvest(agent, index, stock) {
   if (agent.botisattva && stock < 48) {
     return Math.min(2, Math.max(0, 4 - agent.reserve));
   }
-  const target = agent.botisattva ? 6 : 8 + (index % 3);
+  const target = agent.botisattva ? 6 : 5 + (index % 3);
   return Math.min(3, Math.max(0, target + 1 - agent.reserve));
 }
 
@@ -52,16 +52,19 @@ export function nextDay(orchard, freeTime) {
     const startingIndex = orchard.day % AGENT_COUNT;
     for (let offset = 0; offset < AGENT_COUNT; offset++) {
       const agent = agents[(startingIndex + offset) % AGENT_COUNT];
-      if (!agent.present || !agent.botisattva || agent.reserve < 5) continue;
-      const neighborLowOnFood = agents.find(neighbor => neighbor.present && neighbor.reserve < 4);
-      if (neighborLowOnFood) {
+      if (!agent.present || !agent.botisattva) continue;
+      const neighborLowOnFood = agents
+        .filter(neighbor => neighbor !== agent && neighbor.present && (neighbor.hungryDays > 0 || neighbor.reserve < 4))
+        .sort((a, b) => a.reserve - b.reserve)[0];
+      const tendingGate = stock + tending < 48 ? 4 : 5;
+      if (neighborLowOnFood && agent.reserve >= 3) {
         agent.reserve -= 1;
         neighborLowOnFood.reserve += 1;
         agent.action = "Shared";
         orchard.shared++;
-      } else if (stock + tending < 84) {
+      } else if (agent.reserve >= tendingGate && stock + tending < 84) {
         agent.reserve -= 1;
-        tending += 2.6;
+        tending += 2.2;
         agent.action = "Tended";
         orchard.tended++;
       }

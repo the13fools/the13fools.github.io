@@ -1,5 +1,5 @@
-import { AGENT_COUNT, CAPACITY, DAYS, DRY_SPELL, isDry, newOrchard, nextDay, remaining } from "./model.mjs";
-import { drawAgentPortrait, drawOrchardScene } from "./pixel-art.js";
+import { AGENT_COUNT, CAPACITY, DAYS, DRY_SPELL, isDry, newOrchard, nextDay, remaining } from "./model.mjs?v=3";
+import { drawAgentPortrait, drawOrchardScene } from "./pixel-art.js?v=3";
 
 const controls = document.getElementById("controls");
 const mix = document.getElementById("mix");
@@ -20,6 +20,7 @@ const chart = document.getElementById("chart");
 const canvas = chart.getContext("2d");
 const scene = document.getElementById("orchard-scene");
 const landscape = scene?.querySelector("canvas")?.getContext("2d");
+const presetButtons = document.querySelectorAll(".preset-btn");
 
 const agentList = document.getElementById("agents");
 const agentCards = Array.from({ length: AGENT_COUNT }, (_, index) => {
@@ -62,7 +63,7 @@ function drawChart() {
   const y = fruit => bottom - (bottom - top) * fruit / CAPACITY;
 
   canvas.fillStyle = "#f2e6c1";
-  canvas.fillRect(x(DRY_SPELL.firstDay - 0.5), top, x(DRY_SPELL.lastDay + 0.5) - x(DRY_SPELL.firstDay - 0.5), bottom - top);
+  canvas.fillRect(x(DRY_SPELL.firstDay - 1), top, x(DRY_SPELL.lastDay) - x(DRY_SPELL.firstDay - 1), bottom - top);
   canvas.strokeStyle = "#ccd1bf";
   canvas.fillStyle = "#506055";
   canvas.font = "13px system-ui, sans-serif";
@@ -118,9 +119,12 @@ function render() {
 
   mixCount.value = `${bots} of ${AGENT_COUNT} · ${Math.round(bots / AGENT_COUNT * 100)}%`;
   mix.setAttribute("aria-valuetext", `${bots} of ${AGENT_COUNT} agents`);
+  presetButtons.forEach(button => {
+    button.setAttribute("aria-pressed", Number(button.dataset.mix) === bots ? "true" : "false");
+  });
   season.textContent = `Day ${day} of ${DAYS}`;
-  stock.firstChild.nodeValue = `${fruit} `;
-  remainingCount.firstChild.nodeValue = `${present} `;
+  stock.textContent = String(fruit);
+  remainingCount.textContent = String(present);
   weather.textContent = isDry(day)
     ? `Dry spell · day ${day - DRY_SPELL.firstDay + 1} of ${DRY_SPELL.lastDay - DRY_SPELL.firstDay + 1}`
     : day > DRY_SPELL.lastDay ? "Dry spell over" : "Dry spell on days 10–19";
@@ -200,6 +204,12 @@ function resetFromControls() {
 reset.addEventListener("click", resetFromControls);
 mix.addEventListener("input", resetFromControls);
 freeTime.addEventListener("change", resetFromControls);
+presetButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    mix.value = button.dataset.mix;
+    resetFromControls();
+  });
+});
 
 startOver();
 if (scene) scene.hidden = !landscape;
