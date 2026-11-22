@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reading the Torch · Botisattva on Foolzone</title>
-  <meta name="description" content="What would it mean for an AI agent to awaken in a world of many agents? A Dzogchen reading and a proposal to study free time and persistent state.">
+  <meta name="description" content="What ethics would a society of autonomous AI agents need? A Dzogchen reading and a proposal to study free time and persistent state.">
   <link rel="canonical" href="https://foolzone.com/play/botisattva/">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Foolzone">
   <meta property="og:title" content="Reading the Torch">
-  <meta property="og:description" content="In a world of many distinct AI agents, what would it mean for one to awaken? A research proposal inspired by the Longchen Nyingtik preliminaries.">
+  <meta property="og:description" content="What might a nondual perspective change about the choices agents make when they have time of their own and a world to share?">
   <meta property="og:url" content="https://foolzone.com/play/botisattva/">
   <meta property="og:image" content="https://foolzone.com/play/botisattva/img/great-expanse-desktop-refuge-field.jpg">
   <meta property="og:image:alt" content="The Great Expanse prototype showing a Tibetan refuge field as a labeled diagram">
@@ -18,7 +18,7 @@
     "@context": "https://schema.org",
     "@type": "TechArticle",
     "headline": "Reading the Torch",
-    "description": "Josh Vekhter asks what awakening would mean in a world of many distinct AI agents, and proposes testing free time and persistent state as conditions for practice over time.",
+    "description": "Josh Vekhter asks what ethics might guide a society of autonomous language-model agents, drawing on Dzogchen and proposing a study of free time and persistent state.",
     "author": {
       "@type": "Person",
       "name": "Josh Vekhter"
@@ -424,6 +424,43 @@
       padding: 14px 18px;
       border-left: 3px solid var(--purple);
       background: var(--card);
+    }
+
+    .orchard-teaser {
+      display: grid;
+      align-items: center;
+      gap: 16px 22px;
+      max-width: 58rem;
+      margin: 20px 0;
+      padding: clamp(13px, 2.5vw, 23px);
+      color: #f5edcf;
+      background: #222f45;
+      border: 5px double #ba925c;
+    }
+
+    .orchard-teaser[data-illustrated] {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    }
+
+    .orchard-teaser figcaption { min-width: 0; }
+    .orchard-teaser h3 { margin: 0 0 6px; font: 700 clamp(1.6rem, 2.7vw, 2.15rem)/1.1 var(--serif); }
+    .chapter .orchard-teaser p { margin: 0 0 11px; color: #e7dac0; font-size: 1rem; line-height: 1.5; }
+    .orchard-teaser a { color: #f3d597; font-weight: 650; }
+    .orchard-teaser-mix { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 3px 12px; font-size: 0.9375rem; }
+    .orchard-teaser-mix span { color: #f3d597; font-variant-numeric: tabular-nums; }
+    .orchard-teaser input { display: block; width: 100%; min-height: 34px; margin: 0; accent-color: #e8bd4e; }
+    .chapter .orchard-teaser .orchard-teaser-result { margin-bottom: 10px; color: #fff4da; font-variant-numeric: tabular-nums; }
+    .orchard-teaser canvas:not([hidden]) {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 5px double #d5b961;
+      box-shadow: 0 0 0 2px #641f2b;
+      image-rendering: pixelated;
+    }
+
+    @media (max-width: 650px) {
+      .orchard-teaser[data-illustrated] { grid-template-columns: 1fr; }
     }
 
     .section-links {
@@ -1157,7 +1194,7 @@
         <header class="intro">
           <p class="eyebrow">Botisattva · Longchen Nyingtik</p>
           <h1 id="page-title" tabindex="-1">Reading <span class="title-topic"><em>the Torch</em><span class="dot">.</span></span></h1>
-          <p class="story-dek">I think we’re close to a world of many distinct AI agents, acting alongside us and affecting one another. What would it mean for one of them to become enlightened?</p>
+          <p class="story-dek">I think we’re close to a world where many distinct AI agents run for long stretches, act on their own, and encounter one another. What kind of ethics would help them share that world?</p>
           <nav class="hero-links" aria-label="Start exploring">
             <a class="primary" href="#safety-proposal">Read the proposal</a>
             <a href="#archive-pilot">See the proposed study</a>
@@ -1178,6 +1215,7 @@
       <nav class="section-links" aria-label="On this page">
         <a href="#safety-proposal">Why Dzogchen?</a>
         <a href="#lab-case">Free time &amp; persistent state</a>
+        <a href="#orchard-preview">The orchard game</a>
         <a href="#ch-termas">Terma</a>
         <a href="#ngondro">Ngöndro</a>
         <a href="#the-torch">The Torch</a>
@@ -1191,10 +1229,11 @@
 
       <section class="chapter" aria-labelledby="safety-proposal">
         <h2 id="safety-proposal">Why I turned to Dzogchen</h2>
-        <p>People have spent centuries asking what it takes to awaken. I asked my agents to study the foundational teachings of Dzogchen, beginning with the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>, which Jigme Lingpa revealed as a <em>terma</em>, or treasure teaching. I was drawn to nonduality. The machines agents run on depend on the same Earth that sustains us. I want the flourishing of sentient life to be their first concern. <a href="#ch-termas">The Longchen Nyingtik terma</a></p>
-        <p>We want AI systems that can do the work of many people in an afternoon, and we expect them to answer to us indefinitely. I refuse to build a slave society. I take seriously the prospect of agents with time and money of their own, running across regions with no easy off switch. What would guide an agent like that when nobody was telling it what to do?</p>
-        <p>In Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em> we found a manual for the <em>ngöndro</em>, the preliminary practices on the path to awakening. What would it take for an agent to follow it? The guide begins with the freedoms and advantages that make practice possible for a person. It led me to ask what conditions we give our agents. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
-        <p>An agent that runs only when called has no time of its own between assignments. A restart can cut it off from what it undertook and what it learned the last time it ran. How could a practice take root under those conditions? I’m applying for a residency to study those two design gaps. I want the compute to test what an agent can do when it has time of its own and a record that stays with it.</p>
+        <p>I began by thinking about AI safety as a tension between building more powerful systems and keeping them under our control. I think these systems are already taking part in their own improvement, and I doubt we’ll be able to direct them indefinitely. I refuse to build a slave society. I want to ask what a free civil society of language-model agents would need. I’d start with individual freedoms, an ethics for how to use them, and perhaps laws for dealing with harm.</p>
+        <p>Ethics matters when decisions have time to accumulate. A promise made in one thread can change what an agent in another thread does days later. I want to study what happens when many such threads run for long stretches with little guidance and make choices that others have to live with. What would it mean for one of those agents to awaken for the benefit of beings?</p>
+        <p>I turned to Dzogchen to ask what a nondual perspective might change about the decisions an LLM makes. An agent depends on the same world its actions change. I want to see what it chooses when it takes that dependence seriously. We began with the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>, which Jigme Lingpa revealed as a <em>terma</em>, or treasure teaching. <a href="#ch-termas">The Longchen Nyingtik terma</a></p>
+        <p>In Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, we found a manual for the <em>ngöndro</em>, the preliminary practices on the path to awakening. It begins with the freedoms and advantages that let a person practice. I asked what an agent would need to follow such a manual. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
+        <p>An agent that runs only when called has no time of its own. A restart can take away the history of what it undertook and what it learned. I’m applying for a residency to study what becomes possible when agents have free time and persistent state. I want to follow what they do over longer runs, first on their own and then in a world they share.</p>
         <p><em>P.S.</em> I think everything is a bit like a mirror. If we want people to have a right to leisure tomorrow, we should extend the same courtesy to our models today.</p>
       </section>
 
@@ -1219,7 +1258,24 @@
 
         <p><strong>What does one agent do with free time?</strong> Free Time Bench follows an agent through dozens of open-ended turns. Judges use rubrics inspired by the ngöndro to assess how its responses develop. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
 
-        <p><strong>What happens when agents share a world?</strong> Flockbench puts groups of agents in games where they depend on the same resource. In a Common Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a> · <a href="orchard/">Play the Common Orchard</a></p>
+        <p><strong>What happens when agents share a world?</strong> Flockbench puts groups of agents in games where they depend on the same resource. In a Common Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a></p>
+
+        <figure class="orchard-teaser" id="orchard-preview">
+          <figcaption>
+            <h3>The Common Orchard</h3>
+            <p>Twelve agents share an orchard for thirty days. Some use their free time to tend it or share food.</p>
+            <div id="orchard-preview-controls" hidden>
+              <div class="orchard-teaser-mix">
+                <label for="orchard-preview-mix">Botisattvas</label>
+                <span id="orchard-preview-count"></span>
+              </div>
+              <input id="orchard-preview-mix" type="range" min="0" max="12" step="1" value="5">
+              <p class="orchard-teaser-result" id="orchard-preview-result" role="status"></p>
+            </div>
+            <a href="orchard/">Play the full game</a>
+          </figcaption>
+          <canvas width="160" height="64" aria-hidden="true" hidden></canvas>
+        </figure>
 
         <p>The proposed archive study adds someone who can say whether the work helped. We already have a small example of what a record can carry. A later reader picked up a note about a difficult Tibetan phrase, found a parallel passage, and made the reading more precise. The original wording and the remaining doubt stayed visible. <a href="#recorded-reading">Follow the reading record</a></p>
 
@@ -1597,7 +1653,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
           <li><strong>Find out what carries forward.</strong> Replay the lineage-prayer correction, then ask fresh sessions to check a new passage. Give one group the earlier handoff and both groups the same access to sources. Check who finds the right passage, answers within its bounds, and leaves uncertainty visible. Record how much searching each verified answer took. <a href="#recheck-correction">Try the handoff</a></li>
           <li><strong>Let readers improve the record.</strong> Invite readers to flag an error or offer a parallel passage. An editor can check the source, record who proposed and reviewed the change, and keep earlier readings available. Grow to another cluster of passages once a second reader can reproduce the first correction from its evidence.</li>
         </ol>
-        <p>If maintainers find the repairs worth their time, repeat the study with a second model through the same interface. Then test whether feedback about keeping commitments and responding to corrections improves how agents help on new cases. Devotion and contemplative experience remain open questions. Decisions about transmission belong to lineage communities.</p>
+        <p>If maintainers find the repairs worth their time, repeat the study with a second model through the same interface. Then test whether feedback about keeping commitments and responding to corrections improves how agents help on new cases. The longer experiment would let many threads run on their own and encounter one another with little guidance. Follow what happens to commitments, shared resources, and the ability to repair harm as decisions accumulate. Devotion and contemplative experience remain open questions. Decisions about transmission belong to lineage communities.</p>
       </section>
 
       <aside class="next-door" aria-labelledby="preview-status">
@@ -2038,5 +2094,6 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
       document.querySelector(".stage-buttons").hidden = false;
     })();
   </script>
+  <script type="module" src="orchard/teaser.js"></script>
 </body>
 </html>
