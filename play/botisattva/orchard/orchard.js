@@ -18,7 +18,8 @@ const result = document.getElementById("result");
 const announcement = document.getElementById("announcement");
 const chart = document.getElementById("chart");
 const canvas = chart.getContext("2d");
-const landscape = document.getElementById("landscape").getContext("2d");
+const scene = document.getElementById("orchard-scene");
+const landscape = scene?.querySelector("canvas")?.getContext("2d");
 
 const agentList = document.getElementById("agents");
 const agentCards = Array.from({ length: AGENT_COUNT }, (_, index) => {
@@ -201,6 +202,6 @@ mix.addEventListener("input", resetFromControls);
 freeTime.addEventListener("change", resetFromControls);
 
 startOver();
-document.getElementById("orchard-scene").hidden = !landscape;
+if (scene) scene.hidden = !landscape;
 controls.disabled = false;
 new ResizeObserver(drawChart).observe(chart);
