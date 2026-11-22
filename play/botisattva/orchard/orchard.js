@@ -1,4 +1,5 @@
 import { AGENT_COUNT, CAPACITY, DAYS, DRY_SPELL, isDry, newOrchard, nextDay, remaining } from "./model.mjs";
+import { drawAgentPortrait, drawOrchardScene } from "./pixel-art.js";
 
 const controls = document.getElementById("controls");
 const mix = document.getElementById("mix");
@@ -17,6 +18,7 @@ const result = document.getElementById("result");
 const announcement = document.getElementById("announcement");
 const chart = document.getElementById("chart");
 const canvas = chart.getContext("2d");
+const landscape = document.getElementById("landscape").getContext("2d");
 
 const agentList = document.getElementById("agents");
 const agentCards = Array.from({ length: AGENT_COUNT }, (_, index) => {
@@ -24,11 +26,12 @@ const agentCards = Array.from({ length: AGENT_COUNT }, (_, index) => {
   card.className = "agent";
   card.innerHTML = `
     <span class="agent-id"><span>${index + 1}</span><span class="bot-mark" aria-hidden="true">B</span></span>
-    <strong class="agent-reserve"></strong>
+    <span class="agent-tally"><canvas class="agent-portrait" width="12" height="11" aria-hidden="true"></canvas><strong class="agent-reserve"></strong></span>
     <span class="agent-action"></span>`;
   agentList.append(card);
   return {
     card,
+    portrait: card.querySelector(".agent-portrait").getContext("2d"),
     reserve: card.querySelector(".agent-reserve"),
     action: card.querySelector(".agent-action"),
   };
@@ -125,7 +128,8 @@ function render() {
   actions.textContent = `Tending actions ${orchard.tended} · Rations shared ${orchard.shared}`;
 
   orchard.agents.forEach((agent, index) => {
-    const { card, reserve, action } = agentCards[index];
+    const { card, portrait, reserve, action } = agentCards[index];
+    drawAgentPortrait(portrait, agent);
     const amount = Number(agent.reserve.toFixed(1));
     const status = !agent.present ? "Left" : agent.hungryDays ? "Missed meal" : agent.action;
     card.dataset.botisattva = agent.botisattva;
@@ -145,6 +149,7 @@ function render() {
     result.textContent = "Try to finish day 30 with all twelve agents and at least 40 fruit left.";
   }
 
+  drawOrchardScene(landscape, day, orchard.stock);
   drawChart();
   updateControls();
 }
@@ -196,5 +201,6 @@ mix.addEventListener("input", resetFromControls);
 freeTime.addEventListener("change", resetFromControls);
 
 startOver();
+document.getElementById("orchard-scene").hidden = !landscape;
 controls.disabled = false;
 new ResizeObserver(drawChart).observe(chart);

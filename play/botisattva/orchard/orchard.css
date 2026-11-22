@@ -83,6 +83,17 @@ button:disabled { opacity: 0.48; }
 .scores dt { color: var(--muted); font-size: 0.875rem; }
 .scores dd { margin: 0; font: 400 clamp(2.1rem, 5vw, 3rem)/1.1 var(--serif); font-variant-numeric: tabular-nums; }
 .scores small { color: var(--muted); font: 0.875rem system-ui, sans-serif; }
+.orchard-scene { margin: 0.75rem 0 0.95rem; }
+.orchard-scene canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 5px double #d5b961;
+  box-shadow: 0 0 0 2px #641f2b;
+  background: #172541;
+  image-rendering: pixelated;
+}
+.orchard-scene figcaption { margin-top: 0.25rem; color: var(--muted); font-size: 0.875rem; }
 .chart-key { display: flex; gap: 0.25rem 1rem; flex-wrap: wrap; list-style: none; padding: 0; margin: 0.6rem 0 0.3rem; font-size: 0.875rem; }
 .chart-key li { display: flex; gap: 0.4rem; align-items: center; }
 .key { width: 1.15rem; }
@@ -102,6 +113,8 @@ button:disabled { opacity: 0.48; }
 .agent-id { display: flex; justify-content: space-between; gap: 0.15rem; align-items: center; font-size: 0.9rem; }
 .agent-id .bot-mark { display: none; }
 .agent[data-botisattva="true"] .bot-mark { display: inline-grid; }
+.agent-tally { display: flex; align-items: center; gap: 0.35rem; }
+.agent-portrait { width: 1.5rem; height: auto; image-rendering: pixelated; flex: none; }
 .agent-reserve { display: block; margin-block: 0.27rem; font-size: 1.27rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .agent-action { display: block; min-height: 1.4em; color: var(--muted); font-size: 0.875rem; }
 .agent[data-hungry="true"] .agent-action { color: var(--wine); font-weight: 700; }
