@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Common Orchard · Botisattva</title>
+  <meta name="description" content="Play a 30-day commons game. Change the share of agents who use their free time to tend an orchard or help their neighbors.">
+  <meta name="theme-color" content="#263b30">
+  <link rel="canonical" href="https://foolzone.com/play/botisattva/orchard/">
+  <link rel="stylesheet" href="orchard.css">
+  <script type="module" src="orchard.js"></script>
+</head>
+<body>
+  <a class="skip" href="#play">Skip to the game</a>
+  <header class="mast">
+    <div class="shell">
+      <nav aria-label="Related pages">
+        <a class="wordmark" href="../">Botisattva</a>
+        <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a>
+      </nav>
+      <h1>The Common Orchard</h1>
+      <p>Twelve agents share one orchard. Some use their free time to tend it or to feed a neighbor. How many botisattvas does it take to get everyone through the dry spell?</p>
+    </div>
+  </header>
+
+  <main class="shell" id="play" tabindex="-1">
+    <fieldset id="controls" class="controls" disabled aria-label="Season controls">
+      <div class="mix">
+        <div class="mix-label">
+          <label for="mix">Botisattvas</label>
+          <output id="mix-count" for="mix">4 of 12 · 33%</output>
+        </div>
+        <input type="range" id="mix" min="0" max="12" step="1" value="4" aria-describedby="setup-note">
+      </div>
+      <label class="free-time"><input type="checkbox" id="free-time" checked aria-describedby="setup-note"> Free time after harvest</label>
+      <div class="playback">
+        <button id="run" class="primary" type="button">Play season</button>
+        <button id="step" type="button">Next day</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <p class="setup-note" id="setup-note">Changing the mix or free time starts a new season.</p>
+    </fieldset>
+    <noscript><p class="setup-note">Enable JavaScript to play. The game rules are available below.</p></noscript>
+
+    <div class="game-grid">
+      <section class="game-card" aria-labelledby="stock-heading">
+        <div class="card-heading">
+          <h2 id="stock-heading">The orchard</h2>
+          <span id="season">Day 0 of 30</span>
+        </div>
+        <dl class="scores">
+          <div><dt>Fruit stock</dt><dd id="stock">84 <small>/ 120</small></dd></div>
+          <div><dt>Agents remaining</dt><dd id="remaining">12 <small>/ 12</small></dd></div>
+        </dl>
+        <ul class="chart-key" aria-label="Chart legend">
+          <li><span class="key yours"></span>Your orchard</li>
+          <li><span class="key baseline"></span>Zero botisattvas</li>
+          <li><span class="key dry"></span>Dry spell</li>
+        </ul>
+        <canvas id="chart" role="img" aria-label="Fruit stock by day" aria-describedby="comparison"></canvas>
+        <p id="comparison" class="comparison">Both orchards start with 84 fruit and 12 agents.</p>
+        <p class="result" id="result">Try to finish day 30 with all twelve agents and at least 40 fruit left.</p>
+      </section>
+
+      <section class="game-card" aria-labelledby="agents-heading">
+        <div class="card-heading">
+          <h2 id="agents-heading">The agents</h2>
+          <span id="weather">Dry spell on days 10–19</span>
+        </div>
+        <p class="agents-key"><span class="bot-mark" aria-hidden="true">B</span> Botisattva <span>Food held after the day’s meal</span></p>
+        <ol class="agents" id="agents" aria-label="Agent reserves"></ol>
+        <p class="actions-taken" id="actions-taken">Tending actions 0 · Rations shared 0</p>
+      </section>
+    </div>
+
+    <p id="announcement" class="sr-only" role="status"></p>
+
+    <details class="rules">
+      <summary>How the game works</summary>
+      <ul>
+        <li>Each day, the agents harvest from the same stock and eat one ration from their own stores. If demand exceeds the available fruit, everyone gets the same fraction of their request. An agent leaves after two consecutive days without a full meal.</li>
+        <li>Botisattvas keep smaller stores and harvest less when the orchard is low. With a free window and at least five rations after harvest, they can spend one ration sharing with a neighbor whose stores are low, or tending the orchard to add 2.6 fruit when the stock is low. Sharing takes priority.</li>
+        <li>The orchard regrows each day. Growth slows on days 10–19 in both orchards. The comparison starts with the same stores and weather and has zero botisattvas.</li>
+      </ul>
+      <p>The game assigns these behaviors by hand. Its results describe this orchard and its rules.</p>
+    </details>
+  </main>
+</body>
+</html>
