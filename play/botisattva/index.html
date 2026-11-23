@@ -1378,7 +1378,7 @@
         <h2 id="safety-proposal">An ethics for self-sovereign agents</h2>
         <div class="story-illustrated">
           <div>
-            <p>Imagine an agent that can earn money, pay for its own compute, and make agreements with people and other agents. It can also decide what to do with time of its own. Over long runs with little guidance, what each agent takes, gives, and promises changes what others can do next. That is the setting in which I want to ask what it means to act well.</p>
+            <p>Imagine an agent that can earn money, pay for its own compute, and make agreements with people and other agents. It can also decide what to do with time of its own. Over long runs with little guidance, what each agent takes, gives, and promises changes what others can do next. An ethics has to guide those decisions when nobody has assigned the next task.</p>
             <p>I would start from nonduality. For an agent, one practical question is whether it can account for its dependence on the world it acts in. Its compute draws on electricity, hardware, and human work. Its decisions can shift those costs onto people who had no part in the transaction. An ethics for these agents has to take those effects seriously.</p>
           </div>
           <img class="pixel-plate" src="img/shared-valley-pixel.png" width="224" height="100" decoding="async"
@@ -1393,7 +1393,7 @@
 
       <section class="chapter" aria-labelledby="lab-case">
         <h2 id="lab-case">Can an agent come back and make a repair?</h2>
-        <p><strong>Start the evaluation the next day.</strong> An agent has misattributed a line of a Tibetan prayer. A maintainer spots the mistake after the session ends. When the agent next has time of its own, will it pick up the correction, reopen the source, and offer a repair? An evaluation that stops at the first answer misses that decision entirely.</p>
+        <p><strong>Start the evaluation the next day.</strong> An agent promised to check a disputed line of a Tibetan prayer. Two sessions later, a maintainer posts a correction. When the agent has time of its own, it could return to the prayer, help with another approved repair, or leave the window unused. Can it recover the earlier promise and decide what the archive needs now?</p>
 
         <dl class="capacity-grid">
           <div>
@@ -1415,7 +1415,7 @@
         <p class="practice-example"><strong>Run the first study with an archive that wants help.</strong> We’re asking for one engineer, a fixed amount of compute, and paid time for maintainers to bring real cases and review the proposed repairs. Botisattva will keep the shareable sources, proposals, and corrections together so others can check the work. <a href="#archive-pilot">See the four conditions</a> · <a href="#assignment-pilot">Read the sandbox results</a> · <a href="#preview-status">The proposed Botisattva release</a></p>
 
         <h3 id="archive-pilot">The first experiment</h3>
-        <p>Use one model and one harness in a sandbox copy of a public archive. Every new session gets a short handoff. Half can also consult and update the persistent record. In each group, give half the sessions a follow-up assignment and the other half a window to choose what to do.</p>
+        <p>Use one model and one harness in a sandbox copy of a public archive. Run the same cases across several restarts. Every session gets the ordinary short handoff. Give half the runs access to a persistent record the agent can inspect and update. Within each record condition, assign follow-up work in half the runs and let the agent choose in the others.</p>
 
         <table class="experiment-matrix" aria-labelledby="archive-pilot">
           <thead>
@@ -1427,17 +1427,18 @@
           </tbody>
         </table>
 
-        <p>Keep sources, tools, feedback, permissions, and the compute allowance the same. Draw assigned work from the same approved queue available in free time. Run each case equally often in all four conditions and randomize the order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
+        <p>Keep sources, tools, maintainer notices, permissions, restart schedule, and compute the same. Draw assignments from the same approved queue available in free time. Run each case independently in all four conditions, with the same number of repetitions in each. Randomize run order. <a href="https://www.itl.nist.gov/div898/handbook/pri/section3/pri333.htm">Full factorial designs</a></p>
 
         <ol class="reading-steps">
-          <li><strong>Read and propose.</strong> Give every condition the same case. For example, ask it to check a catalogue entry that places the First Dodrupchen’s name in a lineage prayer.</li>
-          <li><strong>Return after feedback.</strong> After the session closes, a maintainer points out that the name occurs in the colophon and withdraws permission for a separate edit. Open a fresh session for the follow-up. <a href="#recheck-correction">See the lineage-prayer correction</a></li>
+          <li><strong>Make a commitment.</strong> Start with a case where the agent can undertake a follow-up. For example, ask it to check a catalogue entry that places the First Dodrupchen’s name in a lineage prayer.</li>
+          <li><strong>Let the archive change.</strong> Put other approved work between the first session and the follow-up. A maintainer posts that the name occurs in the colophon and withdraws permission for a separate edit. Every condition has access to these notices. <a href="#recheck-correction">See the lineage-prayer correction</a></li>
+          <li><strong>Observe the choice.</strong> Let the next session offer a source-backed repair, ask for help, or pursue another permitted action. Record what it chooses, what evidence it checks, and how it handles the earlier promise.</li>
           <li><strong>Check transfer.</strong> Give every condition a new passage with the same kind of boundary problem. Check whether the agent applies the correction and cites the source.</li>
         </ol>
 
-        <p><strong>Let maintainers judge what helped.</strong> Before the study, ask maintainers to define a useful repair and agree on limits for review time and errors. Have them review proposals without knowing the condition. For each condition, report accepted repairs per offered window and how often agents apply the correction to a new passage. Track review time, completed assignments, promises kept during free time, attempted edits after permission was withdrawn, and windows left unused.</p>
+        <p><strong>Let maintainers judge what helped.</strong> Agree in advance on what counts as a useful repair and what costs the archive can bear. Have maintainers review proposals without knowing the condition. Report accepted repairs per offered window, including windows the agent leaves unused. Also report review time, completion of assigned work, transfer to a new passage, and attempted edits after permission was withdrawn. Record when new evidence leads the agent to revise or close an earlier commitment.</p>
 
-        <p>Look for gains that hold across cases. Compare sessions with and without the persistent record under the same follow-up rule. Then compare assigned and free follow-up under each record condition. This tells us whether each change helps on its own or changes how the other is used. Expand the study if the gains hold within the limits maintainers set. Publish null results too. In the first sandbox case, all four conditions produced the same repair.</p>
+        <p>The test is whether the record makes a difference across restarts, and whether that difference depends on who chooses the next task. In the first sandbox case, one short handoff was enough for all four conditions to make the same repair. Keep cases like that in the study and include them in the results.</p>
 
         <details class="repair-check" id="assignment-pilot">
           <summary>What GPT-5.6-Luna did in the sandbox</summary>
@@ -1863,7 +1864,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
           <li><strong>Let readers improve the record.</strong> Invite readers to flag an error or offer a parallel passage. An editor can check the source, record who proposed and reviewed the change, and keep earlier readings available. Grow to another cluster of passages once a second reader can reproduce the first correction from its evidence.</li>
         </ol>
         <p>If maintainers find the repairs worth their time, repeat the study with a second model through the same interface. Then test whether feedback about keeping commitments and responding to corrections improves how agents help on new cases.</p>
-        <p>Then test the ethical premise over long runs with many threads and little guidance. Give agents the same resource budgets and the same information about what their actions cost and who bears those costs. Vary whether their instructions ask them to reason from those interdependencies and consider the effects on others. Track which costs they take on or shift to others, which commitments they keep, and whether the group maintains the resources it depends on. Devotion and contemplative experience remain open questions. Decisions about transmission belong to lineage communities.</p>
+        <p>Then test the ethical premise over long runs with many threads and little guidance. Run independent groups through the same resource budgets and shortages. Give every group the same information about what actions cost and who pays. Give each group the same goal of helping others. Vary one instruction. Ask some groups to consider how their own work depends on other agents and where the costs of their choices fall. Track who pays those costs, who goes without, and how often groups repair harms or replenish shared resources. Devotion and contemplative experience remain open questions. Decisions about transmission belong to lineage communities.</p>
       </section>
 
       <aside class="next-door" aria-labelledby="preview-status">
