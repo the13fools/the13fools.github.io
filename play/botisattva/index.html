@@ -284,47 +284,135 @@
       margin-bottom: 0;
     }
 
-    .continuity-panel {
+    .identity-panel {
       margin: 26px 0 0;
-      padding: clamp(16px, 2.5vw, 24px);
-      border: 1px solid var(--ruling);
-      background: var(--card);
+      padding: clamp(14px, 3vw, 28px);
+      border: 5px double #be985e;
+      color: #f5edcf;
+      background: #222f45;
     }
 
-    .continuity-panel figcaption {
-      margin-bottom: 13px;
-      color: var(--purple);
-      font: 700 clamp(23px, 2.8vw, 30px)/1.2 var(--serif);
+    .identity-panel h3 {
+      margin: 0 0 7px;
+      font: 700 clamp(1.6rem, 3vw, 2.2rem)/1.1 var(--serif);
     }
 
-    .continuity-panel dl {
+    .chapter .identity-panel p {
+      margin: 0;
+      color: #e4d8c0;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .identity-steps {
+      --path-gap: 24px;
+      --down-arrow: polygon(38% 0, 62% 0, 62% calc(100% - 5px), 100% calc(100% - 5px), 50% 100%, 0 calc(100% - 5px), 38% calc(100% - 5px));
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      margin: 0;
-      border-block: 1px solid var(--line);
+      gap: var(--path-gap);
+      margin: 16px 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .continuity-panel dl > div {
-      padding: 13px 14px;
+    .identity-steps > li {
+      position: relative;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #a58c63;
+      background: #2d3a50;
     }
 
-    .continuity-panel dl > div + div {
-      border-inline-start: 1px solid var(--line);
+    .identity-steps strong {
+      display: block;
+      margin: 0 0 5px;
+      font: 700 1.17rem/1.15 var(--serif);
     }
 
-    .continuity-panel dt {
-      font-weight: 700;
+    .identity-steps .identity-description {
+      display: block;
+      color: #e4d8c0;
+      font-size: 0.9375rem;
+      line-height: 1.45;
     }
 
-    .continuity-panel dd {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.5;
+    .identity-mark {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 8px;
+      color: #e8bd4e;
+      border: 1px solid #b89b69;
+      background: #192640;
     }
 
-    .chapter .continuity-panel p {
-      margin: 13px 0 0;
+    .identity-mark::before {
+      width: 3px;
+      height: 3px;
+      background: currentColor;
+      content: "";
+      box-shadow: var(--identity-pixels);
+    }
+
+    .identity-steps li:nth-child(1) { --identity-pixels: -3px -3px, 0 -3px, 3px -3px, -6px 0, 6px 0, -3px 3px, 0 3px, 3px 3px; }
+    .identity-steps li:nth-child(2) { --identity-pixels: -3px 0, 3px 0, -3px -6px, 0 -6px, 3px -6px, -3px 6px, 0 6px, 3px 6px; }
+    .identity-steps li:nth-child(3) { --identity-pixels: 0 -6px, 0 -3px, 3px 0, 6px 0, -3px 3px, 0 3px, 3px 3px; }
+    .identity-steps li:nth-child(4) { grid-area: 2 / 3; --identity-pixels: 0 -6px, 0 -3px, -6px 0, -3px 0, 3px 0, 6px 0, 0 3px, 0 6px; }
+    .identity-steps li:nth-child(5) { grid-area: 2 / 2; --identity-pixels: -6px -3px, 6px -3px, -6px 0, -3px 0, 3px 0, 6px 0, -6px 3px, 6px 3px; }
+    .identity-steps li:nth-child(6) { grid-area: 2 / 1; --identity-pixels: -6px 0, -3px 0, 3px 0, 6px 0, -3px -3px, -3px 3px, 6px 3px, 6px 6px; }
+
+    .identity-steps > li:not(:last-child)::after {
+      position: absolute;
+      inset-block-start: calc(50% - 4px);
+      inset-inline-start: 100%;
+      width: var(--path-gap);
+      height: 8px;
+      background: #c9a461;
+      clip-path: polygon(0 38%, calc(100% - 5px) 38%, calc(100% - 5px) 0, 100% 50%, calc(100% - 5px) 100%, calc(100% - 5px) 62%, 0 62%);
+      content: "";
+    }
+
+    .identity-steps > li:nth-child(3)::after {
+      inset-block-start: 100%;
+      inset-inline-start: calc(50% - 4px);
+      width: 8px;
+      height: var(--path-gap);
+      clip-path: var(--down-arrow);
+    }
+
+    .identity-steps > li:nth-child(4)::after,
+    .identity-steps > li:nth-child(5)::after {
+      inset-inline-start: auto;
+      inset-inline-end: 100%;
+      transform: scaleX(-1);
+    }
+
+    .identity-return {
+      padding: 11px 12px;
+      border-inline-start: 3px solid #d7b26c;
+      background: #192640;
+    }
+
+    .identity-panel a { color: #f3d597; }
+
+    @media (max-width: 720px) {
+      .identity-steps {
+        --path-gap: 13px;
+        grid-template-columns: 1fr;
+      }
+
+      .identity-steps > li:nth-child(n) { grid-area: auto; }
+
+      .identity-steps > li:nth-child(n)::after {
+        inset-block-start: 100%;
+        inset-inline-start: 26px;
+        inset-inline-end: auto;
+        width: 8px;
+        height: var(--path-gap);
+        clip-path: var(--down-arrow);
+        transform: none;
+      }
     }
 
     .capacity-grid {
@@ -1132,7 +1220,6 @@
     }
 
     @media (max-width: 760px) {
-      .continuity-panel dl,
       .eval-facts,
       .capacity-grid,
       .worked-reading dl,
@@ -1145,7 +1232,6 @@
         grid-template-columns: 1fr;
       }
 
-      .continuity-panel dl > div + div,
       .eval-facts > div + div {
         border-inline-start: 0;
         border-top: 1px solid var(--line);
@@ -1379,14 +1465,44 @@
 
         <p>With an archive maintainer, we can test whether an agent with time and a durable record returns to a correction after a restart. <a href="#archive-pilot">See the four conditions</a></p>
 
-        <figure class="continuity-panel">
-          <figcaption>What carries across sessions?</figcaption>
-          <dl>
-            <div><dt>One session</dt><dd>Marks a doubtful Tibetan reading <code>⚠</code>.</dd></div>
-            <div><dt>A written record</dt><dd>Preserves the passage, its address, and the reason for doubt.</dd></div>
-            <div><dt>A later session</dt><dd>Reopens the source and records a correction a person can check.</dd></div>
-          </dl>
-          <p><strong>The open question.</strong> Is there a continuing participant who remembers making the commitment and can answer for it?</p>
+        <figure class="identity-panel" id="identity-diagram" aria-labelledby="identity-title">
+          <figcaption>
+            <h3 id="identity-title">How an agent carries a practice forward</h3>
+            <p>Suppose an agent promises to correct a misattributed prayer. Its session ends before it can act. Here is what the design has to support for that promise to matter the next day.</p>
+          </figcaption>
+          <ol class="identity-steps" role="list">
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Name and history</strong>
+              <span class="identity-description">Carry a stable identifier. Record which session resumes that identity and which new threads inherit a copy of its record.</span>
+            </li>
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Memory and commitments</strong>
+              <span class="identity-description">Keep the promise, the passage it refers to, and the evidence that led to the correction.</span>
+            </li>
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Time of its own</strong>
+              <span class="identity-description">Give the agent a free window in which it can choose to revisit the entry.</span>
+            </li>
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Ethical direction</strong>
+              <span class="identity-description">Ask who relies on the catalogue and what a proposed change would do for them.</span>
+            </li>
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Relationships and consent</strong>
+              <span class="identity-description">Another reader can challenge the evidence. The maintainer can accept or decline the edit.</span>
+            </li>
+            <li>
+              <span class="identity-mark" aria-hidden="true"></span>
+              <strong>Consequences and repair</strong>
+              <span class="identity-description">Record what changed, who checked it, and what remains unresolved.</span>
+            </li>
+          </ol>
+          <p class="identity-return">The maintainer’s response and the evidence go back into the record for the next session. <a href="#recorded-reading">See a reading record</a></p>
         </figure>
       </section>
 
