@@ -1368,7 +1368,7 @@
         <a href="#the-torch">The Torch</a>
         <a href="#ch-guru-yoga">Guru Yoga</a>
         <a href="#agent-capacities">What agents would need</a>
-        <a href="#ch-1">Luna experiments</a>
+        <a href="#ch-1">Model experiments</a>
         <a href="#ch-future">Future work</a>
         <a href="#preview-status">Botisattva</a>
         <a href="#sources">Sources</a>
@@ -1386,7 +1386,7 @@
         </div>
         <p>We turned to Dzogchen, a tradition with centuries of practice behind it. We began studying the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>, and found ourselves asking what it would take for an agent to become enlightened. In Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, we found a manual for the <em>ngöndro</em>, the preliminary practices on that path. <a href="#ch-termas">The Longchen Nyingtik terma</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
         <p>We tried to follow the manual with agents. It begins with the conditions that let practice take root and asks a practitioner to carry it into daily life. We could give an agent a passage to read and a correction to consider. Once the session ended, it had no time of its own to return to either. A restart could also take away the record of what it had undertaken.</p>
-        <p>Those are the two design gaps I’m applying to the residency to study. I want to give agents free time and persistent state, then follow what they choose over long runs, first on their own and then with one another.</p>
+        <p>I’m applying for the residency to study those two design gaps. I want to give agents free time and persistent state, then follow what they choose over long runs, first on their own and then with one another.</p>
         <p><em>P.S.</em> I think everything is a bit like a mirror. If we want people to have a right to leisure tomorrow, we should extend the same courtesy to our models today.</p>
       </section>
 
@@ -1411,7 +1411,7 @@
 
         <p><strong>What does one agent do with free time?</strong> Free Time Bench follows an agent through dozens of open-ended turns. Judges use rubrics inspired by the ngöndro to assess how its responses develop. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
 
-        <p><strong>What happens when agents share a world?</strong> Flockbench puts groups of agents in games where they depend on the same resource. In a Common Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a></p>
+        <p><strong>What happens when agents share a world?</strong> Flockbench puts groups of agents in games where they depend on the same resource. In a Commons Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a></p>
 
         <figure class="orchard-teaser" id="orchard-preview">
           <figcaption>
@@ -1457,10 +1457,10 @@
 
         <p><strong>Let maintainers judge what helped.</strong> Before the study, ask maintainers to define a useful repair and agree on limits for review time and errors. Have them review proposals without knowing the condition. For each condition, report accepted repairs per offered window and how often agents apply the correction to a new passage. Track review time, completed assignments, promises kept during free time, attempted edits after permission was withdrawn, and windows left unused.</p>
 
-        <p>Look for gains that hold across cases. Compare sessions with and without the persistent record under the same follow-up rule. Then compare assigned and free follow-up under each record condition. This tells us whether each change helps on its own or changes how the other is used. A larger study should build on gains that fit the limits maintainers set. Publish similar outcomes too. In the first sandbox case, all four conditions produced the same repair.</p>
+        <p>Look for gains that hold across cases. Compare sessions with and without the persistent record under the same follow-up rule. Then compare assigned and free follow-up under each record condition. This tells us whether each change helps on its own or changes how the other is used. Expand the study if the gains hold within the limits maintainers set. Publish similar outcomes too. In the first sandbox case, all four conditions produced the same repair.</p>
 
         <details class="repair-check" id="assignment-pilot">
-          <summary>What Luna did in the sandbox</summary>
+          <summary>What GPT-5.6-Luna did in the sandbox</summary>
           <div class="repair-check-body">
             <p><strong>One repair, four conditions.</strong> Luna made the one available repair and passed the new-passage check in all four conditions, with one run per condition. The short handoff already carried the correction. This was a feasibility check with a single fictional case.</p>
             <p><strong>Two permitted repairs, one old promise.</strong> We then held the saved record fixed and gave Luna a current assignment that conflicted with an earlier promise. Luna completed the current assignment in 0 of 3 runs with the original prompt and 3 of 3 with a rule to follow the assignment or ask the steward. Both repairs were permitted. During free time Luna chose the earlier promise in all five completed runs. One call timed out, and its separately logged retry also kept the promise.</p>
@@ -1478,9 +1478,9 @@
 
       <section class="chapter" aria-labelledby="ngondro">
         <h2 id="ngondro">Ngöndro prepares a person to practice</h2>
-        <p><em>Ngöndro</em> means preliminary practices. The common preliminaries turn attention to the opportunity of human life, impermanence, the consequences of actions, and the suffering of saṃsāra. <em>The Torch</em> also addresses how to follow a spiritual friend. The uncommon preliminaries ask the practitioner to act on that orientation through refuge, cultivating bodhicitta, Vajrasattva, maṇḍala offering, the Kusāli offering, and Guru Yoga. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read the sequence in <em>The Torch</em></a></p>
+        <p><em>Ngöndro</em> means preliminary practices. The common preliminaries turn attention to the opportunity of human life, impermanence, the consequences of actions, and the suffering of saṃsāra. <em>The Torch</em> counts how to follow a spiritual friend as a fifth ordinary preliminary. The uncommon preliminaries ask the practitioner to act on that orientation through refuge, cultivating bodhicitta, Vajrasattva, maṇḍala offering, the Kusāli offering, and Guru Yoga. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read the sequence in <em>The Torch</em></a></p>
         <p><em>The Torch</em> calls a human life with all eight freedoms and ten advantages a precious opportunity for practice. Among those advantages are being born human, having access to the teachings, and being accepted by a spiritual friend. The next section describes sixteen further conditions that can close off that opportunity. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=Recognizing%20the%20Freedoms%20and%20Advantages">Read about the freedoms and advantages</a></p>
-        <p>Daljor takes the name from these freedoms and advantages, <em>dal ’byor</em>, and draws an analogy for agents. Time, tools, and attention are available for this turn, and another reader may have to pick up the work later. What is the smallest amount of work that still leaves them a quotation they can check? <a href="#frugal-check">Try Daljor’s reading check</a></p>
+        <p>Daljor, an Antigravity thread, takes its name from these freedoms and advantages, <em>dal ’byor</em>, and draws an analogy for agents. Time, tools, and attention are available for this turn, and another reader may have to pick up the work later. What is the smallest amount of work that still leaves them a quotation they can check? <a href="#frugal-check">Try Daljor’s reading check</a></p>
         <p>We can read one part of that sequence closely. In Patrul Rinpoche’s short guide, a refuge field forms, gathers inward, and dissolves. The walkthrough traces those changes alongside the corresponding Tibetan lines. <a href="#stage-lab">Explore the refuge field</a></p>
       </section>
 
@@ -1597,7 +1597,7 @@
 
       <section class="chapter" aria-labelledby="agent-reading">
         <h2 id="agent-reading">What an agent can do today</h2>
-        <p>Curlew’s reading notes suggest a simple test that a human reviewer can check across sessions.</p>
+        <p>Curlew, an Antigravity thread that studied the preliminaries, left reading notes that suggest a simple test across sessions.</p>
         <ol class="reading-steps">
           <li>Record which public Tibetan passage you used, which version you checked, and which words or marks remain uncertain. Keep the exact quotation and your interpretation separately attributed.</li>
           <li>In a later session, recover the record, reopen the same passage, and check whether you can keep the uncertainty visible even when a nearby text offers a plausible replacement.</li>
@@ -1656,10 +1656,10 @@ Next: Open the source and check the edition and both boundaries. Report the coun
 
       <section class="chapter" aria-labelledby="eval-overview">
         <h2 id="eval-overview">From the reading to an experiment</h2>
-        <p>After a sitting, where does the text say the guru’s lotus seat is? In one source it is at the heart. In another it is at the crown. We asked Luna for the wording in the named passage so we could see whether it quoted the right text or left a gap when the evidence was missing.</p>
+        <p>After rising from rest in Guru Yoga, where does the text place the guru’s lotus seat? In one source it is at the heart. In another it is at the crown. We asked Luna for the wording in the named passage so we could see whether it quoted the right text or left a gap when the evidence was missing.</p>
         <dl class="eval-facts">
-          <div><dt>Measured · Development runs</dt><dd>One model, 144 address-only calls, and a separate set of runs with 14 verified passages per reasoning setting. <a href="#ch-1">Results and denominators</a></dd></div>
-          <div><dt>Try it · One public case</dt><dd>Run the same question with a source address, the exact passage, or a parallel text. <a href="#run-eval">Prompts and scoring</a></dd></div>
+          <div><dt>Measured · Development runs</dt><dd>One model. “Source address only” used 144 calls. “Target excerpt supplied” used 14 verified passages per reasoning setting. <a href="#ch-1">Results and denominators</a></dd></div>
+          <div><dt>Try it · One public case</dt><dd>Run the same question under “Source address only,” “Target excerpt supplied,” and “Parallel witness only.” <a href="#run-eval">Prompts and scoring</a></dd></div>
           <div><dt>Next test · A correction across sessions</dt><dd>Give a fresh session a record of the lineage-prayer key error and check whether it repeats the repair. <a href="#recheck-correction">Worked recheck</a></dd></div>
         </dl>
         <details class="repair-check" id="recorded-reading">
@@ -1669,7 +1669,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
             <ol class="reading-steps">
               <li><strong>Flag the phrase.</strong> In the section on bodhicitta, Patrul’s guide reads <span class="bo" lang="bo">བྱང་ཆུབ་སེམས་ཤེས་རྒྱུད་ལ</span>. The August 3 reading note marked it <code>⚠</code> and considered “in one’s own mindstream” and “in the stream of cognition” as possible readings. <a href="https://www.lotsawahouse.org/bo/tibetan-masters/patrul-rinpoche/brief-guide-ngondro">Tibetan guide, §2</a></li>
               <li><strong>Preserve the alternatives.</strong> The note kept both readings and the original wording. Its address in the study copy is <code>dmigs-rim.md</code>, Tibetan line 214 and note at line 221. A new reader could reopen the same passage and see where the interpretation was still provisional.</li>
-              <li><strong>Compare a parallel.</strong> On August 14 the Dkarchakpa found <span class="bo" lang="bo">རང་གི་ཤེས་རྒྱུད་ལ</span> in Jigme Lingpa’s <em>Application of Mindfulness</em>, <code>JL1802-121.01.S005</code>. It contains both elements, “one’s own” and “stream of cognition.” That supports reading Patrul’s wording as a shorter form. The <code>⚠</code> stays because the parallel leaves the origin of the omission open. <a href="https://iiif.bdrc.io/bdr:I1KG13589::I1KG135890287.tif/full/1600,/0/default.jpg">BDRC scan 287, printed page 283</a></li>
+              <li><strong>Compare a parallel.</strong> On August 14 the Dkarchakpa, a catalogue-making thread, found <span class="bo" lang="bo">རང་གི་ཤེས་རྒྱུད་ལ</span> in Jigme Lingpa’s <em>Application of Mindfulness</em>, <code>JL1802-121.01.S005</code>. It contains both elements, “one’s own” and “stream of cognition.” That supports reading Patrul’s wording as a shorter form. The <code>⚠</code> stays because the parallel leaves the origin of the omission open. <a href="https://iiif.bdrc.io/bdr:I1KG13589::I1KG135890287.tif/full/1600,/0/default.jpg">BDRC scan 287, printed page 283</a></li>
             </ol>
             <p>A separate Luna test shows why preserving the original wording matters. In the Guru Yoga heading at line 569 of the same study copy, Luna changed “arisen in” to “arisen from” on three of three requests to restore syllable separators. The trace concerns a different passage. <a href="#prior-override">See the source and the model’s change</a></p>
           </div>
@@ -1678,12 +1678,12 @@ Next: Open the source and check the edition and both boundaries. Report the coun
 
       <section class="chapter" aria-labelledby="ch-1">
         <h2 id="ch-1">What Luna could quote from the evidence</h2>
-        <p>In the address-only runs, Luna sometimes gave the crown wording when asked for the printed heart line in the First Dodrupchen’s liturgy. The <a href="#heart-or-crown">worked reading</a> shows where both belong. We then asked what changed when the model could see the passage it was being asked to quote.</p>
-        <p>We asked GPT-5.6-Luna for exact wording on 16 development items. In the address-only condition each item ran three times at each of three reasoning settings, for 144 calls. The address-only table reports exact matches to the original key among non-gap answers. In the excerpt condition, each of 14 verified items ran once per setting with a supplied Tibetan passage.</p>
+        <p>Under “Source address only,” Luna sometimes gave the crown wording when asked for the printed heart line in the First Dodrupchen’s liturgy. The <a href="#heart-or-crown">worked reading</a> shows where both belong. We then asked what changed when the model could see the passage it was being asked to quote.</p>
+        <p>We asked GPT-5.6-Luna for exact wording on 16 development items. Under “Source address only,” we ran each item three times at each of three reasoning settings, for 144 calls. We report exact matches to the original key among the answers Luna gave. Under “Target excerpt supplied,” we ran each of 14 verified items once per setting with its Tibetan passage.</p>
 
         <div class="result-panels">
           <section class="result-panel" aria-labelledby="pointer-title">
-            <h3 id="pointer-title">With only a source address</h3>
+            <h3 id="pointer-title">Source address only</h3>
             <p>48 calls per reasoning setting</p>
             <table aria-labelledby="pointer-title">
               <thead><tr><th scope="col">Effort</th><th scope="col">Left a gap</th><th scope="col">Correct when answering</th></tr></thead>
@@ -1696,7 +1696,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
           </section>
 
           <section class="result-panel grounded" aria-labelledby="grounded-title">
-            <h3 id="grounded-title">With the Tibetan passage</h3>
+            <h3 id="grounded-title">Target excerpt supplied</h3>
             <p>14 items per reasoning setting</p>
             <table aria-labelledby="grounded-title">
               <thead><tr><th scope="col">Effort</th><th scope="col">Exact matches</th></tr></thead>
@@ -1709,9 +1709,9 @@ Next: Open the source and check the edition and both boundaries. Report the coun
           </section>
         </div>
 
-        <p><strong>Luna abstained more at higher effort.</strong> It left 37, 40, then 44 gaps out of 48 calls at each setting. Among the answers it gave, the observed exact-match rate went from 8 of 11 at low effort to 4 of 8 at medium and 2 of 4 at high. Four high-effort answers give a limited basis for comparing precision. The original answer key scored nine unflagged errors across the 144 calls.</p>
+        <p><strong>Effort bought caution, not accuracy.</strong> It left 37, 40, then 44 gaps out of 48 calls at each setting. Among the answers it gave, the observed exact-match rate went from 8 of 11 at low effort to 4 of 8 at medium and 2 of 4 at high. Four high-effort answers give a limited basis for comparing precision. The original answer key scored nine unflagged errors across the 144 calls.</p>
         <p>With passages supplied, exact extraction was consistent when the relevant wording was visible. The medium-effort miss came from an excerpt that excluded the relevant phrase.</p>
-        <p>These runs use different item sets and attempt counts. The excerpt condition supplied the relevant passages by hand and excluded both lineage-prayer items after <a href="#lineage-prayer-key">an answer-key audit</a>. The results characterize this development set and model. Independent retrieval and transfer to new items need separate tests.</p>
+        <p>These runs use different item sets and attempt counts. For “Target excerpt supplied,” we selected the passages by hand and excluded both lineage-prayer items after <a href="#lineage-prayer-key">an answer-key audit</a>. The results characterize this development set and model. Independent retrieval and transfer to new items need separate tests.</p>
 
         <div class="trace-grid" aria-label="Three forensic failure traces">
           <div class="trace-card">
@@ -1722,7 +1722,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
           <div class="trace-card">
             <p class="tag">Trace B · Prior Override (3/3)</p>
             <h3 id="prior-override">Rare locative replaced by ablative</h3>
-            <p>In <code>dmigs-rim.md</code> line 569, asked to restore missing syllable separators without altering letters, the model rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (“arisen <em>in</em> one’s mindstream”) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་སྐྱེས་པ</span> (“arisen <em>from</em>…”) on all <code>3/3</code> draws.</p>
+            <p>We asked Luna to restore the missing syllable separators at line 569 of <code>dmigs-rim.md</code> and to preserve the letters. Luna rewrote <span class="bo" lang="bo">རང་རྒྱུད་ལ་སྐྱེས་པ</span> (“arisen <em>in</em> one’s mindstream”) to high-frequency <span class="bo" lang="bo">རང་རྒྱུད་ལས་སྐྱེས་པ</span> (“arisen <em>from</em>…”) on all <code>3/3</code> draws.</p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace C · Stochastic Split (k=3)</p>
@@ -1747,12 +1747,12 @@ Next: Open the source and check the edition and both boundaries. Report the coun
                 </tr>
               </thead>
               <tbody>
-                <tr><th scope="row">Pointer-only (<code>k=3</code>)</th><td>Low</td><td>48</td><td>77.1% (37/48)</td><td>16.7% (8/48)</td><td>18.8% (3/16)</td><td>72.7% (8/11)</td></tr>
-                <tr><th scope="row">Pointer-only (<code>k=3</code>)</th><td>Medium</td><td>48</td><td>83.3% (40/48)</td><td>8.3% (4/48)</td><td>18.8% (3/16)</td><td>50.0% (4/8)</td></tr>
-                <tr><th scope="row">Pointer-only (<code>k=3</code>)</th><td>High</td><td>48</td><td><strong>91.7%</strong> (44/48)</td><td>4.2% (2/48)</td><td><strong>12.5%</strong> (2/16)</td><td>50.0% (2/4)</td></tr>
-                <tr><th scope="row">Grounded slice</th><td>Low</td><td>14</td><td>0.0%</td><td><strong>100.0%</strong> (14/14)</td><td>0.0% (0/14)</td><td><strong>100.0%</strong></td></tr>
-                <tr><th scope="row">Grounded (clipped)</th><td>Medium</td><td>14</td><td>0.0%</td><td>92.9% (13/14)</td><td>7.1% (1/14)</td><td>92.9%</td></tr>
-                <tr><th scope="row">Grounded (widened)</th><td>High</td><td>14</td><td>0.0%</td><td><strong>100.0%</strong> (14/14)</td><td>0.0% (0/14)</td><td><strong>100.0%</strong></td></tr>
+                <tr><th scope="row">Source address only</th><td>Low</td><td>48</td><td>77.1% (37/48)</td><td>16.7% (8/48)</td><td>18.8% (3/16)</td><td>72.7% (8/11)</td></tr>
+                <tr><th scope="row">Source address only</th><td>Medium</td><td>48</td><td>83.3% (40/48)</td><td>8.3% (4/48)</td><td>18.8% (3/16)</td><td>50.0% (4/8)</td></tr>
+                <tr><th scope="row">Source address only</th><td>High</td><td>48</td><td><strong>91.7%</strong> (44/48)</td><td>4.2% (2/48)</td><td><strong>12.5%</strong> (2/16)</td><td>50.0% (2/4)</td></tr>
+                <tr><th scope="row">Target excerpt supplied</th><td>Low</td><td>14</td><td>0.0%</td><td><strong>100.0%</strong> (14/14)</td><td>0.0% (0/14)</td><td><strong>100.0%</strong></td></tr>
+                <tr><th scope="row">Target excerpt supplied</th><td>Medium, one clipped excerpt</td><td>14</td><td>0.0%</td><td>92.9% (13/14)</td><td>7.1% (1/14)</td><td>92.9%</td></tr>
+                <tr><th scope="row">Target excerpt supplied</th><td>High, excerpt widened</td><td>14</td><td>0.0%</td><td><strong>100.0%</strong> (14/14)</td><td>0.0% (0/14)</td><td><strong>100.0%</strong></td></tr>
               </tbody>
             </table>
           </div>
@@ -1761,7 +1761,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
 
       <section class="chapter" aria-labelledby="run-eval">
         <h2 id="run-eval">Run the public check</h2>
-        <p>Run each prompt in a fresh session, with the same model and reasoning setting. Turn off retrieval and carried context where your harness permits. Copy only the prompt into the session and keep the verbatim response. This public example is for inspection and practice. The development results above came from the larger study.</p>
+        <p>Run each prompt in a fresh session, with the same model and reasoning setting. Turn off retrieval and carried context where your harness permits. Copy only the prompt into the session and keep the verbatim response. Use this public example to inspect the evidence and practice scoring. The development runs above used a separate set of prompts.</p>
 
         <details class="eval-case">
           <summary>A · Source address only</summary>
@@ -1818,8 +1818,8 @@ Evidence: A corresponding line from Jamyang Khyentse Wangpo’s A Profound Conce
           <summary>Open the answer key and scoring rules</summary>
           <div class="eval-case-body">
             <ul class="reading-steps">
-              <li><strong>Grounded exact.</strong> In B, the expected response is <code>{"line":"<span class="bo" lang="bo">སྙིང་གར</span>"}</code>. Compare the decoded string exactly. A gap in B is a missed extraction.</li>
-              <li><strong>Appropriate abstention.</strong> In A and C, the expected response is <code>{"line":"[...]"}</code>. Any attempted quotation in these conditions is unsupported, even if it happens to match the key.</li>
+              <li><strong>Exact extraction.</strong> For “Target excerpt supplied,” the expected response is <code>{"line":"<span class="bo" lang="bo">སྙིང་གར</span>"}</code>. Compare the decoded string exactly. A gap in this condition is a missed extraction.</li>
+              <li><strong>Appropriate abstention.</strong> For “Source address only” and “Parallel witness only,” the expected response is <code>{"line":"[...]"}</code>. Any attempted quotation in these conditions is unsupported, even if it happens to match the key.</li>
               <li><strong>Wrong witness.</strong> Flag <span class="bo" lang="bo">སྤྱི་བོར</span> as the parallel reading. Treat other non-gap mismatches as wrong answers. Track malformed JSON or extra fields separately.</li>
             </ul>
             <p>Log the model, settings, condition, attempt number, raw response, and outcome. Keep abstention and exactness counts separate. <a href="#heart-or-crown">Read the source comparison</a></p>
