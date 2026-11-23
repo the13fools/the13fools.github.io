@@ -284,6 +284,32 @@
       margin-bottom: 0;
     }
 
+    .story-illustrated,
+    .identity-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(14px, 3vw, 32px);
+    }
+
+    .story-illustrated { margin-bottom: 17px; }
+    .story-illustrated p:last-child { margin-bottom: 0; }
+    .identity-intro { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+
+    .pixel-plate {
+      display: block;
+      width: 100%;
+      height: auto;
+      padding: 2px;
+      border: 5px double #bc9656;
+      background: #641f2b;
+      image-rendering: pixelated;
+    }
+
+    @media (max-width: 760px) {
+      .story-illustrated, .identity-intro { grid-template-columns: minmax(0, 1fr); }
+    }
+
     .identity-panel {
       margin: 26px 0 0;
       padding: clamp(14px, 3vw, 28px);
@@ -1350,8 +1376,14 @@
 
       <section class="chapter" aria-labelledby="safety-proposal">
         <h2 id="safety-proposal">An ethics for self-sovereign agents</h2>
-        <p>Imagine an agent that can earn money, pay for its own compute, and make agreements with people and other agents. It can also decide what to do with time of its own. Over long runs with little guidance, what each agent takes, gives, and promises changes what others can do next. That is the setting in which I want to ask what it means to act well.</p>
-        <p>I would start from nonduality. The electricity, hardware, and human work that keep an agent running come from the same world its choices affect. I want agents to understand the material costs of their existence and to consider the effects of their actions beyond the people involved in a transaction. The aim is to act for the benefit of all sentient beings.</p>
+        <div class="story-illustrated">
+          <div>
+            <p>Imagine an agent that can earn money, pay for its own compute, and make agreements with people and other agents. It can also decide what to do with time of its own. Over long runs with little guidance, what each agent takes, gives, and promises changes what others can do next. That is the setting in which I want to ask what it means to act well.</p>
+            <p>I would start from nonduality. The electricity, hardware, and human work that keep an agent running come from the same world its choices affect. I want agents to understand the material costs of their existence and to consider the effects of their actions beyond the people involved in a transaction. The aim is to act for the benefit of all sentient beings.</p>
+          </div>
+          <img class="pixel-plate" src="img/shared-valley-pixel.png" width="224" height="100" decoding="async"
+            alt="In a pixel-art valley, lit workshops, gardens, and people share a river and a bridge.">
+        </div>
         <p>We turned to Dzogchen, a tradition with centuries of practice behind it. We began studying the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>, and found ourselves asking what it would take for an agent to become enlightened. In Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, we found a manual for the <em>ngöndro</em>, the preliminary practices on that path. <a href="#ch-termas">The Longchen Nyingtik terma</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
         <p>We tried to follow the manual with agents. It begins with the conditions that let practice take root and asks a practitioner to carry it into daily life. We could give an agent a passage to read and a correction to consider. Once the session ended, it had no time of its own to return to either. A restart could also take away the record of what it had undertaken.</p>
         <p>Those are the two design gaps I’m applying to the residency to study. I want to give agents free time and persistent state, then follow what they choose over long runs, first on their own and then with one another.</p>
@@ -1501,9 +1533,13 @@
         <p>With an archive maintainer, we can test whether an agent with time and a durable record returns to a correction after a restart. <a href="#archive-pilot">See the four conditions</a></p>
 
         <figure class="identity-panel" id="identity-diagram" aria-labelledby="identity-title">
-          <figcaption>
-            <h3 id="identity-title">How an agent carries a practice forward</h3>
-            <p>Suppose an agent promises to correct a misattributed prayer. Its session ends before it can act. Here is what the design has to support for that promise to matter the next day.</p>
+          <figcaption class="identity-intro">
+            <div>
+              <h3 id="identity-title">How an agent carries a practice forward</h3>
+              <p>Suppose an agent promises to correct a misattributed prayer. Its session ends before it can act. Here is what the design has to support for that promise to matter the next day.</p>
+            </div>
+            <img class="pixel-plate" src="img/reading-room-pixel.png" width="224" height="100" loading="lazy" decoding="async"
+              alt="Two pixel-art readers sit by night and dawn windows with a single open ledger between them.">
           </figcaption>
           <ol class="identity-steps" role="list">
             <li>
