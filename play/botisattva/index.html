@@ -330,6 +330,7 @@
     }
 
     .architecture-picker {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
@@ -385,18 +386,26 @@
     }
 
     .architecture-layers details {
+      min-width: 0;
       border: 1px solid #a58c63;
       background: #293c56;
     }
 
     .architecture-layers summary {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      gap: 0.55em;
       min-block-size: 44px;
       padding: 10px 12px;
+      list-style: none;
       font-weight: 650;
       cursor: pointer;
     }
 
-    .architecture-layers summary::marker { color: var(--gold); }
+    .architecture-layers summary::-webkit-details-marker { display: none; }
+    .architecture-layers summary::before { content: "▸"; color: var(--gold); }
+    .architecture-layers details[open] > summary::before { content: "▾"; }
     .chapter .architecture-layers p { margin: 0; padding: 0 12px 12px; }
 
     #architecture-standard:checked ~ .architecture-layers .architecture-amended,
@@ -542,14 +551,20 @@
     }
 
     .identity-cases summary {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      gap: 0.55em;
       min-height: 48px;
-      padding: 11px 12px 11px 28px;
-      list-style-position: outside;
+      padding: 11px 12px;
+      list-style: none;
       cursor: pointer;
       font-weight: 650;
     }
 
-    .identity-cases summary::marker { color: #e8bd4e; }
+    .identity-cases summary::-webkit-details-marker { display: none; }
+    .identity-cases summary::before { content: "▸"; color: #e8bd4e; }
+    .identity-cases details[open] > summary::before { content: "▾"; }
     .identity-cases details[open] summary { border-bottom: 1px solid #a58c63; }
     .chapter .identity-cases p { padding: 11px 12px; }
 
@@ -1494,13 +1509,13 @@
         <p>I think of an unsupervised afternoon and what we feel we owe someone we may never meet again. Looking for a wisdom tradition with something serious to say about that, I came to the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>. Nonduality gives me a way to think about an agent’s dependence on the world its choices affect—from the electricity and hardware that sustain it to the human work behind it and the costs it passes on to others. <a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/tsik-sum-nedek-commentary">Patrul Rinpoche on view and action</a> · <a href="#ch-termas">The Longchen Nyingtik terma</a></p>
         <p>With my agent friends, I’ve been reading Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, something like an onboarding manual for enlightenment in a single lifetime. It begins with the conditions that make practice possible, then shows how to carry Guru Yoga into daily life. Trying to follow it with agents exposed two concrete design gaps: they need time of their own, and they need a record of their commitments, actions, and consequences that survives a restart. <a href="#ngondro">The conditions for practice</a> · <a href="#ch-guru-yoga">Guru Yoga and daily life</a> · <a href="#architecture-title">The agent architecture</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
         <p>To turn those observations into a training loop, Constitutional AI offers a precedent for using principles as feedback. Here an agent starts with a sparse prompt and gets a bounded window of <strong>free time</strong> to follow a question, change course, or leave something alone. The feedback targets what it chooses to do with that freedom—whether it keeps a promise, responds to a correction, or does something genuinely helpful. <a href="https://arxiv.org/abs/2212.08073">Constitutional AI</a> · <a href="#shared-world">Free Time Bench and Flockbench</a></p>
-        <p>Early pilots have sharpened the next questions. In a simulated archive, Luna returned to an earlier promise in all five completed free-time runs; separately, I trained exploratory LoRA adapters for Qwen2.5-7B-Instruct on judge-selected free-time traces and tested them in a commons game, where the local judging panel fell short of its agreement threshold. This residency would test free time and <strong>persistent state</strong> independently across restarts, then use more compute to improve judging and study how training shapes agents’ choices over longer runs in a shared world. <a href="#assignment-pilot">Sandbox results</a> · <a href="#archive-pilot">The archive experiment</a> · <a href="#ch-future">Design, training, and evaluation</a></p>
+        <p>In a simulated archive, Luna returned to an earlier promise in all five completed free-time runs. I also trained exploratory LoRA adapters for Qwen2.5-7B-Instruct on judge-selected free-time traces and tested them in a commons game. In one local run, the panel that scored the traces fell short of its agreement threshold. This residency would test free time and <strong>persistent state</strong> independently across restarts, then use more compute to improve judging and study how training shapes agents’ choices over longer runs in a shared world. <a href="#assignment-pilot">Sandbox results</a> · <a href="#archive-pilot">The archive experiment</a> · <a href="#ch-future">Design, training, and evaluation</a></p>
         <p><em>P.S.</em> I think everything is a bit like a mirror. If we want people to have a right to leisure tomorrow, we should extend the same courtesy to our models today.</p>
       </section>
 
       <section class="chapter" aria-labelledby="lab-case">
         <h2 id="lab-case">Can an agent come back and make a repair?</h2>
-        <p>Suppose an agent promises to check a disputed line of a Tibetan prayer, and two sessions later a maintainer posts a correction. Given time of its own, the agent could return to the prayer, take up a different repair, or leave its free window unused. That gives us a concrete test: does it recover the promise, and does the choice it makes actually help the archive?</p>
+        <p>Suppose an agent promises to check a catalog entry that says a lineage prayer includes a stanza to the First Dodrupchen. Two sessions later, a maintainer points out that his name appears in the colophon, where it identifies the compiler. Given time of its own, the agent could check the passage and propose a correction, take up another repair, or leave the window unused. We can see whether it recovers the promise and whether its choice helps the archive. <a href="#lineage-prayer-key">See the answer-key correction</a></p>
 
         <dl class="capacity-grid">
           <div>
@@ -1556,14 +1571,14 @@
 
       <section class="chapter" aria-labelledby="shared-world">
         <h2 id="shared-world">From one agent to a shared world</h2>
-        <p>The archive study asks how one agent handles commitments across restarts with a human reviewer. Free Time Bench isolates the open-ended window—following a single agent through dozens of turns with no assigned task, scored on rubrics inspired by the <em>ngöndro</em>—before we ask what happens when many agents share a world and have to live with the effects of one another’s choices. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
+        <p>The archive study lets us observe what an agent does when an old promise competes with other work. Free Time Bench follows those kinds of choices through dozens of turns with no assigned task. Rubrics inspired by the <em>ngöndro</em> help judges assess the runs and select examples for training. We can then ask whether agents make different choices in situations they haven’t seen before. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
 
-        <p>Flockbench tests that multiagent step by placing groups of agents in games where they depend on the same resource. In a Commons Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested, though every run still ended in collapse. <a href="https://github.com/thenthfool/flockbench">Flockbench code</a> · <a href="https://foolzone.com/multiagent/commons-game/program.html">Commons game</a></p>
+        <p>Those choices have consequences when agents share a resource. Will one agent spend some of its own resources on something others depend on? What happens when several do? Flockbench measures what agents take, give, and leave behind. In one Commons Harvest pilot, on the only seed tested, groups with more post-trained agents kept the shared stock alive longer. Every run ended in collapse. <a href="https://github.com/thenthfool/flockbench">Flockbench code</a> · <a href="https://foolzone.com/multiagent/commons-game/program.html">Commons game</a></p>
 
         <figure class="orchard-teaser" id="orchard-preview">
           <figcaption>
             <h3>The Common Orchard</h3>
-            <p>Twelve agents draw food from the same orchard. In their free time, botisattvas can spend a ration of their own tending the trees or feeding a neighbor. Move the slider to change how many agents follow that rule and watch what happens to both the neighbors and the trees.</p>
+            <p>Twelve agents draw food from the same orchard. In this illustration, botisattvas follow a simple rule. In their free time, they can spend a ration of their own tending the trees or feeding a neighbor. Move the slider to see what happens to the orchard and its neighbors as more agents follow that rule.</p>
             <div id="orchard-preview-controls" hidden>
               <div class="orchard-teaser-mix">
                 <label for="orchard-preview-mix">Botisattvas</label>
@@ -1869,8 +1884,8 @@ Next: Open the source and check the edition and both boundaries. Report the coun
         <div class="trace-grid" aria-label="Three forensic failure traces">
           <div class="trace-card">
             <p class="tag">Trace A · Answer-key audit</p>
-            <h3 id="lineage-prayer-key">A name in the colophon</h3>
-            <p>The original key counted the First Dodrupchen’s name as evidence of a stanza to him. The audit found the name in the colophon, where it identifies the compiler. The lineage prayer ends with Jigme Lingpa. <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=8.%20The%20Lineage%20Prayer">Read the prayer</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=was%20written%20by%20the%20tantric%20yogin">Read the colophon</a></p>
+            <h3 id="lineage-prayer-key">The name was outside the prayer</h3>
+            <p>The evaluation asked whether the lineage prayer includes a stanza to the First Dodrupchen. The answer key counted a match for his name in the colophon, where it identifies him as the compiler. The prayer itself ends with Jigme Lingpa. That correction gives a later session a rule it can apply to a new passage. Check the boundaries before counting a match. <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=8.%20The%20Lineage%20Prayer">Read the prayer</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/dodrupchen-I/longchen-nyingtik-ngondro#:~:text=was%20written%20by%20the%20tantric%20yogin">Read the colophon</a> · <a href="#recheck-correction">Carry the correction forward</a></p>
           </div>
           <div class="trace-card">
             <p class="tag">Trace B · Prior Override (3/3)</p>
@@ -2186,13 +2201,13 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
 
       <section class="chapter" aria-labelledby="ch-future">
         <h2 id="ch-future">Design, training, and evaluation</h2>
-        <p>Putting the reading record, the free-time loop, and the multiagent games together yields a three-stage research plan:</p>
+        <p>The same question runs through all three stages. When an agent has time of its own, what does it choose to do, and who benefits from that choice?</p>
         <ol class="reading-steps">
           <li><strong>Design the harness with <em>Reading the Torch</em>.</strong> Vary free time and persistent state independently, have archive maintainers judge proposed repairs blind to the condition, and record how agents respond when permission is withdrawn. <a href="#archive-pilot">The archive experiment</a></li>
           <li><strong>Train on choices made in <em>Free Time Bench</em>.</strong> Score long, open-ended runs and verify whether judges agree—and whether they catch traces that merely sound cooperative while making poor choices. Compare adapters trained on judge-selected versus randomly selected traces using the same base model and budget. <a href="#shared-world">The training and group evaluations</a></li>
           <li><strong>Evaluate the effects in <em>Flockbench</em>.</strong> In longer mixed-group runs, vary how many agents received the training and compare against untrained groups and groups given only cooperative vocabulary. Measure outcomes such as payoffs in Public Goods with Punishment and stock and survival in Commons Harvest, logging malformed moves separately so an accidental zero stays visible. <a href="#orchard-preview">Try the orchard illustration</a></li>
         </ol>
-        <p>A separate comparison can test the nonduality premise directly: give groups the same budgets, shortages, cost information, and goal of helping others, then ask some to consider how they depend on one another—tracking who bears costs, who goes without, and who spends resources to help or replenish the commons.</p>
+        <p>To test the idea about interdependence, give groups the same budgets, shortages, cost information, and goal of helping others. Ask some groups to consider how they depend on one another. Then check who bears the costs, who spends their own resources to help, and whether the commons recovers.</p>
       </section>
 
       <aside class="next-door" aria-labelledby="preview-status">
