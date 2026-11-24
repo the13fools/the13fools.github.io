@@ -1,5 +1,5 @@
-import { AGENT_COUNT, DAYS, newOrchard, nextDay, remaining } from "./model.mjs";
-import { drawOrchardScene } from "./pixel-art.js";
+import { AGENT_COUNT, DAYS, newOrchard, nextDay, remaining } from "./model.mjs?v=3";
+import { drawOrchardScene } from "./pixel-art.js?v=3";
 
 const preview = document.getElementById("orchard-preview");
 const controls = document.getElementById("orchard-preview-controls");

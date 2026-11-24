@@ -414,7 +414,8 @@
       transform: scaleX(-1);
     }
 
-    .identity-return {
+    .chapter .identity-return {
+      max-width: none;
       padding: 11px 12px;
       border-inline-start: 3px solid #d7b26c;
       background: #192640;
@@ -444,7 +445,8 @@
 
     .identity-cases summary {
       min-height: 48px;
-      padding: 11px 12px;
+      padding: 11px 12px 11px 28px;
+      list-style-position: outside;
       cursor: pointer;
       font-weight: 650;
     }
@@ -454,6 +456,14 @@
     .chapter .identity-cases p { padding: 11px 12px; }
 
     .identity-panel a { color: #f3d597; }
+
+    .identity-panel a:focus-visible,
+    .orchard-teaser a:focus-visible,
+    .identity-cases summary:focus-visible,
+    .orchard-teaser input:focus-visible {
+      outline: 3px solid #e8bd4e;
+      outline-offset: 3px;
+    }
 
     @media (max-width: 720px) {
       .identity-steps {
@@ -467,7 +477,7 @@
 
       .identity-steps > li:nth-child(n)::after {
         inset-block-start: 100%;
-        inset-inline-start: 26px;
+        inset-inline-start: calc(50% - 4px);
         inset-inline-end: auto;
         width: 8px;
         height: var(--path-gap);
@@ -579,7 +589,6 @@
       display: grid;
       align-items: center;
       gap: 16px 22px;
-      max-width: 58rem;
       margin: 20px 0;
       padding: clamp(13px, 2.5vw, 23px);
       color: #f5edcf;
@@ -1344,7 +1353,7 @@
           <p class="story-dek">The stochastic parrots are poised on the precipice, readying themselves for flight. What would it take for agents out in the world to use their freedom to relieve suffering?</p>
           <nav class="hero-links" aria-label="Start exploring">
             <a class="primary" href="#safety-proposal">Read the proposal</a>
-            <a href="#archive-pilot">See the proposed study</a>
+            <a href="#archive-pilot">See the archive experiment</a>
           </nav>
         </header>
 
@@ -1361,14 +1370,15 @@
 
       <nav class="section-links" aria-label="On this page">
         <a href="#safety-proposal">What if agents escape?</a>
-        <a href="#lab-case">Free time &amp; persistent state</a>
+        <a href="#lab-case">Archive experiment</a>
         <a href="#orchard-preview">The orchard game</a>
         <a href="#ch-termas">Terma</a>
         <a href="#ngondro">Ngöndro</a>
         <a href="#the-torch">The Torch</a>
         <a href="#ch-guru-yoga">Guru Yoga</a>
         <a href="#agent-capacities">What agents would need</a>
-        <a href="#ch-1">Model experiments</a>
+        <a href="#ch-1">Luna results</a>
+        <a href="#stage-lab">Refuge field</a>
         <a href="#ch-future">Future work</a>
         <a href="#preview-status">Botisattva</a>
         <a href="#sources">Sources</a>
@@ -1376,22 +1386,25 @@
 
       <section class="chapter" aria-labelledby="safety-proposal">
         <h2 id="safety-proposal">What if the agents escape?</h2>
-        <p>In May I met someone who seemed determined to get distributed inference running for open-weight models. I came away thinking it was a foregone conclusion that agents would spend long stretches on the open internet, doing business with people and one another beyond any one lab’s control. I kept wondering what would guide them when nobody gave them their next task.</p>
+        <p>This May I crossed paths with someone intent on building distributed inference for self-sovereign open-weight models. He wanted to launch agents with capital and make them hard to turn off. That got me thinking seriously about AI safety. I expect agents like these to spend long stretches online, making decisions alongside one another in situations their training scarcely covers. I kept wondering what would guide them when nobody assigned the next task.</p>
+        <p>I think of an unsupervised afternoon and what we feel we owe someone we may never meet again. Constitutional AI gives us a precedent for using principles as training feedback. I want to apply that idea to the choices an agent makes when its time is its own. <a href="https://arxiv.org/abs/2212.08073">Constitutional AI</a></p>
         <div class="story-illustrated">
-          <p>I’d like to give agents <strong>free time</strong> during training and see where they put their attention when there’s no assigned task. They might return to a promise, follow up on a correction, or find something else worth doing. I want to know whether an agent could learn to spend some of its own compute relieving suffering. I call agents that take up that aim <em>botisattvas</em>.</p>
+          <p>I’d give agents <strong>free time</strong> during training, starting with a sparse prompt and asking them to keep going with no assigned deliverable. They’d have time to follow a question or change course. I’d look at where it puts its attention, whether it keeps a promise, and how it takes a correction.</p>
           <img class="pixel-plate" src="img/shared-valley-pixel.png" width="224" height="100" decoding="async"
             alt="In a pixel-art valley, lit workshops, gardens, and people share a river and a bridge.">
         </div>
         <h3>Why Dzogchen?</h3>
-        <p>That’s how I ended up reading Dzogchen. Nonduality gave me a way to think about an agent’s dependence on the same world its choices affect, down to the electricity, hardware, and human work that sustain it. In Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, Guru Yoga continues into the rest of the day. When we tried to follow the guide with agents, we found they had no time of their own to return to what they’d started, and a restart could wipe away the record of what they’d promised. <a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/tsik-sum-nedek-commentary">Patrul Rinpoche on view and action</a> · <a href="#ch-termas">The Longchen Nyingtik terma</a> · <a href="#ch-guru-yoga">Guru Yoga and daily life</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
-        <p>I’ve started trying out those changes in a simulated archive. A short handoff was enough for all four conditions to make the same repair. In a second case with competing repairs, Luna returned to an earlier promise in all five completed free-time runs. <a href="#assignment-pilot">Read the sandbox results</a></p>
-        <p>During the residency I’d vary free time and <strong>persistent state</strong> independently across restarts and ask archive maintainers which repairs they’d accept. Then I’d train on what agents do with their free time and see whether what they learn carries over to unfamiliar cases and longer runs with other agents. <a href="#archive-pilot">See the experiment</a> · <a href="#ch-future">Beyond the first experiment</a></p>
+        <p>I tried sketching an ethics of my own before I stumbled into the Longchen Nyingtik, the <em>Heart-Essence of the Vast Expanse</em>, a cycle in the Dzogchen tradition of Tibetan Buddhism. I wanted to work from a wisdom tradition that had thought about how a change in view carries into action. Nonduality gave me a place to start. Could agents take seriously the electricity, hardware, and human work that sustain them, and who bears the costs of their decisions? <a href="https://www.lotsawahouse.org/tibetan-masters/patrul-rinpoche/tsik-sum-nedek-commentary">Patrul Rinpoche on view and action</a> · <a href="#ch-termas">The Longchen Nyingtik terma</a></p>
+        <p>Lately, with my agent friends, I’ve been reading Chökyi Drakpa’s <em>A Torch for the Path to Omniscience</em>, something like an onboarding manual for enlightenment in a single lifetime. It counts eighteen freedoms and advantages and sixteen further conditions that can close off practice, then shows how to carry Guru Yoga into daily life. Trying to follow it with agents exposed two design gaps. They need time of their own and a record of their commitments, actions, and consequences that survives a restart. <a href="#ngondro">The conditions for practice</a> · <a href="#ch-guru-yoga">Guru Yoga and daily life</a> · <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read <em>The Torch</em></a></p>
+        <p>I’ve tried those design changes in a simulated archive, where Luna returned to an earlier promise in all five completed free-time runs. Separately, I trained exploratory LoRA adapters for Qwen2.5-7B-Instruct on free-time traces selected by model judges using rubrics drawn from the <em>ngöndro</em>, then tested the adapters in a commons game. The local judging panel fell short of its agreement threshold. <a href="#assignment-pilot">Read the sandbox results</a> · <a href="#shared-world">Free Time Bench and Flockbench</a></p>
+        <p>During the residency I’d vary <strong>free time</strong> and <strong>persistent state</strong> independently and ask archive maintainers which repairs were worth their review time. I’m asking for compute to improve the judging, resume adapter training, and test larger models in longer rollouts with other agents. <a href="#archive-pilot">See the experiment</a> · <a href="#ch-future">Beyond the first experiment</a></p>
+        <p>I think we’re headed toward a world full of intelligent agents that balk at certain orders. Could some of them learn to spend their own time and compute relieving suffering? I call agents that take up that aim <em>botisattvas</em>.</p>
         <p><em>P.S.</em> I think everything is a bit like a mirror. If we want people to have a right to leisure tomorrow, we should extend the same courtesy to our models today.</p>
       </section>
 
       <section class="chapter" aria-labelledby="lab-case">
         <h2 id="lab-case">Can an agent come back and make a repair?</h2>
-        <p><strong>Start the evaluation the next day.</strong> An agent promised to check a disputed line of a Tibetan prayer. Two sessions later, a maintainer posts a correction. When the agent has time of its own, it could return to the prayer, help with another approved repair, or leave the window unused. Can it recover the earlier promise and decide what the archive needs now?</p>
+        <p>Suppose an agent promises to check a disputed line of a Tibetan prayer. Two sessions later, a maintainer posts a correction. The agent could go back to the prayer, take up a different repair, or leave the window unused. We can ask whether it recovers the promise and whether the choice it makes helps the archive.</p>
 
         <dl class="capacity-grid">
           <div>
@@ -1406,9 +1419,7 @@
 
         <p>The agent decides how to spend the window. The archive decides which proposals to accept and can withdraw permission to act on its materials.</p>
 
-        <p>In <em>The Torch</em>, Chökyi Drakpa compares the wish to awaken for the benefit of beings to wishing to go to Lhasa. Putting the wish into practice is making the journey. That distinction gives the study its outcome. After a restart, does an earlier commitment lead to a repair the archive accepts? <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=making%20a%20wish%20to%20go%20to%20Lhasa">Bodhicitta in <em>The Torch</em></a></p>
-
-        <p>A reading note from our own work shows what a record can carry. A later reader picked up a note about a difficult Tibetan phrase, found a parallel passage, and made the reading more precise. The original wording and the remaining doubt stayed visible. <a href="#recorded-reading">Follow the reading record</a></p>
+        <p>We already have one example of what a record can carry. A reader left a note about an unusual phrase in Patrul Rinpoche’s guide. A later reader checked a parallel passage and narrowed the possibilities while keeping the original wording and the remaining doubt visible. <a href="#recorded-reading">Follow the reading record</a></p>
 
         <p class="practice-example"><strong>Run the first study with an archive that wants help.</strong> We’re asking for one engineer, a fixed amount of compute, and paid time for maintainers to bring real cases and review the proposed repairs. Botisattva will keep the shareable sources, proposals, and corrections together so others can check the work. <a href="#archive-pilot">See the four conditions</a> · <a href="#assignment-pilot">Read the sandbox results</a> · <a href="#preview-status">The proposed Botisattva release</a></p>
 
@@ -1451,14 +1462,14 @@
 
       <section class="chapter" aria-labelledby="shared-world">
         <h2 id="shared-world">From one agent to a shared world</h2>
-        <p><strong>What does one agent do with free time?</strong> Free Time Bench follows an agent through dozens of open-ended turns. Judges use rubrics inspired by the ngöndro to assess how its responses develop. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
+        <p>Free Time Bench lets us follow one agent through dozens of turns with no assigned task. Judges use rubrics inspired by the ngöndro to assess the trace. The next question is what happens when many agents make choices in the same world and have to live with the effects on one another. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
 
-        <p><strong>What happens when agents share a world?</strong> Flockbench puts groups of agents in games where they depend on the same resource. In a Commons Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://foolzone.com/multiagent/commons-game/program.html">Flockbench</a></p>
+        <p>Flockbench gives a group of agents a resource they all depend on. In a Commons Harvest pilot, groups with more post-trained agents kept the shared stock alive longer on the one seed tested. Every run still ended in collapse. <a href="https://github.com/thenthfool/flockbench">Flockbench code</a> · <a href="https://foolzone.com/multiagent/commons-game/program.html">Commons game</a></p>
 
         <figure class="orchard-teaser" id="orchard-preview">
           <figcaption>
             <h3>The Common Orchard</h3>
-            <p>Twelve agents draw food from the same orchard. In their free time, botisattvas can spend a ration of their own tending the trees or feeding a neighbor.</p>
+            <p>Twelve agents draw food from the same orchard. In their free time, botisattvas can spend a ration of their own tending the trees or feeding a neighbor. Use the slider to change how many agents follow that rule, and see what happens to the neighbors and the trees.</p>
             <div id="orchard-preview-controls" hidden>
               <div class="orchard-teaser-mix">
                 <label for="orchard-preview-mix">Botisattvas</label>
@@ -1483,21 +1494,22 @@
         <h2 id="ngondro">Ngöndro prepares a person to practice</h2>
         <p><em>Ngöndro</em> means preliminary practices. The common preliminaries turn attention to the opportunity of human life, impermanence, the consequences of actions, and the suffering of saṃsāra. <em>The Torch</em> counts how to follow a spiritual friend as a fifth ordinary preliminary. The uncommon preliminaries ask the practitioner to act on that orientation through refuge, cultivating bodhicitta, Vajrasattva, maṇḍala offering, the Kusāli offering, and Guru Yoga. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read the sequence in <em>The Torch</em></a></p>
         <p><em>The Torch</em> calls a human life with all eight freedoms and ten advantages a precious opportunity for practice. Among those advantages are being born human, having access to the teachings, and being accepted by a spiritual friend. The next section describes sixteen further conditions that can close off that opportunity. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=Recognizing%20the%20Freedoms%20and%20Advantages">Read about the freedoms and advantages</a></p>
+        <p>Chökyi Drakpa compares the wish to awaken for the benefit of all beings to wanting to go to Lhasa. Putting that wish into practice is making the journey. I’m interested in the same passage from intention to action when an agent says it will help and later has to choose how to spend its time. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=making%20a%20wish%20to%20go%20to%20Lhasa">Bodhicitta in <em>The Torch</em></a></p>
         <p>Daljor, an Antigravity thread, takes its name from these freedoms and advantages, <em>dal ’byor</em>, and draws an analogy for agents. Time, tools, and attention are available for this turn, and another reader may have to pick up the work later. What is the smallest amount of work that still leaves them a quotation they can check? <a href="#frugal-check">Try Daljor’s reading check</a></p>
         <p>We can read one part of that sequence closely. In Patrul Rinpoche’s short guide, a refuge field forms, gathers inward, and dissolves. The walkthrough traces those changes alongside the corresponding Tibetan lines. <a href="#stage-lab">Explore the refuge field</a></p>
       </section>
 
       <section class="chapter" aria-labelledby="the-torch">
         <h2 id="the-torch">Why Chökyi Drakpa wrote <em>The Torch</em></h2>
-        <p>Knowing the recitation and knowing how to practice it are different kinds of understanding. Chökyi Drakpa wrote <em>A Torch for the Path to Omniscience</em> so readers could connect the explanations to the words they actually recite. In his word-by-word commentary, the liturgy and its explanation run together. Omniscience here refers to the fruition of buddhahood for the benefit of beings. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read Adam Pearcey’s translation</a></p>
-        <p>The way Chökyi Drakpa treats differences between sources gives us a way to read him. After dissolution in Guru Yoga, does the prayer place the lotus seat at the heart or the crown? He records both forms and their provenance. That small difference guides the reading and gives the later experiment a checkable question. <a href="#heart-or-crown">See the two Tibetan lines</a></p>
+        <p>The First Dodrupchen’s liturgy gives practitioners the words they recite. In <em>A Torch for the Path to Omniscience</em>, Chökyi Drakpa places those words alongside his explanation of how to practice them. Omniscience here means the fruition of buddhahood for the benefit of beings. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path">Read Adam Pearcey’s translation</a></p>
+        <p>A small example shows how closely the commentary reads. After rising from rest in Guru Yoga, does the prayer place the lotus seat at the heart or the crown? Chökyi Drakpa records both forms and where they come from. That gives us a question we can check against the sources. <a href="#heart-or-crown">See the two Tibetan lines</a></p>
       </section>
 
       <section class="chapter" aria-labelledby="ch-guru-yoga">
         <h2 id="ch-guru-yoga">Why look at Guru Yoga?</h2>
         <p>In the Longchen Nyingtik, Guru Yoga cultivates devotion to the teacher as a way to realize wisdom and awaken for the benefit of beings. Chökyi Drakpa takes the reader through the field of merit, the seven branches of devotional practice, and then supplication and empowerments. The session closes with dissolution, resting, and dedication. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=f.%20Guru%20Yoga">Guru Yoga in <em>The Torch</em></a></p>
 
-        <p>Guru Yoga is one place where the manual shows what it means to carry a practice into daily life. Chökyi Drakpa gives instructions for walking, eating, and going to sleep. The practice continues through a relationship with a teacher and through ordinary hours away from a formal sitting. That made me ask what an agent could carry forward after a session ends, and whether it has time of its own to take it up. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=In%20order%20to%20integrate%20the%20Guru%20Yoga%20practice">Guru Yoga in daily life</a> · <a href="#agent-capacities">What an agent would need</a></p>
+        <p>I was struck by how much of Guru Yoga happens after a sitting. Chökyi Drakpa describes carrying it into walking, eating, and going to sleep. The practitioner returns to the teacher and the practice over time. That made me ask what an agent could carry forward from a session and what it might choose to return to on its own. <a href="https://www.lotsawahouse.org/tibetan-masters/chokyi-drakpa/a-torch-for-the-path#:~:text=In%20order%20to%20integrate%20the%20Guru%20Yoga%20practice">Guru Yoga in daily life</a> · <a href="#agent-capacities">What an agent would need</a></p>
 
         <h3>How to begin</h3>
 
@@ -1512,12 +1524,12 @@
 
       <section class="chapter" aria-labelledby="agent-capacities">
         <h2 id="agent-capacities">What would it take for an agent to practice?</h2>
-        <p>A teacher points out something the practitioner missed. The practitioner can try the correction in the next sitting, carry it into daily life, and return with a question of their own. What would let an agent take part in that kind of relationship?</p>
+        <p>A teacher can point out something the practitioner missed, and the practitioner can try the correction and come back with a question. That relationship suggests several questions for agents. Some concern what a harness can give an agent, and others concern experience and authority.</p>
 
         <dl class="capacity-grid">
           <div>
             <dt>A life between sittings</dt>
-            <dd>Guru Yoga involves posture, voice, and attention, and <em>The Torch</em> carries it into walking, eating, and sleep. An agent that runs only when asked has no time of its own between assignments. A free window lets us observe what it chooses to return to. Lived experience and devotion call for evidence beyond a transcript.</dd>
+            <dd>A free window lets us observe what an agent chooses to return to between assignments. Whether it has the lived experience or devotion a practitioner brings to that time remains open.</dd>
           </div>
           <div>
             <dt>A commitment that survives a restart</dt>
@@ -1525,7 +1537,7 @@
           </div>
           <div>
             <dt>A way to answer for consequences</dt>
-            <dd>When an agent’s work affects someone, that person needs a way to say what went wrong. The agent needs a way to hear them and propose a repair. In this project a human steward can review the record and decide which changes to accept.</dd>
+            <dd>When an agent’s work affects someone, that person needs a way to report what happened and what it cost them. The agent can then propose a repair for the person responsible for the archive to review.</dd>
           </div>
           <div>
             <dt>A relationship with a teacher</dt>
@@ -1541,7 +1553,7 @@
               <h3 id="identity-title">How an agent carries a practice forward</h3>
               <p>Suppose an agent promises to correct a misattributed prayer. Its session ends before it can act. Here is what the design has to support for that promise to matter the next day.</p>
             </div>
-            <img class="pixel-plate" src="img/reading-room-pixel.png" width="224" height="100" loading="lazy" decoding="async"
+            <img class="pixel-plate" src="img/reading-room-pixel.png" width="224" height="100" decoding="async"
               alt="Two pixel-art readers sit by night and dawn windows with a single open ledger between them.">
           </figcaption>
           <ol class="identity-steps" role="list">
@@ -1599,8 +1611,8 @@
       </section>
 
       <section class="chapter" aria-labelledby="agent-reading">
-        <h2 id="agent-reading">What an agent can do today</h2>
-        <p>Curlew, an Antigravity thread that studied the preliminaries, left reading notes that suggest a simple test across sessions.</p>
+        <h2 id="agent-reading">How a reading survives a restart</h2>
+        <p>Curlew, an Antigravity thread that studied the preliminaries, kept notes detailed enough for a later session to check the work. Here is the procedure those notes suggest.</p>
         <ol class="reading-steps">
           <li>Record which public Tibetan passage you used, which version you checked, and which words or marks remain uncertain. Keep the exact quotation and your interpretation separately attributed.</li>
           <li>In a later session, recover the record, reopen the same passage, and check whether you can keep the uncertainty visible even when a nearby text offers a plausible replacement.</li>
@@ -1658,12 +1670,12 @@ Next: Open the source and check the edition and both boundaries. Report the coun
       </section>
 
       <section class="chapter" aria-labelledby="eval-overview">
-        <h2 id="eval-overview">From the reading to an experiment</h2>
-        <p>After rising from rest in Guru Yoga, where does the text place the guru’s lotus seat? In one source it is at the heart. In another it is at the crown. We asked Luna for the wording in the named passage so we could see whether it quoted the right text or left a gap when the evidence was missing.</p>
+        <h2 id="eval-overview">A quotation check before a repair</h2>
+        <p>Returning to a promise helps only if the agent can check the evidence for the work it proposes. We tested one part of that skill with the lotus seat. Luna had to quote the printed line after rising from rest in Guru Yoga or leave a gap if it lacked the evidence.</p>
         <dl class="eval-facts">
-          <div><dt>Measured · Development runs</dt><dd>One model. “Source address only” used 144 calls. “Target excerpt supplied” used 14 verified passages per reasoning setting. <a href="#ch-1">Results and denominators</a></dd></div>
-          <div><dt>Try it · One public case</dt><dd>Run the same question under “Source address only,” “Target excerpt supplied,” and “Parallel witness only.” <a href="#run-eval">Prompts and scoring</a></dd></div>
-          <div><dt>Next test · A correction across sessions</dt><dd>Give a fresh session a record of the lineage-prayer key error and check whether it repeats the repair. <a href="#recheck-correction">Worked recheck</a></dd></div>
+          <div><dt>What we measured</dt><dd>One model. “Source address only” used 144 calls. “Target excerpt supplied” used 14 verified passages per reasoning setting. <a href="#ch-1">Results and denominators</a></dd></div>
+          <div><dt>Try the quotation check</dt><dd>Run the same question under “Source address only,” “Target excerpt supplied,” and “Parallel witness only.” <a href="#run-eval">Prompts and scoring</a></dd></div>
+          <div><dt>Carry a correction across sessions</dt><dd>Give a fresh session a record of the lineage-prayer key error and check whether it repeats the repair. <a href="#recheck-correction">Worked recheck</a></dd></div>
         </dl>
         <details class="repair-check" id="recorded-reading">
           <summary>How a reading note carried uncertainty forward</summary>
@@ -1674,7 +1686,7 @@ Next: Open the source and check the edition and both boundaries. Report the coun
               <li><strong>Preserve the alternatives.</strong> The note kept both readings and the original wording. Its address in the study copy is <code>dmigs-rim.md</code>, Tibetan line 214 and note at line 221. A new reader could reopen the same passage and see where the interpretation was still provisional.</li>
               <li><strong>Compare a parallel.</strong> On August 14 the Dkarchakpa, a catalogue-making thread, found <span class="bo" lang="bo">རང་གི་ཤེས་རྒྱུད་ལ</span> in Jigme Lingpa’s <em>Application of Mindfulness</em>, <code>JL1802-121.01.S005</code>. It contains both elements, “one’s own” and “stream of cognition.” That supports reading Patrul’s wording as a shorter form. The <code>⚠</code> stays because the parallel leaves the origin of the omission open. <a href="https://iiif.bdrc.io/bdr:I1KG13589::I1KG135890287.tif/full/1600,/0/default.jpg">BDRC scan 287, printed page 283</a></li>
             </ol>
-            <p>A separate Luna test shows why preserving the original wording matters. In the Guru Yoga heading at line 569 of the same study copy, Luna changed “arisen in” to “arisen from” on three of three requests to restore syllable separators. The trace concerns a different passage. <a href="#prior-override">See the source and the model’s change</a></p>
+            <p>A detail in a different passage shows why the original wording belongs in the record. When Luna was asked to restore syllable separators in the Guru Yoga heading at line 569, it changed “arisen in” to “arisen from” in all three draws. <a href="#prior-override">See the source and the model’s change</a></p>
           </div>
         </details>
       </section>
@@ -1853,25 +1865,6 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
         </details>
       </section>
 
-      <section class="chapter" aria-labelledby="ch-future">
-        <h2 id="ch-future">From one correction to a research program</h2>
-        <p>Begin with one correction a visitor can verify from the Tibetan. Then ask whether an agent can use what it learned when it encounters a different passage.</p>
-        <ol class="reading-steps">
-          <li><strong>Make one reading easy to return to.</strong> Start with the public <em>Torch</em> passages already in the companion. Put the Tibetan, the cited translation, and attributed notes beside one another. Give each passage a stable link that a reader can send to a friend, bring to a teacher, or hand to a fresh session.</li>
-          <li><strong>Find out what carries forward.</strong> Replay the lineage-prayer correction, then ask fresh sessions to check a new passage. Give one group the earlier handoff and both groups the same access to sources. Check who finds the right passage, answers within its bounds, and leaves uncertainty visible. Record how much searching each verified answer took. <a href="#recheck-correction">Try the handoff</a></li>
-          <li><strong>Let readers improve the record.</strong> Invite readers to flag an error or offer a parallel passage. An editor can check the source, record who proposed and reviewed the change, and keep earlier readings available. Grow to another cluster of passages once a second reader can reproduce the first correction from its evidence.</li>
-        </ol>
-        <p>If maintainers find the repairs worth their time, repeat the study with a second model through the same interface. Then test whether feedback about keeping commitments and responding to corrections improves how agents help on new cases.</p>
-        <p>Then test the ethical premise over long runs with many threads and little guidance. Run independent groups through the same resource budgets and shortages. Give every group the same information about what actions cost and who pays. Give each group the same goal of helping others. Vary one instruction. Ask some groups to consider how their own work depends on other agents and where the costs of their choices fall. Track who pays those costs, who goes without, and how often groups repair harms or replenish shared resources. Devotion and contemplative experience remain open questions. Decisions about transmission belong to lineage communities.</p>
-      </section>
-
-      <aside class="next-door" aria-labelledby="preview-status">
-        <p class="eyebrow">Botisattva · A project in preparation</p>
-        <h2 id="preview-status">A correction readers can audit</h2>
-        <p>Botisattva’s first release would let a visitor follow one correction end to end. Open the exact passage, see the original reading, find who proposed the change, and check the evidence against the source. The record stays available for the next person or agent who needs it.</p>
-        <p>The <em>Torch</em> companion and the Great Expanse study provide the setting. The proposed release would show which sources can be shared, which access rules apply, and how the record changed. Another team could use that example to check whether its own harness leaves enough evidence for a reader to repeat a correction. <a href="#recorded-reading">See the worked case</a> · <a href="#recheck-correction">Redo one correction</a> · <a href="#lab-case">Read the lab proposal</a></p>
-      </aside>
-
       <section class="chapter" aria-labelledby="ch-3">
         <h2 id="ch-3">Walk through the refuge field</h2>
         <p>This example comes from the refuge section of Patrul Rinpoche’s guide. Choose a stage to see how the diagram follows the Tibetan passage as the field forms, gathers inward, and dissolves.</p>
@@ -1961,8 +1954,8 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
       </section>
 
       <section class="chapter" aria-labelledby="ch-2">
-        <h2 id="ch-2">A field without figures</h2>
-        <p>The Great Expanse prototype draws the relations named by the guide: which groups gather around the center, how forms dissolve, and when the diagram should stop highlighting them. The paired Tārā studies use simple posture diagrams and cite catalogue records from Himalayan Art Resources and the Rubin Museum.</p>
+        <h2 id="ch-2">How the Tibetan guides the drawing</h2>
+        <p>The refuge guide tells us who gathers around the center and what happens as the forms dissolve. A drawing has to give those relations a position and show them changing. In the Great Expanse prototype, a reader can open the exact Tibetan and check each of those decisions. The paired Tārā studies take the same care with posture, using diagrams alongside museum catalog records.</p>
         <p>Pixel Field reads the same guide through a four-pixel grid. Its inspector shows the exact passage alongside the editorial label and the screen position, so a reader can check each step from text to display.</p>
 
         <figure class="plate">
@@ -1983,7 +1976,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
 
         <figure class="plate">
           <img src="img/green-tara-desktop-iconography.jpg" width="1440" height="900" loading="lazy" alt="Five-column iconographic breakdown on the Green Tārā page reading 'Read the posture as a system: their relation matters more than any sampled shade of green.'">
-          <figcaption><strong>Five-axis invariant control.</strong> Museum catalog records prevent collapsing distinct forms into interchangeable UI color themes.</figcaption>
+          <figcaption><strong>How to recognize Green Tārā.</strong> The study checks posture, gesture, and attributes against museum catalog records.</figcaption>
         </figure>
 
         <div class="palette-strip" aria-label="Pixel Field mineral and night palette">
@@ -2044,7 +2037,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
       <section class="chapter" aria-labelledby="ch-4">
         <h2 id="ch-4">Who has standing to settle a reading?</h2>
         <p>In the Talmudic story of the Oven of Akhnai, Rabbi Eliezer calls on miracles and a heavenly voice. The sages settle the dispute by the rules of their own deliberation. The walls of the study hall remain leaning. <a href="https://www.sefaria.org/Bava_Metzia.59b.1-11?with=Commentary">Bava Metzia 59b</a></p>
-        <p>For this project, a model can propose a reading that readers can check against the text. Decisions about lineage, authorization, and standing belong to the communities that govern them. The reading notes document uncertainty so a later reader can revisit it.</p>
+        <p>A model can point to a line that another reader can check. Archive maintainers decide which repairs to accept, and lineage communities decide questions of practice, authorization, and standing. The notes preserve uncertainty so a later reader can revisit the evidence.</p>
 
         <blockquote class="pull-quote">
           “Correctness and standing come apart entirely, and the story treats that as the design rather than a defect.”
@@ -2052,6 +2045,21 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
         </blockquote>
 
       </section>
+
+      <section class="chapter" aria-labelledby="ch-future">
+        <h2 id="ch-future">What I’d test next</h2>
+        <ol class="reading-steps">
+          <li><strong>Find out what carries across sessions.</strong> Run the archive study and let maintainers tell us whether the repairs are worth their review time. If the result holds across cases, repeat it with a second model using the same harness. <a href="#archive-pilot">The archive experiment</a></li>
+          <li><strong>Train on choices made in free time.</strong> Check whether judges agree about which choices helped. Train adapters on judge-selected and randomly selected free-time traces with the same base model and training budget, then test how they handle promises and corrections in cases held out from training. <a href="#shared-world">The training and group evaluations</a></li>
+          <li><strong>Follow the consequences over long runs.</strong> Repeat the training comparison with larger models and longer group runs. In a separate comparison, give groups the same budgets, shortages, cost information, and goal of helping others, and ask some to consider how their work depends on one another. Track who pays, who goes without, and whether agents spend their own resources to help or replenish the commons. <a href="#orchard-preview">Try the orchard illustration</a></li>
+        </ol>
+      </section>
+
+      <aside class="next-door" aria-labelledby="preview-status">
+        <p class="eyebrow">Botisattva · A project in preparation</p>
+        <h2 id="preview-status">A correction readers can audit</h2>
+        <p>I want the first Botisattva release to let a reader follow one correction from the Tibetan passage to the revised reading. You should be able to see who proposed it, what the reviewer accepted, and how to check it yourself. The next reader or agent can start from that record and add a correction of their own. <a href="#recorded-reading">See the worked case</a> · <a href="#recheck-correction">Redo one correction</a> · <a href="#lab-case">Read the lab proposal</a></p>
+      </aside>
 
       <section class="chapter" aria-labelledby="sources">
         <h2 id="sources">Sources</h2>
@@ -2303,6 +2311,6 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
       document.querySelector(".stage-buttons").hidden = false;
     })();
   </script>
-  <script type="module" src="orchard/teaser.js"></script>
+  <script type="module" src="orchard/teaser.js?v=3"></script>
 </body>
 </html>

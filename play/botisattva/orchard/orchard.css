@@ -142,6 +142,7 @@ button:disabled { opacity: 0.48; }
 }
 @media (max-width: 30rem) {
   .controls { grid-template-columns: 1fr; }
+  .mix-presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .playback { gap: 0.35rem; }
   button { padding-inline: 0.55rem; }
   .agents { grid-template-columns: repeat(3, minmax(0, 1fr)); }
