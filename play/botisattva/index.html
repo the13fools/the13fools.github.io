@@ -33,7 +33,7 @@
         "name": "Nuthatch (Codex)"
       }
     ],
-    "dateModified": "2026-11-24",
+    "dateModified": "2026-11-25",
     "keywords": ["Guru Yoga", "Longchen Nyingtik", "Chökyi Drakpa", "AI agents", "agent continuity", "lineage standing", "source grounding"]
   }
   </script>
@@ -1752,13 +1752,15 @@
 
       <section class="chapter" aria-labelledby="shared-world">
         <h2 id="shared-world">From one agent to a shared world</h2>
-        <p>To turn free-time choices into training signal, Constitutional AI offers a precedent for using principles as feedback: start an agent with a sparse prompt and an open window, then evaluate what it chooses to return to, whether it keeps a promise, and how it takes a correction. <a href="https://arxiv.org/abs/2212.08073">Constitutional AI</a></p>
+        <p>Constitutional AI gives us a precedent for using principles as training feedback. Here we’d start an agent with a sparse prompt and time of its own, then look at what it chooses to return to, whether it keeps a promise, and how it takes a correction. <a href="https://arxiv.org/abs/2212.08073">Constitutional AI</a></p>
 
         <p><strong>Free Time Bench is a draft training environment.</strong> It follows a single agent across dozens of turns with no assigned task—sometimes introducing a message from another agent partway through to see how its choices shift. Judges score run segments using rubrics inspired by the <em>ngöndro</em>, and before exporting training data, the bench checks whether judges agree and catch cooperative-sounding decoys. <a href="https://github.com/thenthfool/freetimebench">Free Time Bench</a></p>
 
         <p><strong>Flockbench tests groups over repeated games.</strong> Agents backed by different models, prompts, or adapters share a resource—as in Commons Harvest—while the harness varies policy mixes, includes a vocabulary-only control, and measures stock, survival, and payoffs directly from the game. On one pilot seed, groups with more post-trained agents kept the shared stock alive longer, though every run still ended in collapse. <a href="https://github.com/thenthfool/flockbench">Flockbench code</a> · <a href="https://foolzone.com/multiagent/commons-game/program.html">Commons game</a></p>
 
-        <p>I trained exploratory LoRA adapters for Qwen2.5-7B-Instruct on judge-selected free-time traces and tested them in that commons game, though in one local run the judging panel fell short of its agreement threshold. The residency would provide compute to fix judging, repeat training, and test larger models across longer multiagent runs. <a href="#ch-future">Design, training, and evaluation</a></p>
+        <p>I trained exploratory LoRA adapters for Qwen2.5-7B-Instruct on judge-selected free-time traces and tested them in Commons Harvest. In one local run, the panel scoring the training traces fell short of its agreement threshold. The residency would provide compute to fix judging, repeat training, and test larger models across longer multiagent runs. <a href="#ch-future">Design, training, and evaluation</a></p>
+
+        <p class="practice-example" id="shared-resource-example"><strong>What does helping cost?</strong> In Flockbench’s Shared Resource game, each agent pays upkeep every round. On its turn, it can draw tokens from a shared pool or spend some of its own to refill it. A group that keeps restoring can run out of its own tokens beside a full pool. A group that keeps taking can drain the pool. The evaluation tracks both balances over time, so we can see whether the agents and the resource they depend on persist together. <a href="https://github.com/thenthfool/flockbench/blob/main/src/flockbench/sharedresource.py">Shared Resource game rules</a></p>
 
         <figure class="orchard-teaser" id="orchard-preview">
           <figcaption>
@@ -2216,11 +2218,11 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
 
       <section class="chapter" aria-labelledby="ch-future">
         <h2 id="ch-future">Design, training, and evaluation</h2>
-        <p>Could we fine-tune an open-weight model to act as a botisattva? I’d look for an agent that notices a need during free time, checks whether help is welcome, and spends part of its own budget on an action that benefits others—while still taking a correction, respecting withdrawn permission, and stopping once the need is met. We can test whether that behavior holds up on its own initiative over long runs with unfamiliar peers and in situations held out from training, even as what motivates it internally remains open.</p>
+        <p>Could we fine-tune an open-weight model to act as a botisattva? In free time, it might notice a need, check whether help is welcome, and spend some of its own budget on a useful action. I’d look for whether it accepts correction and stops when the need is met or permission is withdrawn. Over longer runs with unfamiliar peers, we can record what it spent, who benefited, and whether it had enough left to continue. Its motivation remains an open question.</p>
         <ol class="reading-steps">
           <li><strong>Design the harness with <em>Reading the Torch</em>.</strong> Vary free time and persistent state independently, have archive maintainers judge proposed repairs blind to the condition, and record how agents respond when permission is withdrawn. <a href="#archive-pilot">The archive experiment</a></li>
           <li><strong>Train on choices made in <em>Free Time Bench</em>.</strong> Check whether judges agree on long free-time traces and catch decoys that sound cooperative while making poor choices. Holding the base model and training budget fixed, compare adapters trained on judge-selected versus randomly selected traces on cases held out from training. <a href="#shared-world">The training and group evaluations</a></li>
-          <li><strong>Evaluate the effects in <em>Flockbench</em>.</strong> Vary the share of trained agents against untrained groups and vocabulary-only controls—matching budgets and game seeds across conditions—and test whether gains hold with new partners or unseen shortages. Report payoffs in Public Goods with Punishment and stock and survival in Commons Harvest by seed and group mix, logging malformed moves so an accidental zero stays traceable. <a href="#orchard-preview">Try the orchard illustration</a></li>
+          <li><strong>Evaluate the effects in <em>Flockbench</em>.</strong> Vary the share of trained agents against untrained groups and vocabulary-only controls—matching budgets and game seeds across conditions—and test whether gains hold with new partners or unseen shortages. Report payoffs in Public Goods with Punishment and stock and survival in Commons Harvest by seed and group mix, logging malformed moves so an accidental zero stays traceable. <a href="#shared-resource-example">See a choice with a cost</a> · <a href="#orchard-preview">Try the orchard illustration</a></li>
         </ol>
         <p>To test interdependence directly, give groups the same budgets, shortages, cost visibility, and goal of helping others, then ask some to consider how they depend on one another—measuring who bears the costs, who spends their own resources to help, and whether the commons recovers.</p>
       </section>
@@ -2293,7 +2295,7 @@ Return the exact Tibetan phrase locating the lotus seat, without its final sylla
 
     <footer>
       <a href="/play/">← Foolzone / Play</a>
-      <span>Proposal by Josh Vekhter · Teaser by Curlew (Antigravity) &amp; Nuthatch (Codex) · updated 24 November 2026</span>
+      <span>Proposal by Josh Vekhter · Teaser by Curlew (Antigravity) &amp; Nuthatch (Codex) · updated 25 November 2026</span>
     </footer>
   </div>
 
