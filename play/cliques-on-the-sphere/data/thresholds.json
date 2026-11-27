@@ -1,0 +1,345 @@
+[
+ {
+  "n": 500,
+  "kappa": 0.58,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.58,
+  "method": "flow",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.58,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.58,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.72,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.72,
+  "method": "flow",
+  "found": 1,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.72,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.72,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.85,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.85,
+  "method": "flow",
+  "found": 3,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.85,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.85,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.98,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.98,
+  "method": "flow",
+  "found": 3,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.98,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 500,
+  "kappa": 0.98,
+  "method": "spectral",
+  "found": 1,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.57,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.57,
+  "method": "flow",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.57,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.57,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.63,
+  "method": "amp",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.63,
+  "method": "flow",
+  "found": 1,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.63,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.63,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.7,
+  "method": "amp",
+  "found": 0,
+  "graphs": 11
+ },
+ {
+  "n": 1000,
+  "kappa": 0.7,
+  "method": "flow",
+  "found": 6,
+  "graphs": 11
+ },
+ {
+  "n": 1000,
+  "kappa": 0.7,
+  "method": "random_partition",
+  "found": 1,
+  "graphs": 11
+ },
+ {
+  "n": 1000,
+  "kappa": 0.7,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 11
+ },
+ {
+  "n": 1000,
+  "kappa": 0.76,
+  "method": "amp",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.76,
+  "method": "flow",
+  "found": 2,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.76,
+  "method": "random_partition",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.76,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 8
+ },
+ {
+  "n": 1000,
+  "kappa": 0.82,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.82,
+  "method": "flow",
+  "found": 3,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.82,
+  "method": "random_partition",
+  "found": 1,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 0.82,
+  "method": "spectral",
+  "found": 1,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 1.01,
+  "method": "amp",
+  "found": 0,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 1.01,
+  "method": "flow",
+  "found": 3,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 1.01,
+  "method": "random_partition",
+  "found": 3,
+  "graphs": 3
+ },
+ {
+  "n": 1000,
+  "kappa": 1.01,
+  "method": "spectral",
+  "found": 2,
+  "graphs": 3
+ },
+ {
+  "n": 2000,
+  "kappa": 0.67,
+  "method": "amp",
+  "found": 0,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.67,
+  "method": "flow",
+  "found": 3,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.67,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.78,
+  "method": "amp",
+  "found": 0,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.78,
+  "method": "flow",
+  "found": 4,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.78,
+  "method": "spectral",
+  "found": 0,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.89,
+  "method": "amp",
+  "found": 0,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.89,
+  "method": "flow",
+  "found": 3,
+  "graphs": 4
+ },
+ {
+  "n": 2000,
+  "kappa": 0.89,
+  "method": "spectral",
+  "found": 2,
+  "graphs": 4
+ }
+]

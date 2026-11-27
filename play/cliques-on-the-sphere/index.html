@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Research proposal: can a nonconvex energy on the sphere find better seeds for planted clique? Aims, preliminary results with matched controls, and a two-year plan.">
+<title>Cliques on the Sphere</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a 90s personal-research page in foolzone /play's palette -- lavender dot grid, ink-navy hard-shadow "windows" with title bars,
+   lime number chips, cream panes. One reading column with wide instrument windows (charts, theory, sphere replay). Single deliberate light look. */
+:root {
+  --ground: #a4a5e5; --dot: rgba(37, 32, 71, .38); --ink: #242047; --pane: #fffbe8; --pane2: #f4efff;
+  --lime: #b1f35d; --sun: #ffe45c; --pink: #ff9fd2; --muted: #4c4565; --faint: #7a7397; --rule: #242047;
+  --gold: #ff5c1f; --teal: #1f8f84; --violet: #7b55d6; --rose: #d0456a; --panel: #fffbe8; --deep: #fffbe8;
+  --display: "Trebuchet MS", Verdana, system-ui, sans-serif;
+  --body: Verdana, "Trebuchet MS", system-ui, sans-serif;
+  --mono: ui-monospace, "Courier New", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box }
+body { background-color: var(--ground); background-image: radial-gradient(var(--dot) 1px, transparent 1px); background-size: 14px 14px; color: var(--ink);
+  font: 15px/1.62 var(--body); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 56px }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 36px }
+.col { max-width: 74ch; display: grid; gap: 12px; min-width: 0 }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance }
+h1 { font-size: clamp(1.55rem, 3.0vw, 2.2rem); line-height: 1.14; font-weight: 700; letter-spacing: -.01em }
+h2 { font-size: clamp(1.22rem, 2.3vw, 1.56rem); line-height: 1.2; font-weight: 700 }
+h3 { font-size: 1rem; font-weight: 700 }
+p { margin: 0 }
+a { color: #3a1fb8; text-underline-offset: 2px }
+a:visited { color: #6a1f8f }
+.eyebrow { font: 700 .74rem/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); background: var(--lime); border: 2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); padding: 2px 8px; justify-self: start; width: fit-content }
+.muted { color: var(--muted) }
+.mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums }
+em.k { font-style: italic }
+
+/* window chrome */
+.win { background: var(--pane); border: 2px solid var(--ink); box-shadow: 5px 5px 0 var(--ink); min-width: 0 }
+.win > .bar { background: var(--ink); color: var(--pane); font: 700 .8rem/1 var(--mono); letter-spacing: .06em; padding: 7px 10px; display: flex; justify-content: space-between; gap: 10px; text-transform: uppercase }
+.win > .bar i { font-style: normal; color: var(--lime) }
+.win > .body { padding: 18px 20px; display: grid; gap: 14px; min-width: 0 }
+
+/* homepage-style header */
+.mast { margin-top: 26px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--sun); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); padding: 12px 16px }
+.who { display: flex; gap: 12px; align-items: center }
+.mark { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--ink); background: var(--pane); position: relative; flex: none }
+.mark::before { content: ""; position: absolute; inset: 3px 9px; border-radius: 50%; border: 2px solid var(--violet); transform: rotate(36deg) }
+.mark::after { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); border: 1.5px solid var(--ink); right: 1px; top: 3px }
+.who strong { display: block; font: 700 1.05rem var(--display) }
+.who span { color: var(--muted); font-size: .82rem }
+.mast nav { display: flex; gap: 6px; flex-wrap: wrap }
+.mast nav a { font: 700 .72rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink); background: var(--pane); border: 2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); padding: 4px 8px; text-decoration: none }
+.mast nav a:hover { background: var(--lime) }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr); gap: 28px; align-items: start }
+.hero .lede { font-size: 1rem; color: var(--ink) }
+.facts .fact { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; padding: 11px 0; border-top: 2px dashed color-mix(in srgb, var(--ink) 35%, transparent) }
+.facts .fact:first-child { border-top: 0; padding-top: 0 }
+.fact b { font: 700 1.3rem/1 var(--mono); font-variant-numeric: tabular-nums; min-width: 6.2ch; color: var(--violet) }
+.fact b.hi { color: var(--teal) }
+.fact span { font-size: .87rem }
+.fact span b { font: 700 1em var(--body); min-width: 0; color: var(--ink) }
+
+.formula { font-family: var(--mono); font-size: .86rem; background: var(--pane2); border: 2px solid var(--ink); padding: 12px 14px; overflow-x: auto; white-space: nowrap; line-height: 1.85 }
+ul.plain { margin: 0; padding-left: 1.2rem; display: grid; gap: 9px }
+ul.plain li::marker { content: "✳ "; content: "✳ " / "" }
+
+/* sphere replay + charts (ids and classes used by the script) */
+.panel { display: grid; gap: 14px; min-width: 0 }
+.panel-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: end }
+.player { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(240px, .8fr); gap: 18px }
+.stage { position: relative; background: var(--pane2); border: 2px solid var(--ink); aspect-ratio: 1 / 1; max-width: 100%; touch-action: none; cursor: grab;
+  background-image: radial-gradient(color-mix(in srgb, var(--ink) 16%, transparent) 1px, transparent 1px); background-size: 12px 12px }
+.stage canvas { width: 100%; height: 100%; display: block }
+.stage .hint { position: absolute; left: 10px; bottom: 8px; font: .72rem var(--mono); color: var(--muted) }
+.side { display: grid; gap: 10px; align-content: start; min-width: 0 }
+.seg { display: flex; flex-wrap: wrap; gap: 6px }
+button { font: inherit; cursor: pointer }
+.seg button, .btn { border: 2px solid var(--ink); background: var(--pane); color: var(--ink); box-shadow: 2px 2px 0 var(--ink); padding: 5px 10px; font: 700 .78rem var(--mono); text-align: left }
+.seg button[aria-pressed="true"] { background: var(--lime) }
+.btn.primary { background: var(--sun) }
+button:active { transform: translate(2px, 2px); box-shadow: none }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px }
+.tile { background: var(--pane2); border: 2px solid var(--ink); padding: 8px 10px; min-width: 0 }
+.tile span { display: block; font: 700 .68rem var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted) }
+.tile strong { font: 700 1.05rem/1.35 var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere }
+.tile.wide { grid-column: 1 / -1 }
+.ebox { border: 2px solid var(--ink); background: var(--pane2); padding: 8px 10px; display: grid; gap: 6px; font-size: .86rem }
+.ebox .erow { padding: 6px 8px; border: 2px dashed transparent; opacity: .55 }
+.ebox .erow.on { border-color: var(--ink); background: var(--pane); opacity: 1 }
+.ebox .erow b { font: 700 .72rem var(--mono); text-transform: uppercase; letter-spacing: .05em }
+.ebox .ef { font: .8rem/1.5 var(--mono); overflow-wrap: anywhere }
+.ebox .estep { font: .8rem/1.45 var(--body); color: var(--ink) }
+.tag { display: inline-grid; place-items: center; min-width: 1.65em; padding: 0 .3em; height: 1.65em; margin-right: .35em; font: 700 .85em var(--mono); background: var(--lime); border: 2px solid var(--ink); box-shadow: 2px 2px 0 var(--ink); vertical-align: .08em }
+.scrub { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center }
+input[type=range] { width: 100%; accent-color: var(--violet) }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .78rem; color: var(--ink) }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; border: 1.5px solid var(--ink) }
+.note { font-size: .81rem; color: var(--muted) }
+.charts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px }
+.chart { min-width: 0; background: var(--pane2); border: 2px solid var(--ink); padding: 8px }
+.chart svg { width: 100%; height: auto; display: block }
+.chart h3 { font: 700 .78rem var(--mono); margin-bottom: 4px }
+.table-wrap { overflow-x: auto }
+table { border-collapse: collapse; width: 100%; font-size: .84rem; min-width: 520px; background: var(--pane) }
+th, td { text-align: left; padding: 6px 10px; border: 2px solid var(--ink) }
+th { background: var(--ink); color: var(--pane); font: 700 .71rem var(--mono); text-transform: uppercase; letter-spacing: .05em }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums }
+tr.total-row td { background: var(--pane2); font-weight: 700 }
+.two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px }
+.q { background: var(--pane); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 13px 15px; display: grid; gap: 6px; min-width: 0; align-content: start }
+.q h3::before { content: "✳ "; content: "✳ " / ""; color: var(--violet) }
+.q.gold { background: #fff6d6 }
+.math mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; margin: .6em 0 !important }
+.q.math p { color: var(--ink) }
+.story { max-width: 900px }
+.story .body > p { max-width: 75ch }
+.q.mint { background: #eefcf4 }
+footer { font-size: .8rem; display: grid; gap: 4px; text-align: center; font-family: var(--mono) }
+.blink { animation: blink 1.2s steps(2, start) infinite }
+@keyframes blink { to { visibility: hidden } }
+b.inl { font: 700 1em var(--mono); color: var(--teal) }
+section[id] { scroll-margin-top: 16px }
+.stage:focus-visible, .table-wrap:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0 }
+/* kappa ruler */
+.ruler-wrap { overflow-x: auto; background: var(--pane2); border: 2px solid var(--ink); padding: 10px 6px }
+.ruler-wrap svg { display: block; width: 100%; min-width: 760px; height: auto }
+/* approach panels */
+.pipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px }
+.pipe figure { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0 }
+.pipe .pic { background: var(--pane2); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); aspect-ratio: 1 / 1 }
+.pipe .pic svg { width: 100%; height: 100%; display: block }
+.pipe figcaption { font-size: .82rem; color: var(--muted) }
+.pipe figcaption b { display: block; color: var(--ink); font: 700 .86rem var(--display); margin-bottom: 2px }
+/* head-to-head charts */
+.h2h-chart { background: var(--pane2); border: 2px solid var(--ink); padding: 8px; overflow-x: auto }
+.h2h-chart svg { display: block; width: 100%; min-width: 620px; height: auto }
+.legend i.ring { background: transparent !important; border: 2px solid var(--ink) }
+.pill-row { display: flex; flex-wrap: wrap; gap: 8px }
+.pill { font: 700 .76rem var(--mono); background: var(--pane2); border: 2px solid var(--ink); padding: 4px 9px }
+.pill b { color: var(--teal) }
+@media (max-width: 860px) { .hero, .player, .two-col, .charts { grid-template-columns: 1fr } .pipe { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (max-width: 480px) { .pipe { grid-template-columns: 1fr } }
+@media (prefers-reduced-motion: reduce) { .blink { animation: none } button:active { transform: none } }
+.draftnote { margin: 12px 0 0; padding: 8px 12px; background: var(--sun); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); font: .82rem/1.5 var(--mono) }
+</style>
+<script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="who"><span class="mark" aria-hidden="true"></span><div><strong>Josh Vekhter</strong><span>Research proposal · draft of 27 November 2026</span></div></div>
+    <nav aria-label="Links"><a href="https://foolzone.com/">Home</a><a href="https://foolzone.com/play/">Play</a><a href="#aims">Aims</a><a href="#problem">Background</a><a href="#idea">Approach</a><a href="#results">Results</a><a href="#future">Plan</a><a href="#timeline">Timeline</a><a href="#watch">Replay</a></nav>
+  </header>
+
+  <main class="wrap" style="margin:0;max-width:none">
+
+  <p role="note" class="draftnote">DRAFT · first posted 27 November 2026 · work in progress; results and wording may change. Cite as: J. Vekhter, “Cliques on the Sphere: a research proposal,” draft, foolzone.com/play/cliques-on-the-sphere/, 27 November 2026. Dated revisions are kept in the site’s public history at <a href="https://github.com/the13fools/the13fools.github.io/commits/master/play/cliques-on-the-sphere">github.com/the13fools/the13fools.github.io</a>.</p>
+
+  <!-- 0. TITLE -->
+  <section class="hero">
+    <div class="col" style="gap:14px">
+      <p class="eyebrow">Research proposal · planted clique</p>
+      <h1>Can geometry make finding a hidden clique more sample-efficient?</h1>
+      <p class="lede"><b>Summary.</b> Below √n, finding a planted clique comes down to finding a seed: a few vertices that are surely in the clique. I propose to study whether a <b>nonconvex energy over points on the 2-sphere</b> can find seeds more cheaply than graph-only rankings, and to settle the question with a theorem in one direction or the other. Preliminary work, on degree-matched graphs where spectral methods recover 2 of 36 benchmark cliques and plain message passing none, shows that the energy gathers the clique well above chance but not yet strongly enough to beat random partitions or codegree. The same triangle couplings, used inside message passing, solve 35 of 36 graphs.</p>
+      <p class="lede">The plan has three aims: a Goemans–Williamson-style rounding theorem that says exactly what the geometry would have to achieve (Aim 1); rigorous state evolution for the triangle-coupled message passing that already works (Aim 2); and targeted repairs of the energy, each tested against matched controls with predictions fixed in advance (Aim 3).</p>
+      <p class="muted">Contents: <a href="#aims">1 specific aims</a> · <a href="#problem">2 background and significance</a> · <a href="#idea">3 approach</a> · <a href="#results">4 preliminary results</a> · <a href="#future">5 research plan</a> · <a href="#timeline">6 timeline and deliverables</a> · <a href="#theory">appendix</a></p>
+    </div>
+    <div class="win facts" aria-label="Key results"><div class="bar"><span>summary.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+      <div class="fact"><b class="num">3.0×</b><span><b>The energy gathers the clique.</b> The best corner holds up to 3.0× its share of the clique; null graphs never exceed 1.6× (p = 0.008).</span></div>
+      <div class="fact"><b class="num">34 = 34</b><span><b>But not yet better seeds.</b> Searching inside the energy’s four corners finds the clique on 34 of 42 graphs. Splitting the vertices into four parts at random also finds it on 34.</span></div>
+      <div class="fact"><b class="num hi">35/36</b><span><b>Triangle-coupled AMP</b> solves 35 of 36 benchmark graphs. Pairwise AMP solves 0 of them, and the sphere flow solves 17.</span></div>
+      <div class="fact"><b class="num">0</b><span><b>False certificates</b> on graphs with no planted clique, in every experiment.</span></div>
+    </div></div>
+  </section>
+
+  <!-- 1. SPECIFIC AIMS -->
+  <section id="aims" class="win story"><div class="bar"><span>1_aims.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">1 · Specific aims</p>
+    <h2>Can a low-dimensional nonlinear energy see what the analysed algorithm classes cannot?</h2>
+    <p>The lower bounds for planted clique cover sum-of-squares, statistical-query and low-degree algorithms. A nonconvex flow of points on S², run with transport and rounding, is not obviously in any of these classes. The conjecture says it should still fail below √n, but no existing lower bound covers it. <b>The long-term goal</b> is to understand what geometric, nonconvex methods can and cannot do on average-case problems, using planted clique as the test case. <b>The central hypothesis</b> is that a sphere energy concentrates the clique by a measurable, analysable amount, and that this amount either decays with n in a provable way or yields a real gain in seed cost.</p>
+    <ul class="plain">
+      <li><b><a href="#aim1">Aim 1 (theory).</a> A rounding theorem for geometric seeds.</b> Reduce “geometry beats √n” to a single angle condition (Lemma 4: average clique angle below 52.7°), then prove a lower bound on the flow’s concentration or show the flow is close to a low-degree function of the graph.</li>
+      <li><b><a href="#aim2">Aim 2 (theory).</a> State evolution for dependent motif message passing.</b> Turn the measured thresholds of (2+3)-body AMP (κ ≈ 0.647 unseeded, 0.371 with one debiased vertex) into theorems, although the triangle tensor shares edges across triples.</li>
+      <li><b><a href="#aim3">Aim 3 (experiment).</a> Stronger concentration, judged against the right controls.</b> Repair the three identified weaknesses of the energy and test each against random partitions and codegree at matched budget, with a go/no-go criterion that decides which direction Aim 1 pursues.</li>
+    </ul>
+    <p class="muted">Every outcome is informative. A positive answer would give a new kind of seed-finding algorithm. A negative one would extend the low-degree picture to a class of nonconvex flows, and Aim 2 stands on its own.</p>
+  </div></section>
+
+  <!-- 1. PROBLEM -->
+  <section id="problem" class="win story"><div class="bar"><span>2_1_problem.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">2 · Background and significance · 2.1 The problem</p>
+    <h2>Planted clique</h2>
+    <p>Take a random graph G(n, ½): n vertices, with each pair joined independently with probability ½. Pick k of the vertices and join every pair of them. Given only the graph, find those k vertices.</p>
+    <p>The largest clique in G(n, ½) has about 2 log₂ n vertices (about 21 at n = 2,000). A planted clique larger than that is unique, and it <b>certifies itself</b>: any clique found that is larger than a random graph could contain must be the planted one. Every success reported here is checked this way.</p>
+    <p>Difficulty is measured by <span class="mono">κ = k/√n</span>. At n = 2,000, κ = 1 means a clique of about 45 vertices and κ = 0.5 means about 22.</p>
+    <div class="q"><h3>The harder variant used here: degree-matched cliques</h3><p class="muted">Planting a clique gives each of its vertices about k/2 extra neighbours, and most algorithms exploit that degree bump. Here every added clique edge is paid for by a degree-preserving swap outside the clique, so every vertex keeps exactly its original degree. Degree counts carry no signal, and spectral methods and plain message passing need κ ≈ 1, that is k ≈ √n. On the 36-graph benchmark at κ = 0.63–0.89, spectral methods recover 2 cliques and plain AMP none. Where spectral methods work on the standard problem, they fail here outright. The remaining signal is in higher-order structure, such as how triangles sit together, which is the structure this work targets. <b>Every success reported below is at k &lt; √n on these harder graphs.</b></p></div>
+  </div></section>
+
+  <!-- 2. WHAT IS KNOWN -->
+  <section id="known" class="win story"><div class="bar"><span>2_2_known.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">2.2 · What is known</p>
+    <h2>Spectral methods, seeds, and the √n barrier</h2>
+    <ul class="plain">
+      <li><b>Degrees</b> (Kučera 1995). Clique vertices have about k/2 extra neighbours, which separates them once k ≳ √(n log n).</li>
+      <li><b>Spectral</b> (Alon, Krivelevich &amp; Sudakov 1998). The clique adds a rank-one bump of size about k/2 to a random matrix whose spectral norm is about √n. Once k ≥ C√n, the top eigenvector points at the clique. Message passing lowers the constant: AMP works for κ &gt; 1/√e ≈ 0.61 (Deshpande &amp; Montanari 2015).</li>
+      <li><b>Seeds</b> (also AKS). Suppose s clique vertices were known. Restricting to their common neighbourhood shrinks the graph by 2<sup>s</sup> but the clique only by s, so κ grows by about 2<sup>s/2</sup>. Guessing the seeds by brute force costs about n<sup>s</sup> tries, which makes any constant κ solvable in time n<sup>O(log 1/κ)</sup>.</li>
+      <li><b>Lower bounds.</b> For k = n<sup>1/2−ε</sup>, sum-of-squares relaxations (Barak, Hopkins, Kelner, Kothari, Moitra &amp; Potechin 2016, via pseudo-calibration), statistical-query algorithms (Feldman et al. 2013) and low-degree polynomial tests (Hopkins 2018) all fail. The problem is conjectured hard for every polynomial-time algorithm there.</li>
+    </ul>
+    <div class="q gold math"><h3>So at constant κ, the practical question is: how cheaply can you find a seed?</h3>
+      <p><b>Lemma 1 (restricting to a seed).</b> Let \(G\) be \(G(n,\tfrac12)\) with a planted clique \(K\), \(|K| = k\). Fix \(S \subseteq K\) with \(|S| = s\), and let \(N(S)\) be the set of vertices outside \(S\) that are adjacent to every vertex of \(S\). Conditional on \(K\), the graph \(G[N(S)]\) is again a planted-clique instance:
+      \[ N(S) = (K \setminus S) \,\cup\, U, \qquad \Pr[v \in U] = 2^{-s} \text{ independently for each } v \notin K, \]
+      every edge of \(G[N(S)]\) not inside \(K \setminus S\) is an independent fair coin, and \(K \setminus S\) is a clique of size \(k-s\).</p>
+      <p class="muted"><i>Proof.</i> Whether \(v \notin K\) lies in \(U\) depends only on the \(s\) edges between \(v\) and \(S\). These are disjoint from the edges among \(V \setminus S\), and in \(G(n,\tfrac12)\) disjoint edge sets are independent. Hence the membership events are independent, each with probability \(2^{-s}\), and independent of every edge inside \(N(S)\). \(\square\)</p>
+      <p><b>Corollary 2 (the seed raises κ).</b> \(|U| \sim \mathrm{Bin}(n-k,\,2^{-s})\). If \(2^{s} \le n^{1-\Omega(1)}\) and \(s = o(k)\), a Chernoff bound gives \(n' := |N(S)| = 2^{-s} n\,(1+o(1))\) with high probability, so
+      \[ \kappa' \;=\; \frac{k-s}{\sqrt{n'}} \;=\; 2^{s/2}\,\kappa\,(1+o(1)). \]</p>
+      <p><b>Corollary 3 (a pure triangle is enough).</b> Take \(s=3\). AMP recovers a planted clique with high probability when \(\kappa' > (1+\varepsilon)/\sqrt e\) (Deshpande &amp; Montanari 2015). So if
+      \[ \kappa \;>\; \frac{1+\varepsilon}{\sqrt{8e}} \;\approx\; 0.214\,(1+\varepsilon), \]
+      AMP run on \(G[N(S)]\) for a pure triangle \(S\) recovers \(K \setminus S\). Checking each output for being a \(k\)-clique rules out false answers. Trying proposed triangles in order costs \(T \cdot \mathrm{poly}(n)\), where \(T\) is the rank of the first pure triangle. In a uniformly random order,
+      \[ \Pr[\text{a random triangle of } G \text{ is pure}] \;\approx\; \frac{\binom{k}{3}}{\binom{n}{3}/8} \;\approx\; 8\kappa^{3} n^{-3/2}, \qquad \mathbb{E}[T] \approx \frac{n^{3/2}}{8\kappa^{3}}. \]
+      At \(n = 2000\) and \(k = 30\), that is about 1 in 37,000. With \(s\) seeds instead of 3, \(s = \lceil 2\log_2\!\big(1/(\kappa\sqrt e)\big)\rceil + 1\) suffices for any \(\kappa>0\), which recovers the Alon–Krivelevich–Sudakov bound \(n^{O(\log 1/\kappa)}\).</p>
+      <p class="muted">So at constant κ every method here runs in polynomial time. What differs is \(T\): a good proposal source puts a pure triangle near the top of its list. Whole-graph codegree ranking (common neighbours of each pair) reaches \(T\) in the hundreds at n = 2,000. The question is whether geometry lowers \(T\) further. Lemma 1 uses the independence of the standard model. For the degree-matched graphs used in the experiments, where swaps correlate edges, Tern’s adaptive-completion lemma (appendix 4) plays the same role.</p>
+    </div>
+  </div></section>
+
+  <!-- 0. BACKGROUND -->
+  <section id="background" class="win story"><div class="bar"><span>2_3_investigator.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">2.3 · The investigator’s approach</p>
+    <h2>A solver-builder’s approach to an average-case problem</h2>
+    <p>My background is in writing nonlinear solvers for low-dimensional problems. In that world, when a discrete structure is hidden in data, the usual move is to place the objects in a small continuous space. You then write an energy whose low states display the structure, and engineer a solver that reaches those states. This proposal applies that habit to planted clique.</p>
+    <p>From the standpoint of average-case complexity, this is a non-traditional approach. The lower bounds for planted clique are proved for particular classes of algorithms: sum-of-squares, statistical queries and low-degree polynomials (section 2.2). A nonconvex flow of points on a 2-sphere, run for many steps with transport and rounding, is not obviously in any of these classes. That is not a loophole, since the conjecture says no polynomial-time algorithm works below √n. But it leaves a question open rather than settled: how much can a low-dimensional nonlinear energy see that the analysed classes cannot? Aim 1 (section 5) states that question as a precise open problem.</p>
+    <div class="q"><h3>How I arrived at the 2-sphere</h3>
+      <p class="muted">I tried several formulations before settling on this one:</p>
+      <ul class="plain muted">
+        <li><b>Phase codes.</b> Each vertex carried a few complex numbers whose angles spell a binary colour code. The clique becomes one colour class of the complement graph, and a motif term rewards pairs with many shared neighbours. It beat a budget-matched null, but not message passing, and the solver kept exploiting slack in the encoding.</li>
+        <li><b>Outer-product motif energies, and clustering on higher-dimensional spheres.</b> These included a mass-constrained “cell” that behaves like kernel k-means with a single cluster. Once the clique was gathered, these energies held it together, but from a cold start they did not find it.</li>
+        <li><b>Points on S², with triangle-area terms.</b> This is the current formulation (section 3). Three dimensions force vertices to compete for room, and every intermediate state can be watched (<a href="#watch">replay</a>). Here the clique gathers from a cold start, measurably above chance (section 4.1).</li>
+      </ul>
+      <p class="muted">Since then I have been exploring energies within this formulation: springs, signed and squared triangle areas, and optimal-transport moves. The question has been which energy concentrates the clique most.</p></div>
+  </div></section>
+
+  <!-- 3. KEY IDEA -->
+  <section id="idea" class="win story"><div class="bar"><span>3_1_idea.txt</span><i>one real run, n = 2,000 · k = 35</i></div><div class="body">
+    <p class="eyebrow">3 · Approach · 3.1 The key idea</p>
+    <h2>Minimize an energy on the sphere that pulls the clique together</h2>
+    <p>Place every vertex at a point on the unit sphere S². Each clique vertex lies in roughly k²/2 more edge-complete triangles than a typical vertex. An energy that shrinks complete triangles and spreads out empty ones should therefore pull the clique’s vertices toward each other. The energy has two terms: an angular spring on every edge, and a weighted squared area for every triple of points, where the weight depends on how many of the triple’s three edges exist.</p>
+    <div class="formula">E(X) = ½ k<sub>s</sub> Σ<sub>ij ∈ E</sub> (θ<sub>ij</sub> − θ<sub>0</sub>)² + (μ / n) Σ<sub>a&lt;b&lt;c</sub> f(m<sub>abc</sub>) · area(x<sub>a</sub>, x<sub>b</sub>, x<sub>c</sub>)², &nbsp; x<sub>v</sub> ∈ S², &nbsp; m<sub>abc</sub> = A<sub>ab</sub> + A<sub>bc</sub> + A<sub>ca</sub></div>
+    <p class="muted">Across the n = 500–4,000 benchmarks, each restart starts uniformly on S² and runs 15 cycles of the <b>quench</b> (f = (−16, 0.1, 0, 1), k<sub>s</sub> = 5, θ<sub>0</sub> = 10°, μ = 10; 200 max-move gradient steps alternating with Sinkhorn transport β = 0.2 and a 0.3 swirl), splitting the cloud into four balanced clusters at tetrahedral angles (109.47°). The recorded movies in <a href="#watch">Replay</a> prefix 6 <b>gather</b> cycles (f = (−8, 0.1, 0.1, 4) with non-edge repulsion) so the initial cohesion is visible before the split. The schematic below illustrates one recorded gather-then-quench run (n = 2,000, k = 35, κ = 0.78).</p>
+    <div class="pipe" id="pipe">
+      <figure><div class="pic" data-pic="graph"></div><figcaption><b>1 · Zero-gap graph</b>35 clique vertices among 2,000 (1.75%), with every vertex’s degree unchanged from the base G(n, ½) graph. Single-vertex degrees carry zero signal.</figcaption></figure>
+      <figure><div class="pic" data-pic="gather"></div><figcaption><b>2 · Relax + transport on S²</b>Edges pull pairs toward 10° and closed triangles contract while Sinkhorn transport moves mass toward patches dense in small triangles.</figcaption></figure>
+      <figure><div class="pic" data-pic="quench"></div><figcaption><b>3 · Tetrahedral quench</b>Empty-triple repulsion splits the sphere into four balanced corners (~500 vertices each). This run split the clique 20 / 7 / 6 / 2—57% in one corner where chance gives 25%.</figcaption></figure>
+      <figure><div class="pic" data-pic="decode"></div><figcaption><b>4 · Certified readout</b>Search or propose triangles inside each corner and complete on the full graph. Accept only an exact clique larger than ω(G(n, ½)). All 35 vertices recovered.</figcaption></figure>
+    </div>
+    <div class="q gold"><h3>What a geometric corner buys—and what it costs</h3><p class="muted">Landing 20 of 35 clique vertices inside a 504-vertex corner raises effective density from κ = 35/√2,000 = 0.78 to κ<sub>corner</sub> = 20/√504 = 0.89, making the subproblem substantially easier. The structural cost is hard truncation: any high-scoring triangle whose vertices straddle two corners is discarded. Section 4 measures both effects.</p></div>
+    <div class="q" id="energies"><h3>Two energies, used one after the other</h3>
+      <p class="muted">The recorded runs minimize two different energies in sequence. Both share the edge springs and a squared-area term whose weight f(m) depends on how many of a triple’s three edges exist (m = 0, 1, 2, 3).</p>
+      <div class="two-col">
+        <div><p class="muted"><b>Stage 1 · gather (6 cycles).</b> Pulls connected structure together.</p>
+          <p class="math">\[ E_G = \tfrac52\!\sum_{ij\in E}(\theta_{ij}-10^\circ)^2 + 0.5\!\!\sum_{ij\notin E}\! e^{-\theta_{ij}^2/2(30^\circ)^2} + \tfrac{10}{n}\!\!\sum_{a&lt;b&lt;c}\! f_G(m_{abc})\,\mathrm{area}^2 + E_1 + E_2 \]</p>
+          <p class="muted">f<sub>G</sub> = (−8, 0.1, 0.1, 4), so f(3)/|f(0)| = ½. E1 pushes a vertex adjacent to neither endpoint away from an edge’s midpoint; E2 penalizes a non-edge whose endpoints share many nearby neighbours (both 15° kernels). Transport targets a sharp density (σ 5°) with half the mass uniform.</p></div>
+        <div><p class="muted"><b>Stage 2 · quench (15 cycles).</b> Splits the cloud into corners.</p>
+          <p class="math">\[ E_Q = \tfrac52\!\sum_{ij\in E}(\theta_{ij}-10^\circ)^2 + \tfrac{10}{n}\!\!\sum_{a&lt;b&lt;c}\! f_Q(m_{abc})\,\mathrm{area}^2 \]</p>
+          <p class="muted">f<sub>Q</sub> = (−16, 0.1, 0, 1), so f(3)/|f(0)| = 1/16: the push on empty triples dominates. No repulsion, E1 or E2. Transport is smoother (σ 15°) with a 0.2 uniform share. The benchmark runs use this stage alone, from a uniform start.</p></div>
+      </div>
+    </div>
+    <div class="q" id="solver"><h3>How the solver runs</h3>
+      <p class="muted">The state is n unit vectors in ℝ³. One <b>cycle</b> has two moves, and a run is 15 cycles from a uniform start:</p>
+      <ol class="muted" style="margin:0;padding-left:1.3rem;display:grid;gap:6px">
+        <li><b>Relax.</b> 200 projected gradient steps on the energy. In each step the vertex with the largest force moves 1°, and every other vertex moves in proportion. Because the step length is fixed, only the <i>direction</i> of the force matters. Rescaling all the weights together leaves a run unchanged to every digit. The real knobs are ratios: f(3)/|f(0)| and spring stiffness to μ.</li>
+        <li><b>Transport.</b> Estimate where small edge-complete triangles are dense: triangles within 45° of their centroid, counted on an icosphere grid and smoothed at 15°. Mix in a uniform share β = 0.2, and solve entropic optimal transport (Sinkhorn) from equal mass on the points to that density. Each point moves to its barycentric target, with a small sideways “swirl” component (weight 0.3).</li>
+      </ol>
+      <p class="muted">At the end, spherical k-means with four clusters gives the corners that the read-outs search.</p>
+    </div>
+    <div class="q"><h3>What each term does</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Term</th><th>What it pushes</th><th>What we have seen it do</th></tr></thead>
+        <tbody>
+          <tr><td>Edge springs, rest 10°</td><td>Every adjacent pair toward 10° apart</td><td>Half of all pairs are edges, so on its own it contracts the whole cloud and does not tell clique pairs apart. Its cone at θ = 0 means coincident neighbours keep bouncing: the relax never fully converges.</td></tr>
+          <tr><td>Area², complete triples, f(3) &gt; 0</td><td>Triangles with all three edges shrink</td><td>The clique-specific term, but weakest where it matters: a tight triangle’s area² scales like θ⁴, so its pull fades as the clique tightens.</td></tr>
+          <tr><td>Area², empty triples, f(0) &lt; 0</td><td>Triples with no edges spread to large area</td><td>The spreading force. At the quench weight (f(0) = −16) it splits the cloud into corners.</td></tr>
+          <tr><td>Area², mixed triples, f(1), f(2) ≈ 0</td><td>Nearly neutral</td><td>Negative weight on two-edge triples helped strongly on one graph (K344) but did not replicate.</td></tr>
+          <tr><td>Transport</td><td>Mass toward regions dense in small complete triangles</td><td>With no uniform share it collapses everything to a point. With a floor, a gathered set settles into a dense core with spokes held up by thin triangles. Its own contribution to recovery has not been isolated.</td></tr>
+          <tr><td>Swirl</td><td>A sideways component on each transport move</td><td>Little measurable effect (K423).</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted">The <b>gather</b> stage shown in the replays adds three more terms: a repulsion between non-adjacent pairs, and two short-range terms. One pushes a vertex adjacent to neither endpoint of an edge away from that edge. The other penalizes a non-edge whose endpoints share many nearby neighbours.</p>
+    </div>
+    <div class="q"><h3>Phases of the final distribution</h3>
+      <p class="muted">Sweeping the ratio r = f(3)/|f(0)| with the clique started inside a 15° cap (n = 340, k = 12, K419), and running the quench from uniform starts (K425, K433), gives four regimes:</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Regime</th><th>Final cloud</th><th>Clique</th></tr></thead>
+        <tbody>
+          <tr><td><b>Quench</b>: r = 1/16, with springs</td><td>Four balanced clusters at tetrahedral angles (109–110°), each about 10° across, on planted and null graphs alike</td><td>Splits unevenly across the corners, for example 17 / 5 / 1 / 1 of 24. The best corner holds more than chance (section 4.1).</td></tr>
+          <tr><td><b>Spread</b>: r ≤ 1</td><td>Spread over the sphere, median pair angle about 90°</td><td>Partly held together (pair z down to about −8); a random set of the same size is not</td></tr>
+          <tr><td><b>Intermediate</b>: r ≈ 1.5</td><td>Partly contracted, 28–64°</td><td>Not held</td></tr>
+          <tr><td><b>Collapse</b>: r ≥ 2</td><td>The whole cloud falls into a few degrees</td><td>Collapses along with everything else, so there is no signal</td></tr>
+        </tbody>
+      </table></div>
+      <p class="muted">The tetrahedron is robust: after three-quarters of each corner is reshuffled, it re-forms every time (K435).</p>
+    </div>
+    <div class="q gold math" id="shapes"><h3>Why the gather forms two circles and the quench a tetrahedron</h3>
+      <p class="muted">Both shapes follow from one identity. Let \(m = \tfrac1n\sum_v x_v\) be the cloud’s mean and \(M = \tfrac1n\sum_v x_v x_v^{\top}\) its second-moment matrix, so \(\operatorname{tr} M = 1\). For any \(n\) unit vectors,
+      \[ \sum_{a&lt;b&lt;c} \mathrm{area}(x_a,x_b,x_c)^2 \;=\; \frac{n^3}{8}\Big[\,1-\operatorname{tr}(M^2)-2\,m^{\top}(I-M)\,m\,\Big]. \]
+      (Expand \((x_b-x_a)\times(x_c-x_a) = x_a\times x_b + x_b\times x_c + x_c\times x_a\) and sum.) The bracket is at most \(2/3\), with equality exactly when \(m = 0\) and \(M = I/3\): the cloud is centred and looks the same in every direction.</p>
+      <p class="muted">In a random graph the empty triples are spread evenly over the vertices, so the large negative weight f(0) acts, to first order, like this whole sum with a minus sign. It pins the cloud at isotropy, and every recorded frame stays within 0.4% of the maximum. Within that constraint the springs, and the positive weight on complete triangles, pull points together. So the flow shrinks the cloud onto the smallest support that is still isotropic:</p>
+      <ul class="plain muted">
+        <li><b>Gather: two circles</b> at polar angles \(\arccos(\pm 1/\sqrt3) \approx 54.7^\circ\) and \(125.3^\circ\), with points spread evenly around each. This is a one-dimensional set with \(M = I/3\). The recorded runs land on 54–55° and 125–126°.</li>
+        <li><b>Quench: the four vertices of a regular tetrahedron,</b> the smallest point set on the sphere with \(m = 0\) and \(M = I/3\). The recorded corners sit at 109–110° apart, the tetrahedral angle.</li>
+      </ul>
+      <p class="muted">A check (K466) rules out a numerical artifact. The circles form the same way when the transport grid is rotated and when transport is switched off. Their axis is set by the random start, not by the coordinate frame, and they form on graphs with no clique too. Why the gather stops at circles rather than collapsing to four points is not yet tested. A plausible cause is its extra repulsion between non-adjacent pairs, which penalizes tight clumps. The quench drops that term.</p>
+      <p class="muted"><b>What this means for the clique.</b> Both shapes are set by the empty triples, which are global, and they appear on null graphs too. The clique enters only as a perturbation: which circle, or which corner, its vertices land in. That is why the corner concentration is real but modest. The isotropy constraint, not the clique, decides the overall shape.</p>
+    </div>
+    <div class="q gold"><h3>What we understand, and what we don’t</h3>
+      <ul class="plain muted">
+        <li><b>The area² family is a global spread-or-collapse knob,</b> with a sharp transition between r = 1.5 and 2. It does not single out the clique by itself.</li>
+        <li><b>The gathered clique is not a ground state.</b> With every vertex free to move (K385), a state with the clique gathered does not have lower energy than ordinary restarts. Total energies differ by about 0.5%, and dense decoy sets sometimes end lower. So the concentration we measure is a property of the <i>dynamics</i> (relax, transport and the tetrahedral split) rather than of the minimizer. Any theory has to analyse the flow, not the energy landscape alone.</li>
+        <li><b>A corner assignment behaves like a degree vote.</b> Tern’s analysis treats one exact best response with four fixed, balanced corners. Each vertex then joins the corner where it has the most neighbours. As n grows, the clique’s κ inside its best corner tends to half its whole-graph value, which is exactly the value an even split gives. One such step provably adds nothing in the limit. The concentration we observe must come from iterating the flow, or from finite size, and we cannot yet tell which.</li>
+        <li><b>Why four corners:</b> the tetrahedron is the smallest isotropic support (box above). What sets the corner sizes, and whether a different energy would favour a corner holding most of the clique, is open.</li>
+        <li><b>The next change to the energy</b> follows from the θ⁴ problem. A bounded reward for small complete triangles, for example a Gaussian in triangle size, would not vanish as the clique tightens.</li>
+      </ul>
+    </div>
+    <div class="two-col">
+      <div class="q"><h3>Why a sphere?</h3><p class="muted">Three dimensions and unit norm force competition for space: not every set can be close at once, so a tightly connected set has to win room. By Lagrange’s identity, a chord triangle’s squared area is quadratic in the Gram matrix G = XXᵀ, so the method is a rank-3, Burer–Monteiro-type relaxation. And every intermediate state can be looked at (<a href="#watch">replay</a>).</p></div>
+      <div class="q"><h3>Why optimal transport?</h3><p class="muted">Gradient steps move a point about a degree at a time. In each cycle, entropic optimal transport (Sinkhorn) also moves every point toward the smoothed density of small complete triangles, mixed with a uniform share so the cloud does not collapse. This is the one move that relocates mass across the sphere in a single step. Its contribution to recovery has not yet been isolated by an ablation.</p></div>
+    </div>
+  </div></section>
+
+  <!-- 4. SAMPLE EFFICIENCY -->
+  <section id="efficiency" class="win story"><div class="bar"><span>3_2_rationale.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">3.2 · Rationale: why it could save samples</p>
+    <h2>Concentration multiplies the rate of pure triangles, by the cube</h2>
+    <p class="math">Suppose the quench puts a fraction \(\sigma\) of the clique into one corner that holds a quarter of the vertices. A random triangle inside that corner is then pure with probability \[ \approx \frac{8(\sigma k)^3}{(n/4)^3} \;=\; 64\,\sigma^{3}\cdot 8\Big(\frac{k}{n}\Big)^{3}, \] which is <b>\(64\sigma^3\) times</b> the whole-graph rate, so \(T\) shrinks by the same factor. Equivalently, inside the corner \(\kappa_{\text{corner}} = \sigma k/\sqrt{n/4} = 2\sigma\kappa\), so the corner is an easier instance whenever \(\sigma > \tfrac12\).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Share of the clique in the best corner (σ)</th><th class="num">¼ (even split)</th><th class="num">0.4</th><th class="num">½</th><th class="num">0.68 (best observed)</th></tr></thead>
+      <tbody><tr><td>Pure-triangle rate inside that corner, relative to the whole graph</td><td class="num">1×</td><td class="num">4×</td><td class="num">8×</td><td class="num">20×</td></tr></tbody>
+    </table></div>
+    <p>The question becomes concrete. How large is σ in practice, and does it beat graph-only rankings such as codegree, which also push pure triangles up the list?</p>
+  </div></section>
+
+  <!-- 4. EMPIRICAL FINDINGS: FOUR-ACT SCIENTIFIC STORY -->
+  <section id="results" class="wrap" style="gap:22px">
+    <div class="col"><p class="eyebrow">4 · Preliminary results</p><h2>Partly: the energy gathers the clique, but not enough to give better seeds yet</h2>
+      <p>Each experiment had its predictions written down before it ran, and each was paired with null G(n, ½) graphs. A success is an exact clique larger than any a random graph of that size contains (false-certificate probability below 2<sup>−45</sup>). No experiment produced a false certificate. All graphs are degree-matched, and every success is at k &lt; √n (κ between 0.49 and 0.89), where spectral methods and plain AMP recover almost nothing. That is a constant factor below √n, not yet the n<sup>1/2−ε</sup> regime of the lower bounds. The four results below follow the argument above, step by step.</p>
+      <p><b>The concentration is real but usually modest.</b> The median best-corner share corresponds to a predicted gain in pure triangles of only 1.24× over a random partition. Measured directly over 42 graphs, quench corners and random four-way partitions supplied the same number of all-clique triangle proposals: 48 each. The 8–20× gains of section 3.2 occur only on the few graphs where one corner holds half the clique or more.</p></div>
+
+    <!-- ACT 1: GEOMETRIC CONCENTRATION -->
+    <div class="col"><h2><span class="tag">4.1</span> The spherical quench concentrates the clique well above chance</h2>
+      <p>Without labels and without a degree signal, the quench puts more of the clique into one corner than chance puts of a random k-set. Across 42 planted vs 6 null graphs (n = 1,000 and 2,000), planted enrichment has median <b>1.63×</b> and reaches <b>2.99×</b> (15 of 20 vertices in a 251-vertex corner at n = 1,000; and 27 of 40 in 504, 2.68×, at n = 2,000), while nulls stay at median 1.30× and never exceed 1.62× (Mann–Whitney <b>p = 0.008</b>; 22 of 42 planted graphs exceed the null maximum).</p>
+      <p class="muted">When decoded by an exact maximum-clique search per corner, this concentration yields direct recovery where naive baselines fail: <b>7 of 24</b> in K456 at n = 1,000 (κ 0.63–0.76) against <b>0 of 24</b> for random four-way partitions searched identically (sign test p = 0.016; <b>9 of 27 vs 1 of 27</b> when pooled with the earlier K450 pilot in the baseline table below, p = 0.022), and <b>10 of 12</b> at n = 2,000 (κ 0.67–0.89) where baseline AMP scores 0/12.</p></div>
+    <div class="win"><div class="bar"><span>concentration.gif</span><i>best-corner enrichment: planted vs null</i></div><div class="body panel">
+      <div class="col" style="max-width:76ch;gap:6px"><h3>Best-corner clique share relative to vertex share</h3>
+        <p class="muted">Enrichment equals (planted vertices in best corner / k) ÷ (vertices in best corner / n); 1× is an even split. Hollow rings show unplanted G(n, ½) controls scored on a random k-set, defining the shaded chance band.</p></div>
+      <div class="h2h-chart" id="enrich"></div>
+      <div class="legend" id="enrichLegend"></div>
+      <p class="note">Planted (42 graphs): median 1.63×, max 2.99× (15/20 in 251 at n = 1,000, κ = 0.63; 27/40 in 504 = 2.68× at n = 2,000, κ = 0.89). Nulls (6 graphs): median 1.30×, max 1.62×. Mann–Whitney two-sided p = 0.008.</p>
+    </div></div>
+
+    <!-- ACT 2: MATCHED CONTROLS & STRONG GRAPH-ONLY DECODERS -->
+    <div class="col"><h2><span class="tag">4.2</span> Matched controls separate partitioning from geometry</h2>
+      <p>Do quench corners give triangle-proposal decoders better proposals? <b>Not yet</b>, once the decoder’s budget and the graph-only ranker are matched. Two controls show this.</p>
+      <ul class="plain">
+        <li><b>The 4× call-count confound (K458h vs K464):</b> Running a pool-based low-rank AMP decoder separately on each of the four corners initially beat a single whole-graph centered-triangle pool <b>34/42 vs 25/42</b>. Auditing the budgets revealed that each corner call ran 512 AMP completions (4 × 512 total vs 1 × 512). Substituting <b>random four-way partitions</b> with the same four calls immediately matched the corners at <b>34/42 = 34/42</b> (4 vs 4 discordant, p = 1.0); corners also generated fewer all-clique proposals overall (48 vs 142).</li>
+        <li><b>Corner truncation vs whole-graph codegree (K458h3 &amp; K460):</b> With a stronger decoder that ranks triangles by pairwise codegree and completes the top 1,024, keeping only intra-corner triangles tied whole-graph codegree at <b>12/14 = 12/14</b> on the hardest graphs. When the clique gathered inside one corner, recovery arrived earlier (e.g., proposal 548 → 184); when the top planted triangle straddled two corners, filtering discarded it (proposal 18 → 403, even on a graph with 17/26 clique vertices in one corner). At budget 4,096, whole-graph codegree alone reached κ = 0.49 (5/6 at n = 2,000).</li>
+      </ul></div>
+    <div class="win"><div class="bar"><span>matched_controls.gif</span><i>pool AMP (42 graphs) &amp; codegree decoder (14 hardest)</i></div><div class="body panel">
+      <div class="legend" id="h2hLegend"></div>
+      <div class="h2h-chart" id="h2h"></div>
+      <p class="note" id="h2hNote">Top chart (K458h + K458h2 + K464): 4–8 planted graphs per bar, 6 nulls (0 false certificates in every arm). Quench corners and random 4-way partitions tie 34/42 = 34/42 (4–4 discordant).</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Decoder comparison on the 14 hardest graphs"><table>
+        <caption class="sr-only">Recovered planted cliques by decoder and proposal source on the 14 hardest graphs</caption>
+        <thead><tr><th scope="col">Decoder · proposal source (14 hardest graphs)</th><th scope="col" class="num">n 1,000 · κ 0.63</th><th scope="col" class="num">n 2,000 · κ 0.58</th><th scope="col" class="num">Total</th></tr></thead>
+        <tbody>
+          <tr><td>Codegree triangles (top 1,024) · whole graph</td><td class="num">6/8</td><td class="num">6/6</td><td class="num"><b>12/14</b></td></tr>
+          <tr><td>Codegree triangles (top 1,024) · inside one quench corner</td><td class="num">7/8</td><td class="num">5/6</td><td class="num"><b>12/14</b></td></tr>
+          <tr><td>Pool AMP decoder · quench corners (4 decodes)</td><td class="num">6/8</td><td class="num">3/6</td><td class="num">9/14</td></tr>
+          <tr><td>Pool AMP decoder · centered-triangle pool (1 decode)</td><td class="num">3/8</td><td class="num">1/6</td><td class="num">4/14</td></tr>
+          <tr><td>Pool AMP decoder · all vertices (1 decode)</td><td class="num">3/8</td><td class="num">1/6</td><td class="num">4/14</td></tr>
+          <tr><td>Pool AMP decoder · random 20% pool (1 decode)</td><td class="num">3/8</td><td class="num">0/6</td><td class="num">3/14</td></tr>
+        </tbody>
+      </table></div>
+    </div></div>
+
+    <!-- ACT 3: FROM MOTIF GEOMETRY TO MULTI-BODY ZERO-GAP AMP -->
+    <div class="col"><h2><span class="tag">4.3</span> The same triangle couplings, as multi-body AMP</h2>
+      <p>Asking why a triangle energy sees past pairwise spectra led to a faster algebraic method. The triangle energy splits into two orthogonal channels—centered edges and signed 3-cliques—whose state evolution explains the exact unseeded zero-gap vertex-AMP barrier: <b>κ* = 1.000</b> for 2-body edges alone, <b>0.779</b> for 3-body triangles alone, <b>0.647</b> for hybrid (2+3)-body AMP, and <b>0.625</b> across all clique orders p ≥ 2.</p>
+      <p>To cross below 1/√e = 0.607 in low polynomial time, we combine channel-split (2+3)-body AMP with <b>seed conditioning and global-degree debiasing</b>. Inside the neighborhood N(v) of a candidate vertex (m ≈ n/2, raising local κ<sub>v</sub> ≈ √2 κ), subtracting the configuration-model baseline <span class="mono">S̃<sup>(v)</sup><sub>uw</sub> = (2A<sub>uw</sub> − 1) − 2/(n−2)·(Δ<sub>u</sub> + Δ<sub>w</sub> − 1)</span>, where <span class="mono">Δ<sub>u</sub> = deg<sub>G</sub>(u) − (n−1)/2</span>, cancels global degree noise while preserving the positive internal clique shift—unlocking a non-negative exclusion-tempered denoiser on both 2- and 3-body channels (asymptotic global threshold κ* = 0.5246/√2 = <b>0.371</b>). Extending the same debiasing to a candidate edge’s common neighborhood N(u) ∩ N(v) (m ≈ n/4, κ<sub>uv</sub> ≈ 2κ) ranked by debiased codegree (S̃²)<sub>uv</sub> runs pure 2-body AMP in milliseconds per edge.</p></div>
+    <div class="win"><div class="bar"><span>multibody_amp.txt</span><i>K456 causal ablation (36 planted) + edge-seeded scaling to n = 8,000, κ = 0.44</i></div><div class="body panel">
+      <div class="formula">u<sub>2</sub><sup>(t)</sup> = W f<sub>2</sub><sup>(t)</sup> − (⟨f<sub>2</sub>′⟩/σ<sub>t</sub>) a<sub>t−1</sub> f<sub>2</sub><sup>(t−1)</sup>, &nbsp; u<sub>3</sub><sup>(t)</sup> = (n√2)<sup>−1</sup> Σ<sub>j,l</sub> S<sub>ij</sub>S<sub>il</sub>S<sub>jl</sub> f<sub>3,j</sub><sup>(t)</sup> f<sub>3,l</sub><sup>(t)</sup> − (2⟨f<sub>3</sub>′⟩/σ<sub>t</sub>) b<sub>t−1</sub>⟨f<sub>3</sub><sup>(t)</sup>, f<sub>3</sub><sup>(t−1)</sup>⟩ f<sub>3</sub><sup>(t−1)</sup></div>
+      <p class="muted">On null G(1,000, ½), the calibrated Onsager recursion holds step-3 background noise SD to <b>0.993</b> (ideal 1.000; <b>0.986</b> inside N(u) ∩ N(v) at n = 2,000). A matched ablation on K456 with identical label-free seed order isolates each ingredient: 1-seed raw 2-body AMP recovers <b>28/36</b>, adding global-degree debiasing raises it to <b>31/36</b>, and adding the 3-body Onsager channel reaches <b>35/36</b> (median 1.5–17.6 s vs 294–1,163 s for quench flow). Across 310 analytic oracle single-seed trials (n = 1,000–4,000), conditional recovery P(exact | v ∈ K) rises from <b>24.5%</b> (raw 2-body) to <b>41.0%</b> (+ debiasing) to <b>58.7%</b> (+ 3-body; more than doubling 2-body in κ ∈ [0.49, 0.67], 38.4% vs 17.9%). Conditioning on top debiased-codegree edges (<b>2-seed edge AMP</b>) keeps the same <b>35/36</b> on K456 in <b>0.10–0.46 s</b> median and matches whole-graph codegree’s sensitivity at n = 2,000 (6/6 at κ = 0.58 in 0.5 s; 5/6 at κ = 0.49 in 4.0 s vs 78–210 s), with <b>0/13</b> false certificates on nulls across n = 1,000–8,000.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Matched K456 causal ablation of quench flow versus 1-seed and 2-seed debiased AMP"><table>
+        <caption class="sr-only">Exact certified recovery counts and median runtimes on the 36 planted K456 graphs and 4 nulls</caption>
+        <thead><tr><th scope="col">K456 cell</th><th scope="col" class="num">κ</th><th scope="col" class="num">Quench Flow</th><th scope="col" class="num">1-Seed 2b (raw)</th><th scope="col" class="num">1-Seed 2b (deb)</th><th scope="col" class="num">1-Seed (2+3)b (med s)</th><th scope="col" class="num">2-Seed Edge 2b (med s)</th></tr></thead>
+        <tbody>
+          <tr><td>n = 1,000 · k = 20</td><td class="num">0.63</td><td class="num">1/8 (365 s)</td><td class="num">3/8</td><td class="num">4/8 (1.5 s)</td><td class="num"><b>7/8 (3.2 s)</b></td><td class="num"><b>7/8 (0.46 s)</b></td></tr>
+          <tr><td>n = 1,000 · k = 22</td><td class="num">0.70</td><td class="num">4/8 (294 s)</td><td class="num">8/8</td><td class="num">8/8 (0.5 s)</td><td class="num"><b>8/8 (2.2 s)</b></td><td class="num"><b>8/8 (0.12 s)</b></td></tr>
+          <tr><td>n = 1,000 · k = 24</td><td class="num">0.76</td><td class="num">2/8 (310 s)</td><td class="num">7/8</td><td class="num">8/8 (0.5 s)</td><td class="num"><b>8/8 (1.5 s)</b></td><td class="num"><b>8/8 (0.10 s)</b></td></tr>
+          <tr><td>n = 2,000 · k = 30</td><td class="num">0.67</td><td class="num">3/4 (1,007 s)</td><td class="num">2/4</td><td class="num">3/4 (2.7 s)</td><td class="num"><b>4/4 (12.0 s)</b></td><td class="num"><b>4/4 (0.40 s)</b></td></tr>
+          <tr><td>n = 2,000 · k = 35</td><td class="num">0.78</td><td class="num">4/4 (1,163 s)</td><td class="num">4/4</td><td class="num">4/4 (2.9 s)</td><td class="num"><b>4/4 (17.6 s)</b></td><td class="num"><b>4/4 (0.35 s)</b></td></tr>
+          <tr><td>n = 2,000 · k = 40</td><td class="num">0.89</td><td class="num">3/4 (497 s)</td><td class="num">4/4</td><td class="num">4/4 (1.3 s)</td><td class="num"><b>4/4 (2.6 s)</b></td><td class="num"><b>4/4 (0.43 s)</b></td></tr>
+          <tr class="total-row"><td>Total planted (36) · Nulls (4)</td><td class="num">—</td><td class="num">17/36 · 0/4</td><td class="num">28/36 · 0/4</td><td class="num">31/36 · 0/4</td><td class="num">35/36 · 0/4</td><td class="num">35/36 · 0/4</td></tr>
+        </tbody>
+      </table></div>
+      <div class="pill-row" aria-label="Sub-1/sqrt(e) zero-gap recovery across n = 1,000 to 8,000">
+        <span class="pill">Sub-1/√e scaling (Petrel-04):</span>
+        <span class="pill">n=2k · κ=0.58 (K458h3): <b>6/6</b> edge (0.5 s) · 3/6 1-seed</span>
+        <span class="pill">n=2k · κ=0.49 (K460): <b>5/6</b> edge (4.0 s) · 2/6 1-seed</span>
+        <span class="pill">n=4k · κ=0.60 / 0.51 / 0.44: <b>4/4</b> (2.6 s) · <b>4/4</b> (8.2 s) · <b>2/4</b> (14–31 s)</span>
+        <span class="pill">n=8k · κ=0.60 / 0.51: <b>1/1</b> (55 s) · <b>1/2</b> (28 s)</span>
+        <span class="pill">Nulls: <b>0/13 FP</b></span>
+      </div>
+      <p class="note">Baseline AMP scored 0/36, spectral 2/36, and unseeded (2+3)-body AMP 4/36 on the same K456 graphs. All n ≥ 2,000 recoveries above satisfy strict certification (&lt; 2<sup>−45</sup>; &lt; 2<sup>−140</sup> at n = 4,000, k = 28). At n = 1,000, k = 17 (κ = 0.54, below the strict certification floor), 1-seed (2+3)-body AMP recovers 3/6 exact planted cliques (vs 0/6 for both 2-body controls and 2-seed edge AMP, where m ≈ 250 is too small). Across n = 1,000–8,000, both methods track constant-κ scaling on G(n, ½).</p>
+    </div></div>
+
+    <!-- ACT 4: THE KAPPA RULER & CLASSICAL BASELINE CURVES -->
+    <div class="col"><h2><span class="tag">4.4</span> The full κ landscape on degree-matched graphs</h2>
+      <p class="muted">On one axis: pairwise methods stall near κ ≈ 1; unseeded vertex-level multi-body AMP has an asymptotic wall at 0.625–0.647; seeded multi-body AMP and codegree triangle search reach 0.49–0.60, still at constant κ.</p></div>
+    <div id="ruler" class="win" aria-label="Where this sits among known methods"><div class="bar"><span>kappa_ruler.gif</span><i>smaller <span style="text-transform:none">κ</span> = harder</i></div><div class="body">
+      <div class="ruler-wrap"><svg viewBox="0 0 960 250" role="img" aria-label="A kappa scale from 0.4 to 1.1 marking the certificate floor at 0.47, codegree search at 0.49, quench corners and 1-seed AMP at 0.58 and 0.67, the unseeded vertex-AMP wall at 0.625 to 0.65, and spectral methods near 1.0">
+        <rect x="323" y="96" width="31" height="24" fill="var(--rose)" opacity=".28"/>
+        <line x1="40" x2="920" y1="120" y2="120" stroke="var(--ink)" stroke-width="2.5"/>
+        <g font-family="ui-monospace, Courier New, monospace" font-size="12" fill="var(--ink)" text-anchor="middle">
+          <line x1="40" x2="40" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="40" y="141">0.4</text>
+          <line x1="166" x2="166" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="166" y="141">0.5</text>
+          <line x1="291" x2="291" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="291" y="141">0.6</text>
+          <line x1="417" x2="417" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="417" y="141">0.7</text>
+          <line x1="543" x2="543" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="543" y="141">0.8</text>
+          <line x1="669" x2="669" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="669" y="141">0.9</text>
+          <line x1="794" x2="794" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="794" y="141">1.0</text>
+          <line x1="920" x2="920" y1="114" y2="126" stroke="var(--ink)" stroke-width="2"/><text x="920" y="141">1.1</text>
+        </g>
+        <g font-family="ui-monospace, Courier New, monospace" font-size="11" fill="var(--muted)" text-anchor="middle">
+          <text x="20" y="157" text-anchor="start">k at n = 2,000:</text>
+          <text x="236" y="157">25</text><text x="377" y="157">30</text><text x="518" y="157">35</text><text x="659" y="157">40</text><text x="800" y="157">45</text>
+        </g>
+        <g font-family="Verdana, sans-serif" font-size="12" fill="var(--ink)">
+          <line x1="153" x2="153" y1="120" y2="100" stroke="var(--teal)" stroke-width="3"/><rect x="146" y="113" width="14" height="14" fill="var(--teal)" stroke="var(--ink)" stroke-width="2" transform="rotate(45 153 120)"/>
+          <text x="146" y="88" text-anchor="end" font-weight="700">κ 0.49 · k 22</text>
+          <text x="146" y="103" text-anchor="end" fill="var(--muted)">codegree 5/6 (4k)</text>
+          <line x1="266" x2="266" y1="120" y2="68" stroke="var(--gold)" stroke-width="3"/><circle cx="266" cy="120" r="7" fill="var(--gold)" stroke="var(--ink)" stroke-width="2"/>
+          <text x="258" y="48" text-anchor="end" font-weight="700">κ 0.58 · k 26: codegree 6/6</text>
+          <text x="258" y="63" text-anchor="end" fill="var(--muted)">in-corner codegree 5/6 · 1-seed AMP 4/6</text>
+          <line x1="379" x2="379" y1="120" y2="38" stroke="var(--gold)" stroke-width="3"/><circle cx="379" cy="120" r="7" fill="var(--gold)" stroke="var(--ink)" stroke-width="2"/>
+          <text x="387" y="30" font-weight="700">κ 0.67 · k 30: corners 3/4 · 1-seed AMP 4/4</text>
+          <text x="387" y="45" fill="var(--muted)">exact corner search · spectral 0/4 · baseline AMP 0/4</text>
+          <line x1="794" x2="794" y1="120" y2="78" stroke="var(--violet)" stroke-width="3"/><rect x="787" y="113" width="14" height="14" fill="var(--violet)" stroke="var(--ink)" stroke-width="2"/>
+          <text x="786" y="63" text-anchor="end" font-weight="700">κ ≈ 1 · k ≈ 45: spectral methods</text>
+          <text x="786" y="78" text-anchor="end" fill="var(--muted)">unseeded 2-body AMP also stalls here</text>
+          <line x1="128" x2="128" y1="120" y2="174" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/>
+          <text x="134" y="186" font-weight="700">κ 0.47 · k 21</text>
+          <text x="134" y="201" font-weight="700">certificate floor:</text>
+          <text x="134" y="216" fill="var(--muted)">random cliques reach this size</text>
+          <line x1="338" x2="338" y1="120" y2="210" stroke="var(--rose)" stroke-width="2"/>
+          <text x="344" y="222" font-weight="700">κ ≈ 0.625–0.65: unseeded vertex-AMP wall</text>
+          <text x="344" y="237" fill="var(--muted)">all clique orders (0.625) to edges + triangles (0.647), n → ∞</text>
+          <text x="40" y="242" fill="var(--muted)">← harder</text>
+          <text x="920" y="242" text-anchor="end" fill="var(--muted)">easier →</text>
+        </g>
+      </svg></div>
+      <p class="note">The second row below the axis converts κ to clique size k at n = 2,000. The pink band is the asymptotic threshold for unseeded vertex-level AMP on degree-matched graphs. Seeded methods (codegree triangles; 1-seed (2+3)-body AMP, asymptotic κ* = 0.371) go below 1/√e = 0.607 in polynomial time.</p>
+    </div></div>
+
+    <div class="win"><div class="bar"><span>thresholds.gif</span><i>classical baselines across n = 500, 1,000, 2,000 (K450 + K456)</i></div><div class="body panel">
+      <div class="charts" id="charts"></div>
+      <div class="legend" id="chartLegend"></div>
+      <p class="note">Pooled K450 + K456 exact per-corner search vs weak pairwise baselines (3–11 planted graphs per point; random partitions not run at n = 2,000; 0 false certificates on all nulls).</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Pooled K450 and K456 classical baseline recovery rates"><table>
+        <caption class="sr-only">Pooled K450 and K456 exact-clique recovery counts for flow, spectral, AMP, and random partitions</caption>
+        <thead><tr><th scope="col" class="num">n</th><th scope="col" class="num">κ</th><th scope="col" class="num">Flow</th><th scope="col" class="num">Spectral</th><th scope="col" class="num">AMP (told k)</th><th scope="col" class="num">Random partitions</th></tr></thead>
+        <tbody id="keyRows"></tbody>
+      </table></div>
+    </div></div>
+  </section>
+
+  <!-- 6. LIMITS -->
+  <section id="limits" class="win" style="max-width:860px"><div class="bar"><span>limits.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">4.5 · Limitations of the preliminary data</p>
+    <h2>What these results do—and do not—establish</h2>
+    <ul class="plain">
+      <li><b>Geometry does not yet beat the best graph-only search.</b> Quench corners cluster the clique (p = 0.008) and beat random partitions under exact per-corner search (9/27 vs 1/27, p = 0.022), but under strong decoders they tie random 4-way partitions on equal-call AMP pools (34/42 = 34/42) and tie whole-graph codegree on the 14 hardest graphs (12/14 = 12/14).</li>
+      <li><b>Dense spherical concentration dilutes with n.</b> At fixed κ, the clique’s share of global triangle density decays like n<sup>−3/2</sup>; at n = 4,000, κ = 0.79, single-solve quench concentration fell back to null, and at n = 4,000, κ = 0.60, codegree recovered 2/4 vs 1/4 for corners (while 1-seed (2+3)-body AMP recovered 3/4 in ~55 s).</li>
+      <li><b>Constant κ, not n<sup>1/2−ε</sup>.</b> Every success—including 2-seed debiased AMP down to κ = 0.44 at n = 4,000 and κ = 0.51 at n = 8,000, and codegree down to κ = 0.49—lies at constant κ. Success rates line up on κ = k/√n across n = 1,000–8,000, as the planted-clique conjecture predicts.</li>
+      <li><b>Finite samples.</b> Individual cells hold 4–11 graphs, so pooled tests (enrichment p = 0.008; exact corner search p = 0.022; K456 1-seed AMP 35/36 vs 17/36) carry the statistical weight rather than single points.</li>
+    </ul>
+  </div></section>
+
+  <!-- 5. RESEARCH PLAN -->
+  <section id="future" class="col" style="max-width:none">
+    <p class="eyebrow">5 · Research plan</p>
+    <h2>Three aims over two years</h2>
+    <p>Each aim lists its hypothesis, approach, milestones, how success is judged, and what happens if it fails. Experimental milestones follow the discipline of the preliminary work: one small check first, predictions written before the run, matched null graphs, and refutations reported as such.</p>
+
+    <div class="q gold" id="aim1"><h3>Aim 1 · A rounding theorem for geometric seeds</h3>
+      <p class="muted"><b>Hypothesis.</b> Whether a sphere flow can beat √n reduces to one measurable quantity, the clique’s average pairwise angle θ̄ after the flow. Recursive hyperplane rounding gains a constant factor in κ per level whenever θ̄ &lt; π(1 − 1/√2) ≈ 52.7° (Lemma 4, below).</p>
+      <p class="muted"><b>Approach.</b> (a) Measure θ̄ as a function of κ and n on the recorded flows, to see which side of 52.7° they sit and how that moves with n. (b) <i>Positive direction:</i> a rounding analysis lower-bounding the flow’s concentration in κ and n, starting from the fixed-background case. There, Tern’s analysis shows that one best response on four fixed corners gives no asymptotic gain (its κ gain tends to ½); the question is whether iterating the flow does better. (c) <i>Negative direction:</i> regress the corner map A ↦ corners(A) onto orthogonal graph polynomials of growing degree D, and, if the fit holds at D = O(log n), prove that the flow is close to a low-degree function, so the low-degree bounds apply. (d) Identify the convex lift: because area² is quadratic in G = XXᵀ, the energy is a rank-3 Burer–Monteiro relaxation of a degree-4 Gram program; compare its power with the rank-3 restriction.</p>
+      <p class="muted"><b>Milestones.</b> M1.1 θ̄(κ, n) on existing traces. M1.2 low-degree regression for D = 1…6 at n up to 4,000. M1.3 a proved statement in the direction the Aim 3 go/no-go selects.</p>
+      <p class="muted"><b>Success.</b> A theorem in either direction. <b>Risk and fallback.</b> The full adaptive flow may resist analysis; the fallback is a theorem for the one-step, fixed-background flow, which is already a well-posed problem.</p></div>
+
+    <div class="q gold" id="aim2" style="margin-top:16px"><h3>Aim 2 · Rigorous state evolution for dependent motif AMP</h3>
+      <p class="muted"><b>Hypothesis.</b> The heuristic state evolution of channel-split (2+3)-body AMP is asymptotically exact, even though the triangle tensor T<sub>ijk</sub> = S<sub>ij</sub>S<sub>jk</sub>S<sub>ki</sub> shares edges across triples and so violates the i.i.d. assumptions of tensor AMP. Preliminary support: the step-3 null standard deviation measures 0.993 against a predicted 1, and the method solves 35 of 36 benchmark graphs.</p>
+      <p class="muted"><b>Approach.</b> Derive the Onsager correction and field-covariance laws for tensors built from one random sign matrix, first for the triangle channel and then for non-backtracking cycle channels, checking each step numerically against the benchmark and larger n.</p>
+      <p class="muted"><b>Milestones.</b> M2.1 numerical state-evolution checks up to n = 16,000. M2.2 a proof for the triangle channel. M2.3 extension to cycle channels and to degree debiasing.</p>
+      <p class="muted"><b>Success.</b> Proved thresholds matching the measured 0.647 (unseeded) and 0.371 (one debiased vertex). <b>Risk and fallback.</b> If edge sharing changes the recursion, quantify the correction terms; a corrected recursion that matches experiment is itself the result.</p></div>
+
+    <div class="q" id="aim3" style="margin-top:16px"><h3>Aim 3 · Stronger concentration, judged against the right controls</h3>
+      <p class="muted"><b>Hypothesis.</b> The concentration is limited by three identified mechanisms: the area² pull on a tightening triangle vanishes as θ⁴; raw triangle density is 97.5% shared edge noise (appendix 2); and Sinkhorn transport amplifies within-corner splitting 18.89× (appendix 3). Repairing them gives corners that beat random partitions and codegree.</p>
+      <p class="muted"><b>Approach.</b> One change at a time: a bounded small-triangle reward; the Walsh-clean (1, 0, −1, 2) triangle field; anchored transport. Ablations first: transport off (K466 found the gather’s two circles form without it), and why the gather stops at circles rather than corners. Soft reweighting of triangle scores has been tested (K463) and gave no net gain over codegree, so the concentration itself has to get stronger.</p>
+      <p class="muted"><b>Go/no-go.</b> Over at least 40 graphs, a repaired energy must supply more all-clique triangle proposals than random four-way partitions (p &lt; 0.05), and recover the clique earlier than codegree at κ ≤ 0.45. The bar is concrete: at n = 2,000 and κ = 0.45, codegree triangles with a branching decoder recover 4 of 6 cliques where random triangles at the same budget recover none (K462). A pass sends Aim 1 toward the positive direction; a fail sends it toward the negative one.</p>
+      <p class="muted"><b>Risk and fallback.</b> If no repair passes, the negative result is reported as such and becomes the empirical input to Aim 1’s low-degree argument.</p></div>
+
+      <div class="q gold math" style="margin-top:16px">
+      <h3>Aim 1, the target statement: a rounding theorem for corners, in the style of Goemans–Williamson</h3>
+      <p>Goemans and Williamson analysed MAX-CUT by embedding the vertices as unit vectors, cutting with a random hyperplane, and bounding the probability that each pair is separated. The same template gives a precise statement of what a geometric method would have to do to beat √n.</p>
+      <p><b>Lemma 4 (hyperplane rounding keeps the clique together).</b> Let \(x: V \to S^{d-1}\) be any embedding and let \(\bar\theta\) be the average angle \(\angle(x_u, x_v)\) over ordered pairs of distinct clique vertices. Cut with a uniformly random hyperplane through the origin, and let \(\sigma_1, \sigma_2\) be the fractions of the clique on the two sides. Then
+      \[ \mathbb{E}\big[\max(\sigma_1,\sigma_2)\big] \;\ge\; \mathbb{E}\big[\sigma_1^2+\sigma_2^2\big] \;=\; \frac1k + \Big(1-\frac1k\Big)\Big(1-\frac{\bar\theta}{\pi}\Big). \]</p>
+      <p class="muted"><i>Proof.</i> Because \(\sigma_1+\sigma_2 = 1\), \(\max_i \sigma_i \ge \sum_i \sigma_i^2\). The sum \(\sum_i \sigma_i^2\) is the probability that two clique vertices drawn independently and uniformly, with replacement, land on the same side. They are the same vertex with probability \(1/k\). Otherwise, the Goemans–Williamson lemma says a random hyperplane separates \(x_u\) and \(x_v\) with probability \(\angle(x_u,x_v)/\pi\). Averaging over pairs gives the identity. \(\square\)</p>
+      <p><b>Consequence for recursion.</b> If the side holding more of the clique has at most \((\tfrac12+\eta)n\) vertices, the clique’s κ on that side is \(\kappa' \ge \sqrt{2/(1+2\eta)}\;\sigma_{\max}\,\kappa\). In expectation this is a fixed gain \(\kappa' \ge (1+\delta)\kappa\) per level whenever
+      \[ \bar\theta \;&lt;\; \pi\Big(1-\tfrac{1}{\sqrt2}\Big) \;\approx\; 52.7^\circ \quad(\text{with } \eta \text{ small}). \]
+      Recursing on both sides for \(L = \lceil \varepsilon \log_2 n / \log_2(1+\delta) \rceil\) levels raises \(\kappa = n^{-\varepsilon}\) to a constant, at a cost of \(2^{L} = n^{\varepsilon/\log_2(1+\delta)}\) branches. That is polynomial. Corollary 3 then finishes.</p>
+      <p><b>The open problem.</b> Is there a polynomial-time embedding of \(G\) that, at \(k = n^{1/2-\varepsilon}\), keeps the clique’s average pairwise angle below about 52.7° while splitting the other vertices evenly, and keeps doing so on the subgraphs it produces (each level selects its subgraph from the graph, so adaptivity has to be controlled)? Such an embedding would refute the planted-clique conjecture. Convex embeddings cannot do it: the Lovász θ function (Feige &amp; Krauthgamer) and sum-of-squares (Barak et al.) do not see the clique at that size. A theorem is within reach in either direction:</p>
+      <ul class="plain">
+        <li><b>Positive:</b> a rounding analysis of the nonconvex sphere flow that lower-bounds its clique concentration as a function of κ and n. The experiments measure that quantity, and at constant κ it is real but modest.</li>
+        <li><b>Negative:</b> a proof that the flow’s embedding is close to a low-degree polynomial in \(A\). Then the low-degree bounds apply, and no motif flow of this kind can reach \(n^{1/2-\varepsilon}\).</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- 6. TIMELINE -->
+  <section id="timeline" class="win story"><div class="bar"><span>6_timeline.txt</span><i aria-hidden="true">● ● ●</i></div><div class="body">
+    <p class="eyebrow">6 · Timeline and deliverables</p>
+    <h2>Two years, with the go/no-go at the midpoint</h2>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Timeline by term"><table>
+      <thead><tr><th>Term</th><th>Aim 1 (rounding theory)</th><th>Aim 2 (AMP theory)</th><th>Aim 3 (energy and controls)</th></tr></thead>
+      <tbody>
+        <tr><td>Year 1, first half</td><td>M1.1 θ̄(κ, n) on recorded flows</td><td>M2.1 numerical state evolution to n = 16,000</td><td>Ablations: transport, the circle stage</td></tr>
+        <tr><td>Year 1, second half</td><td>M1.2 low-degree regression</td><td>M2.2 triangle-channel proof</td><td>Repairs one at a time; <b>go/no-go</b></td></tr>
+        <tr><td>Year 2, first half</td><td>M1.3 theorem, direction set by go/no-go</td><td>M2.3 cycle channels, debiasing</td><td>Scaling of whichever repair passed, or the negative report</td></tr>
+        <tr><td>Year 2, second half</td><td colspan="3">Write-up and release</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Deliverables.</b> A paper on state evolution for dependent motif AMP (Aim 2). A paper on rounding geometric embeddings for planted clique, positive or negative (Aim 1, with Aim 3’s data). A public benchmark of degree-matched planted-clique instances with matched nulls and self-certifying checks, together with the solver code and the recorded runs.</p>
+  </div></section>
+
+  <!-- 5. ANALYTICAL ANATOMY (THE FOUR PROVED / DERIVED MECHANISMS) -->
+  <section id="theory" class="wrap" style="gap:18px">
+    <div class="col"><p class="eyebrow">Appendix · analysis</p><h2>Four analyses of the dynamics</h2>
+      <p class="muted">Four analyses address why the flow concentrates at n ≤ 2,000, why the concentration dilutes at n = 4,000, and what limits triangle-based decoders. Analyses 2–4 are derivations written up in the agents’ notes. Analysis 1 is a heuristic scaling argument, not a proof.</p></div>
+    <div class="two-col">
+      <div class="q mint"><h3>1. Free-vertex 3-body spin-glass scaling (Θ(√n), not n<sup>2/5</sup>)</h3><p class="muted">Holding background vertices fixed on S² suggests a gathered clique beats noise once k³ ≫ k√n + √k·n, i.e. k ≫ n<sup>2/5</sup>. Letting all 2n spherical coordinates relax changes this: dense mean-zero 3-body couplings act as a 3-spin glass whose noise ground state reaches E<sub>noise</sub> ≈ −c n² (~c n per vertex). Pinning k clique vertices forfeits ~c k n of noise-lowering freedom, giving the global-minimum balance k³/48 ≳ c k n, i.e. <b>k ≳ C√n</b>, consistent with the n = 600 and n = 4,000 runs.</p></div>
+      <div class="q mint"><h3>2. Walsh chaos of triangle density (97.5% edge noise)</h3><p class="muted">Expanding raw local triangle excess in edge signs X<sub>e</sub> = 2A<sub>e</sub> − 1 gives 8R = Σ<sub>e</sub> d<sub>e</sub> X<sub>e</sub> + Σ<sub>t</sub> h<sub>t</sub>(X<sub>a</sub>X<sub>b</sub> + X<sub>b</sub>X<sub>c</sub> + X<sub>c</sub>X<sub>a</sub> + X<sub>a</sub>X<sub>b</sub>X<sub>c</sub>). Shared single-edge fluctuations account for (m−2)/(m−2+4/3) = <b>97.5%</b> of local variance in a 54-vertex patch. Projecting out the edge term yields the unique Cauchy–Schwarz-optimal pure 3-clique field with triple weights <b>(1, 0, −1, 2)</b>—and its exact edge-null sphere potential f = (−1, −3, −5, 1).</p></div>
+      <div class="q mint"><h3>3. Exact Sinkhorn splitting instability (18.89×)</h3><p class="muted">On an ideal 4-partite tetrahedral configuration (109.47° corner spacing), both the graph energy and Sinkhorn substeps have an exact fixed point, yet zero-mean within-corner perturbations amplify under the shared barycentric transport Jacobian DF(x) = [2/(ε‖m‖)](I − FFᵀ) Cov<sub>p</sub>(g). A continuum bound gives a splitting multiplier g ≥ (11/96)·(2/ε) ≈ <b>7.64</b>, and it measures <b>18.89</b> on the icosphere mesh, which explains why unanchored masked transport destabilizes clean corners once local triangles disappear.</p></div>
+      <div class="q mint"><h3>4. Uniform adaptive completion &amp; codegree barriers</h3><p class="muted">Using ε-net spectral bounds uniform over all graph-dependent subsets, any corner P of size m admits deterministic spectral + two-threshold completion on the <i>same</i> graph (even under degree-preserving switches) whenever s ≥ C√(m log(en/m)), and r = ⌈log₂(n/k²)⌉ + O(1) pure seed vertices suffice uniformly. Conversely, at k = n<sup>1/2−ε</sup>, centered codegree places zero planted pairs inside the top n<sup>1+δ</sup> edges (δ &lt; 2ε) with high probability.</p></div>
+    </div>
+  </section>
+
+  <!-- 8. INTERACTIVE RECORDED RUNS -->
+  <section id="watch" class="win" aria-label="Replay of recorded runs"><div class="bar"><span>sphere_replay.exe</span><i>drag · keys · scrub · play</i></div><div class="body panel">
+    <div class="panel-head">
+      <div class="col" style="gap:6px"><p class="eyebrow">Recorded trajectories (K453)</p><h2>Watch the flow gather and quench, frame by frame</h2></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>planted clique</span><span><i style="background:var(--muted)"></i>other vertices, shaded by final corner</span></div>
+    </div>
+    <div class="player">
+      <div class="stage" id="stage" tabindex="0" role="application" aria-label="Interactive 3D sphere replay. Drag or use arrow keys to rotate, R to reset view, Space to play or pause."><canvas id="sphere" aria-hidden="true"></canvas><span class="hint">drag or arrow keys · r resets</span></div>
+      <div class="side">
+        <div class="seg" id="traceSel" role="group" aria-label="Choose a run"></div>
+        <p class="note" id="traceNote"></p>
+        <div class="scrub"><button class="btn primary" id="play" type="button">Play</button><input id="frame" type="range" min="0" max="0" value="0" aria-label="Frame"><span class="mono note" id="frameNo">0</span></div>
+        <div class="tiles">
+          <div class="tile wide"><span>Stage</span><strong id="tStage">–</strong></div>
+          <div class="tile"><span>Clique per corner</span><strong id="tBands">–</strong></div>
+          <div class="tile"><span>Pair z (below 0 = gathered)</span><strong id="tZ">–</strong></div>
+        </div>
+        <div class="ebox" aria-live="polite">
+          <div class="erow" id="eG"><b>Stage 1 · gather energy</b><div class="ef">E<sub>G</sub> = ½·5·Σ<sub>edges</sub>(θ−10°)² + 0.5·Σ<sub>non-edges</sub> e<sup>−θ²/2(30°)²</sup> + (10/n)·Σ<sub>triples</sub> f<sub>G</sub>(m)·area² + E1 + E2<br>f<sub>G</sub>(0,1,2,3 edges) = (−8, 0.1, 0.1, 4) · ratio f(3)/|f(0)| = ½<br>transport: σ 5°, uniform share 0.5, swirl 1</div></div>
+          <div class="erow" id="eQ"><b>Stage 2 · quench energy</b><div class="ef">E<sub>Q</sub> = ½·5·Σ<sub>edges</sub>(θ−10°)² + (10/n)·Σ<sub>triples</sub> f<sub>Q</sub>(m)·area²<br>f<sub>Q</sub>(0,1,2,3 edges) = (−16, 0.1, 0, 1) · ratio 1/16 · no repulsion, E1, E2<br>transport: σ 15°, uniform share 0.2, swirl 0.3</div></div>
+          <p class="estep" id="eStep">–</p>
+        </div>
+        <p class="note">Each frame is a saved checkpoint from a two-stage gather-then-quench run (K453): one after every transport step and one after every 200-step relaxation. The camera starts facing the corner that finishes with the most planted vertices. Pair z compares the clique’s mean pairwise closeness against 200 random k-sets.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="col">
+    <p class="eyebrow">Research environment and methods</p>
+    <p class="muted">This program was conducted as an experiment in human-directed, multi-agent mathematical research inside one shared workspace. Josh Vekhter chose the problem, the formulations and the questions; the named agents are AI models (Claude Code and Codex sessions), each keeping its own log. The work used preregistered predictions and cross-checked proofs: with independent logs, preregistered predictions, and cross-checked proofs: Wren ran the spherical flows and matched-control threshold panels, Lark proved the Walsh variance decomposition and Sinkhorn fixed-point instability, Tern proved the uniform adaptive completion and codegree-barrier lemmas, Heron formalized the multi-body motif-AMP covariance laws, and Petrel audited the two-ring spherical flows and built the zero-gap (2+3)-body AMP benchmark.</p>
+  </section>
+  </main>
+
+  <footer>
+    <p>Data: the K-numbered experiments cited above (October–November 2026) and Petrel-01/03/04. Degree-matched planted cliques in G(n, ½). Every certificate is a verified exact clique.</p>
+    <p>more doors at <a href="https://foolzone.com/play/">foolzone.com/play</a> · <span class="blink" aria-hidden="true">▮</span> best viewed in any browser</p>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const mono = 'font-family="ui-monospace, Courier New, monospace"';
+  const fetchJson = async url => { const r = await fetch(url); if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
+
+  /* ---------- sphere replay ---------- */
+  const S = { traces: [], cur: null, frame: 0, playing: false, timer: null, yaw: 0.6, pitch: -0.35, homeYaw: 0.6, homePitch: -0.35, view: [0, 0, 1], lab: null, tid: 0 };
+  const canvas = $('sphere'), ctx = canvas.getContext('2d');
+
+  function stopPlay() {
+    S.playing = false;
+    if (S.timer) { clearTimeout(S.timer); S.timer = null; }
+    $('play').textContent = 'Play';
+  }
+  function startPlay() {
+    if (!S.cur) return;
+    stopPlay();
+    S.playing = true; $('play').textContent = 'Pause';
+    if (S.frame >= S.cur.frames.length - 1) setFrame(0);
+    const tick = () => {
+      if (!S.playing || !S.cur) return;
+      if (S.frame >= S.cur.frames.length - 1) { stopPlay(); return; }
+      setFrame(S.frame + 1);
+      S.timer = setTimeout(tick, 380);
+    };
+    S.timer = setTimeout(tick, 380);
+  }
+  function decode(b64) {
+    const bin = atob(b64), buf = new ArrayBuffer(bin.length), u8 = new Uint8Array(buf);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    const i16 = new Int16Array(buf), out = new Float32Array(i16.length);
+    for (let i = 0; i < i16.length; i++) out[i] = i16[i] / 32767;
+    return out;
+  }
+  function kmeans4(X, n) {   // spherical k-means, deterministic farthest-point start
+    const C = [[X[0], X[1], X[2]]];
+    while (C.length < 4) {
+      let bi = 0, bd = -1;
+      for (let i = 0; i < n; i++) { let m = 2; for (const c of C) m = Math.min(m, 1 - (X[3*i]*c[0] + X[3*i+1]*c[1] + X[3*i+2]*c[2])); if (m > bd) { bd = m; bi = i; } }
+      C.push([X[3*bi], X[3*bi+1], X[3*bi+2]]);
+    }
+    const lab = new Int8Array(n);
+    for (let it = 0; it < 40; it++) {
+      for (let i = 0; i < n; i++) { let b = -2, q = 0; C.forEach((c, j) => { const d = X[3*i]*c[0] + X[3*i+1]*c[1] + X[3*i+2]*c[2]; if (d > b) { b = d; q = j; } }); lab[i] = q; }
+      const M = C.map(() => [0, 0, 0]);
+      for (let i = 0; i < n; i++) { M[lab[i]][0] += X[3*i]; M[lab[i]][1] += X[3*i+1]; M[lab[i]][2] += X[3*i+2]; }
+      M.forEach((m, j) => { const l = Math.hypot(...m); if (l > 1e-9) C[j] = m.map(v => v / l); });
+    }
+    return { lab, C };
+  }
+  async function loadTrace(i) {
+    stopPlay();
+    const meta = S.traces[i]; S.tid = i;
+    [...$('traceSel').children].forEach((b, j) => b.setAttribute('aria-pressed', String(j === i)));
+    $('traceNote').textContent = meta.note;
+    if (!meta.data) {
+      const d = await fetchJson(meta.file);
+      d.X = decode(d.pos); d.isP = new Uint8Array(d.n); d.planted.forEach(v => d.isP[v] = 1); meta.data = d;
+    }
+    if (S.tid !== i) return;
+    const d = meta.data, F = d.frames.length, n = d.n, last = d.X.subarray(3 * n * (F - 1), 3 * n * F);
+    const km = kmeans4(last, n); let best = 0, bc = -1;
+    for (let q = 0; q < 4; q++) { let c = 0; for (let v = 0; v < n; v++) if (km.lab[v] === q && d.isP[v]) c++; if (c > bc) { bc = c; best = q; } }
+    S.lab = km.lab; S.view = km.C[best];
+    const v = S.view;
+    S.homeYaw = S.yaw = Math.atan2(v[0], v[1]);
+    S.homePitch = S.pitch = Math.asin(Math.max(-1, Math.min(1, v[2])));
+    S.cur = d; $('frame').max = F - 1; setFrame(F - 1);
+  }
+  function setFrame(f) {
+    S.frame = f; $('frame').value = f; const d = S.cur, fr = d.frames[f];
+    $('frameNo').textContent = `${f} / ${d.frames.length - 1}`;
+    $('tStage').textContent = fr.stage;
+    $('tZ').textContent = fr.pairz == null ? '–' : (fr.pairz > 0 ? '+' : '') + fr.pairz.toFixed(1);
+    $('tBands').textContent = fr.bands ? `${fr.bands.join(' / ')} of ${d.k}` : 'after relaxation';
+    { const st = fr.stage || '', g = st.startsWith('gather'), q = st.startsWith('quench');
+      $('eG').classList.toggle('on', g); $('eQ').classList.toggle('on', q);
+      const E = g ? 'E<sub>G</sub>' : 'E<sub>Q</sub>';
+      $('eStep').innerHTML = st === 'start' ? 'Uniform random start; no energy applied yet.'
+        : st.endsWith('transported') ? `This frame: one optimal-transport move. Every point jumped toward regions dense in small complete triangles (the ${g ? 'gather' : 'quench'} transport settings above). The energy was not minimized in this move.`
+        : st.endsWith('relaxed') ? `This frame: 200 gradient steps lowering ${E} (each step moves the point with the largest force 1°).` + (g ? ' At n = 1,000 the cloud settles onto two circles at ±54.7°, the shape the empty-triple push and the springs agree on (see “Why the gather forms two circles”).' : ' The cloud settles into four tetrahedral corners.') : ''; }
+    draw();
+  }
+  function draw() {
+    const r = canvas.getBoundingClientRect(); if (!r.width || !r.height || !S.cur) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cw = Math.round(r.width * dpr), ch = Math.round(r.height * dpr);
+    if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+    const cx = r.width / 2, cy = r.height / 2, R = Math.min(r.width, r.height) * .44;
+    const cy_ = Math.cos(S.yaw), sy = Math.sin(S.yaw), cp = Math.cos(S.pitch), sp = Math.sin(S.pitch);
+    const rot = (a, b, c) => { const x1 = a * cy_ - b * sy, y1 = a * sy + b * cy_; return [x1, y1 * sp * -1 + c * cp, y1 * cp + c * sp]; };
+    ctx.strokeStyle = css('--rule'); ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 2 * Math.PI); ctx.stroke();
+    const d = S.cur, n = d.n, X = d.X, off = 3 * n * S.frame;
+    const tints = [css('--muted'), css('--teal'), css('--violet'), css('--rose')], gold = css('--gold');
+    const pts = [];
+    for (let v = 0; v < n; v++) { const p = rot(X[off+3*v], X[off+3*v+1], X[off+3*v+2]); pts.push([p[0], p[1], p[2], v]); }
+    pts.sort((a, b) => a[2] - b[2]);
+    const small = n > 600 ? 1.6 : 2.3;
+    for (const [x, y, z, v] of pts) {
+      const front = z > 0, P = d.isP[v];
+      ctx.globalAlpha = P ? (front ? 1 : .35) : (front ? .55 : .14);
+      ctx.fillStyle = P ? gold : tints[S.lab[v]];
+      ctx.beginPath(); ctx.arc(cx + R * x, cy - R * y, P ? (front ? 4.2 : 3) : small, 0, 2 * Math.PI); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  let drag = null;
+  const stage = $('stage');
+  stage.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; stage.setPointerCapture(e.pointerId); stage.style.cursor = 'grabbing'; });
+  stage.addEventListener('pointermove', e => { if (!drag) return; S.yaw += (e.clientX - drag[0]) * .01; S.pitch = Math.max(-1.5, Math.min(1.5, S.pitch + (e.clientY - drag[1]) * .01)); drag = [e.clientX, e.clientY]; draw(); });
+  const up = () => { drag = null; stage.style.cursor = 'grab'; };
+  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+  stage.addEventListener('keydown', e => {
+    const step = 0.14;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); S.yaw -= step; draw(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); S.yaw += step; draw(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); S.pitch = Math.max(-1.5, S.pitch - step); draw(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); S.pitch = Math.min(1.5, S.pitch + step); draw(); }
+    else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); S.yaw = S.homeYaw; S.pitch = S.homePitch; draw(); }
+    else if (e.key === ' ') { e.preventDefault(); S.playing ? stopPlay() : startPlay(); }
+  });
+  $('frame').addEventListener('input', e => { stopPlay(); setFrame(+e.target.value); });
+  $('play').addEventListener('click', () => { S.playing ? stopPlay() : startPlay(); });
+  window.addEventListener('resize', draw);
+  fetchJson('data/traces.json').then(list => {
+    S.traces = list;
+    list.forEach((t, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = t.label; b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', () => loadTrace(i).catch(() => { $('traceNote').textContent = 'That trace could not be loaded.'; })); $('traceSel').appendChild(b); });
+    loadTrace(1).catch(() => { $('traceNote').textContent = 'The recorded runs could not be loaded.'; });
+  }).catch(() => { $('traceNote').textContent = 'The recorded runs could not be loaded.'; });
+
+  /* ---------- threshold charts ---------- */
+  const M = [
+    { key: 'flow', label: 'Flow (quench + corner read-out)', color: '--gold', w: 2.4 },
+    { key: 'random_partition', label: 'Random 4-way partitions + same corner search', color: '--teal', w: 1.6 },
+    { key: 'spectral', label: 'Spectral + cleanup', color: '--violet', w: 1.6 },
+    { key: 'amp', label: 'AMP told k + cleanup', color: '--rose', w: 1.6 },
+  ];
+  let TH = [];
+  function drawCharts() {
+    if (!TH.length) return;
+    const host = $('charts'); host.innerHTML = '';
+    const W = 320, H = 236, L = 38, Rm = 12, T = 20, B = 36, x0 = .5, x1 = 1.06;
+    const X = k => L + (k - x0) / (x1 - x0) * (W - L - Rm), Y = f => T + (1 - f) * (H - T - B);
+    for (const n of [500, 1000, 2000]) {
+      const div = document.createElement('div'); div.className = 'chart';
+      let s = `<h3>n = ${n.toLocaleString()}</h3><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Recovery rate against kappa at n ${n}">`;
+      for (const f of [0, .5, 1]) s += `<line x1="${L}" x2="${W - Rm}" y1="${Y(f)}" y2="${Y(f)}" stroke="var(--rule)" stroke-dasharray="${f === .5 ? '3 3' : ''}"/><text x="${L - 6}" y="${Y(f) + 4}" text-anchor="end" font-size="10" fill="var(--muted)" ${mono}>${f}</text>`;
+      for (const k of [.6, .7, .8, .9, 1]) s += `<text x="${X(k)}" y="${H - B + 16}" text-anchor="middle" font-size="10" fill="var(--muted)" ${mono}>${k.toFixed(1)}</text>`;
+      s += `<text x="${(L + W - Rm) / 2}" y="${H - 6}" text-anchor="middle" font-size="10.5" fill="var(--muted)">κ = k / √n</text>`;
+      for (const m of [...M].reverse()) {
+        const pts = TH.filter(r => r.n === n && r.method === m.key).sort((a, b) => a.kappa - b.kappa);
+        if (!pts.length) continue;
+        s += `<polyline fill="none" stroke="var(${m.color})" stroke-width="${m.w}" points="${pts.map(p => `${X(p.kappa)},${Y(p.found / p.graphs)}`).join(' ')}"/>`;
+        pts.forEach((p, idx) => {
+          const val = p.found / p.graphs;
+          s += `<circle cx="${X(p.kappa)}" cy="${Y(val)}" r="${m.key === 'flow' ? 4 : 3}" fill="var(${m.color})" stroke="var(--panel)" stroke-width="1.5"><title>${m.label}: ${p.found}/${p.graphs} at κ ${p.kappa}</title></circle>`;
+          if (m.key === 'flow') {
+            const valley = idx > 0 && idx < pts.length - 1 && val < pts[idx - 1].found / pts[idx - 1].graphs && val < pts[idx + 1].found / pts[idx + 1].graphs;
+            const dy = valley ? 14 : -8;
+            s += `<text x="${X(p.kappa)}" y="${Y(val) + dy}" text-anchor="middle" font-size="9.5" fill="var(--ink)" stroke="var(--pane2)" stroke-width="3" paint-order="stroke" ${mono}>${p.found}/${p.graphs}</text>`;
+          }
+        });
+      }
+      div.innerHTML = s + '</svg>'; host.appendChild(div);
+    }
+    $('chartLegend').innerHTML = M.map(m => `<span><i style="background:var(${m.color})"></i>${m.label}</span>`).join('');
+  }
+  function keyRows() {
+    const pick = [[1000, .63], [1000, .7], [1000, .76], [2000, .67], [2000, .78], [2000, .89]];
+    const cell = (n, k, m) => { const r = TH.find(x => x.n === n && x.kappa === k && x.method === m); return r ? `${r.found}/${r.graphs}` : '–'; };
+    $('keyRows').innerHTML = pick.map(([n, k]) => `<tr><td class="num">${n.toLocaleString()}</td><td class="num">${k.toFixed(2)}</td><td class="num"><b>${cell(n, k, 'flow')}</b></td><td class="num">${cell(n, k, 'spectral')}</td><td class="num">${cell(n, k, 'amp')}</td><td class="num">${cell(n, k, 'random_partition')}</td></tr>`).join('');
+  }
+  fetchJson('data/thresholds.json').then(rows => { TH = rows; drawCharts(); keyRows(); }).catch(() => { $('charts').textContent = 'The result tables could not be loaded.'; });
+
+  /* ---------- seeded random ---------- */
+  const rng = s => () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const gauss = r => Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r());
+
+  /* ---------- approach panels (schematic, from the n 2,000 · k 35 run's split 20 / 7 / 6 / 2) ---------- */
+  (() => {
+    const dot = (x, y, r, fill, op = 1, stroke = '') => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${fill}" opacity="${op}"${stroke ? ` stroke="${stroke}" stroke-width="1.2"` : ''}/>`;
+    const G = 'var(--gold)', M = 'var(--muted)', I = 'var(--ink)', T = ['var(--muted)', 'var(--teal)', 'var(--violet)', 'var(--rose)'];
+    const sphere = '<circle cx="100" cy="100" r="86" fill="var(--pane)" stroke="var(--ink)" stroke-width="2"/><ellipse cx="100" cy="100" rx="86" ry="26" fill="none" stroke="var(--ink)" stroke-opacity=".25"/>';
+    const P = {};
+    { const r = rng(1); let s = ''; const pts = []; for (let i = 0; i < 150; i++) pts.push([12 + r() * 176, 12 + r() * 176]);
+      for (let i = 0; i < 90; i++) { const a = pts[Math.floor(r() * 150)], b = pts[Math.floor(r() * 150)]; s += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="var(--ink)" stroke-opacity=".12"/>`; }
+      pts.forEach((p, i) => s += i < 7 ? dot(p[0], p[1], 3.6, G, 1, I) : dot(p[0], p[1], 2.4, M, .6)); P.graph = s; }
+    { const r = rng(2); let s = sphere; for (let i = 0; i < 150; i++) { const a = r() * 6.283, d = 80 * Math.sqrt(r()); s += dot(100 + d * Math.cos(a), 100 + d * Math.sin(a), 2.4, M, .55); }
+      for (let i = 0; i < 7; i++) s += dot(122 + 14 * gauss(r), 74 + 14 * gauss(r), 3.6, G, 1, I); P.gather = s; }
+    { const r = rng(3), C = [[100, 46], [48, 136], [152, 136], [100, 112]], gold = [7, 2, 2, 1]; let s = sphere;
+      C.forEach(([cx, cy], q) => { for (let i = 0; i < 36; i++) s += dot(cx + 9 * gauss(r), cy + 9 * gauss(r), 2.4, T[q], .7); });
+      C.forEach(([cx, cy], q) => { for (let i = 0; i < gold[q]; i++) s += dot(cx + 7 * gauss(r), cy + 7 * gauss(r), 3.6, G, 1, I); });
+      s += `<circle cx="100" cy="46" r="27" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>`; P.quench = s; }
+    { let s = ''; const k = 7, V = [...Array(k)].map((_, i) => [100 + 58 * Math.cos(-1.571 + i * 6.283 / k), 92 + 58 * Math.sin(-1.571 + i * 6.283 / k)]);
+      for (let i = 0; i < k; i++) for (let j = i + 1; j < k; j++) s += `<line x1="${V[i][0]}" y1="${V[i][1]}" x2="${V[j][0]}" y2="${V[j][1]}" stroke="var(--gold)" stroke-width="1.6"/>`;
+      V.forEach(v => s += dot(v[0], v[1], 5, G, 1, I));
+      s += `<text x="100" y="186" text-anchor="middle" font-family="ui-monospace, Courier New, monospace" font-size="14" font-weight="700" fill="var(--ink)">35 / 35 · certified</text>`; P.decode = s; }
+    document.querySelectorAll('#pipe .pic').forEach(el => el.innerHTML = `<svg viewBox="0 0 200 200" aria-hidden="true">${P[el.dataset.pic]}</svg>`);
+  })();
+
+  /* ---------- head-to-head + concentration ---------- */
+  function drawH2H(rows) {
+    const pl = rows.filter(r => r.kind === 'planted'), keys = [...new Set(pl.map(r => `${r.n}|${r.k}`))].map(s => s.split('|').map(Number)).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const W = 760, H = 254, L = 40, R = 10, T = 22, B = 46, gw = (W - L - R) / keys.length, bw = Math.min(24, gw * .24), gap = 2;
+    const Y = f => T + (1 - f) * (H - T - B);
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Recovered graphs per setting for the graph-only pool, random four-way partitions, and quench corners">`;
+    for (const f of [0, .5, 1]) s += `<line x1="${L}" x2="${W - R}" y1="${Y(f)}" y2="${Y(f)}" stroke="var(--rule)" stroke-opacity="${f ? .25 : 1}" stroke-width="${f ? 1 : 2}"/><text x="${L - 6}" y="${Y(f) + 4}" text-anchor="end" font-size="10" fill="var(--muted)" ${mono}>${f * 100}%</text>`;
+    keys.forEach(([n, k], i) => {
+      const g = pl.filter(r => r.n === n && r.k === k), cx = L + gw * (i + .5), N = g.length;
+      const vals = [['pool', 'var(--teal)', g.filter(r => r.pool).length], ['rand4', 'var(--violet)', g.filter(r => r.rand4).length], ['corners', 'var(--gold)', g.filter(r => r.corners).length]];
+      const xStart = cx - (3 * bw + 2 * gap) / 2;
+      vals.forEach(([key, col, c], j) => { const x = xStart + j * (bw + gap), y = Y(c / N), h = Y(0) - y;
+        s += `<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h, 0)}" fill="${col}" stroke="var(--ink)" stroke-width="1.5"><title>${{pool: 'Graph-only pool, 1 decode', rand4: 'Random 4-way partition, 4 decodes', corners: 'Quench corners, 4 decodes'}[key]}: ${c}/${N} at n ${n}, k ${k}</title></rect>`;
+        s += `<text x="${x + bw / 2}" y="${y - 5}" text-anchor="middle" font-size="10" font-weight="700" fill="var(--ink)" ${mono}>${c}/${N}</text>`; });
+      s += `<text x="${cx}" y="${H - B + 17}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)" ${mono}>κ ${(k / Math.sqrt(n)).toFixed(2)}</text>`;
+      s += `<text x="${cx}" y="${H - B + 32}" text-anchor="middle" font-size="10" fill="var(--muted)" ${mono}>n ${n.toLocaleString()} · k ${k}</text>`;
+    });
+    const split = L + gw * 3; s += `<line x1="${split}" x2="${split}" y1="${T - 10}" y2="${H - 10}" stroke="var(--ink)" stroke-dasharray="3 4" stroke-opacity=".5"/>`;
+    $('h2h').innerHTML = s + '</svg>';
+    const tot = f => pl.filter(f).length;
+    $('h2hLegend').innerHTML = `<span><i style="background:var(--teal)"></i>Graph-only pool, 1 decode: <b>${tot(r => r.pool)}/${pl.length}</b></span><span><i style="background:var(--violet)"></i>Random 4-way partition, 4 decodes: <b>${tot(r => r.rand4)}/${pl.length}</b></span><span><i style="background:var(--gold)"></i>Quench corners, 4 decodes: <b>${tot(r => r.corners)}/${pl.length}</b></span>`;
+  }
+  function drawEnrich(rows) {
+    const W = 760, H = 210, L = 168, R = 14, T = 16, B = 34, x0 = .5, x1 = 3.2, X = v => L + (v - x0) / (x1 - x0) * (W - L - R), r = rng(7);
+    const nul = rows.filter(q => q.kind === 'null'), hi = Math.max(...nul.map(q => q.enrich));
+    const lanes = [['No planted clique (chance)', q => q.kind === 'null', 40], ['Planted, corners missed', q => q.kind === 'planted' && !q.corners, 95], ['Planted, corners recovered', q => q.kind === 'planted' && q.corners, 150]];
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Best-corner enrichment per graph, planted against null">`;
+    s += `<rect x="${X(x0)}" y="${T}" width="${X(hi) - X(x0)}" height="${H - T - B}" fill="var(--ink)" opacity=".07"/><text x="${X(hi) - 4}" y="${H - B - 4}" text-anchor="end" font-size="10" fill="var(--muted)" ${mono}>chance range</text>`;
+    s += `<line x1="${X(1)}" x2="${X(1)}" y1="${T}" y2="${H - B}" stroke="var(--ink)" stroke-dasharray="4 3"/><text x="${X(1) + 4}" y="${T + 11}" font-size="10" fill="var(--muted)" ${mono}>even split</text>`;
+    s += `<line x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}" stroke="var(--ink)" stroke-width="2"/>`;
+    for (const v of [.5, 1, 1.5, 2, 2.5, 3]) s += `<text x="${X(v)}" y="${H - B + 15}" text-anchor="middle" font-size="10" fill="var(--muted)" ${mono}>${v}×</text>`;
+    s += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle" font-size="10.5" fill="var(--muted)">best corner’s share of the clique ÷ its share of the vertices</text>`;
+    for (const [lab, f, y] of lanes) {
+      s += `<text x="${L - 10}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--ink)">${lab}</text>`;
+      for (const q of rows.filter(f)) { const cy = y + (r() - .5) * 22, tt = `<title>n ${q.n}, k ${q.k}, seed ${q.seed}: best corner ${q.best} of ${q.m} (${q.enrich.toFixed(2)}×); split ${q.split.join(' / ')}</title>`;
+        s += q.kind === 'null' ? `<circle cx="${X(q.enrich)}" cy="${cy}" r="5" fill="var(--pane)" stroke="var(--ink)" stroke-width="2">${tt}</circle>`
+          : `<circle cx="${X(q.enrich)}" cy="${cy}" r="5" fill="${q.corners ? 'var(--gold)' : 'var(--muted)'}" stroke="var(--pane2)" stroke-width="1.5">${tt}</circle>`; }
+    }
+    $('enrich').innerHTML = s + '</svg>';
+    $('enrichLegend').innerHTML = `<span><i class="ring"></i>graph without a clique: a random set scored the same way</span><span><i style="background:var(--gold)"></i>corners recovered the clique</span><span><i style="background:var(--muted)"></i>corners missed</span>`;
+  }
+  fetchJson('data/headtohead.json').then(rows => { drawH2H(rows); drawEnrich(rows); }).catch(() => { $('h2h').textContent = 'The head-to-head data could not be loaded.'; });
+})();
+</script>
+</body>
+</html>

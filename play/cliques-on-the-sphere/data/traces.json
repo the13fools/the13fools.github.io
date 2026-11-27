@@ -1,0 +1,26 @@
+[
+ {
+  "id": "k453_b_n255_s1_gather_quench",
+  "label": "n 255 \u00b7 k 16 \u00b7 \u03ba 1.0",
+  "note": "Gather, then tetrahedral quench",
+  "file": "data/trace_k453_b_n255_s1_gather_quench.json",
+  "frames": 43,
+  "n": 255
+ },
+ {
+  "id": "k453_f_n1000_k24_planted_gather_quench",
+  "label": "n 1,000 \u00b7 k 24 \u00b7 \u03ba 0.76",
+  "note": "Gather, then tetrahedral quench",
+  "file": "data/trace_k453_f_n1000_k24_planted_gather_quench.json",
+  "frames": 43,
+  "n": 1000
+ },
+ {
+  "id": "k453_g_n1000_k24_null_gather_quench",
+  "label": "n 1,000 \u00b7 no clique",
+  "note": "Same flow on a graph with no clique: a random 24-set is marked",
+  "file": "data/trace_k453_g_n1000_k24_null_gather_quench.json",
+  "frames": 43,
+  "n": 1000
+ }
+]
