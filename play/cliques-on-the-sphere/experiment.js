@@ -191,13 +191,18 @@ function setupSphereExperiment({drawSphere, kmeans4, summarizeCorners, chanceTex
       frames.end = X;
       frames.labels = final.lab;
       setFrame('end');
-      const tally = stats => `${stats.counts[stats.best]} of ${k} marks in one cluster (${chanceText(stats.tail)} chance of at least this many in any cluster)`;
-      const ranking = planted ? firstTriangleRanks(graph.adj, marks, X) : null;
-      document.getElementById('experimentBefore').textContent = tally(initial);
-      document.getElementById('experimentAfter').textContent = tally(measured);
-      document.getElementById('experimentRanks').textContent = ranking
-        ? `First planted triangle out of ${ranking.total.toLocaleString()}: ${ranking.graph.toLocaleString()} with signed codegree, ${ranking.geometry.toLocaleString()} with the compactness bonus.`
-        : 'Gold marks a random set on this unplanted graph.';
+      for (const [suffix, stats] of [['Before', initial], ['After', measured]]) {
+        document.getElementById(`experiment${suffix}`).textContent = `${stats.counts[stats.best]} of ${k}`;
+        document.getElementById(`experiment${suffix}Chance`).textContent = chanceText(stats.tail);
+      }
+      document.getElementById('experimentRanking').hidden = !planted;
+      document.getElementById('experimentNullNote').hidden = planted;
+      if (planted) {
+        const ranking = firstTriangleRanks(graph.adj, marks, X);
+        document.getElementById('experimentGraphRank').textContent = ranking.graph.toLocaleString();
+        document.getElementById('experimentGeometryRank').textContent = ranking.geometry.toLocaleString();
+        document.getElementById('experimentRankNote').textContent = `There are ${ranking.total.toLocaleString()} graph triangles. Position 1 means the first triangle tried was entirely in the clique.`;
+      }
       summary.hidden = false;
       status.textContent = `Finished ${cycles} ${cycles === 1 ? 'cycle' : 'cycles'} ${transport ? 'with' : 'without'} transport.`;
     } catch (error) {

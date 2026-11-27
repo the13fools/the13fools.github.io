@@ -100,10 +100,9 @@ input[type=range] { width: 100%; accent-color: #c4a9ed }
   padding-top: 22px; display: grid; gap: 12px; min-width: 0 }
 .reading-section > h2 { margin-bottom: 3px }
 ul.plain { margin: 0; padding-left: 1.25em; display: grid; gap: 9px }
-.findings { display: grid; gap: 4px; margin: 0 }
-.findings dt { font-weight: 680 }
-.findings dd { margin: 0 0 10px }
-.findings dd:last-child { margin-bottom: 0 }
+.result-steps { display: grid; gap: 16px }
+.result-steps article { border-top: 1px solid var(--rule); padding-top: 12px }
+.result-steps h3 { margin-bottom: 5px }
 .first-year { margin: 0; padding-left: 1.4em; display: grid; gap: 12px }
 .first-year li { padding-left: 3px }
 .first-year li::marker { color: var(--violet); font-weight: 650 }
@@ -181,7 +180,10 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 .experiment-view { max-width: 480px; width: 100% }
 .experiment-view .instrument-control { display: flex }
 .experiment-summary { font-size: .9rem }
-.experiment-summary p + p { margin-top: 4px }
+.experiment-summary .experiment-readout { min-width: 0; margin: 6px 0; font-variant-numeric: tabular-nums }
+.experiment-readout th, .experiment-readout td { padding: 7px 8px }
+.experiment-readout th[scope="row"] { background: transparent; font-size: inherit; font-weight: 580 }
+.experiment-summary > div, #experimentNullNote { margin-top: 14px }
 @media (max-width: 540px) { .experiment-fields { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 </style>
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };</script>
@@ -264,22 +266,28 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 
     <section class="reading-section" id="results" aria-labelledby="results-title">
       <h2 id="results-title">What the experiments show</h2>
-      <p>Four clusters also form on unplanted graphs. Across 42 planted graphs and 6 controls, the most enriched cluster holds a median <strong>1.63×</strong> (up to <strong>2.99×</strong>) more of the clique than its share of vertices, versus <strong>1.30×</strong> on controls (Mann–Whitney <em>p</em> = 0.008), and beats random four-way partitions under exact per-corner search (<strong>9 of 27 vs. 1 of 27</strong>, <em>p</em> = 0.022). The central question is whether this concentration improves <a href="#corner-evidence">recovery against strong matched controls</a>.</p>
-      <dl class="findings">
-        <dt>Phase- and start-sensitive early triangles</dt>
-        <dd>In a <a href="#phase-ranks">phase-by-phase rank audit</a> (<var>n</var> = 2,000, <var>k</var> = 30), adding a compactness bonus moved one selected run’s first planted triangle to <strong>rank 21</strong> versus <strong>359</strong> for codegree alone—yet a second start on the same graph sent it to rank 29,343, and on six other graphs geometric scores alone trailed codegree, while a bounded bonus inside the codegree shortlist helped on three and hurt on three (median rank 280 vs. 272).</dd>
-        <dt>Matched recovery ties and initial energy ablations</dt>
-        <dd>Restricting codegree proposals to intra-cluster triangles tied whole-graph codegree at <strong>12 of 14</strong> cliques (1,024 proposals per graph), and equal-budget pool decoders tied random four-way partitions (<strong>34 of 42 = 34 of 42</strong>). Soft geometric reweighting, Walsh-clean squared-area flows, and an initial localized Gaussian pilot on six graphs (raising median enrichment to 1.83×) have not yet beaten whole-graph codegree consistently.</dd>
-        <dt>Triangle couplings strongly help seeded message passing</dt>
-        <dd>Translating the same edge and triangle interactions into a degree-debiased (2+3)-body message-passing decoder recovers <strong>35 of 36</strong> cliques on the degree-matched benchmark in 1.5–17.6 s. With the same seed order, raw 2-body AMP recovers <strong>28 of 36</strong> and degree debiasing raises it to <strong>31 of 36</strong>; the quench flow recovers <strong>17 of 36</strong> and unseeded (2+3)-body AMP 4 of 36, with 0 of 4 false certificates on nulls (<a href="#amp-evidence">seeded decoder benchmark</a>).</dd>
-      </dl>
+      <p>The layout brings clique vertices together. Whether that makes the clique easier to find depends on what the search does with the layout.</p>
+      <div class="result-steps">
+        <article>
+          <h3>Do clique vertices land together?</h3>
+          <p>Yes, more than in the controls. A cluster containing a quarter of the graph has a proportional share of one quarter of the clique. The best cluster held a median <strong>1.63×</strong> its proportional share across 42 planted graphs, compared with <strong>1.30×</strong> for random marked sets on six unplanted graphs. <a href="#corner-evidence">Concentration benchmark</a></p>
+        </article>
+        <article>
+          <h3>Does geometry find a planted triangle earlier?</h3>
+          <p>Sometimes. In one selected run, adding a bonus for compact triangles moved the first planted triangle from <strong>359th to 21st</strong> in the list. On six separate graphs, a geometric bonus improved the rank on three and worsened it on three. <a href="#phase-ranks">Triangle ranking results</a></p>
+        </article>
+        <article>
+          <h3>Does searching the clusters recover more whole cliques?</h3>
+          <p>The matched comparison was a tie. Both searches used signed codegree to rank triangles and the same procedure to complete them. Searching within clusters recovered <strong>12 of 14</strong> cliques, as did searching the whole graph, with 1,024 triangles tried per graph in each arm. <a href="#corner-evidence">Matched recovery tests</a></p>
+        </article>
+      </div>
     </section>
 
     <section class="reading-section" id="future" aria-labelledby="plan-title">
       <h2 id="plan-title">First-year plan</h2>
       <ul class="first-year" id="aims">
         <li id="aim1"><h3><span class="tag">Aim 1</span> Explain when a spherical cut helps</h3><p>Analyze one relaxation step followed by hyperplane rounding, bounding the joint probability of bulk balance and clique retention against the 52.7° angular margin of <a href="#rounding">Lemma 4</a>.</p></li>
-        <li id="aim2"><h3><span class="tag">Aim 2</span> Analyze seeded motif message passing</h3><p>Derive the covariance and memory corrections for the first iterations of (2+3)-body AMP, accounting for edge-reuse correlations across triangles and degree-preserving switches.</p></li>
+        <li id="aim2"><h3><span class="tag">Aim 2</span> Analyze seeded motif message passing</h3><p>Derive the covariance and memory corrections for the first iterations of (2+3)-body AMP, accounting for edge-reuse correlations across triangles and degree-preserving switches. In a separate benchmark with the same candidate seeds, an edge-and-triangle decoder recovered <strong>35 of 36</strong> cliques, compared with <strong>31 of 36</strong> using only edges with the same degree correction. <a href="#amp-evidence">Decoder benchmark</a></p></li>
         <li id="aim3"><h3><span class="tag">Aim 3</span> Test frozen phase-dependent triangle rankings</h3><p>Fix the flow checkpoint, localized energy, and triangle score on development graphs, then benchmark first-pure rank on at least 40 fresh degree-matched graphs against signed codegree and within-degree position shuffles at equal budget (<a href="#detailed-aims">detailed aims</a> · <a href="#timeline">timeline</a>).</p></li>
       </ul>
       <p>The first-year outputs are a mathematical note on controlled spherical rounding, an initial state-evolution calculation for dependent motif AMP, and a reproducible held-out ranking benchmark.</p>
@@ -312,11 +320,29 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
             </div>
           </div>
           <div id="experimentSummary" class="experiment-summary" hidden>
-            <p><strong>Start.</strong> <span id="experimentBefore"></span></p>
-            <p><strong>Final layout.</strong> <span id="experimentAfter"></span></p>
-            <p id="experimentRanks"></p>
+            <h3 id="concentration-title">Where the marked vertices landed</h3>
+            <table class="experiment-readout" aria-labelledby="concentration-title" aria-describedby="experimentChanceNote">
+              <thead><tr><th scope="col">Layout</th><th scope="col">Most marks in one cluster</th><th scope="col">Chance with random marks</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Start</th><td id="experimentBefore"></td><td id="experimentBeforeChance"></td></tr>
+                <tr><th scope="row">Final</th><td id="experimentAfter"></td><td id="experimentAfterChance"></td></tr>
+              </tbody>
+            </table>
+            <p class="note" id="experimentChanceNote">For each layout, chance is the probability that randomly marking the same number of vertices gives at least as many in any one of the four clusters.</p>
+            <div id="experimentRanking">
+              <h3 id="triangle-rank-title">First planted triangle</h3>
+              <table class="experiment-readout" aria-labelledby="triangle-rank-title" aria-describedby="experimentRankNote">
+                <thead><tr><th scope="col">Triangle ranking</th><th scope="col">Position</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">Graph only (signed codegree)</th><td id="experimentGraphRank"></td></tr>
+                  <tr><th scope="row">Graph score + compactness bonus</th><td id="experimentGeometryRank"></td></tr>
+                </tbody>
+              </table>
+              <p class="note" id="experimentRankNote"></p>
+            </div>
+            <p class="note" id="experimentNullNote" hidden>Gold marks a random set on this unplanted graph. Triangle ranks are measured on planted graphs.</p>
           </div>
-          <p class="note">This small quench uses 120 relaxation steps per cycle and omits the sideways component of transport. Chance is computed for random marks on each fixed four-way partition. The geometric score subtracts half √<var>n</var> times a triangle’s largest chord length from signed codegree. All computation stays in this browser.</p>
+          <p class="note">These browser runs use 64–128 vertices and 120 relaxation steps per cycle. The geometry bonus subtracts ½√<var>n</var> times a triangle’s longest chord from its graph score. All computation stays in this browser.</p>
         </div>
       </details>
     </section>
@@ -670,7 +696,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 </div>
 
 <script src="transport-solver.js"></script>
-<script src="experiment.js"></script>
+<script src="experiment.js?v=2"></script>
 <script>
 (() => {
   'use strict';
