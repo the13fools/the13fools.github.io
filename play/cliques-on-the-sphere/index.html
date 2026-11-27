@@ -169,6 +169,20 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
   .tiles { grid-template-columns: 1fr 1fr }
   .tiles .wide { grid-column: 1 / -1 }
 }
+.phase-finding { border-left: 2px solid #e6bb80; padding-left: 10px; color: #ded5e9; font-size: .8rem; line-height: 1.5 }
+.phase-finding strong { color: #ffdb9f }
+.phase-finding p + p { margin-top: 3px }
+.phase-finding a { color: #e3d5f6 }
+.experiment-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 14px }
+.experiment-fields label { display: grid; align-content: start; gap: 3px; font-size: .82rem; font-weight: 620 }
+.experiment-fields input, .experiment-fields select { min-width: 0; max-width: 100%; width: 100%;
+  color: var(--ink); background: var(--pane); border: 1px solid var(--rule); border-radius: 5px; padding: 6px; font: inherit }
+.experiment-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center }
+.experiment-view { max-width: 480px; width: 100% }
+.experiment-view .instrument-control { display: flex }
+.experiment-summary { font-size: .9rem }
+.experiment-summary p + p { margin-top: 4px }
+@media (max-width: 540px) { .experiment-fields { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 </style>
 <script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }, svg: { fontCache: 'global' } };</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
@@ -181,7 +195,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
   <a class="skip-link" href="#problem">Skip to introduction</a>
   <div class="who"><strong>Josh Vekhter</strong><span>IAS research proposal · draft</span></div>
   <nav aria-label="Proposal sections">
-    <a href="#problem">Overview</a><a href="#results">Evidence</a><a href="#future">Research plan</a><a href="#appendix">Appendix</a>
+    <a href="#problem">Overview</a><a href="#results">Evidence</a><a href="#future">Research plan</a><a href="#experiments">Experiments</a><a href="#appendix">Appendix</a>
   </nav>
 </header>
 <main>
@@ -206,6 +220,11 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
           <button class="reset-view" id="resetView" type="button" disabled>Reset view</button>
         </div>
         <p class="instrument-caption" id="phaseCaption" role="status">Loading the recorded points…</p>
+        <div class="phase-finding" id="phaseFinding" hidden>
+          <p><strong id="phaseCount"></strong></p>
+          <p id="phaseChance"></p>
+          <p>This replay was selected for illustration. <a href="#corner-evidence">See the comparison across graphs</a>.</p>
+        </div>
       </div>
       <details class="replay-details">
         <summary>Replay and settings</summary>
@@ -264,6 +283,42 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
         <li id="aim3"><h3><span class="tag">Aim 3</span> Test frozen phase-dependent triangle rankings</h3><p>Fix the flow checkpoint, localized energy, and triangle score on development graphs, then benchmark first-pure rank on at least 40 fresh degree-matched graphs against signed codegree and within-degree position shuffles at equal budget (<a href="#detailed-aims">detailed aims</a> · <a href="#timeline">timeline</a>).</p></li>
       </ul>
       <p>The first-year outputs are a mathematical note on controlled spherical rounding, an initial state-evolution calculation for dependent motif AMP, and a reproducible held-out ranking benchmark.</p>
+    </section>
+
+    <section class="reading-section" id="experiments" aria-labelledby="experiments-title">
+      <h2 id="experiments-title">Run an experiment</h2>
+      <p>Generate a fresh graph, relax its vertices on the sphere, and compare the first planted-triangle ranks with and without a geometric bonus. Use the same seeds to compare the flow with and without transport.</p>
+      <details class="technical">
+        <summary>Open the experiment controls</summary>
+        <div class="inner">
+          <form id="experimentForm">
+            <div class="experiment-fields">
+              <label>Graph <select name="graph"><option value="planted">Degree-matched clique</option><option value="null">Unplanted control</option></select></label>
+              <label>Transport <select name="transport"><option value="on">On</option><option value="off">Off</option></select></label>
+              <label>Vertices <select name="n"><option>64</option><option selected>96</option><option>128</option></select></label>
+              <label>Marked vertices <input type="number" name="k" min="4" max="16" value="12" required></label>
+              <label>Graph seed <input type="number" name="seed" min="0" max="2147483647" value="7" required></label>
+              <label>Start seed <input type="number" name="start" min="0" max="2147483647" value="1" required></label>
+              <label>Cycles <input type="number" name="cycles" min="1" max="15" value="8" required></label>
+            </div>
+            <div class="experiment-actions"><button class="btn primary" id="experimentRun">Run experiment</button><button class="btn" id="experimentStop" type="button" disabled>Stop</button></div>
+          </form>
+          <p class="note" id="experimentStatus" role="status">Ready to run. Gold marks the clique, or a random set in the unplanted control.</p>
+          <div class="instrument experiment-view" hidden>
+            <div class="stage" tabindex="0" aria-label="Experiment sphere. Drag or use arrow keys to rotate."><canvas id="experimentSphere" aria-hidden="true"></canvas></div>
+            <div class="instrument-control seg" role="group" aria-label="Show experiment checkpoint">
+              <button type="button" data-experiment-frame="start" aria-pressed="true" disabled>Start</button>
+              <button type="button" data-experiment-frame="end" aria-pressed="false" disabled>Final layout</button>
+            </div>
+          </div>
+          <div id="experimentSummary" class="experiment-summary" hidden>
+            <p><strong>Start.</strong> <span id="experimentBefore"></span></p>
+            <p><strong>Final layout.</strong> <span id="experimentAfter"></span></p>
+            <p id="experimentRanks"></p>
+          </div>
+          <p class="note">This small quench uses 120 relaxation steps per cycle and omits the sideways component of transport. Chance is computed for random marks on each fixed four-way partition. The geometric score subtracts half √<var>n</var> times a triangle’s largest chord length from signed codegree. All computation stays in this browser.</p>
+        </div>
+      </details>
     </section>
   </div>
 
@@ -614,6 +669,8 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 </footer>
 </div>
 
+<script src="transport-solver.js"></script>
+<script src="experiment.js"></script>
 <script>
 (() => {
   'use strict';
@@ -646,7 +703,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
   const legend = () => S.cur?.id.includes('_null_')
     ? 'Gold marks a random comparison set.'
     : 'Gold marks vertices of the planted clique.';
-  const canvas = $('sphere'), ctx = canvas.getContext('2d');
+  const canvas = $('sphere');
 
   function stopPlay() {
     S.playing = false;
@@ -689,6 +746,32 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     }
     return { lab, C };
   }
+  // Conditional random-label null. Count all samples meeting the observed
+  // maximum in any of the four fixed clusters, including overlapping tails.
+  function summarizeCorners(labels, marks) {
+    const sizes = [0, 0, 0, 0], counts = [0, 0, 0, 0];
+    labels.forEach((cluster, v) => { sizes[cluster]++; counts[cluster] += marks[v]; });
+    const k = counts.reduce((a, b) => a + b, 0);
+    const threshold = Math.max(...counts), best = counts.indexOf(threshold);
+    function choose(n) {
+      const row = [1];
+      for (let j = 1; j <= Math.min(n, k); j++) row.push(row[j - 1] * (n - j + 1) / j);
+      return row;
+    }
+    const [a, b, c, d] = sizes.map(choose);
+    let ways = 0;
+    for (let i = 0; i < a.length; i++) for (let j = 0; j < b.length && i + j <= k; j++) {
+      for (let l = 0; l < c.length && i + j + l <= k; l++) {
+        const m = k - i - j - l;
+        if (m < d.length && Math.max(i, j, l, m) >= threshold) ways += a[i] * b[j] * c[l] * d[m];
+      }
+    }
+    return {sizes, counts, best, tail: Math.min(1, ways / choose(labels.length)[k])};
+  }
+  function chanceText(p) {
+    if (p < .0001) return 'less than 0.01%';
+    return `${(p * 100).toFixed(p < .01 ? 2 : 1)}%`;
+  }
   async function loadTrace(i) {
     stopPlay();
     const meta = S.traces[i]; S.tid = i;
@@ -701,8 +784,9 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     if (S.tid !== i) return;
     const d = meta.data, F = d.frames.length, n = d.n, last = d.X.subarray(3 * n * (F - 1), 3 * n * F);
     const km = kmeans4(last, n);
-    const counts = [0, 0, 0, 0];
-    for (const cluster of km.lab) counts[cluster]++;
+    S.corners = summarizeCorners(km.lab, d.isP);
+    S.highlight = km.C[S.corners.best];
+    const counts = S.corners.sizes;
     const [first, second] = [0, 1, 2, 3].sort((a, b) => counts[b] - counts[a]);
     const look = km.C[first].map((x, c) => x + .68 * km.C[second][c]);
     const norm = Math.hypot(...look);
@@ -739,7 +823,15 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     const swatch = document.createElement('span');
     swatch.className = 'key';
     swatch.setAttribute('aria-hidden', 'true');
-    $('phaseCaption').append(swatch, `${description} ${legend()}`);
+    const isFinal = f === S.picks.quench, planted = !d.id.includes('_null_');
+    $('phaseCaption').append(swatch, `${description} ${legend()}${isFinal && planted ? ' The ring marks the cluster with the most clique vertices.' : ''}`);
+    $('phaseFinding').hidden = !isFinal;
+    if (isFinal) {
+      const {counts, sizes, best, tail} = S.corners;
+      const k = d.planted.length, count = counts[best];
+      $('phaseCount').textContent = `${count} of ${k} ${planted ? 'clique' : 'randomly marked'} vertices in one cluster of ${sizes[best]}.`;
+      $('phaseChance').textContent = `A random set of ${k} would place ${count} or more in any of these four clusters in ${chanceText(tail)} of draws.`;
+    }
     $('tZ').textContent = fr.pairz == null ? '–' : (fr.pairz > 0 ? '+' : '') + fr.pairz.toFixed(1);
     $('tBands').textContent = fr.bands ? `${fr.bands.join(' / ')} of ${d.k}` : 'after relaxation';
     { const st = fr.stage || '', g = st.startsWith('gather'), q = st.startsWith('quench');
@@ -751,13 +843,21 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     draw();
   }
   function draw() {
-    const r = canvas.getBoundingClientRect(); if (!r.width || !r.height || !S.cur) return;
+    const d = S.cur;
+    if (!d) return;
+    const off = 3 * d.n * S.frame;
+    const highlight = S.frame === S.picks.quench && !d.id.includes('_null_') ? S.highlight : null;
+    drawSphere(canvas, d.X.subarray(off, off + 3 * d.n), d.isP, S.lab, S, highlight);
+  }
+  function drawSphere(canvas, X, marks, labels, camera, highlight) {
+    const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return;
+    const ctx = canvas.getContext('2d');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cw = Math.round(r.width * dpr), ch = Math.round(r.height * dpr);
     if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
     const cx = r.width / 2, cy = r.height / 2, R = Math.min(r.width, r.height) * .455;
-    const cy_ = Math.cos(S.yaw), sy = Math.sin(S.yaw), cp = Math.cos(S.pitch), sp = Math.sin(S.pitch);
+    const cy_ = Math.cos(camera.yaw), sy = Math.sin(camera.yaw), cp = Math.cos(camera.pitch), sp = Math.sin(camera.pitch);
     const rot = (a, b, c) => { const x1 = a * cy_ - b * sy, y1 = a * sy + b * cy_; return [x1, y1 * sp * -1 + c * cp, y1 * cp + c * sp]; };
     const fill = ctx.createRadialGradient(cx - .34 * R, cy - .38 * R, .05 * R, cx, cy, R);
     fill.addColorStop(0, '#3a3650');
@@ -794,35 +894,65 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
       const a = k * Math.PI / 6;
       guide(t => [Math.cos(a) * Math.sin(t), Math.sin(a) * Math.sin(t), Math.cos(t)]);
     }
-    const d = S.cur, n = d.n, X = d.X, off = 3 * n * S.frame;
+    const n = marks.length;
     const tints = ['#a5c7f6', '#89dad4', '#c8b3f8', '#e2adcd'], gold = '#ffd18c';
     const pts = [];
-    for (let v = 0; v < n; v++) { const p = rot(X[off+3*v], X[off+3*v+1], X[off+3*v+2]); pts.push([p[0], p[1], p[2], v]); }
+    for (let v = 0; v < n; v++) { const p = rot(X[3*v], X[3*v+1], X[3*v+2]); pts.push([p[0], p[1], p[2], v]); }
     pts.sort((a, b) => a[2] - b[2]);
     const small = n > 600 ? 1.6 : 2.3;
     for (const [x, y, z, v] of pts) {
-      const front = z > 0, P = d.isP[v];
+      const front = z > 0, P = marks[v];
       ctx.globalAlpha = P ? (front ? 1 : .68) : (front ? .64 : .24);
-      ctx.fillStyle = P ? gold : tints[S.lab[v]];
+      ctx.fillStyle = P ? gold : labels ? tints[labels[v]] : '#a5c7f6';
       ctx.beginPath(); ctx.arc(cx + R * x, cy - R * y, P ? (front ? 3.25 : 2.65) : small, 0, 2 * Math.PI); ctx.fill();
     }
     ctx.globalAlpha = 1;
+    if (highlight) {
+      const [x, y, z] = rot(...highlight);
+      ctx.strokeStyle = z > 0 ? '#ffd18c' : '#ffd18c80';
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.arc(cx + R * x, cy - R * y, .17 * R, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
   }
-  let drag = null;
+  function bindRotation(stage, camera, draw, {reset, play} = {}) {
+    let drag = null;
+    stage.addEventListener('pointerdown', event => {
+      drag = [event.clientX, event.clientY];
+      stage.setPointerCapture(event.pointerId);
+      stage.style.cursor = 'grabbing';
+    });
+    const tilt = delta => { camera.pitch = Math.max(-1.5, Math.min(1.5, camera.pitch + delta)); };
+    stage.addEventListener('pointermove', event => {
+      if (!drag) return;
+      camera.yaw += (event.clientX - drag[0]) * .01;
+      tilt((event.clientY - drag[1]) * .01);
+      drag = [event.clientX, event.clientY];
+      draw();
+    });
+    const release = () => { drag = null; stage.style.cursor = 'grab'; };
+    stage.addEventListener('lostpointercapture', release);
+    stage.addEventListener('pointerup', release);
+    stage.addEventListener('pointercancel', release);
+    stage.addEventListener('keydown', event => {
+      switch (event.key) {
+        case 'ArrowLeft': camera.yaw -= .14; break;
+        case 'ArrowRight': camera.yaw += .14; break;
+        case 'ArrowUp': tilt(-.14); break;
+        case 'ArrowDown': tilt(.14); break;
+        case 'r': case 'R': if (reset) reset(); return;
+        case ' ': if (play) { event.preventDefault(); play(); } return;
+        default: return;
+      }
+      event.preventDefault();
+      draw();
+    });
+  }
   const stage = $('stage');
-  stage.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; stage.setPointerCapture(e.pointerId); stage.style.cursor = 'grabbing'; });
-  stage.addEventListener('pointermove', e => { if (!drag) return; S.yaw += (e.clientX - drag[0]) * .01; S.pitch = Math.max(-1.5, Math.min(1.5, S.pitch + (e.clientY - drag[1]) * .01)); drag = [e.clientX, e.clientY]; draw(); });
-  const up = () => { drag = null; stage.style.cursor = 'grab'; };
-  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
-  stage.addEventListener('keydown', e => {
-    const step = 0.14;
-    if (e.key === 'ArrowLeft') { e.preventDefault(); S.yaw -= step; draw(); }
-    else if (e.key === 'ArrowRight') { e.preventDefault(); S.yaw += step; draw(); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); S.pitch = Math.max(-1.5, S.pitch - step); draw(); }
-    else if (e.key === 'ArrowDown') { e.preventDefault(); S.pitch = Math.min(1.5, S.pitch + step); draw(); }
-    else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); resetView(); }
-    else if (e.key === ' ') { e.preventDefault(); S.playing ? stopPlay() : startPlay(); }
-  });
+  bindRotation(stage, S, draw, {reset: resetView, play: () => S.playing ? stopPlay() : startPlay()});
   $('frame').addEventListener('input', e => { stopPlay(); setFrame(+e.target.value); });
   $('play').addEventListener('click', () => { S.playing ? stopPlay() : startPlay(); });
   function resetView() { S.yaw = S.homeYaw; S.pitch = S.homePitch; draw(); }
@@ -951,6 +1081,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     $('enrichLegend').innerHTML = `<span><i class="ring"></i>graph without a clique: a random set scored the same way</span><span><i style="background:var(--gold)"></i>corners recovered the clique</span><span><i style="background:var(--muted)"></i>corners missed</span>`;
   }
   fetchJson('data/headtohead.json').then(rows => { drawH2H(rows); drawEnrich(rows); }).catch(() => { $('h2h').textContent = 'The head-to-head data could not be loaded.'; });
+  setupSphereExperiment({drawSphere, kmeans4, summarizeCorners, chanceText, bindRotation, rng});
 })();
 </script>
 </body>
