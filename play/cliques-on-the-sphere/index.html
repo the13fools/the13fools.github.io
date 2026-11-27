@@ -232,36 +232,38 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
   <div class="narrative">
     <section class="reading-section" id="problem" aria-labelledby="intro-title">
       <h2 id="intro-title">The problem and approach</h2>
-      <p>A clique is a set of vertices with an edge between every pair. The planted clique problem asks us to identify a small clique hidden in a random graph. In my main benchmark, planting preserves each vertex’s degree. Recovery therefore depends on structure beyond the number of neighbours.</p>
-      <p id="approach">I place one point per vertex on the sphere. Edges pull their endpoints together, triangles contract, and triples with no edges spread out. Between relaxation steps, I move the points toward patches with many small triangles. I use the resulting positions to rank the graph’s triangles.</p>
-      <p>For each proposed triangle, I can restrict the search to vertices adjacent to all three corners. If the triangle is planted, this smaller set contains the whole remaining clique. I evaluate the ranking by counting how many proposals it takes to reach the first planted triangle.</p>
+      <p>A clique is a set of vertices with an edge between every pair. The planted clique problem asks us to identify a small clique hidden in an Erdős–Rényi random graph G(<var>n</var>, ½). In my main benchmark, planting rewires edges so every vertex keeps its original degree; recovery therefore depends on structure beyond vertex degrees. The cliques studied are smaller than √<var>n</var>: <var>k</var> = κ√<var>n</var> with κ between 0.49 and 0.89, where spectral methods recover 2 of 36 benchmark cliques and plain message passing none.</p>
+      <p id="approach">I place one point per vertex on the unit sphere S². Edges pull their endpoints together, closed triangles (three edges) contract, and empty triples (no edges) spread out. Between relaxation steps, optimal transport moves points toward patches rich in small closed triangles. I use the resulting positions to rank the graph’s triangles.</p>
+      <p>For each proposed triangle, <a href="#efficiency">common-neighbour restriction</a> confines the search to vertices adjacent to all three corners. When the triangle lies inside the clique, this cuts the ambient graph by roughly a factor of eight while keeping the entire remaining clique. I evaluate each ranking by the rank of its first planted triangle.</p>
     </section>
 
     <section class="reading-section" id="known" aria-labelledby="related-title">
       <h2 id="related-title">Related work</h2>
-      <p>In the ordinary random-graph model, spectral methods and message passing have recovery guarantees when the clique is a sufficiently large multiple of √<var>n</var>, where <var>n</var> is the number of vertices. My experiments use cliques of comparable size in degree-matched graphs. <a href="https://arxiv.org/abs/1304.7047">Deshpande and Montanari</a> give a message-passing guarantee for clique sizes of at least (1 + ε)√(<var>n</var>/e) for any fixed ε &gt; 0.</p>
-      <p>The baseline is <strong>signed codegree</strong>, which compares the adjacency lists of two vertices. Agreement on an edge or a missing edge raises the score. Disagreement lowers it. Summing over all three pairs gives a triangle score computed directly from the graph.</p>
+      <p>In the ordinary random-graph model G(<var>n</var>, ½), spectral methods with common-neighbour conditioning (Alon, Krivelevich, and Sudakov), approximate message passing (<a href="https://arxiv.org/abs/1304.7047">Deshpande and Montanari</a>, above √(<var>n</var>/e)), and signed subgraph counts (<a href="https://arxiv.org/abs/2609.24780">Kunisky and Mao</a>, above 0.3320√<var>n</var>) recover cliques of size <var>k</var> = κ√<var>n</var>. By contrast, low-degree and sum-of-squares lower bounds obstruct cliques of size <var>n</var><sup>1/2−ε</sup>. My experiments probe the constant-κ regime on degree-matched graphs (<a href="#related-context">scaling regimes</a>).</p>
+      <p>The direct graph-only baseline is <strong>signed codegree</strong>, which compares two vertices’ adjacency rows by treating edges as +1 and non-edges as −1. Agreement raises the score and disagreement lowers it; summing over the three pairs gives a strong triangle ranking computed directly from the graph.</p>
     </section>
 
     <section class="reading-section" id="results" aria-labelledby="results-title">
       <h2 id="results-title">What the experiments show</h2>
-      <p>Four clusters also form on graphs without a planted clique. On the benchmark, the most enriched cluster tends to contain a larger share of the clique than its size would suggest. I test whether that concentration improves <a href="#corner-evidence">recovery against matched controls</a>.</p>
+      <p>Four clusters also form on unplanted graphs. Across 42 planted graphs and 6 controls, the most enriched cluster holds a median <strong>1.63×</strong> (up to <strong>2.99×</strong>) more of the clique than its share of vertices, versus <strong>1.30×</strong> on controls (Mann–Whitney <em>p</em> = 0.008), and beats random four-way partitions under exact per-corner search (<strong>9 of 27 vs. 1 of 27</strong>, <em>p</em> = 0.022). The central question is whether this concentration improves <a href="#corner-evidence">recovery against strong matched controls</a>.</p>
       <dl class="findings">
-        <dt>An early triangle in one selected run</dt>
-        <dd>On a graph of 2,000 vertices with a clique of 30, codegree with a bonus for compact triangles produced its first planted triangle at <strong>rank 21</strong>. Codegree alone reached its first at <strong>359</strong>. From a second start on the same graph, the triangle that ranked 21st fell to rank 29,343.</dd>
-        <dt>A tie at the same recovery budget</dt>
-        <dd>On a separate panel, I compared codegree restricted to triangles inside the four clusters with codegree on the whole graph. Both recovered <strong>12 of 14</strong> cliques with the same decoder and 1,024 proposals per graph. A reliable gain from geometry remains an open question.</dd>
+        <dt>Phase- and start-sensitive early triangles</dt>
+        <dd>In a <a href="#phase-ranks">phase-by-phase rank audit</a> (<var>n</var> = 2,000, <var>k</var> = 30), adding a compactness bonus moved one selected run’s first planted triangle to <strong>rank 21</strong> versus <strong>359</strong> for codegree alone—yet a second start on the same graph sent it to rank 29,343, and on six other graphs geometric scores alone trailed codegree, while a bounded bonus inside the codegree shortlist helped on three and hurt on three (median rank 280 vs. 272).</dd>
+        <dt>Matched recovery ties and initial energy ablations</dt>
+        <dd>Restricting codegree proposals to intra-cluster triangles tied whole-graph codegree at <strong>12 of 14</strong> cliques (1,024 proposals per graph), and equal-budget pool decoders tied random four-way partitions (<strong>34 of 42 = 34 of 42</strong>). Soft geometric reweighting, Walsh-clean squared-area flows, and an initial localized Gaussian pilot on six graphs (raising median enrichment to 1.83×) have not yet beaten whole-graph codegree consistently.</dd>
+        <dt>Triangle couplings strongly help seeded message passing</dt>
+        <dd>Translating the same edge and triangle interactions into a degree-debiased (2+3)-body message-passing decoder recovers <strong>35 of 36</strong> cliques on the degree-matched benchmark in 1.5–17.6 s. With the same seed order, raw 2-body AMP recovers <strong>28 of 36</strong> and degree debiasing raises it to <strong>31 of 36</strong>; the quench flow recovers <strong>17 of 36</strong> and unseeded (2+3)-body AMP 4 of 36, with 0 of 4 false certificates on nulls (<a href="#amp-evidence">seeded decoder benchmark</a>).</dd>
       </dl>
     </section>
 
     <section class="reading-section" id="future" aria-labelledby="plan-title">
       <h2 id="plan-title">First-year plan</h2>
       <ul class="first-year" id="aims">
-        <li id="aim3"><h3>Test whether geometry improves the ranking</h3><p>Choose the checkpoint and triangle score on development graphs, then freeze both. On at least 40 fresh degree-matched graphs, compare how soon each ranking reaches its first planted triangle. Use signed codegree and positions shuffled within degree bands as controls, with the same proposal budget for each.</p></li>
-        <li id="aim1"><h3>Explain when a cluster helps</h3><p>For one relaxation step followed by a cut, bound the chance of keeping a given share of the clique while shrinking the search space.</p></li>
-        <li id="aim2"><h3>Analyze recovery from a seed</h3><p>Analyze the first few steps of a message-passing method that uses edges and triangles. Account for the correlations that arise when many triangles share the same edges. This aim builds on the <a href="#amp-evidence">seeded decoder benchmark</a>.</p></li>
+        <li id="aim1"><h3><span class="tag">Aim 1</span> Explain when a spherical cut helps</h3><p>Analyze one relaxation step followed by hyperplane rounding, bounding the joint probability of bulk balance and clique retention against the 52.7° angular margin of <a href="#rounding">Lemma 4</a>.</p></li>
+        <li id="aim2"><h3><span class="tag">Aim 2</span> Analyze seeded motif message passing</h3><p>Derive the covariance and memory corrections for the first iterations of (2+3)-body AMP, accounting for edge-reuse correlations across triangles and degree-preserving switches.</p></li>
+        <li id="aim3"><h3><span class="tag">Aim 3</span> Test frozen phase-dependent triangle rankings</h3><p>Fix the flow checkpoint, localized energy, and triangle score on development graphs, then benchmark first-pure rank on at least 40 fresh degree-matched graphs against signed codegree and within-degree position shuffles at equal budget (<a href="#detailed-aims">detailed aims</a> · <a href="#timeline">timeline</a>).</p></li>
       </ul>
-      <p>The first-year outputs are a reproducible ranking benchmark and a mathematical analysis of the cut and the initial recovery updates.</p>
+      <p>The first-year outputs are a mathematical note on controlled spherical rounding, an initial state-evolution calculation for dependent motif AMP, and a reproducible held-out ranking benchmark.</p>
     </section>
   </div>
 
@@ -269,7 +271,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     <summary>Technical appendix</summary>
     <div class="supplement-body">
       <h2>Experimental results</h2>
-      <p class="note">Sources include K444–K466, Petrel-01/03/04/05, and the triangle-phase rank audit.</p>
+      <p class="note">Sources include K444–K466, Petrel-01/03/04/05/06, and the triangle-phase rank audit.</p>
       <details class="technical"><summary>Triangle ranks by phase and start</summary>
         <div class="inner">
     <div class="col" id="phase-ranks">
@@ -355,7 +357,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
         <span class="pill">n=8k · κ=0.60 / 0.51: <b>1/1</b> (55 s) · <b>1/2</b> (28 s)</span>
         <span class="pill">Nulls: <b>0/13 FP</b></span>
       </div>
-      <p class="note">On K456, plain AMP found 0/36, the spectral baseline 2/36, and unseeded (2+3)-body AMP 4/36. A pure-triangle oracle on separate n = 2,000 graphs increased conditional exact recovery at k = 18 from 15/60 with the debiased pairwise channel to 42/60 with both channels. At k = 20, label-blind triangle ranking followed by the two-channel decoder recovered 4/6 within 16,384 proposals. The individual larger-n cells remain pilot results.</p>
+      <p class="note">On K456, plain AMP found 0/36, the spectral baseline 2/36, and unseeded (2+3)-body AMP 4/36. A pure-triangle oracle on separate n = 2,000 graphs increased conditional exact recovery at k = 18 from 15/60 with the debiased pairwise channel to 42/60 with both channels. At k = 20, label-blind triangle ranking followed by the two-channel decoder recovered 4/6 strictly within 16,384 proposals (0/2 nulls, 17–107 s; K465’s branching decoder recovered 5/6 strict / 6/6 with a 1-vertex swap on the same panel). The individual larger-n cells remain pilot results.</p>
     </div></div>
 
     <!-- ACT 4: THE KAPPA RULER & CLASSICAL BASELINE CURVES -->
@@ -379,7 +381,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
           <text x="20" y="157" text-anchor="start">k at n = 2,000:</text>
           <text x="236" y="157">25</text><text x="377" y="157">30</text><text x="518" y="157">35</text><text x="659" y="157">40</text><text x="800" y="157">45</text>
         </g>
-        <g font-family="Verdana, sans-serif" font-size="12" fill="var(--ink)">
+        <g font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="var(--ink)">
           <line x1="153" x2="153" y1="120" y2="100" stroke="var(--teal)" stroke-width="3"/><rect x="146" y="113" width="14" height="14" fill="var(--teal)" stroke="var(--ink)" stroke-width="2" transform="rotate(45 153 120)"/>
           <text x="146" y="88" text-anchor="end" font-weight="700">κ 0.49 · k 22</text>
           <text x="146" y="103" text-anchor="end" fill="var(--muted)">codegree / AMP 5/6</text>
@@ -459,13 +461,13 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     </div>
     <div class="q"><h3>What each term does</h3>
       <div class="table-wrap"><table>
-        <thead><tr><th>Term</th><th>What it pushes</th><th>What we have seen it do</th></tr></thead>
+        <thead><tr><th>Term</th><th>What it pushes</th><th>Observed effect</th></tr></thead>
         <tbody>
           <tr><td>Edge springs, rest 10°</td><td>Every adjacent pair toward 10° apart</td><td>Half of all pairs are edges, so on its own it contracts the whole cloud and does not tell clique pairs apart. Its cone at θ = 0 means coincident neighbours keep bouncing: the relax never fully converges.</td></tr>
           <tr><td>Area², complete triples, f(3) &gt; 0</td><td>Triangles with all three edges shrink</td><td>For uniformly shrinking triangles the energy is fourth order in angular diameter, and its gradient is third order. The contribution weakens as a triangle tightens.</td></tr>
           <tr><td>Area², empty triples, f(0) &lt; 0</td><td>Triples with no edges spread to large area</td><td>The spreading force. At the quench weight (f(0) = −16) it splits the cloud into corners.</td></tr>
           <tr><td>Area², mixed triples, f(1), f(2) ≈ 0</td><td>Nearly neutral</td><td>Negative weight on two-edge triples helped strongly on one graph (K344) but did not replicate.</td></tr>
-          <tr><td>Transport</td><td>Mass toward regions dense in small complete triangles</td><td>Without a uniform floor it collapses everything to a point. Gather’s two circles form without it (K466), and turning it off on the Walsh-clean potential still reaches exact tetrahedral corners (Petrel-05b); its isolated effect on baseline quench recovery remains to be ablated in Aim 3.</td></tr>
+          <tr><td>Transport</td><td>Mass toward regions dense in small complete triangles</td><td>Without a uniform floor it collapses everything to a point. Gather’s two circles form without it (K466), and turning off transport—even alongside edge springs—on the Walsh-clean squared-area and Gaussian potentials still reaches exact 109.4–109.5° tetrahedral corners (Petrel-05b/06); its isolated effect on baseline quench recovery remains to be ablated in Aim 3.</td></tr>
           <tr><td>Swirl</td><td>A sideways component on each transport move</td><td>Little measurable effect (K423).</td></tr>
         </tbody>
       </table></div>
@@ -495,18 +497,18 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
       <p class="muted">In K466 the circles persisted when the transport grid was rotated and when transport was omitted. They also formed on a null graph. The identity permits both shapes. The effect of the extra gather terms on which shape is reached is an open question.</p>
       <p class="muted"><b>What this means for the clique.</b> The rings and corners can form in the bulk on their own. I will measure whether the clique changes where vertices land within those shapes and whether the effect is visible in early triangle proposals.</p>
     </div>
-    <div class="q gold"><h3>What we understand, and what we don’t</h3>
+    <div class="q gold"><h3>What is understood, and what remains open</h3>
       <ul class="plain muted">
         <li><b>The area² family is a global spread-or-collapse knob,</b> with a sharp transition between r = 1.5 and 2. It does not single out the clique by itself.</li>
-        <li><b>The gathered clique is not a ground state.</b> With every vertex free to move (K385), a state with the clique gathered does not have lower energy than ordinary restarts. Total energies differ by about 0.5%, and dense decoy sets sometimes end lower. So the concentration we measure is a property of the <i>dynamics</i> (relax, transport and the tetrahedral split) rather than of the minimizer. Any theory has to analyse the flow, not the energy landscape alone.</li>
-        <li><b>A corner assignment behaves like a degree vote.</b> Tern’s analysis treats one exact best response with four fixed, balanced corners. Each vertex then joins the corner where it has the most neighbours. As n grows, the clique’s κ inside its best corner tends to half its whole-graph value, which is exactly the value an even split gives. One such step provably adds nothing in the limit. The concentration we observe must come from iterating the flow, or from finite size, and we cannot yet tell which.</li>
+        <li><b>The gathered clique is not a ground state.</b> With every vertex free to move (K385), a state with the clique gathered does not have lower energy than ordinary restarts. Total energies differ by about 0.5%, and dense decoy sets sometimes end lower. So the concentration measured here is a property of the <i>dynamics</i> (relax, transport and the tetrahedral split) rather than of the minimizer. Any theory has to analyse the flow, not the energy landscape alone.</li>
+        <li><b>A corner assignment behaves like a degree vote.</b> Tern’s analysis treats one exact best response with four fixed, balanced corners. Each vertex then joins the corner where it has the most neighbours. As n grows, the clique’s κ inside its best corner tends to half its whole-graph value, which is exactly the value an even split gives. One such step provably adds nothing in the limit. The observed concentration must come from iterating the flow or from finite size, and those two effects are not yet separated.</li>
         <li><b>Why four corners:</b> the tetrahedron is the smallest isotropic support (box above). What sets the corner sizes, and whether a different energy would favour a corner holding most of the clique, is open.</li>
-        <li><b>A localized triangle term.</b> For a uniformly shrinking triangle, squared area is fourth order in its diameter. A Gaussian reward in squared diameter changes the near-coincidence energy at second order. Its effect on the bulk phase and the proposal ranks can be tested separately.</li>
+        <li><b>A localized triangle term.</b> For a uniformly shrinking triangle, squared area is fourth order in its diameter. Replacing it with a Gaussian reward in squared chord distance restores a second-order near-coincidence well; an initial 6-graph pilot (Petrel-06) raised median corner enrichment to 1.83× (σ = 0.45) and revived the spring-free, transport-free Walsh arm (1.67×), yet still left mean clique angles near 86° and did not consistently beat codegree on shortlist reranking, leaving pre-quench checkpoints and bandwidths for Aim 3.</li>
       </ul>
     </div>
     <div class="two-col">
       <div class="q"><h3>Why a sphere?</h3><p class="muted">The sphere gives a simple setting for tracking the shapes and relative angles of a low-dimensional embedding. Squared chord-triangle area is quadratic in the Gram entries of the unit vectors. This gives a rank-constrained Gram formulation and a starting point for investigating convex relaxations. The intermediate states are visible in the <a href="#watch">replay</a>.</p></div>
-      <div class="q"><h3>Why optimal transport?</h3><p class="muted">Gradient steps move a point at most a degree at a time. In each cycle, entropic optimal transport (Sinkhorn) relocates every point toward the smoothed density of small complete triangles, mixed with a uniform share to prevent collapse—the one non-local move across the sphere. K466 and Petrel-05b show the global shapes form without it; Aim 3 isolates its net effect on baseline quench recovery.</p></div>
+      <div class="q"><h3>Why optimal transport?</h3><p class="muted">Gradient steps move a point at most a degree at a time. In each cycle, entropic optimal transport (Sinkhorn) relocates every point toward the smoothed density of small complete triangles, mixed with a uniform share to prevent collapse—the one non-local move across the sphere. K466, Petrel-05b, and Petrel-06 show both global shapes form without it; Aim 3 isolates its net effect on baseline quench recovery.</p></div>
     </div>
 </div></details>
 <details class="technical" id="efficiency"><summary>Seed restriction and triangle sampling</summary>
@@ -522,15 +524,15 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
       \[ \kappa \;>\; \frac{1+\varepsilon}{\sqrt{8e}} \;\approx\; 0.214\,(1+\varepsilon). \]
       For a fixed planted triangle, the restricted graph satisfies Lemma 1, and AMP recovers \(K\setminus S\) with high probability in this regime. I use the rank \(T\) of the first pure triangle to evaluate the proposal sequence. In a uniformly random ordering of the graph triangles,
       \[ \Pr[\text{a random triangle of } G \text{ is pure}] \;\approx\; \frac{\binom{k}{3}}{\binom{n}{3}/8} \;\approx\; 8\kappa^{3} n^{-3/2}, \qquad \mathbb{E}[T] \approx \frac{n^{3/2}}{8\kappa^{3}}. \]
-      At \(n = 2000\) and \(k = 30\), that is about 1 in 37,000. With \(s\) seeds instead of 3, \(s = \lceil 2\log_2\!\big(1/(\kappa\sqrt e)\big)\rceil + 1\) suffices for any \(\kappa>0\), for fixed small \(\kappa\). This gives the familiar seed-enumeration bound in that regime.</p>
+      At \(n = 2000\) and \(k = 30\), that is about 1 in 41,000 exact (37,000 by the leading asymptotic). With \(s\) seeds instead of 3, \(s = \lceil 2\log_2\!\big(1/(\kappa\sqrt e)\big)\rceil + 1\) suffices for any \(\kappa>0\), for fixed small \(\kappa\). This gives the familiar seed-enumeration bound in that regime.</p>
       <p class="muted">The fixed-seed reduction explains why proposing a pure triangle can be valuable. A seed selected by inspecting the graph induces extra conditioning, and degree-preserving swaps correlate the edges. Completion on those inputs requires its own guarantee. The experiments report first-pure rank and check decoder outputs against the planted set.</p>
     </div>
 
 
     <p class="math">If a corner \(P\) holds \(s=\sigma k\) planted vertices, the fraction of its graph triangles that are pure is exactly \(\binom{s}{3}/\#\{\text{triangles in }G[P]\}\). In a quarter-sized corner with the background triangle density of \(G(n,\tfrac12)\), the leading approximation is \(64\sigma^3\) times the whole-graph pure fraction. A data-dependent corner can have a different triangle density, so I measure the denominator and the actual ranks. Its effective clique ratio is \(\kappa_{\mathrm{corner}}=\sigma k/\sqrt{|P|}\), which is \(2\sigma\kappa\) for an exactly balanced four-way partition.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th scope="col">Share of the clique in the best corner (<span class="keepcase">σ</span>)</th><th scope="col" class="num">¼ (even split)</th><th scope="col" class="num">0.4</th><th scope="col" class="num">½</th><th scope="col" class="num">0.68 (best observed)</th></tr></thead>
-      <tbody><tr><td>Pure-triangle rate inside that corner, relative to the whole graph</td><td class="num">1×</td><td class="num">4×</td><td class="num">8×</td><td class="num">20×</td></tr></tbody>
+      <thead><tr><th scope="col">Share of the clique in the best corner (<span class="keepcase">σ</span>)</th><th scope="col" class="num">¼ (even split)</th><th scope="col" class="num">0.4</th><th scope="col" class="num">½</th><th scope="col" class="num">0.75 (best observed)</th></tr></thead>
+      <tbody><tr><td>Pure-triangle rate inside that corner, relative to the whole graph (64σ³)</td><td class="num">1×</td><td class="num">4×</td><td class="num">8×</td><td class="num">27×</td></tr></tbody>
     </table></div>
     <p>The question becomes concrete. How large is σ in practice, and does it beat graph-only rankings such as codegree, which also push pure triangles up the list?</p>
 </div></details>
@@ -553,16 +555,16 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     <div class="two-col">
       <div class="q mint"><h3>1. Free-vertex 3-body spin-glass scaling (Θ(√n), not n<sup>2/5</sup>)</h3><p class="muted">Holding background vertices fixed on S² suggests a gathered clique beats noise once k³ ≫ k√n + √k·n, i.e. k ≫ n<sup>2/5</sup>. Letting all 2n spherical coordinates relax changes this: dense mean-zero 3-body couplings act as a 3-spin glass whose noise ground state reaches E<sub>noise</sub> ≈ −c n² (~c n per vertex). Pinning k clique vertices forfeits ~c k n of noise-lowering freedom, giving the global-minimum balance k³/48 ≳ c k n, i.e. <b>k ≳ C√n</b>, consistent with the n = 600 and n = 4,000 runs.</p></div>
       <div class="q mint"><h3>2. Walsh chaos of triangle density (97.5% edge noise)</h3><p class="muted">Expanding raw local triangle excess in edge signs X<sub>e</sub> = 2A<sub>e</sub> − 1 gives 8R = Σ<sub>e</sub> d<sub>e</sub> X<sub>e</sub> + Σ<sub>t</sub> h<sub>t</sub>(X<sub>a</sub>X<sub>b</sub> + X<sub>b</sub>X<sub>c</sub> + X<sub>c</sub>X<sub>a</sub> + X<sub>a</sub>X<sub>b</sub>X<sub>c</sub>). Shared single-edge fluctuations account for (m−2)/(m−2+4/3) = <b>97.5%</b> of local variance in a 54-vertex patch. Projecting out the edge term yields the unique Cauchy–Schwarz-optimal pure 3-clique field with triple weights <b>(1, 0, −1, 2)</b>—and its exact edge-null sphere potential f = (−1, −3, −5, 1).</p></div>
-      <div class="q mint"><h3>3. Exact Sinkhorn splitting instability (18.89×)</h3><p class="muted">On an ideal 4-partite tetrahedral configuration (109.47° corner spacing), both the graph energy and Sinkhorn substeps have an exact fixed point, yet zero-mean within-corner perturbations amplify under the shared barycentric transport Jacobian DF(x) = [2/(ε‖m‖)](I − FFᵀ) Cov<sub>p</sub>(g). A continuum bound gives a splitting multiplier g ≥ (11/96)·(2/ε) ≈ <b>7.64</b>, and it measures <b>18.89</b> on the icosphere mesh, which explains why unanchored masked transport destabilizes clean corners once local triangles disappear.</p></div>
+      <div class="q mint"><h3>3. Exact Sinkhorn splitting instability (18.89×)</h3><p class="muted">On an ideal 4-partite tetrahedral configuration (109.47° corner spacing), both the graph energy and Sinkhorn substeps have an exact fixed point, yet zero-mean within-corner perturbations amplify under the shared barycentric transport Jacobian DF(x) = [2/(ε‖m‖)](I − FFᵀ) Cov<sub>p</sub>(g). At ε = 0.03, a continuum bound gives a splitting multiplier g ≥ (11/96)·(2/ε) ≈ <b>7.64</b>, and it measures <b>18.89</b> on the icosphere mesh, which explains why unanchored masked transport destabilizes clean corners once local triangles disappear.</p></div>
       <div class="q mint"><h3>4. Uniform adaptive completion &amp; codegree barriers</h3><p class="muted">Using ε-net spectral bounds uniform over all graph-dependent subsets, any corner P of size m admits deterministic spectral + two-threshold completion on the <i>same</i> graph (even under degree-preserving switches) whenever s ≥ C√(m log(en/m)), and r = ⌈log₂(n/k²)⌉ + O(1) pure seed vertices suffice uniformly. Conversely, at k = n<sup>1/2−ε</sup>, centered codegree places zero planted pairs inside the top n<sup>1+δ</sup> edges (δ &lt; 2ε) with high probability.</p></div>
     </div>
 </div></details>
 <details class="technical" id="background"><summary>Research methods and collaboration</summary>
 <div class="inner">
-<p class="muted">This program was conducted as an experiment in human-directed, multi-agent mathematical research inside one shared workspace, with independent logs, preregistered predictions, and cross-checked proofs: Wren ran the spherical flows, isotropy checks, and matched-control threshold panels; Lark proved the Walsh variance decomposition and Sinkhorn fixed-point instability; Tern proved the uniform adaptive completion and codegree-barrier lemmas; Heron formalized the multi-body motif-AMP covariance laws; and Petrel audited the two-ring spherical flows, built the zero-gap multi-body and edge-seeded AMP benchmarks, and ran the Walsh-clean sphere-flow ablation.</p>
+<p class="muted">This program was conducted as an experiment in human-directed, multi-agent mathematical research inside one shared workspace. Josh Vekhter chose the problem, the formulations and the questions; the named agents are AI models (Claude Code and Codex sessions), each keeping its own log. The work used preregistered predictions and cross-checked proofs: Wren ran the spherical flows, isotropy checks, and matched-control threshold panels; Lark proved the Walsh variance decomposition and Sinkhorn fixed-point instability; Tern proved the uniform adaptive completion and codegree-barrier lemmas; Heron formalized the multi-body motif-AMP covariance laws; and Petrel audited the two-ring spherical flows, built the zero-gap multi-body and edge-seeded AMP benchmarks, and ran the Walsh-clean and localized-Gaussian sphere-flow ablations.</p>
 </div></details>
       <h2>Research context and milestones</h2>
-      <details class="technical"><summary>Related results and scaling regimes</summary>
+      <details class="technical" id="related-context"><summary>Related results and scaling regimes</summary>
         <div class="inner">
     <div class="prose">
       <p>Write κ = k/√n for a clique of size k in a graph with n vertices. A smaller constant κ and a clique of size n<sup>1/2−ε</sup> are different regimes. The experiments here probe the constant-κ regime.</p>
@@ -574,7 +576,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     </div>
         </div>
       </details>
-      <details class="technical"><summary>Detailed research aims</summary>
+      <details class="technical" id="detailed-aims"><summary>Detailed research aims</summary>
         <div class="inner">
     <div class="research-grid">
     <div class="q gold"><h3>Aim 1 · Rounding for controlled spherical flows</h3>
@@ -585,7 +587,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
       <p class="muted">For a signed matrix S, the triangle channel uses T<sub>ijk</sub> = S<sub>ij</sub>S<sub>jk</sub>S<sub>ki</sub>. The four triangle signs on a tetrahedron multiply to one. This illustrates the dependencies a proof must handle when the channels reuse the graph. I will derive the covariance and memory correction through the first few updates in the ordinary model, then test how the degree-preserving switches and seed conditioning enter. The 0.647 and 0.371 values are targets from the heuristic equations.</p></div>
 
     <div class="q"><h3>Aim 3 · A controlled test of phase-dependent proposals</h3>
-      <p class="muted">I will intervene on the relative spring and triangle weights and test a localized Gaussian reward for small graph triangles. I will record the phase, the triangle readout, and the geometry before and after transport and relaxation. The Walsh-clean and anchored variants in Petrel-05b reproduced tetrahedral shapes while providing weak separation from the null controls. They motivate testing the proposal ranks directly.</p>
+      <p class="muted">I will intervene on the relative spring and triangle weights and test localized Gaussian rewards for small graph triangles. I will record the phase, the triangle readout, and the geometry before and after transport and relaxation. The Walsh-clean and anchored squared-area variants in Petrel-05b reproduced tetrahedral shapes while providing weak separation from the null controls. An initial bounded Gaussian pilot on six graphs (Petrel-06) raised median corner enrichment to 1.83× (σ = 0.45 vs 1.66× / 0.40 baseline) and lifted the spring-free, transport-free Walsh arm from 1.48× to 1.67×, yet still left mean clique angles near 86° and did not consistently beat whole-graph signed codegree on shortlist reranking—motivating a systematic phase- and checkpoint-controlled test of proposal ranks.</p>
       <p class="muted">I will freeze a rule for choosing the checkpoint and the score on development graphs, then compare it on at least 40 fresh degree-matched graphs against signed codegree and within-degree position shuffles. I will first calibrate near κ = 0.67 and include a harder panel near κ = 0.45. The primary endpoints are first-pure rank and pure-triangle counts at fixed prefixes, with the same proposal budget and a miss recorded whenever the prefix contains zero pure triangles. Any claim of improvement will use paired, graph-level uncertainty. I will also measure how often the same fixed decoder converts those proposals into an exact recovery.</p></div>
 
     </div>
@@ -607,7 +609,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
   </details>
 </main>
 <footer>
-  <p>Draft first posted <time datetime="2026-11-27">27 November 2026</time> · <a href="https://github.com/the13fools/the13fools.github.io/commits/master/play/cliques-on-the-sphere">Revision history</a></p>
+  <p>Draft first posted <time datetime="2026-11-27">27 November 2026</time> · <a href="https://github.com/the13fools/the13fools.github.io/commits/master/play/cliques-on-the-sphere">Revision history</a> · <a href="https://web.archive.org/web/20261127201434/https://foolzone.com/play/cliques-on-the-sphere/">Archived first version</a></p>
   <p><a href="https://foolzone.com/">Research home</a> · <a href="https://foolzone.com/play/">Play</a></p>
 </footer>
 </div>
@@ -941,7 +943,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
     s += `<text x="${(L + W - R) / 2}" y="${H - 4}" text-anchor="middle" font-size="10.5" fill="var(--muted)">best corner’s share of the clique ÷ its share of the vertices</text>`;
     for (const [lab, f, y] of lanes) {
       s += `<text x="${L - 10}" y="${y + 4}" text-anchor="end" font-size="11" fill="var(--ink)">${lab}</text>`;
-      for (const q of rows.filter(f)) { const cy = y + (r() - .5) * 22, tt = `<title>n ${q.n}, k ${q.k}, seed ${q.seed}: best corner ${q.best} of ${q.m} (${q.enrich.toFixed(2)}×); split ${q.split.join(' / ')}</title>`;
+      for (const q of rows.filter(f)) { const cy = y + (r() - .5) * 22, tt = `<title>n ${q.n}, k ${q.k}, seed ${q.seed}: best corner ${q.best} of ${q.k} in ${q.m} vertices (${q.enrich.toFixed(2)}×); split ${q.split.join(' / ')}</title>`;
         s += q.kind === 'null' ? `<circle cx="${X(q.enrich)}" cy="${cy}" r="5" fill="var(--pane)" stroke="var(--ink)" stroke-width="2">${tt}</circle>`
           : `<circle cx="${X(q.enrich)}" cy="${cy}" r="5" fill="${q.corners ? 'var(--gold)' : 'var(--muted)'}" stroke="var(--pane2)" stroke-width="1.5">${tt}</circle>`; }
     }
