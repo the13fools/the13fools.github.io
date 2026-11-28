@@ -1,11 +1,110 @@
 // Graph Transport Playground solver, adapted from Wren’s worker (2026-11-20).
 // The installer is used to create a worker on HTTPS and in a local file preview.
-function installGraphTransportWorker(self) {
+function installGraphTransportWorker(self, rng) {
   // Graph Transport Playground worker (Wren, 2026-11-20): triangle density on an icosphere, Sinkhorn transport, spring relaxation.
   'use strict';
   const D2R = Math.PI / 180;
   const G = { N: 0, adj: null, mesh: null, nb: null, nbKey: '', kern: null, kernKey: '' };
   const norm3 = (x, y, z) => { const n = Math.hypot(x, y, z) || 1; return [x / n, y / n, z / n]; };
+
+  let evaluationMarks;
+
+  // Same degree-preserving switch as Graph Transport Playground. The random
+  // labels are chosen before rewiring and are also used for the matched null.
+  function experimentGraph(n, k, seed, planted, rng) {
+    const edges = rng(seed * 7919 + 3);
+    const selection = rng(seed + 773);
+    const switches = rng(seed + 555);
+    const adj = new Uint8Array(n * n);
+    const labels = Array.from({length: n}, (_, i) => i);
+    for (let i = 0; i < n; i++) {
+      const j = i + Math.floor(selection() * (n - i));
+      [labels[i], labels[j]] = [labels[j], labels[i]];
+      for (let b = i + 1; b < n; b++) adj[i * n + b] = adj[b * n + i] = +(edges() < .5);
+    }
+    const clique = labels.slice(0, k), outside = labels.slice(k), marks = new Uint8Array(n);
+    for (const vertex of clique) marks[vertex] = 1;
+    if (!planted) return {adj, marks};
+    const setEdge = (a, b, value) => { adj[a * n + b] = adj[b * n + a] = value; };
+    for (let i = 0; i < k; i++) for (let j = i + 1; j < k; j++) {
+      const a = clique[i], b = clique[j];
+      if (adj[a * n + b]) continue;
+      const offset = Math.floor(switches() * outside.length);
+      let changed = false;
+      for (let q = 0; q < outside.length && !changed; q++) {
+        const u = outside[(q + offset) % outside.length];
+        if (!adj[a * n + u]) continue;
+        for (let r = 0; r < outside.length; r++) {
+          const v = outside[(r + offset) % outside.length];
+          if (u === v || !adj[b * n + v] || adj[u * n + v]) continue;
+          setEdge(a, b, 1);
+          setEdge(u, v, 1);
+          setEdge(a, u, 0);
+          setEdge(b, v, 0);
+          changed = true;
+          break;
+        }
+      }
+      if (!changed) throw new Error('Could not finish degree-preserving planting. Try a smaller marked set or a different graph seed.');
+    }
+    return {adj, marks};
+  }
+
+  function firstTriangleRanks(adj, marks, positions) {
+    const n = marks.length;
+    const pairScore = new Int16Array(n * n), distance = new Float64Array(n * n);
+    for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) {
+      const ab = a * n + b;
+      if (!adj[ab]) continue;
+      let agreement = 0;
+      for (let v = 0; v < n; v++) {
+        if (v !== a && v !== b) agreement += adj[a * n + v] === adj[b * n + v] ? 1 : -1;
+      }
+      pairScore[ab] = agreement;
+      distance[ab] = Math.hypot(positions[3 * a] - positions[3 * b],
+        positions[3 * a + 1] - positions[3 * b + 1], positions[3 * a + 2] - positions[3 * b + 2]);
+    }
+
+    // Find the best planted triangle for each score, then count what precedes
+    // it. This keeps the old lexicographic tie break without storing all the
+    // graph triangles (about 22 million at n = 1,024).
+    const marked = [];
+    for (let v = 0; v < n; v++) if (marks[v]) marked.push(v);
+    const weight = .5 * Math.sqrt(n);
+    let firstGraph = -Infinity, firstGeometry = -Infinity;
+    let graphKey = 0, geometryKey = 0;
+    for (let i = 0; i < marked.length; i++) for (let j = i + 1; j < marked.length; j++) {
+      const a = marked[i], b = marked[j], ab = a * n + b;
+      if (!adj[ab]) continue;
+      for (let l = j + 1; l < marked.length; l++) {
+        const c = marked[l], ac = a * n + c, bc = b * n + c;
+        if (!adj[ac] || !adj[bc]) continue;
+        const graph = pairScore[ab] + pairScore[ac] + pairScore[bc];
+        const geometry = graph - weight * Math.max(distance[ab], distance[ac], distance[bc]);
+        const key = ab * n + c;
+        if (graph > firstGraph) { firstGraph = graph; graphKey = key; }
+        if (geometry > firstGeometry) { firstGeometry = geometry; geometryKey = key; }
+      }
+    }
+    if (firstGraph === -Infinity) throw new Error('The marked vertices contain no graph triangle.');
+
+    let graphRank = 1, geometryRank = 1, total = 0;
+    for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++) {
+      const ab = a * n + b;
+      if (!adj[ab]) continue;
+      for (let c = b + 1; c < n; c++) {
+        const ac = a * n + c, bc = b * n + c;
+        if (!adj[ac] || !adj[bc]) continue;
+        const graph = pairScore[ab] + pairScore[ac] + pairScore[bc];
+        const geometry = graph - weight * Math.max(distance[ab], distance[ac], distance[bc]);
+        const key = ab * n + c;
+        total++;
+        if (graph > firstGraph || (graph === firstGraph && key < graphKey)) graphRank++;
+        if (geometry > firstGeometry || (geometry === firstGeometry && key < geometryKey)) geometryRank++;
+      }
+    }
+    return {graph: graphRank, geometry: geometryRank, total};
+  }
 
   function icosphere(level) {
     const t = (1 + Math.sqrt(5)) / 2; let V = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]].map(v => norm3(...v));
@@ -170,13 +269,23 @@ function installGraphTransportWorker(self) {
       for (let i = 0; i < N; i++) X.set(norm3(X[3 * i] - eta * Gr[3 * i], X[3 * i + 1] - eta * Gr[3 * i + 1], X[3 * i + 2] - eta * Gr[3 * i + 2]), 3 * i);
       if (t % p.every === p.every - 1) self.postMessage({ id, frame: X.slice(), E, t: t + 1 });
     }
-    return totalGrad(X, Gr, p);
+    return p.finalEnergy === false ? undefined : totalGrad(X, Gr, p);
   }
 
   self.onmessage = (ev) => {
     const m = ev.data, id = m.id;
     try {
-      if (m.cmd === 'graph') { G.N = m.N; G.adj = m.adj; G.mark = m.mark; self.postMessage({ id, ok: true }); }
+      if (m.cmd === 'sample') {
+        const {adj, marks} = experimentGraph(m.N, m.k, m.seed, m.planted, rng);
+        G.N = m.N;
+        G.adj = adj;
+        evaluationMarks = marks;
+        self.postMessage({id, marks});
+      }
+      else if (m.cmd === 'rank') {
+        self.postMessage({id, ranking: firstTriangleRanks(G.adj, evaluationMarks, m.X)});
+      }
+      else if (m.cmd === 'graph') { G.N = m.N; G.adj = m.adj; G.mark = m.mark; self.postMessage({ id, ok: true }); }
       else if (m.cmd === 'mesh') { if (!G.mesh || G.mesh.level !== m.level) { G.mesh = icosphere(m.level); G.nbKey = ''; G.kernKey = ''; } const { M, V, F } = G.mesh; self.postMessage({ id, M, V: Float32Array.from(V), F }); }
       else if (m.cmd === 'density') { const t0 = Date.now(), r = density(m.X, m.rho, m.sig, m.floor); self.postMessage({ id, sm: r.sm, nu: r.nu, nT: r.nT, ms: Date.now() - t0 }); }
       else if (m.cmd === 'transport') { const t0 = Date.now(), r = sinkhorn(m.X, m.nu, m.eps, m.iters); self.postMessage({ id, Y: r.Y, cost: r.cost, ms: Date.now() - t0 }); }

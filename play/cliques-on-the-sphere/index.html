@@ -177,6 +177,8 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 .experiment-fields input, .experiment-fields select { min-width: 0; max-width: 100%; width: 100%;
   color: var(--ink); background: var(--pane); border: 1px solid var(--rule); border-radius: 5px; padding: 6px; font: inherit }
 .experiment-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center }
+.experiment-size-note { margin-top: 10px }
+#experimentProgress { width: 100%; height: 10px; accent-color: var(--violet) }
 .experiment-view { max-width: 480px; width: 100% }
 .experiment-view .instrument-control { display: flex }
 .experiment-summary { font-size: .9rem }
@@ -303,15 +305,19 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
             <div class="experiment-fields">
               <label>Graph <select name="graph"><option value="planted">Degree-matched clique</option><option value="null">Unplanted control</option></select></label>
               <label>Transport <select name="transport"><option value="on">On</option><option value="off">Off</option></select></label>
-              <label>Vertices <select name="n"><option>64</option><option selected>96</option><option>128</option></select></label>
-              <label>Marked vertices <input type="number" name="k" min="4" max="16" value="12" required></label>
+              <label>Vertices <input type="number" name="n" min="64" max="1024" value="96" list="experimentSizes" required></label>
+              <datalist id="experimentSizes"><option value="96"><option value="256"><option value="512"><option value="768"><option value="1000"><option value="1024"></datalist>
+              <label>Marked vertices <input type="number" name="k" min="4" max="24" value="12" required></label>
               <label>Graph seed <input type="number" name="seed" min="0" max="2147483647" value="7" required></label>
               <label>Start seed <input type="number" name="start" min="0" max="2147483647" value="1" required></label>
               <label>Cycles <input type="number" name="cycles" min="1" max="15" value="8" required></label>
+              <label>Steps per cycle <input type="number" name="steps" min="1" max="200" value="120" required></label>
             </div>
+            <p class="note experiment-size-note">Choose 64–1,024 vertices and up to a quarter as many marked vertices (maximum 64). For a quick look at 1,024 vertices, try one cycle with 10 steps. A short run shows early movement.</p>
             <div class="experiment-actions"><button class="btn primary" id="experimentRun">Run experiment</button><button class="btn" id="experimentStop" type="button" disabled>Stop</button></div>
           </form>
           <p class="note" id="experimentStatus" role="status">Ready to run. Gold marks the clique, or a random set in the unplanted control.</p>
+          <progress id="experimentProgress" aria-label="Relaxation steps completed" value="0" hidden></progress>
           <div class="instrument experiment-view" hidden>
             <div class="stage" tabindex="0" aria-label="Experiment sphere. Drag or use arrow keys to rotate."><canvas id="experimentSphere" aria-hidden="true"></canvas></div>
             <div class="instrument-control seg" role="group" aria-label="Show experiment checkpoint">
@@ -342,7 +348,7 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
             </div>
             <p class="note" id="experimentNullNote" hidden>Gold marks a random set on this unplanted graph. Triangle ranks are measured on planted graphs.</p>
           </div>
-          <p class="note">These browser runs use 64–128 vertices and 120 relaxation steps per cycle. The geometry bonus subtracts ½√<var>n</var> times a triangle’s longest chord from its graph score. All computation stays in this browser.</p>
+          <p class="note">Every relaxation step evaluates the full force. The geometry bonus subtracts ½√<var>n</var> times a triangle’s longest chord from its graph score. All computation stays in this browser.</p>
         </div>
       </details>
     </section>
@@ -695,8 +701,8 @@ footer { margin-top: 48px; padding-top: 12px; border-top: 1px solid var(--rule);
 </footer>
 </div>
 
-<script src="transport-solver.js"></script>
-<script src="experiment.js?v=2"></script>
+<script src="transport-solver.js?v=2"></script>
+<script src="experiment.js?v=3"></script>
 <script>
 (() => {
   'use strict';
